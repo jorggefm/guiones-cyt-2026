@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5S — Secuencias Didácticas · Semana 15-19 junio 2026</title>
+<style>
+  :root {
+    --gancho:  #1B5E20;
+    --explica: #0D47A1;
+    --hace:    #4A148C;
+    --aplica:  #004D40;
+    --cierra:  #3E2723;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; color: #212121; background: #F5F7FA; }
+
+  /* TOP BAR */
+  .top-bar { background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%); color: white; padding: 18px 24px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .top-bar h1 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .top-bar .subtitle { font-size: 12px; opacity: 0.85; margin-bottom: 10px; }
+  .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn-pdf { background: #FF6F00; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.2s; }
+  .btn-pdf:hover { background: #E65100; }
+  .btn-expand { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn-expand:hover { background: rgba(255,255,255,0.35); }
+
+  /* NAV TABS */
+  .nav-tabs { display: flex; overflow-x: auto; background: #E8F5E9; border-bottom: 2px solid #C8E6C9; padding: 0 8px; gap: 2px; scrollbar-width: thin; align-items: stretch; }
+  .week-separator { display: flex; align-items: center; padding: 0 8px; font-size: 10px; font-weight: 700; color: #1B5E20; white-space: nowrap; background: #C8E6C9; border-radius: 4px; margin: 6px 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tab-btn { background: transparent; border: none; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #388E3C; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; text-align: center; line-height: 1.3; }
+  .tab-btn:hover { background: #C8E6C9; }
+  .tab-btn.active { color: #1B5E20; border-bottom-color: #1B5E20; background: #C8E6C9; }
+  .tab-btn small { font-weight: 400; color: #555; }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* META */
+  .meta-info { background: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .meta-info p { margin: 3px 0; }
+  .meta-info strong { color: #1B5E20; }
+
+  /* CLASS SECTION */
+  .class-section { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .class-banner { background: linear-gradient(135deg, #0D47A1, #1565C0); color: white; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 3px 10px rgba(13,71,161,0.3); }
+  .class-num { font-size: 26px; font-weight: 900; opacity: 0.6; min-width: 40px; }
+  .class-day { font-size: 17px; font-weight: 700; }
+  .class-time { font-size: 13px; opacity: 0.8; margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+
+  .week-badge { background: rgba(255,255,255,0.25); border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+
+  /* IDEA FUERZA */
+  .idea-fuerza { background: #FFF8E1; border-left: 5px solid #FF6F00; border-radius: 0 8px 8px 0; padding: 12px 16px; font-weight: 600; color: #E65100; margin-bottom: 16px; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* STEP CARDS */
+  .step-card { border-radius: 8px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background: white; }
+  .step-header { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; user-select: none; gap: 10px; transition: filter 0.15s; }
+  .step-header:hover { filter: brightness(0.96); }
+  .step-icon { font-size: 18px; }
+  .step-label { font-weight: 700; font-size: 13px; flex: 1; text-transform: uppercase; letter-spacing: 0.3px; }
+  .step-toggle { font-size: 12px; opacity: 0.6; transition: transform 0.2s; }
+  .step-toggle.open { transform: rotate(180deg); }
+  .step-body { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,0.07); display: none; }
+  .step-body.open { display: block; }
+
+  /* BODY CONTENT */
+  .step-body p { margin: 5px 0; line-height: 1.55; }
+  .step-body ul { margin: 6px 0 6px 20px; }
+  .step-body ol { margin: 6px 0 6px 20px; }
+  .step-body li { margin: 3px 0; line-height: 1.5; }
+  .step-body li.sub-item { margin-left: 16px; }
+  .step-body strong { color: #1A237E; }
+  .step-body em { color: #555; }
+  .step-body code { background: #F5F5F5; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: 'Courier New', monospace; }
+  blockquote { border-left: 4px solid #90A4AE; padding: 8px 14px; color: #555; font-style: italic; background: #FAFAFA; border-radius: 0 6px 6px 0; margin: 8px 0; }
+  .warning { background: #FFF3E0; border-left: 4px solid #FF6F00; padding: 8px 14px; border-radius: 0 6px 6px 0; color: #E65100; font-weight: 600; font-size: 13px; margin: 8px 0; }
+  pre { background: #F5F5F5; border: 1px solid #E0E0E0; border-radius: 6px; padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 12px; overflow-x: auto; color: #444; margin: 8px 0; white-space: pre; }
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th { background: #E3F2FD; color: #0D47A1; font-weight: 700; padding: 7px 10px; text-align: left; border: 1px solid #BBDEFB; }
+  td { padding: 6px 10px; border: 1px solid #E0E0E0; vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFAFA; }
+  h4 { color: #333; font-size: 13px; margin: 10px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .top-bar { position: static; background: #1B5E20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .btn-pdf, .btn-expand, .nav-tabs { display: none !important; }
+    .main { max-width: 100%; padding: 10px; }
+    .class-section { display: block !important; page-break-before: always; }
+    .class-section:first-child { page-break-before: avoid; }
+    .class-banner { background: #0D47A1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 4px; margin-bottom: 10px; }
+    .step-body { display: block !important; }
+    .step-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .step-card { page-break-inside: avoid; box-shadow: none; border: 1px solid #E0E0E0; margin-bottom: 6px; }
+    .step-toggle { display: none; }
+    .idea-fuerza { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { page-break-inside: avoid; }
+    th { background: #E3F2FD !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .meta-info { box-shadow: none; border: 1px solid #E0E0E0; }
+    .week-badge { background: rgba(0,0,0,0.15) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>5S — Secuencias Didácticas · Semana 15-19 junio 2026</h1>
+  <div class="subtitle">Semanas 8-12 y 15-19 junio 2026 · CyT MDD</div>
+  <div class="top-actions">
+    <button class="btn-pdf" onclick="imprimirPDF()">⬇ Descargar PDF</button>
+    <button class="btn-expand" onclick="expandAll()">Expandir todo</button>
+    <button class="btn-expand" onclick="collapseAll()">Colapsar todo</button>
+  </div>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+<div class="week-separator">8-12 jun</div>
+<button class="tab-btn active" onclick="showClass(0)" id="tab-0">Lunes<br><small>11:00-12:05 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(1)" id="tab-1">Miércoles<br><small>7:50-8:55 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(2)" id="tab-2">Viernes<br><small>12:45-13:55 (70 min)</small></button>
+<div class="week-separator">15-19 jun</div>
+<button class="tab-btn " onclick="showClass(3)" id="tab-3">Lunes<br><small>11:00-12:05 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(4)" id="tab-4">Miércoles<br><small>7:50-8:55 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(5)" id="tab-5">Viernes<br><small>12:45-13:55 (70 min)</small></button>
+
+</div>
+
+<div class="main">
+  <div class="meta-info"><p><strong>Horario:</strong> Lunes 11:00 · Miércoles 7:50 · Viernes 12:45</p><p><strong>Unidad 3:</strong> Trabajo, energía y conservación</p><p><strong>Estado:</strong> L3 (Conservación de la energía, C2) cerrando + L4 (C1 — máquina de movimiento perpetuo) iniciando</p><blockquote>Fuente: B2_planificacion_estado.md → <em>"L3: Vie5jun/Lun8jun/Mié10jun · L4: Vie12jun/..."</em></blockquote><div class="warning">⚠️ El <strong>viernes inicia la evidencia C1</strong> (L4 — diseño del prototipo).</div></div>
+  
+        <div class="class-section" id="class-0" style="display:block">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 8 junio</div>
+              <div class="class-time">11:00-12:05 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L3 S2 — Conservación de la energía: el teorema trabajo-energía | C2</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: La energía no desaparece — se transforma. Pero en todo sistema real, parte de la energía "útil" se convierte en calor por rozamiento. Esa pérdida es inevitable, y entenderla es la clave para diseñar máquinas eficientes.</div><div class="warning">⚠️ 🖥️ <strong>CLASE VIRTUAL</strong> — lunes 8 jun se dicta por videoconferencia. La secuencia de 5 pasos y la justificación DUA se mantienen; solo cambian las herramientas. Clase conceptual: se adapta completa.</div><p><strong>Cómo se dicta cada paso a distancia:</strong></p><div class="table-wrap"><table><thead><tr><th>Paso</th><th>Herramienta / acción virtual</th><th>DUA</th></tr></thead><tbody><tr><td>Gancho (demo de la pelota)</td><td>El docente hace la demo <strong>frente a la cámara</strong> (suelta la pelota) o usa la simulación PhET "Energy Skate Park". Estudiantes predicen por chat antes de ver el resultado.</td><td>P.I — predicción + demostración visible para todos</td></tr><tr><td>Explica</td><td>Compartir pantalla con la montaña rusa, la ecuación Ep₁=Ec+Ep₂+Q y el diagrama de Sankey (pizarra digital). <strong>Grabar</strong> y subir a Classroom.</td><td>P.II — representación visual + asincrónica</td></tr><tr><td>Hace (problema del esquiador)</td><td>Resolución en cuaderno físico (foto al Classroom) o documento compartido.</td><td>P.III — entrega por foto o texto</td></tr><tr><td>Aplica (Hidroeléctrica Mantaro)</td><td>Caso en pantalla; responden en chat o documento colaborativo.</td><td>P.I — contexto peruano real</td></tr><tr><td>Cierra</td><td>Ticket de salida por <strong>Google Forms</strong> (registro automático).</td><td>P.III — expresión escrita</td></tr></tbody></table></div><p><strong>Plataforma:</strong> videoconferencia (Meet/Zoom) + aula virtual (Classroom o equivalente). <strong>Sugerencia:</strong> simulación PhET "Energy Skate Park" (gratis, en español) para reforzar el Explica. <strong>Subir antes a Classroom:</strong> el problema del esquiador y el enlace al formulario.</p>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> POE con demostración (P.I — conflicto cognitivo)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Suelto una pelota de básquet desde 1 metro. ¿Rebotará hasta 1 metro? ¿Más? ¿Menos? Primero predicen."</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Predicción: ¿Hasta qué altura rebota? · Resultado real:</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Escribe predicción + justificación → observa → responde: <em>"¿Qué pasó con la energía que 'faltó'?"</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li><li class="bullet ">Montaña rusa: cima A (h₁, v=0) → valle (v máx) → cima B (h₂ < h₁)</li><li class="bullet ">Ecuación: <code>Ep₁ = Ec + Ep₂ + Q</code> (Q = calor por rozamiento)</li><li class="bullet ">Diagrama de Sankey simplificado: energía total → útil (cinética) + perdida (calor)</li><li class="bullet "><strong>Frase clave:</strong> <em>"El rozamiento siempre se lleva una parte — y esa parte no vuelve como movimiento."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica causas + Integra</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Dibujar el diagrama energético de la pelota: <code>Ep inicial → Ec máxima → Ep en el rebote + calor</code></li><li class="numbered">Resolver: <em>Un esquiador baja por una pista de 20 m de desnivel. Ep inicial = 16.000 J. Llega con Ec = 12.800 J. ¿Cuánta energía se perdió? ¿Cuál es la eficiencia?</em></li><li class="numbered">Explicar en 3 líneas: ¿por qué una linterna de dinamo nunca puede ser 100% eficiente?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Diagrama + resolución del problema + explicación en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (13 min) — C2: Evalúa implicancias</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En la Central Hidroeléctrica del Mantaro (Junín), si la presa tiene eficiencia del 85%, ¿qué pasa con el 15% restante? ¿Es un error de diseño o algo inevitable?"</em></li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">¿Qué forma toma ese 15%?</li><li class="numbered">¿Se podría eliminar completamente con mejor tecnología?</li><li class="numbered">¿Qué implicancia tiene para la idea de una "máquina perfecta"?</li></ol>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Es posible diseñar una máquina con eficiencia del 100%? Justifica con el concepto de energía disipada."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> No — el rozamiento convierte parte de la energía mecánica en calor. La eficiencia siempre es menor que 100%.</li><li class="bullet "><strong>Palabras clave:</strong> energía potencial, cinética, rozamiento, eficiencia, calor disipado, fuerzas conservativas</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-1" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 10 junio</div>
+              <div class="class-time">7:50-8:55 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">L3 S3 — Conservación de la energía: aplicaciones y cierre | C2</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Entender la conservación de la energía permite predecir el comportamiento de cualquier sistema. Y también explica por qué el movimiento perpetuo es físicamente imposible.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Conectar → Extender → Cuestionar (P.I)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Pensemos en el salto con garrocha. ¿Qué transformaciones de energía ocurren desde que el atleta corre hasta que cruza la barra?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>CONECTAR: ¿qué ya sé? · EXTENDER: ¿qué nuevo veo? · CUESTIONAR: ¿qué no entiendo?</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Completa las 3 columnas → 2-3 comparten</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Salto con garrocha en 4 momentos:</li></ul><pre><code>  1. Carrera → Ec máxima
+  2. Clava la garrocha → Ep elástica
+  3. Garrocha se endereza → Ep gravitatoria (sube)
+  4. Cruza la barra → Ep gravitatoria máxima</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"El atleta no crea energía — la transforma. Lo que 'gana' en altura lo 'pagó' con su carrera."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Hace (25 min) — C2: Explica + Evalúa</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>DUA:</strong> P.III — elige A o B</li><li class="bullet "><strong>Opción A (ecuaciones):</strong> Un ciclista baja por una colina de 15 m, masa total 80 kg. v inicial = 0. Rozamiento disipa 2.400 J. ¿Cuál es su velocidad al llegar abajo? (g = 10 m/s²)</li><li class="bullet "><strong>Opción B (diagrama):</strong> Dibuja el diagrama de Sankey del mismo ciclista. Explica en 5 líneas qué pasó con la energía.</li><li class="bullet "><strong>Producto:</strong> Resolución de la opción elegida en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"Un ingeniero diseña un tranvía solar para Lima que baja cuestas y sube otras. ¿Podría la bajada 'recargar' la subida? ¿Qué límite físico tendría?"</em></li><li class="bullet "><strong>Concepto:</strong> frenado regenerativo — recuperación parcial de Ec → eléctrica → almacenada</li><li class="bullet "><strong>Tarea:</strong> Explica el principio + identifica qué pérdida seguirá siendo inevitable</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué decimos que 'el rozamiento no viola la conservación de la energía'?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> La energía no desaparece — se convierte en calor. Energía total (útil + calor) se conserva; solo cambia de forma útil a no útil</li><li class="bullet "><strong>Adelanto:</strong> <em>"El viernes empezamos L4 — van a diseñar un prototipo de máquina de movimiento perpetuo para demostrar empíricamente que es imposible."</em></li><li class="bullet "><strong>Palabras clave:</strong> transformación de energía, rozamiento, calor, frenado regenerativo, eficiencia</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-2" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Viernes 12 junio</div>
+              <div class="class-time">12:45-13:55 (70 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L4 S1 — Indagación: ¿Podemos crear una máquina de movimiento perpetuo? | C1 · Diseño</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El movimiento perpetuo no falla por falta de creatividad — la física lo prohíbe. Diseñar un experimento que lo demuestre requiere medir la pérdida de energía por ciclo.</div><div class="warning">⚠️ Inicia la evidencia C1. Instrumento: rúbrica de indagación (5 capacidades).</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Ver → Pensar → Preguntarse (P.I — fascinación + escepticismo)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Miren este diseño publicado en internet como 'máquina de energía libre'. El inventor dice que genera más energía de la que consume. ¿Creen que es posible?"</em></li><li class="bullet "><em>Apoyo:</em> Dibujar en pizarra una rueda con imanes — diseño típico de máquina "perpetua"</li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>VEO · PIENSO · ME PREGUNTO</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Escribe sus 3 respuestas → debate breve → el docente NO confirma ni niega</li><li class="bullet "><strong>Pregunta generadora:</strong> <em>"¿Cómo podríamos demostrarlo empíricamente — sin solo decir 'la física lo dice'?"</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li><li class="bullet ">Eje de la indagación: <code>Hipótesis: ningún prototipo puede funcionar indefinidamente → variable: tiempo de funcionamiento</code></li><li class="bullet ">Esquema del prototipo base sugerido: peonza / péndulo / bola en riel / rueda giratoria</li><li class="bullet "><strong>Frase clave:</strong> <em>"No necesitamos una máquina perfecta para demostrarlo. Basta con medir cuánto tiempo funciona y calcular que nunca alcanza el 100% de eficiencia."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <span class="step-label" style="color:#4A148C">Hace (30 min) — C1: Problematiza + Diseña estrategias</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Diseño del experimento en grupos de 3</li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered"><strong>Pregunta:</strong> <em>"¿En cuántos ciclos el prototipo pierde más del 50% de su movimiento inicial?"</em></li><li class="numbered"><strong>Hipótesis:</strong> predecir número de ciclos + explicación desde la conservación de energía</li><li class="numbered"><strong>Variables:</strong> independiente (tipo de material del eje/superficie) · dependiente (nº de ciclos / tiempo) · control (misma fuerza inicial, mismo ambiente)</li><li class="numbered"><strong>Plan:</strong> materiales disponibles, procedimiento, tabla de registro:</li></ol><div class="table-wrap"><table><thead><tr><th>Material eje</th><th>Ciclo 1 (s)</th><th>Ciclo 5 (s)</th><th>Ciclo 10 (s)</th><th>¿Se detuvo?</th></tr></thead><tbody></tbody></table></div><ul><li class="bullet "><strong>Producto:</strong> Ficha de diseño completa + esbozo del prototipo en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En YouTube hay canales peruanos con millones de visitas que venden 'generadores de energía libre' como solución para zonas sin luz eléctrica en la selva. ¿Qué le dirías a alguien que quiere comprar uno?"</em></li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">¿Qué ley física viola cualquier "generador de energía libre"?</li><li class="numbered">¿Qué evidencia pedirías antes de creerle?</li><li class="numbered">¿Qué recomendarías en su lugar para una comunidad sin red eléctrica?</li></ol>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué no basta ver que un prototipo funciona 10 minutos para concluir que viola la conservación de la energía?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Porque todavía tiene energía almacenada disipándose; para ser perpetuo necesitaría funcionar indefinidamente sin fuente externa — lo que ningún sistema con rozamiento puede hacer</li><li class="bullet "><strong>Adelanto:</strong> <em>"La próxima semana: ejecutamos el prototipo y medimos la pérdida por ciclo."</em></li><li class="bullet "><strong>Palabras clave:</strong> movimiento perpetuo, eficiencia, energía disipada, hipótesis, ciclo, prototipo</li></ul><p><em>Generado: 2026-06-07 | Fuente: 5S_B2.md + B2_planificacion_estado.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-3" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 15 junio</div>
+              <div class="class-time">11:00-12:05 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L4 S2 — Indagación: Ejecución del prototipo de movimiento perpetuo | C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El experimento no falla si el prototipo se detiene — ese es exactamente el resultado que la teoría predice. La ciencia no busca "ganar" — busca la verdad, aunque contradiga lo que queremos ver.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dice el docente:</strong> <em>"El viernes diseñaron el experimento y construyeron el prototipo. Hoy lo ponemos en marcha. Antes de empezar: ¿qué esperan que pase según su hipótesis?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Hipótesis: el prototipo perderá más del 50% de su movimiento en ___ ciclos porque ___</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Lee su hipótesis del viernes en voz alta → 2-3 grupos comparten</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (5 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Protocolo de medición:</strong></li></ul><pre><code>  Ciclo 1: impulso inicial → medir tiempo hasta que se detiene o reduce el 50%
+  Registrar: tiempo de funcionamiento · número de ciclos · temperatura del eje (si es posible)
+  Eje: comparar material A vs material B (variable independiente)</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"Midamos exactamente lo que planeamos medir — no cambiemos el experimento sobre la marcha. Si algo falla, lo anotamos como limitación."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <span class="step-label" style="color:#4A148C">Hace (38 min) — C1: Genera y registra datos</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Materiales:</strong> peonza / péndulo / bola en riel / rueda giratoria (según el prototipo de cada grupo)</li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Impulsar el prototipo con la misma fuerza inicial (definida en el plan)</li><li class="numbered">Registrar en la tabla:</li></ol><div class="table-wrap"><table><thead><tr><th>Material eje</th><th>Intento</th><th>Tiempo total (s)</th><th>Ciclos antes de detenerse</th><th>Temperatura eje</th></tr></thead><tbody><tr><td>A</td><td>1</td><td></td><td></td><td></td></tr><tr><td>A</td><td>2</td><td></td><td></td><td></td></tr><tr><td>A</td><td>3</td><td></td><td></td><td></td></tr><tr><td>B</td><td>1</td><td></td><td></td><td></td></tr><tr><td>B</td><td>2</td><td></td><td></td><td></td></tr><tr><td>B</td><td>3</td><td></td><td></td><td></td></tr></tbody></table></div><ol><li class="numbered">Calcular promedios por material</li><li class="numbered"><strong>Observación adicional:</strong> ¿El eje se calienta? ¿Hay sonido? ¿Dónde parece perderse la energía?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Tabla completa de datos con cálculos de promedios</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"Un inventor de Ucayali publica en YouTube que construyó un 'generador de energía libre' que funciona con imanes. Lleva grabado 3 minutos de video. ¿Por qué eso NO es evidencia de movimiento perpetuo?"</em></li><li class="bullet "><strong>Tarea:</strong> ¿Qué evidencia pedirías para evaluar la afirmación del inventor? (aplica el diseño experimental)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (6 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿En cuántos ciclos tu prototipo perdió el 50% del movimiento? ¿Coincidió con la hipótesis?"</em></li><li class="bullet "><strong>Adelanto:</strong> <em>"El miércoles: análisis completo y conclusión — se entrega la evidencia C1."</em></li><li class="bullet "><strong>Palabras clave:</strong> ciclo, rozamiento, energía disipada, tiempo de funcionamiento, datos, repetición</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-4" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 17 junio</div>
+              <div class="class-time">7:50-8:55 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L4 S3 — Indagación: Análisis y comunicación — Máquina de movimiento perpetuo | C1 | ✅ EVIDENCIA C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Demostrar empíricamente que algo es imposible es tan válido como descubrir que algo es posible. La evidencia de que el prototipo siempre pierde energía ES la prueba de la imposibilidad del movimiento perpetuo.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Antes pensaba → Ahora pienso (P.I — metacognición)</li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Antes del experimento pensaba... → Los datos del lunes muestran que...</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Completa las frases usando la tabla de datos del lunes</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (8 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Análisis de energía por ciclo:</li></ul><pre><code>  Energía inicial (Ec + Ep) → ciclo 1 → pierde X% → ciclo 2 → pierde X% → ...→ 0
+  Donde va la energía perdida: rozamiento → calor → disipado (no recuperable)
+  → Conclusión: eficiencia siempre < 100%  → movimiento perpetuo imposible</code></pre><ul><li class="bullet "><strong>Estructura de la conclusión:</strong></li></ul><pre><code>  "Según los datos, el prototipo con [material] se detuvo en ___ ciclos / ___ segundos.
+  Esto apoya la hipótesis porque...
+  La energía perdida por ciclo se debió a [rozamiento/calor/choque] porque...
+  Limitación: ___. Mejora: ___."</code></pre>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <span class="step-label" style="color:#4A148C">Hace (32 min) — C1: Analiza + Evalúa y comunica</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Gráfico de líneas: tiempo de funcionamiento por ciclo (línea descendente por material)</li><li class="numbered">Calcular % de energía perdida entre ciclo 1 y ciclo 3 (usando tiempo como proxy)</li><li class="numbered">Redactar conclusión completa (mínimo 6 líneas, con datos numéricos)</li><li class="numbered">Identificar 2 fuentes de error del experimento</li><li class="numbered"><strong>Pregunta central:</strong> <em>"¿Por qué la ley de conservación de la energía NO implica que el movimiento perpetuo sea posible?"</em></li></ol><ul><li class="bullet "><strong>Producto:</strong> Gráfico + conclusión + evaluación → <strong>evidencia C1</strong></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (13 min) — C1: Comunica</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Presentación oral por grupo</strong> (2-3 min): pregunta → hipótesis → datos del prototipo (con gráfico) → conclusión (mencionar rozamiento y calor) → 1 limitación</li><li class="bullet "><strong>Conexión final:</strong> <em>"Cada máquina real — un motor, una bicicleta, el corazón — pierde energía por rozamiento. Los ingenieros no buscan el 100% de eficiencia — eso es físicamente imposible. Buscan el 99%, el 98%. Ese 1-2% que ahorraron puede ser la diferencia entre contaminar o no contaminar el planeta."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Se recoge el informe / cuaderno</strong> → ✅ rúbrica C1 aplicada</li><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Puede existir una máquina con eficiencia del 100%? Responde en 2 líneas con la evidencia de tu experimento."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> No — el rozamiento siempre convierte parte de la energía cinética en calor (no recuperable). Los datos del prototipo muestran pérdida constante por ciclo, lo que prueba empíricamente la imposibilidad.</li><li class="bullet "><strong>Palabras clave:</strong> eficiencia, energía disipada, rozamiento, movimiento perpetuo, termodinámica, evidencia empírica</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-5" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Viernes 19 junio</div>
+              <div class="class-time">12:45-13:55 (70 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L5 S1 Punto de llegada — Las poleas y el salto con garrocha | C2 · Cierre U3</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Las poleas multiplican la fuerza sin crear energía nueva — solo la redirigen. Y el garrocha es un ejemplo perfecto de la conservación de la energía: cada transformación es trazable, y al final nada "desaparece".</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <span class="step-label" style="color:#1B5E20">Gancho (12 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Partes → Propósitos → Complejidades (P.I)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Imaginen que tienen que subir una caja de 50 kg al segundo piso. Tienen una cuerda, una polea y su propio peso. ¿Cómo lo harían? ¿Podrían hacerlo más fácil usando más poleas?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Polea simple: ¿cuánto trabajo se hace? · Polea doble: ¿qué cambia?</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Dibuja su propuesta de sistema de poleas (2 min) → comparte</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + diagramas (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li><li class="bullet ">Polea simple: <code>F = W (misma fuerza, diferente dirección)</code></li><li class="bullet ">Polea doble (móvil): <code>F = W/2 (mitad de fuerza, pero doble de distancia → mismo trabajo)</code></li><li class="bullet ">Regla de oro: <em>"Una polea no te da energía de gratis — te da ventaja mecánica a cambio de más recorrido."</em></li><li class="bullet ">Salto con garrocha — secuencia energética:</li></ul><pre><code>    Carrera → Ec máxima
+    Clava la garrocha → Ec → Ep elástica
+    Garrocha se endereza → Ep elástica → Ep gravitatoria
+    Cruza la barra → Ep gravitatoria máxima
+    Cae → Ep → Ec (+ algo de calor por rozamiento del aire)</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"El atleta no crea energía — la compra con su carrera y la 'invierte' en altura. La garrocha es el banco que guarda y devuelve esa inversión."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <span class="step-label" style="color:#0D47A1">Hace (25 min) — C2: Explica causas + Calcula</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Parte A — Poleas (15 min):</strong></li><li class="bullet ">Un operario usa un sistema de 2 poleas para subir sacos de papa (80 kg) en un mercado de Lima.</li></ul><ol><li class="numbered">¿Cuánta fuerza necesita aplicar con el sistema de poleas? (g = 10 m/s²)</li><li class="numbered">Si sube el saco 3 metros, ¿cuánto hala de la cuerda?</li><li class="numbered">¿Se conserva el trabajo total? Calcula W con fuerza grande y W con fuerza reducida</li></ol><ul><li class="bullet "><strong>Parte B — Salto con garrocha (10 min):</strong></li><li class="bullet ">Un garrocha de 70 kg corre a 9 m/s. Si no hubiera rozamiento:</li></ul><ol><li class="numbered">¿Cuánta Ec tiene al clavar la garrocha?</li><li class="numbered">Si toda esa Ec se convierte en Ep, ¿a qué altura teórica podría saltar?</li><li class="numbered">¿Por qué en la realidad nunca alcanza esa altura?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Cálculos y respuestas en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <span class="step-label" style="color:#004D40">Aplica (12 min) — C2: Evalúa implicancias + Conecta con C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"Los mineros de mina artesanal en Puno usan sistemas de poleas para subir mineral. ¿Qué ventaja y qué limitación física tiene su sistema? ¿Por qué nunca podrán recuperar más energía de la que meten?"</em></li><li class="bullet "><strong>Conexión con L4 (C1):</strong> <em>"¿En qué se parece la polea a su prototipo de 'movimiento perpetuo'? ¿Qué comparten respecto a la eficiencia?"</em></li><li class="bullet "><strong>Tarea:</strong> Compara polea con prototipo: ventaja mecánica vs eficiencia energética</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <span class="step-label" style="color:#3E2723">Cierra (6 min)</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Cierre integrador de U3:</strong> <em>"Recorrieron trabajo, potencia, energía cinética y potencial, conservación de la energía, eficiencia, y ahora poleas. Todo conecta: ninguna máquina crea energía, todas la transforman con alguna pérdida. El universo es honesto — no te da más de lo que pones."</em></li><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué el sistema de poleas no viola la conservación de la energía aunque 'facilita' levantar pesos?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Porque el trabajo total se conserva — lo que se gana en fuerza se paga con más distancia recorrida. W = F × d es constante.</li><li class="bullet "><strong>Palabras clave:</strong> polea, ventaja mecánica, trabajo, conservación de la energía, eficiencia, salto con garrocha, transformación energética</li></ul><p><em>Generado: 2026-06-07 | Fuente: 5S_B2.md + B2_planificacion_estado.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+</div>
+
+<script>
+  function showClass(idx) {
+    document.querySelectorAll('.class-section').forEach((el, i) => {
+      el.style.display = i === idx ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+  }
+
+  function toggleStep(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.step-toggle');
+    body.classList.toggle('open', !body.classList.contains('open'));
+    if (toggle) toggle.classList.toggle('open', !toggle.classList.contains('open'));
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.add('open'));
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.remove('open'));
+  }
+
+  function imprimirPDF() {
+    document.querySelectorAll('.step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section').forEach(el => el.style.display = 'block');
+    window.print();
+    setTimeout(() => {
+      document.querySelectorAll('.class-section').forEach((el, i) => {
+        el.style.display = i === 0 ? 'block' : 'none';
+      });
+    }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const firstStep = document.querySelector('.class-section .step-body');
+    if (firstStep) {
+      firstStep.classList.add('open');
+      const toggle = firstStep.previousElementSibling.querySelector('.step-toggle');
+      if (toggle) toggle.classList.add('open');
+    }
+  });
+</script>
+</body>
+</html>

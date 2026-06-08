@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guiones CyT 2026 — MDD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
+    font-size: 1.6rem;
+    color: #1a237e;
+    margin-bottom: 0.3rem;
+  }
+  header p {
+    color: #555;
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 900px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    padding: 1.4rem 1.6rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-left: 5px solid var(--color);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.13);
+  }
+  .icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+  }
+  .card h2 { font-size: 1.1rem; color: #1a237e; margin-bottom: 0.2rem; }
+  .card p  { font-size: 0.82rem; color: #666; }
+  footer {
+    margin-top: 2.5rem;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Guiones Didácticos CyT 2026</h1>
+  <p>Ciencia y Tecnología — MDD · Secuencias semanales por grado</p>
+</header>
+
+<div class="grid">
+
+  <a class="card" href="Guion_6P.html" style="--color:#2e7d32;">
+    <div class="icon">🌱</div>
+    <div>
+      <h2>6.° Primaria</h2>
+      <p>Unidad 3 — Salud humana<br>Situación: Nueva Villa</p>
+    </div>
+  </a>
+
+  <a class="card" href="Guion_1S.html" style="--color:#1565c0;">
+    <div class="icon">🦎</div>
+    <div>
+      <h2>1.° Secundaria</h2>
+      <p>Unidad 3 — Ecosistemas<br>Situación: Jaguar en Madre de Dios</p>
+    </div>
+  </a>
+
+  <a class="card" href="Guion_2S.html" style="--color:#6a1b9a;">
+    <div class="icon">⚡</div>
+    <div>
+      <h2>2.° Secundaria</h2>
+      <p>Unidad 3 — Coordinación y regulación<br>Situación: ¿Cómo reacciona tu cuerpo?</p>
+    </div>
+  </a>
+
+  <a class="card" href="Guion_3S.html" style="--color:#00695c;">
+    <div class="icon">🔬</div>
+    <div>
+      <h2>3.° Secundaria</h2>
+      <p>Unidad 3 — Enlaces químicos<br>Situación: Agua y materia</p>
+    </div>
+  </a>
+
+  <a class="card" href="Guion_4S.html" style="--color:#e65100;">
+    <div class="icon">🧬</div>
+    <div>
+      <h2>4.° Secundaria</h2>
+      <p>Unidad 3 — Nutrición y sistemas<br>Exposiciones temas 1–12</p>
+    </div>
+  </a>
+
+  <a class="card" href="Guion_5S.html" style="--color:#4527a0;">
+    <div class="icon">⚙️</div>
+    <div>
+      <h2>5.° Secundaria</h2>
+      <p>Unidad 3 — Trabajo y energía<br>Situación: Máquina imposible</p>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  Generado con Claude Code · Actualizado automáticamente cada semana
+</footer>
+
+</body>
+</html>
