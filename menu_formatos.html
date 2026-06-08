@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú de Formatos de Clase — DUA + Ciencias</title>
+<style>
+:root {
+  --p1:#e74c3c; --p1bg:#fdecea; --p1b:#f1948a;
+  --p2:#8e44ad; --p2bg:#f5eef8; --p2b:#c39bd3;
+  --p3:#16a085; --p3bg:#e8f8f5; --p3b:#76d7c4;
+  --verde:#27ae60; --azul:#2980b9; --amarillo:#e67e22;
+  --gris:#f4f6f8; --texto:#2c3e50; --sub:#7f8c8d;
+  --blanco:#fff; --borde:#e0e4ea;
+  --sombra:0 2px 10px rgba(0,0,0,0.08);
+  --sombra-hover:0 6px 24px rgba(0,0,0,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--gris);color:var(--texto);min-height:100vh;}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  color:#fff;padding:30px 24px 22px;text-align:center;
+}
+.header h1{font-size:1.55rem;font-weight:800;letter-spacing:-0.02em;}
+.header p{font-size:0.9rem;opacity:0.65;margin-top:6px;}
+
+/* ── TABS FASES ── */
+.tabs{display:flex;overflow-x:auto;background:#fff;border-bottom:2px solid var(--borde);gap:0;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:14px 20px;font-size:0.85rem;font-weight:700;cursor:pointer;white-space:nowrap;
+  color:var(--sub);border-bottom:3px solid transparent;transition:all 0.2s;flex-shrink:0;}
+.tab.active{color:var(--texto);border-bottom-color:var(--azul);}
+.tab:hover{background:#f8f9fa;}
+
+/* ── BARRA HERRAMIENTAS ── */
+.toolbar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 20px;background:#fff;border-bottom:1px solid var(--borde);
+}
+.search-box{
+  flex:1;min-width:180px;padding:8px 14px;border:1.5px solid var(--borde);
+  border-radius:8px;font-size:0.88rem;outline:none;transition:border-color 0.2s;
+}
+.search-box:focus{border-color:var(--azul);}
+.filter-label{font-size:0.78rem;font-weight:700;color:var(--sub);white-space:nowrap;}
+.filter-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.fbtn{
+  padding:5px 12px;border-radius:16px;border:2px solid transparent;
+  font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.15s;background:#f0f0f0;color:#666;
+}
+.fbtn.active-p1{background:var(--p1bg);color:var(--p1);border-color:var(--p1);}
+.fbtn.active-p2{background:var(--p2bg);color:var(--p2);border-color:var(--p2);}
+.fbtn.active-p3{background:var(--p3bg);color:var(--p3);border-color:var(--p3);}
+.fbtn.active-all{background:var(--azul);color:#fff;border-color:var(--azul);}
+.count{font-size:0.78rem;color:var(--sub);white-space:nowrap;margin-left:auto;}
+
+/* ── GRID TARJETAS ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:14px;padding:20px;
+  max-width:1200px;margin:0 auto;
+}
+
+/* ── TARJETA ── */
+.card{
+  background:var(--blanco);border-radius:14px;overflow:hidden;
+  box-shadow:var(--sombra);border-top:4px solid #ddd;
+  transition:box-shadow 0.2s,transform 0.15s;cursor:pointer;
+  display:flex;flex-direction:column;
+}
+.card:hover{box-shadow:var(--sombra-hover);transform:translateY(-2px);}
+.card.hidden{display:none;}
+
+/* colores de borde por categoría */
+.cat-rutinas{border-top-color:#e67e22;}
+.cat-indagacion{border-top-color:#27ae60;}
+.cat-colaborativo{border-top-color:#2980b9;}
+.cat-expresion{border-top-color:#8e44ad;}
+.cat-gamif{border-top-color:#e74c3c;}
+.cat-5e{border-top-color:#16a085;}
+
+/* cabecera tarjeta */
+.card-head{
+  display:flex;align-items:flex-start;gap:12px;padding:16px 16px 12px;
+}
+.card-icon{
+  font-size:1.8rem;width:46px;height:46px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.cat-rutinas .card-icon{background:#fef0e0;}
+.cat-indagacion .card-icon{background:#eafaf1;}
+.cat-colaborativo .card-icon{background:#eaf4fb;}
+.cat-expresion .card-icon{background:#f5eef8;}
+.cat-gamif .card-icon{background:#fdedec;}
+.cat-5e .card-icon{background:#e8f8f5;}
+
+.card-titles{flex:1;}
+.card-titles h3{font-size:0.98rem;font-weight:700;line-height:1.3;}
+.card-cat{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;}
+.cat-rutinas .card-cat{color:#e67e22;}
+.cat-indagacion .card-cat{color:#27ae60;}
+.cat-colaborativo .card-cat{color:#2980b9;}
+.cat-expresion .card-cat{color:#8e44ad;}
+.cat-gamif .card-cat{color:#e74c3c;}
+.cat-5e .card-cat{color:#16a085;}
+
+/* resumen */
+.card-summary{
+  font-size:0.85rem;color:#555;line-height:1.5;
+  padding:0 16px 12px;flex:1;
+}
+
+/* tags DUA */
+.card-tags{display:flex;flex-wrap:wrap;gap:5px;padding:0 16px 12px;}
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:12px;font-size:0.73rem;font-weight:700;
+}
+.tag.p1{background:var(--p1bg);color:var(--p1);}
+.tag.p2{background:var(--p2bg);color:var(--p2);}
+.tag.p3{background:var(--p3bg);color:var(--p3);}
+.tag .dot{width:5px;height:5px;border-radius:50%;}
+.tag.p1 .dot{background:var(--p1);}
+.tag.p2 .dot{background:var(--p2);}
+.tag.p3 .dot{background:var(--p3);}
+
+/* pie tarjeta */
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-top:1px solid #f0f0f0;background:#fafafa;
+}
+.tiempo-chip{
+  font-size:0.75rem;font-weight:700;color:var(--sub);
+  background:#efefef;padding:3px 9px;border-radius:10px;
+}
+.ver-btn{font-size:0.78rem;color:var(--azul);font-weight:700;text-decoration:none;}
+
+/* ── MODAL DETALLE ── */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:200;overflow-y:auto;padding:20px;
+}
+.overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+.modal{
+  background:#fff;border-radius:18px;max-width:640px;width:100%;
+  margin:auto;box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  animation:popIn 0.22s ease;overflow:hidden;
+}
+@keyframes popIn{from{transform:scale(0.92) translateY(20px);opacity:0;}to{transform:none;opacity:1;}}
+
+.modal-hero{
+  padding:24px 24px 18px;border-bottom:1px solid var(--borde);
+  display:flex;align-items:flex-start;gap:14px;
+}
+.modal-icon{font-size:2.2rem;flex-shrink:0;}
+.modal-hero-text h2{font-size:1.2rem;font-weight:800;}
+.modal-hero-text .modal-cat{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;}
+.modal-hero-text .modal-tiempo{font-size:0.82rem;color:var(--sub);margin-top:2px;}
+
+.modal-body{padding:20px 24px;}
+.msec{margin-bottom:20px;}
+.msec-title{
+  font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;
+  color:var(--sub);margin-bottom:8px;
+}
+.msec p,.msec li{font-size:0.91rem;line-height:1.65;color:#444;}
+.msec ul{padding-left:18px;}
+.msec li{margin-bottom:5px;}
+
+.quote-box{
+  background:#f8f9fa;border-left:3px solid #ccc;padding:10px 14px;
+  border-radius:0 8px 8px 0;font-size:0.87rem;color:#555;font-style:italic;
+  margin-top:8px;line-height:1.6;
+}
+.alumno-box{
+  display:flex;gap:10px;align-items:flex-start;background:#eaf4fb;
+  border-radius:10px;padding:10px 14px;margin-top:8px;
+  font-size:0.88rem;line-height:1.6;color:#2c3e50;
+}
+.alumno-box .ei{font-size:1.25rem;flex-shrink:0;}
+
+.modal-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+
+.source-box{
+  background:#f8f9fa;border-radius:10px;padding:10px 14px;
+  font-size:0.8rem;color:#888;line-height:1.5;
+}
+.source-box a{color:var(--azul);text-decoration:none;}
+.source-box a:hover{text-decoration:underline;}
+
+/* competencia tags */
+.tag-comp{
+  display:inline-flex;align-items:center;padding:3px 9px;
+  border-radius:12px;font-size:0.73rem;font-weight:800;margin-left:2px;
+}
+.tcC1{background:#fdecea;color:#c0392b;border:1.5px solid #e74c3c;}
+.tcC2{background:#eaf4fb;color:#1a5276;border:1.5px solid #2980b9;}
+.tcC3{background:#eafaf1;color:#1e8449;border:1.5px solid #27ae60;}
+
+/* prep chip */
+.prep-chip{
+  font-size:0.72rem;font-weight:600;color:#888;
+  background:#f5f5f5;padding:3px 8px;border-radius:10px;
+}
+
+.modal-close{
+  display:block;width:calc(100% - 48px);margin:0 24px 24px;
+  padding:12px;background:var(--texto);color:#fff;border:none;
+  border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;
+}
+
+/* ── SECCIONES VACÍAS ── */
+.empty{text-align:center;color:var(--sub);padding:60px 20px;font-size:0.95rem;}
+
+/* ── LEYENDA DUA fija ── */
+.dua-legend{
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+  padding:12px 20px;background:#fff;border-bottom:1px solid var(--borde);
+}
+.dl-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:16px;font-size:0.78rem;font-weight:700;cursor:pointer;
+  transition:transform 0.15s;
+}
+.dl-badge:hover{transform:translateY(-1px);}
+.dl-badge.p1{background:var(--p1bg);color:var(--p1);border:1.5px solid var(--p1b);}
+.dl-badge.p2{background:var(--p2bg);color:var(--p2);border:1.5px solid var(--p2b);}
+.dl-badge.p3{background:var(--p3bg);color:var(--p3);border:1.5px solid var(--p3b);}
+.dl-badge .bdot{width:7px;height:7px;border-radius:50%;}
+.dl-badge.p1 .bdot{background:var(--p1);}
+.dl-badge.p2 .bdot{background:var(--p2);}
+.dl-badge.p3 .bdot{background:var(--p3);}
+
+/* modal DUA info */
+.dua-modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);
+  z-index:300;align-items:center;justify-content:center;padding:20px;
+}
+.dua-modal.open{display:flex;}
+.dua-box{
+  background:#fff;border-radius:16px;max-width:460px;width:100%;
+  padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  animation:popIn 0.2s ease;
+}
+.dua-box h2{font-size:1.15rem;margin-bottom:10px;}
+.dua-box p{font-size:0.9rem;line-height:1.65;color:#555;margin-bottom:10px;}
+.dua-close{
+  margin-top:16px;padding:10px 24px;background:var(--texto);color:#fff;
+  border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.9rem;
+}
+
+@media(max-width:500px){
+  .grid{grid-template-columns:1fr;padding:12px;}
+  .header h1{font-size:1.2rem;}
+  .modal-hero{flex-direction:column;gap:8px;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 Menú de Formatos de Clase</h1>
+  <p>DUA + Ciencia y Tecnología · CYTEC 2026 · Toca una tarjeta para ver el detalle completo</p>
+</div>
+
+<!-- LEYENDA DUA -->
+<div class="dua-legend">
+  <div class="dl-badge p1" onclick="openDUA('p1')"><span class="bdot"></span> P. I — Implicación (el porqué)</div>
+  <div class="dl-badge p2" onclick="openDUA('p2')"><span class="bdot"></span> P. II — Representación (el qué)</div>
+  <div class="dl-badge p3" onclick="openDUA('p3')"><span class="bdot"></span> P. III — Acción y Expresión (el cómo)</div>
+</div>
+
+<!-- MODAL DUA -->
+<div class="dua-modal" id="dua-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="dua-box">
+    <h2 id="dua-title"></h2>
+    <p id="dua-def"></p>
+    <p id="dua-pautas" style="font-size:0.82rem;color:#999;"></p>
+    <button class="dua-close" onclick="document.getElementById('dua-modal').classList.remove('open')">Cerrar</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="filterCat('all',this)">Todos</div>
+  <div class="tab" onclick="filterCat('rutinas',this)">🔮 Rutinas de Pensamiento</div>
+  <div class="tab" onclick="filterCat('indagacion',this)">🔬 Indagación</div>
+  <div class="tab" onclick="filterCat('colaborativo',this)">🤝 Colaborativo</div>
+  <div class="tab" onclick="filterCat('expresion',this)">🎨 Expresión Alternativa</div>
+  <div class="tab" onclick="filterCat('gamif',this)">🎮 Gamificación</div>
+  <div class="tab" onclick="filterCat('5e',this)">🔄 Modelo 5E</div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <input class="search-box" type="text" placeholder="Buscar por nombre, tema o contenido..." oninput="filterSearch(this.value)" id="searchbox">
+  <span class="filter-label">DUA:</span>
+  <div class="filter-btns" id="dua-btns">
+    <div class="fbtn" id="fp1" onclick="filterDUA('p1')">P. I</div>
+    <div class="fbtn" id="fp2" onclick="filterDUA('p2')">P. II</div>
+    <div class="fbtn" id="fp3" onclick="filterDUA('p3')">P. III</div>
+    <div class="fbtn active-all" id="fall" onclick="filterDUA('all')">Todos</div>
+  </div>
+  <span class="filter-label">Competencia:</span>
+  <div class="filter-btns" id="comp-btns">
+    <div class="fbtn" id="fc1" onclick="filterComp('C1')" style="color:#c0392b">C1</div>
+    <div class="fbtn" id="fc2" onclick="filterComp('C2')" style="color:#1a5276">C2</div>
+    <div class="fbtn" id="fc3" onclick="filterComp('C3')" style="color:#1e8449">C3</div>
+    <div class="fbtn active-all" id="fcall" onclick="filterComp('all')">Todas</div>
+  </div>
+  <span class="filter-label">Prep:</span>
+  <div class="filter-btns" id="prep-btns">
+    <div class="fbtn" id="fsin" onclick="filterPrep('sin')">⚡ Sin prep</div>
+    <div class="fbtn" id="fminima" onclick="filterPrep('minima')">🟢 5-10 min</div>
+    <div class="fbtn" id="fmedia" onclick="filterPrep('media')">🟡 15-30 min</div>
+    <div class="fbtn" id="falta" onclick="filterPrep('alta')">🔴 1h+</div>
+    <div class="fbtn active-all" id="fpall" onclick="filterPrep('all')">Todas</div>
+  </div>
+  <span class="count" id="count"></span>
+</div>
+
+<!-- GRID -->
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none">No se encontraron formatos con ese criterio.</div>
+
+<!-- MODAL DETALLE -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <div class="modal-hero">
+      <div class="modal-icon" id="m-icon"></div>
+      <div class="modal-hero-text">
+        <h2 id="m-title"></h2>
+        <div class="modal-cat" id="m-cat"></div>
+        <div class="modal-tiempo" id="m-tiempo"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="msec">
+        <div class="msec-title">¿En qué consiste?</div>
+        <p id="m-desc"></p>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Lo que dices / haces tú</div>
+        <div class="quote-box" id="m-profe"></div>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Lo que hace el alumno</div>
+        <div class="alumno-box"><span class="ei">✏️</span><span id="m-alumno"></span></div>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Ejemplo en Ciencia y Tecnología</div>
+        <ul id="m-ejemplos"></ul>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Justificación DUA</div>
+        <div class="modal-tags" id="m-tags"></div>
+        <p id="m-dua"></p>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Cuándo usarlo</div>
+        <p id="m-cuando"></p>
+      </div>
+      <div class="msec">
+        <div class="msec-title">Fuente documentada</div>
+        <div class="source-box" id="m-fuente"></div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">Cerrar</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   BASE DE DATOS DE FORMATOS
+═══════════════════════════════════════ */
+const formatos = [
+
+  /* ── RUTINAS DE PENSAMIENTO (Project Zero) ── */
+  {
+    id:1, cat:"rutinas", icon:"👁️",
+    nombre:"Ver → Pensar → Preguntarse",
+    tiempo:"8-12 min", lugar:"Inicio o Desarrollo",
+    resumen:"Observan un fenómeno o imagen, luego interpretan y generan preguntas propias.",
+    profe:"Proyecta una imagen, una demo o un fenómeno real y dice: 'Primero solo observen. ¿Qué ven exactamente? Ahora: ¿qué piensan que está pasando? Y ahora: ¿qué pregunta les genera?'",
+    alumno:"Escribe 3 respuestas separadas (ver / pensar / preguntarse) antes de recibir cualquier explicación. Las preguntas que generan guían el resto de la clase.",
+    ejemplos:["🌿 Planta torcida hacia la ventana → ¿por qué?","⚗️ Foto de un átomo o diagrama de Bohr → ¿qué ven que no entienden?","🔥 Video corto de una reacción química llamativa","🌊 Imagen de ecosistema con una especie invasora"],
+    dua:["p1","p2"], duaText:"P. I: La pregunta propia del alumno lo hace dueño del tema — motivación intrínseca. P. II: El mismo fenómeno se da en imagen, video o demo real (múltiple representación).",
+    cuando:"Gancho perfecto para abrir cualquier tema nuevo. Especialmente cuando el contenido tiene algo observable o sorprendente.",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — Thinking Routines Toolbox (Harvard)</a>. Rutina original: "See, Think, Wonder". Una de las 3 rutinas más usadas mundialmente.'
+  },
+  {
+    id:2, cat:"rutinas", icon:"🔀",
+    nombre:"Antes pensaba… Ahora pienso…",
+    tiempo:"5-8 min", lugar:"Cierre (siempre)",
+    resumen:"El alumno compara su idea inicial con su comprensión final. Ve con sus propios ojos que aprendió.",
+    profe:"Al inicio de clase: 'Escribe en una línea: ¿qué crees que es/causa X?' — guardas ese papel. Al cierre: 'Ahora escribe: ¿qué piensas ahora?'",
+    alumno:"Compara sus dos respuestas. Puede cambiar de idea con evidencia y argumentarlo. No hay respuesta 'incorrecta inicial' — hay un cambio documentado.",
+    ejemplos:["🌿 'Antes pensaba que las plantas solo reaccionan a la luz. Ahora sé que también responden a la gravedad, agua y contacto.'","⚡ 'Antes pensaba que la energía se perdía. Ahora sé que se transforma.'","🧬 'Antes pensaba que los genes solo vienen de la madre. Ahora sé que vienen de ambos.'"],
+    dua:["p1","p3"], duaText:"P. I: Metacognición y autorregulación — el alumno evalúa su propio cambio de idea, construyendo identidad de 'aprendiz experto'. P. III: Expresión escrita reflexiva.",
+    cuando:"Cierre de CUALQUIER clase. Es el complemento natural del gancho. Si abres con una predicción, cierras con esta rutina.",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — "I Used to Think... Now I Think..."</a>. Diseñada específicamente para consolidar cambio conceptual.'
+  },
+  {
+    id:3, cat:"rutinas", icon:"🎯",
+    nombre:"Afirmar → Apoyar → Cuestionar",
+    tiempo:"10-15 min", lugar:"Desarrollo o Cierre",
+    resumen:"El alumno hace una afirmación sobre el tema, busca evidencia que la apoye, y luego genera una pregunta que la cuestiona.",
+    profe:"'Hagan una afirmación sobre [tema]. Ahora: ¿qué evidencia tienen para apoyarla? Y finalmente: ¿qué pregunta la haría más difícil de defender?'",
+    alumno:"Escribe su afirmación, lista 2-3 evidencias, y genera 1 pregunta crítica. Trabaja solo primero, luego comparte en pares.",
+    ejemplos:["🌿 'Las plantas sienten' → evidencia: tropismos, etileno → cuestión: ¿'sentir' sin sistema nervioso es lo mismo?","🔥 'La combustión destruye materia' → evidencia: la madera desaparece → cuestión: ¿la ley de conservación dice otra cosa?","🧬 'La reproducción sexual es mejor que la asexual' → debate de ventajas y desventajas"],
+    dua:["p1","p3"], duaText:"P. I: El alumno construye su propia posición — tiene voz y agencia. P. III: Argumentación escrita y oral como forma de expresión.",
+    cuando:"Temas donde hay debate, conceptos erróneos frecuentes, o cuando quieres que el alumno argumente con evidencia (competencia C2).",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — "Claim, Support, Question"</a>. Pensada para desarrollar pensamiento crítico basado en evidencia.'
+  },
+  {
+    id:4, cat:"rutinas", icon:"🧩",
+    nombre:"Partes → Propósitos → Complejidades",
+    tiempo:"10-15 min", lugar:"Desarrollo",
+    resumen:"Desmontan un sistema u objeto: identifican sus partes, para qué sirve cada una, y qué lo hace complejo o sorprendente.",
+    profe:"'Miren este sistema [órgano, ecosistema, átomo, máquina]. Primero: ¿qué partes tiene? Segundo: ¿para qué sirve cada parte? Tercero: ¿qué lo hace sorprendente o complicado?'",
+    alumno:"Llena un organizador de 3 columnas o dibuja el sistema etiquetando partes, funciones y complejidades.",
+    ejemplos:["🫀 Sistema circulatorio: partes (corazón, arterias, venas) → propósitos → complejidad: ¿cómo sabe el corazón cuándo latir más rápido?","⚛️ Átomo: núcleo/electrones → propósitos → complejidad: ¿por qué no se rompe si hay protones positivos juntos?","🌊 Ecosistema de manglar: productores/consumidores/descomponedores → roles → complejidad: ¿qué pasa si desaparece una especie?"],
+    dua:["p2","p3"], duaText:"P. II: Construir un modelo propio del sistema (organiza la representación). P. III: El organizador puede ser dibujado, escrito o hablado.",
+    cuando:"Temas con sistemas complejos: sistemas del cuerpo, ecosistemas, estructuras atómicas, ciclos biogeoquímicos.",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — "Parts, Purposes, Complexities"</a>. Especialmente diseñada para investigar objetos y sistemas.'
+  },
+  {
+    id:5, cat:"rutinas", icon:"🔗",
+    nombre:"Conectar → Extender → Cuestionar",
+    tiempo:"8-10 min", lugar:"Cierre o inicio de tema nuevo",
+    resumen:"El alumno conecta lo nuevo con lo que ya sabía, extiende su comprensión hacia ideas nuevas, y genera preguntas pendientes.",
+    profe:"'De lo que vieron hoy: ¿qué conecta con algo que ya sabían? ¿Qué idea nueva les abre esto? ¿Qué pregunta les queda sin responder?'",
+    alumno:"Responde las 3 preguntas por escrito o en discusión. Las preguntas sin responder se pueden usar como gancho de la siguiente clase.",
+    ejemplos:["🌿 Conecta tropismos con lo del sistema endocrino (hormonas como señales) → Extiende: ¿las plantas también tienen 'sistema hormonal'? → Cuestión: ¿pueden comunicarse entre sí?","⚡ Conecta conservación de energía con combustión → Extiende: ¿y en el cuerpo humano?"],
+    dua:["p1","p2"], duaText:"P. I: La pregunta pendiente crea motivación para la siguiente clase. P. II: Integra y consolida la red conceptual del alumno.",
+    cuando:"Al cerrar una unidad o al preparar el puente hacia el siguiente tema. También como tarea reflexiva de 5 minutos.",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — "Connect, Extend, Challenge"</a>.'
+  },
+  {
+    id:6, cat:"rutinas", icon:"🎪",
+    nombre:"Verdadero o Mito",
+    tiempo:"5-8 min", lugar:"Inicio (gancho)",
+    resumen:"El profe lanza 3-5 afirmaciones sobre el tema. Los alumnos votan si son verdad o mito antes de saber la respuesta.",
+    profe:"Escribe las afirmaciones en la pizarra. 'Levanten la mano los que creen que es verdad.' No confirmes aún — deja la tensión.",
+    alumno:"Vota, se compromete con una posición, anota su razón. Quiere saber si acertó — eso mantiene la atención toda la clase.",
+    ejemplos:["🌿 'Las plantas se mueven a propósito' / 'Una fruta puede madurar a otra'","⚛️ 'El átomo es sólido' / 'El núcleo ocupa la mayoría del átomo'","🧬 'Los hijos son mitad papá mitad mamá exactamente'","⚡ 'La energía se destruye cuando se pierde'"],
+    dua:["p1"], duaText:"P. I: Activa conocimientos previos y genera tensión cognitiva (¿acerté?). La curiosidad por saber si erraron sostiene la atención durante toda la explicación.",
+    cuando:"Inicio de CUALQUIER tema. Especialmente efectivo cuando el tema tiene mitos populares o ideas equivocadas comunes.",
+    fuente:'Basado en estrategia de activación de conocimientos previos documentada en didáctica de ciencias. Variante de "Facts or Fiction" de Project Zero.'
+  },
+  {
+    id:7, cat:"rutinas", icon:"🌀",
+    nombre:"El Juego de la Explicación",
+    tiempo:"8-12 min", lugar:"Cierre",
+    resumen:"Los alumnos explican el concepto más importante de la clase como si se lo explicaran a un niño de 5 años o a un familiar sin formación científica.",
+    profe:"'Explíquenle a alguien en casa qué aprendieron hoy sobre [tema] en menos de 4 oraciones, con palabras que cualquier persona entienda.' Algunos comparten en voz alta.",
+    alumno:"Simplifica, reformula, busca analogías propias. Si no puede explicarlo simple, identifica exactamente qué no entendió.",
+    ejemplos:["🌿 'Las plantas saben dónde está la luz porque tienen una señal química que las hace crecer más por un lado'","⚡ 'La energía no desaparece, se convierte en otra cosa, como el ruido y calor cuando frenas'","🧬 'Los genes son como instrucciones escritas en un código que le dice al cuerpo cómo ser'"],
+    dua:["p1","p3"], duaText:"P. I: Metacognición — descubren solos si entendieron o no. P. III: Expresión oral en lenguaje cotidiano como alternativa a la escritura técnica.",
+    cuando:"Cierre de clase cuando el tema tiene mucho vocabulario técnico. También como tarea para casa.",
+    fuente:'<a href="https://pz.harvard.edu/thinking-routines" target="_blank">Project Zero — "The Explanation Game"</a>. Basado también en la "Técnica Feynman": si no puedes explicarlo simple, no lo entendiste del todo.'
+  },
+
+  /* ── INDAGACIÓN ── */
+  {
+    id:8, cat:"indagacion", icon:"🔬",
+    nombre:"POE — Predecir / Observar / Explicar",
+    tiempo:"15-20 min", lugar:"Inicio o Desarrollo",
+    resumen:"El alumno predice el resultado de un fenómeno, lo observa, y luego explica el choque entre su predicción y la realidad.",
+    profe:"'Antes de ver qué pasa: escriban qué creen que va a ocurrir y por qué.' Realizas la demo o muestras el fenómeno. 'Ahora comparen: ¿coincidió con su predicción? ¿Por qué sí o no?'",
+    alumno:"Escribe predicción con justificación → observa → escribe explicación del resultado real. El choque entre lo esperado y lo real es el momento de aprendizaje más potente.",
+    ejemplos:["🌿 Experimento de Darwin: semilla en caja con agujero de luz → ¿hacia dónde crece?","⚗️ Mezclar bicarbonato y vinagre → ¿qué gas se produce?","⚡ Soltar una pelota desde distinta altura → ¿cómo cambia el rebote?","🫀 Medir pulso antes y después de 30 segundos de saltos → ¿cuánto sube?"],
+    dua:["p1","p2","p3"], duaText:"P. I: La predicción crea inversión personal — quieren saber si acertaron. P. II: El mismo fenómeno se presenta de 2 maneras (predicción mental + observación real). P. III: El alumno escribe y explica con sus propias palabras.",
+    cuando:"Siempre que haya algo observable o demostrable. Es el formato más poderoso para ciencias porque replica el proceso científico real.",
+    fuente:'White, R. & Gunstone, R. (1992). <em>Probing Understanding</em>. Routledge. Metodología POE documentada y ampliamente usada en didáctica de ciencias desde los años 90.'
+  },
+  {
+    id:9, cat:"indagacion", icon:"🧫",
+    nombre:"Mini-Indagación (reto de días)",
+    tiempo:"15 min (setup) + días de observación",
+    lugar:"Desarrollo",
+    resumen:"El alumno monta un mini-experimento con materiales simples, formula hipótesis, registra datos durante 2-3 días y concluye.",
+    profe:"'Vamos a diseñar un experimento. Necesitamos una variable que cambiamos (X) y algo que medimos (Y). ¿Cómo sería el grupo control?'",
+    alumno:"Arma el experimento, llena tabla de predicción, registra observaciones en días siguientes, concluye si su hipótesis fue correcta.",
+    ejemplos:["🌿 Reto etileno: bolsa A (plátano maduro + fruta verde) vs bolsa B (control) → ¿cuál madura primero?","🌱 Germinación con y sin luz → ¿la luz es necesaria para germinar?","🧂 Disolución de sal en agua fría vs caliente → ¿la temperatura afecta?","🌊 Experimento del maíz en caja con agujero de luz (tropismos)"],
+    dua:["p1","p3"], duaText:"P. I: Autenticidad máxima — el alumno usa materiales de su cocina o casa. El resultado real los trae de vuelta a la siguiente clase. P. III: Diseña, registra, concluye — funciones ejecutivas completas (CyT C1).",
+    cuando:"Cuando el fenómeno puede reproducirse con materiales simples. Perfecto para biología, química básica. Da continuidad entre clases.",
+    fuente:'Basado en el modelo de <em>Indagación Guiada</em> (Guided Inquiry) del NGSS (Next Generation Science Standards, 2013) y el modelo 5E de Bybee (BSCS, 1987).'
+  },
+  {
+    id:10, cat:"indagacion", icon:"📊",
+    nombre:"Análisis de Datos Reales",
+    tiempo:"15-20 min", lugar:"Desarrollo",
+    resumen:"Los alumnos reciben datos reales (de noticias, estudios, estadísticas) y los interpretan para responder una pregunta científica.",
+    profe:"Entrega una tabla o gráfico real. 'Aquí están los datos. ¿Qué patrón ven? ¿Qué conclusión pueden sacar? ¿Qué no nos dicen estos datos?'",
+    alumno:"Lee el gráfico, identifica tendencias, formula una conclusión y señala las limitaciones del dato.",
+    ejemplos:["📈 Temperatura global vs CO2 últimos 100 años → ¿correlación o causalidad?","🌿 Datos de crecimiento de plantas con/sin auxinas","🫁 Casos de COVID en altitud vs nivel del mar → ¿hay relación con O2?","🐟 Datos de biodiversidad en manglares degradados vs conservados"],
+    dua:["p2","p3"], duaText:"P. II: Los datos como forma de representación diferente al texto (tablas, gráficos, mapas). P. III: Interpretar y concluir a partir de datos es una forma de expresión científica (CyT C1 y C2).",
+    cuando:"Temas con evidencia cuantitativa disponible. Especialmente efectivo para 5S (física, energía) y temas ambientales. Desarrolla pensamiento crítico.",
+    fuente:'Práctica documentada en NGSS: "Analyzing and interpreting data" como práctica científica central. Recomendada también en el marco de CyT del CNEB peruano.'
+  },
+  {
+    id:11, cat:"indagacion", icon:"🗂️",
+    nombre:"Estudio de Caso Real",
+    tiempo:"20-25 min", lugar:"Desarrollo o Aplicación",
+    resumen:"El alumno analiza una situación real (problema ambiental, médico, tecnológico) aplicando el contenido de la clase para proponer soluciones.",
+    profe:"Presenta el caso con suficiente contexto. 'No hay una sola respuesta correcta. Usen lo que aprendieron para argumentar una posición.'",
+    alumno:"Lee el caso, identifica el problema científico, aplica conceptos, propone solución o toma posición argumentada.",
+    ejemplos:["🏔️ Caso Lima-Cusco: ¿por qué se cansa más una persona en altura? → aplica hipoxia y hemoglobina","🌿 Caso: agricultor quiere madurar paltas más rápido → aplica etileno","⚡ Caso: apagón en un edificio → ¿cómo redistribuir la energía disponible?","🦠 Caso: brote de enfermedad en una comunidad → ¿cómo se propaga? ¿qué hacer?"],
+    dua:["p1","p3"], duaText:"P. I: La situación real genera relevancia personal — 'esto me pasa a mí o a alguien que conozco'. P. III: La respuesta al caso puede ser escrita, un diagrama causal o una propuesta de acción (CyT C3).",
+    cuando:"Aplicación de cualquier contenido a la realidad peruana o cotidiana del alumno. Excelente para evaluación porque evidencia comprensión profunda.",
+    fuente:'Aprendizaje Basado en Problemas (ABP/PBL). Documentado en: Barrows, H.S. (1980). <em>Problem-Based Learning</em>. Springer. Ampliamente usado en ciencias de la salud y naturales.'
+  },
+
+  /* ── COLABORATIVO ── */
+  {
+    id:12, cat:"colaborativo", icon:"🧩",
+    nombre:"Jigsaw (Rompecabezas de Aronson)",
+    tiempo:"20-25 min", lugar:"Desarrollo",
+    resumen:"Cada alumno es 'experto' de una parte del tema y luego la enseña a su grupo base. Nadie puede aprender todo sin sus compañeros.",
+    profe:"Divide el contenido en partes iguales. Grupo experto: dominan su parte (5-8 min). Grupo base: cada experto explica al resto (10-12 min).",
+    alumno:"Primero aprende su parte en profundidad; luego tiene la responsabilidad de enseñarla. Enseñar obliga a entender.",
+    ejemplos:["🌿 Tropismos: Grupo A=fototropismo, B=geotropismo, C=hidrotropismo, D=tigmotropismo","🔬 Células: Grupo A=membrana, B=núcleo, C=mitocondria, D=cloroplasto","⚗️ Reacciones: Grupo A=síntesis, B=descomposición, C=combustión","🌊 Ciclos: Grupo A=carbono, B=oxígeno, C=nitrógeno"],
+    dua:["p1","p3"], duaText:"P. I: La responsabilidad social es motor poderoso — sus compañeros dependen de que explique bien. P. III: Expresión oral como forma de demostrar comprensión (alternativa a escribir).",
+    cuando:"Contenido que se puede dividir en partes comparables. Ideal para temas con tipos, fases o componentes. Evita que el profe repita lo mismo 4 veces.",
+    fuente:'Aronson, E. (1978). <em>The Jigsaw Classroom</em>. Uno de los métodos colaborativos más investigados. Metaanálisis de Johnson & Johnson confirman su efectividad.'
+  },
+  {
+    id:13, cat:"colaborativo", icon:"💬",
+    nombre:"Think → Pair → Share",
+    tiempo:"8-12 min", lugar:"En cualquier momento",
+    resumen:"El alumno piensa solo, luego discute con un compañero, luego comparte al grupo. Tres niveles de procesamiento en 10 minutos.",
+    profe:"Lanza una pregunta. '1 minuto para pensar solo y escribir tu idea. Ahora con tu compañero: 2 minutos. ¿Quién quiere compartir al grupo?'",
+    alumno:"Primero no tiene que comprometerse públicamente — procesa solo. Luego el par le da seguridad para hablar en grupo.",
+    ejemplos:["❓ '¿Por qué crees que el ciclo del carbono es importante para el ecosistema?' → piensa → par → comparte","❓ '¿Qué pasaría si desapareciera la gravedad en el ciclo del agua?'","❓ '¿Por qué la energía 'perdida' en fricción no sirve para nada?'"],
+    dua:["p1","p3"], duaText:"P. I: El tiempo de pensar solo reduce ansiedad (sistema límbico) y aumenta calidad de respuestas. P. III: Expresión oral progresiva — de privado a semipúblico a público.",
+    cuando:"En CUALQUIER momento de la clase para activar participación. Especialmente útil con grupos tímidos o cuando una pregunta es difícil.",
+    fuente:'Lyman, F. (1981). Think-Pair-Share. Universidad de Maryland. Una de las estrategias colaborativas más replicadas en investigación educativa.'
+  },
+  {
+    id:14, cat:"colaborativo", icon:"🔄",
+    nombre:"Estaciones de Aprendizaje",
+    tiempo:"25-35 min", lugar:"Desarrollo",
+    resumen:"El aula se divide en 3-4 estaciones. Cada una tiene una tarea diferente sobre el mismo tema. Los grupos rotan.",
+    profe:"Prepara 3-4 estaciones con materiales y tarea clara en cada una. Asigna tiempos iguales (5-8 min por estación). Supervisa la rotación.",
+    alumno:"En cada estación tiene una tarea breve y específica. El producto de todas las estaciones completa la comprensión del tema.",
+    ejemplos:["🌿 Tropismos: E1=observar planta real, E2=video corto con preguntas, E3=diagrama para completar, E4=caso problema","⚗️ Moléculas: E1=modelos con plastilina, E2=tarjetas para clasificar, E3=simulador en tablet, E4=pregunta de reflexión","🌊 Ecosistemas: E1=mapa de biomas, E2=cadena trófica, E3=ciclo del carbono, E4=caso de deforestación"],
+    dua:["p1","p2","p3"], duaText:"P. I: Movimiento físico y variedad mantienen el interés. P. II: Cada estación usa un formato distinto (visual, táctil, digital, escrito). P. III: Cada estación tiene un producto diferente.",
+    cuando:"Temas con varios sub-conceptos que se pueden explorar en paralelo. Requiere preparación previa pero casi no requiere que el profe hable.",
+    fuente:'Documentado en: Gregory, G. & Chapman, C. (2007). <em>Differentiated Instructional Strategies</em>. Ampliamente usado en aprendizaje diferenciado y DUA.'
+  },
+  {
+    id:15, cat:"colaborativo", icon:"🗣️",
+    nombre:"Debate Científico Estructurado",
+    tiempo:"20-25 min", lugar:"Aplicación / Cierre",
+    resumen:"Dos grupos defienden posiciones opuestas sobre una pregunta científica con implicaciones éticas o sociales, usando evidencia.",
+    profe:"Divide en 2 grupos. Asigna posición (aunque no la crean). Da 5 min para preparar argumentos. Modera el debate.",
+    alumno:"Busca evidencia, construye argumento, responde al grupo contrario. Aprende que en ciencia hay posiciones con distinto peso de evidencia.",
+    ejemplos:["🧬 '¿Es éticamente correcto modificar genes en humanos?' (CRISPR)","🌊 '¿Debe el Perú priorizar pesquería industrial o conservación marina?'","⚡ '¿Las centrales nucleares son necesarias para el futuro energético?'","🌿 '¿Los transgénicos son seguros para el consumo humano?'"],
+    dua:["p1","p3"], duaText:"P. I: La responsabilidad de defender una posición frente al grupo es motivación fuerte. P. III: Expresión oral argumentada como forma legítima de demostrar comprensión científica (CyT C2).",
+    cuando:"Temas con dimensión ética, social o ambiental. Excelente para 4S y 5S donde los temas tienen más complejidad social.",
+    fuente:'Documentado en: Sadler, T.D. (2004). Informal reasoning regarding socioscientific issues. <em>Journal of Research in Science Teaching</em>. Modelo SSI (Socio-Scientific Issues).'
+  },
+
+  /* ── EXPRESIÓN ALTERNATIVA ── */
+  {
+    id:16, cat:"expresion", icon:"🎨",
+    nombre:"Modelado y Dibujo Explicativo",
+    tiempo:"10-15 min", lugar:"Desarrollo",
+    resumen:"El alumno dibuja el mecanismo o proceso con flechas, etiquetas y direcciones. No copia — construye una representación propia.",
+    profe:"'No quiero que copien el dibujo de la pizarra. Quiero que ustedes dibujen cómo funciona [mecanismo] con sus propias palabras visuales.'",
+    alumno:"Dibuja, etiqueta y añade flechas de dirección. El dibujo revela exactamente qué entendió y qué no.",
+    ejemplos:["🌿 Experimento de Darwin: caja, agujero de luz, semilla, flecha de crecimiento, auxinas","🫀 Circuito de la sangre: corazón, pulmones, tejidos, flechas de dirección","⚛️ Átomo: núcleo con protones/neutrones, electrones en órbita, cargas","⚡ Montaña rusa: alturas, flechas de energía potencial → cinética → calor"],
+    dua:["p2","p3"], duaText:"P. II: El alumno construye su propio modelo visual del concepto — forma de representación alternativa al texto. P. III: El dibujo como expresión legítima — llega a alumnos que no se expresan bien escribiendo.",
+    cuando:"Mecanismos espaciales, procesos con fases, flujos de materia o energía. Especialmente útil en biología (órganos, ciclos) y física (fuerzas, transformaciones).",
+    fuente:'Basado en "Visual-Spatial Learning" y construcción de modelos (Modeling Instruction). Gilbert, J.K. (2004). Models and Modelling in Science Education. <em>International Journal of Science Education</em>.'
+  },
+  {
+    id:17, cat:"expresion", icon:"🗞️",
+    nombre:"Titular de Periódico / Resumen en 10 palabras",
+    tiempo:"5-8 min", lugar:"Cierre",
+    resumen:"El alumno resume la idea más importante de la clase en un titular periodístico o en exactamente 10 palabras.",
+    profe:"'Si la clase de hoy fuera noticia, ¿cuál sería el titular? Máximo 10 palabras. La idea más importante, no el título del tema.'",
+    alumno:"Sintetiza, prioriza, elimina lo accesorio. La restricción de palabras obliga a claridad conceptual.",
+    ejemplos:["📰 'Las plantas usan hormonas, no nervios, para moverse hacia la luz'","📰 'La energía no desaparece: siempre se convierte en otra cosa'","📰 'Sin bacterias del suelo, las plantas no podrían usar el nitrógeno'","📰 'El átomo es 99.9% espacio vacío, no materia sólida'"],
+    dua:["p1","p3"], duaText:"P. I: La restricción creativa (10 palabras) es un reto lúdico que sostiene el esfuerzo. P. III: Síntesis escrita creativa como alternativa a las preguntas de evaluación estándar.",
+    cuando:"Cierre de cualquier clase como alternativa al ticket de salida. Especialmente útil para consolidar la idea fuerza.",
+    fuente:'Basado en la rutina "Headlines" de Project Zero y la estrategia de síntesis de Marzano (2001). <em>Classroom Instruction That Works</em>.'
+  },
+  {
+    id:18, cat:"expresion", icon:"🎭",
+    nombre:"Role-Play Científico",
+    tiempo:"15-20 min", lugar:"Desarrollo o Aplicación",
+    resumen:"Los alumnos representan físicamente los elementos de un sistema científico: una molécula, un ciclo, una reacción, un proceso celular.",
+    profe:"Asigna roles. 'Tú eres una molécula de CO2. Tú eres una planta. Ahora actúen el ciclo del carbono.' El profe narra o guía.",
+    alumno:"Se mueve, interactúa, simula. El cuerpo como instrumento de aprendizaje activa memoria motora y emocional.",
+    ejemplos:["🌊 Ciclo del agua: algunos son moléculas H2O, otros son sol, suelo, planta, nube","🌿 Ciclo del carbono: CO2, fotosíntesis, respiración, combustión actuados","🔬 Mitosis: cada grupo representa una fase y la actúa ante la clase","🫀 Circulación: alumnos son glóbulos rojos viajando por el circuito"],
+    dua:["p1","p2","p3"], duaText:"P. I: El juego de roles es intrínsecamente motivador — rompe la rutina del aula. P. II: Representación kinestésica/corporal (múltiple representación). P. III: La actuación como forma de expresión (accesible para alumnos no verbales).",
+    cuando:"Ciclos, procesos con fases, sistemas con partes interactuantes. Excelente para 1S (ecosistemas) y 2S (sistemas del cuerpo). Requiere espacio.",
+    fuente:'Documentado en: <a href="https://proyectosimbiosis.colectivocrecet.com/blog/el-uso-del-role-playing-en-la-ensenanza-de-biologia-y-geologia-aprender-ciencia-de-manera-activa-y-divertida/" target="_blank">Proyecto Simbiosis — Role-Playing en Biología y Geología</a>.'
+  },
+  {
+    id:19, cat:"expresion", icon:"📝",
+    nombre:"Ficha de Aplicación",
+    tiempo:"15-20 min", lugar:"Aplicación o Evaluación",
+    resumen:"Documento estructurado con lectura breve + clasificación + preguntas de juicio crítico. Producto individual que sirve como evidencia de aprendizaje.",
+    profe:"Entrega la ficha. 'Trabajen individualmente. La lectura es de apoyo — no es examen, es para organizar lo que ya saben.'",
+    alumno:"Lee, clasifica, responde. El producto queda en su cuaderno como resumen del tema y como evidencia de aprendizaje.",
+    ejemplos:["🌿 Lectura: 'Cómo responden las plantas' → clasificar 10 características en tabla → pregunta: ¿podría una planta sobrevivir en Marte?","⚡ Lectura: 'Transformaciones de energía' → diagrama de flujo → pregunta: ¿cómo explicas que una bombilla 'gaste' energía?","🌊 Lectura: 'Ecosistemas amenazados en Perú' → mapa + preguntas críticas"],
+    dua:["p2","p3"], duaText:"P. II: La lectura como formato de representación (complementa lo oral y visual de la clase). P. III: Clasificación + juicio crítico como expresión escrita.",
+    cuando:"NO todos los días — máximo 1-2 veces por semana. Ideal para consolidar o evaluar. Alternar con formatos más activos para no aburrir.",
+    fuente:'Estrategia documentada en el ejemplo de sesión de Ciencias Sociales del MINEDU (2026) y en modelos de evaluación formativa basados en DUA.'
+  },
+  {
+    id:20, cat:"expresion", icon:"🎤",
+    nombre:"Ticket de Salida",
+    tiempo:"3-5 min", lugar:"Cierre (siempre)",
+    resumen:"Una sola pregunta al final de la clase que el alumno responde en 3 minutos. No es examen — es evidencia rápida para el profe.",
+    profe:"Una pregunta que es la idea fuerza de la clase reformulada. '¿Por qué el tallo se curva hacia la luz?' Pueden responder en texto o dibujo.",
+    alumno:"Responde en pocas líneas o con un dibujo. El profe lee rápido los tickets y sabe quién entendió y quién no.",
+    ejemplos:["🌿 '¿Por qué el tallo se curva hacia la luz en vez de crecer recto?' (respuesta: auxinas)","⚡ '¿A dónde fue la energía cuando la montaña rusa frenó?'","🌊 '¿Por qué desaparecería la vida si no hubiera ciclo del nitrógeno?'","⚛️ '¿Qué cambiaría en un átomo si agregas un protón al núcleo?'"],
+    dua:["p3"], duaText:"P. III: La respuesta puede ser en texto, dibujo o esquema — expresión flexible. Es la forma más rápida de obtener evidencia de aprendizaje.",
+    cuando:"TODAS las clases, al cierre. Es la práctica de evaluación formativa más eficiente que existe. 5 minutos que valen más que un examen de 20.",
+    fuente:'Fisher, D. & Frey, N. (2004). <em>Checking for Understanding</em>. ASCD. Práctica de cierre ampliamente documentada en aprendizaje formativo.'
+  },
+
+  /* ── GAMIFICACIÓN ── */
+  {
+    id:21, cat:"gamif", icon:"⚔️",
+    nombre:"Duelo de Conocimiento (Kahoot / Pizarra)",
+    tiempo:"10-15 min", lugar:"Repaso o Cierre",
+    resumen:"Competencia entre grupos con preguntas sobre el contenido. Puede ser digital (Kahoot) o analógico (levantar tarjetas / pizarras individuales).",
+    profe:"Prepara 8-10 preguntas con opciones. Los grupos responden simultáneamente. Puntos para el equipo correcto. Ritmo rápido.",
+    alumno:"Compite, discute con su grupo, recibe feedback inmediato de si acertó o no. El error no tiene consecuencia grave.",
+    ejemplos:["🌿 Repaso de tropismos y fitohormonas antes de evaluación","⚛️ 'Duelo de elementos' — identificar propiedades del átomo","⚡ 'Duelo de transformaciones' — identificar tipo de energía en cada caso"],
+    dua:["p1"], duaText:"P. I: La competencia y el feedback inmediato son motivadores intrínsecos. El formato lúdico reduce ansiedad ante evaluación.",
+    cuando:"Repaso antes de evaluación, o para consolidar vocabulario técnico. NO para enseñar concepto nuevo — solo para reforzar lo que ya se sabe.",
+    fuente:'<a href="https://makestemproud.com/ejemplos-gamificacion-aula-secundaria/" target="_blank">Make STEM Proud — Gamificación en Secundaria</a>. Basado en mecánicas de gamificación documentadas por Deterding et al. (2011).'
+  },
+  {
+    id:22, cat:"gamif", icon:"🗺️",
+    nombre:"Misión / Narrativa de Clase",
+    tiempo:"Toda la clase (envuelve otras estrategias)",
+    lugar:"Toda la sesión",
+    resumen:"La clase entera tiene una narrativa de misión: los alumnos son detectives, científicos en campo, o agentes que deben resolver un problema real.",
+    profe:"'Hoy son biólogos del SERNANP y acaban de encontrar una especie desconocida. Tienen 60 min para clasificarla, describirla y proponer su nombre científico.'",
+    alumno:"Todo lo que hace en la clase (observar, clasificar, dibujar, escribir) está dentro de la narrativa. Las tareas se convierten en 'misiones'.",
+    ejemplos:["🔬 'Científicos en la Amazonía: clasificar 5 organismos desconocidos'","⚡ 'Ingenieros energéticos: diseñar una ciudad que use solo energía renovable'","🌊 'Detectives ambientales: ¿qué está matando los peces del río?'","🧬 'Médicos genetistas: determinar qué enfermedad hereditaria tiene el paciente'"],
+    dua:["p1","p3"], duaText:"P. I: La narrativa da contexto emocional — no es un ejercicio abstracto, es una misión real. P. III: El producto final de la misión puede tomar múltiples formas (informe, presentación, mapa, propuesta).",
+    cuando:"Para clases donde el contenido se puede contextualizar como una investigación o problema real. Requiere preparación pero el enganche es muy alto.",
+    fuente:'Documentado en: <a href="https://www.researchgate.net/publication/327423995" target="_blank">Juegos y gamificación en ciencia (ResearchGate, 2018)</a>. Basado en "Narrative Learning" de McEwan & Egan (1995).'
+  },
+  {
+    id:23, cat:"gamif", icon:"🎯",
+    nombre:"Simulador Interactivo (HTML offline)",
+    tiempo:"15-20 min", lugar:"Desarrollo o Exploración",
+    resumen:"El alumno manipula variables en un simulador digital y observa el efecto en tiempo real. Hace invisible lo invisible.",
+    profe:"'Abran el simulador. Cambien [variable X] y anoten qué le pasa a [variable Y]. Prueben 3 combinaciones distintas.'",
+    alumno:"Experimenta, prueba, falla, ajusta. Aprende por descubrimiento guiado. El feedback es inmediato y sin consecuencia.",
+    ejemplos:["⚛️ Simulador del átomo: cambiar protones y ver cómo cambia el elemento","🌌 Simulador del efecto Doppler y Big Bang","⚡ Simulador de ruta energética: seguir la energía de una pila a una bombilla","🌿 (posible) Simulador de tropismos: cambiar dirección de luz y ver crecimiento"],
+    dua:["p1","p2"], duaText:"P. I: El control sobre el experimento virtual da sensación de agencia y autonomía. P. II: Lo abstracto (átomo, energía, ondas) se vuelve visible e interactivo — representación que el texto no puede dar.",
+    cuando:"Conceptos abstractos o microscópicos que no se pueden ver en el aula real (átomo, ondas, reacciones nucleares). Tienes simuladores propios para varios temas.",
+    fuente:'PhET Interactive Simulations (Universidad de Colorado, 2002-presente). Tus propios simuladores HTML: 01_propiedades_atomo.html, 02_efecto_doppler_bigbang.html, ruta_energetica_interactiva.html, etc.'
+  },
+
+  /* ── MODELO 5E ── */
+  {
+    id:24, cat:"5e", icon:"🔄",
+    nombre:"Engage — Enganchar (5E fase 1)",
+    tiempo:"5-8 min", lugar:"Inicio",
+    resumen:"Actividad breve de 3-5 min que genera curiosidad y activa conocimientos previos antes de cualquier explicación.",
+    profe:"Video corto impactante, pregunta provocadora, noticia reciente, demo visual, o afirmación contradictoria.",
+    alumno:"Responde emocionalmente al estímulo — se pregunta, se sorprende, se desafía.",
+    ejemplos:["🌿 Time-lapse de una planta creciendo y curvándose","⚡ Video de una cámara de alta velocidad mostrando combustión","🌊 Noticia reciente: 'derrame de petróleo en el mar de Grau'","⚛️ Demo: mezcla de dos líquidos que producen luz (reacción quimioluminiscente)"],
+    dua:["p1"], duaText:"P. I: La fase Engage del 5E es 100% Implicación. Su propósito exclusivo es captar interés y crear la pregunta que guiará el resto.",
+    cuando:"Primera fase de CUALQUIER clase según el modelo 5E. Equivalente al 'gancho' de la secuencia didáctica.",
+    fuente:'<a href="https://www.edutopia.org/article/how-use-5e-model-your-science-classroom/" target="_blank">Edutopia — How to Use the 5E Model in Science Class</a>. Modelo 5E original: Bybee, R. (1987). BSCS.'
+  },
+  {
+    id:25, cat:"5e", icon:"🧪",
+    nombre:"Explore — Explorar (5E fase 2)",
+    tiempo:"15-20 min", lugar:"Desarrollo (antes de explicar)",
+    resumen:"Los alumnos investigan el fenómeno ANTES de que el profe explique. Observan, tocan, miden, predicen. El profe no da respuestas todavía.",
+    profe:"'Aquí tienen materiales/datos. Trabajen en grupos. Escriban lo que observan y lo que no entienden. Yo no respondo preguntas todavía — solo observo.'",
+    alumno:"Manipula, observa, discute con el grupo, genera preguntas. La confusión es parte del proceso — es señal de que está pensando.",
+    ejemplos:["🌿 Antes de explicar auxinas: dar datos de experimento de Darwin y que los alumnos intenten explicar solos","⚗️ Antes de explicar gas carbónico: mezclar bicarbonato y vinagre y observar qué pasa","⚡ Antes de explicar conservación de energía: soltar pelota desde distintas alturas y medir rebote"],
+    dua:["p1","p2","p3"], duaText:"P. I: Descubrir antes de recibir la explicación genera mayor motivación que el orden inverso. P. II y III: El alumno procesa el fenómeno en su propia representación antes de recibir la oficial.",
+    cuando:"Cuando el fenómeno puede explorarse con materiales simples o datos. La fase Explore es la que más separa al modelo 5E del modelo tradicional.",
+    fuente:'<a href="https://www.edutopia.org/article/how-use-5e-model-your-science-classroom/" target="_blank">Edutopia — 5E Model</a> y Bybee, R. et al. (2006). The BSCS 5E Instructional Model. <em>CBE Life Sciences Education</em>.'
+  },
+  {
+    id:26, cat:"5e", icon:"💡",
+    nombre:"Explain — Explicar (5E fase 3)",
+    tiempo:"10-15 min", lugar:"Desarrollo (después de Explore)",
+    resumen:"Recién aquí el profe explica formalmente. Pero ahora los alumnos ya tienen preguntas reales, por lo que la explicación tiene un receptor preparado.",
+    profe:"Formaliza lo que los alumnos observaron. 'Lo que vieron en el experimento se llama X y funciona así…' Introduce vocabulario científico sobre base de experiencia propia.",
+    alumno:"Escucha activamente porque ya tiene una pregunta que quiere responder. Conecta la explicación con lo que observó.",
+    ejemplos:["🌿 Después de explorar el experimento: nombrar fototropismo, auxinas, su mecanismo","⚗️ Después de la mezcla: explicar reacción química, reactivos, productos","⚡ Después de medir la pelota: formalizar energía potencial y cinética"],
+    dua:["p2"], duaText:"P. II: La explicación formal se da sobre la base de la experiencia del Explore — el alumno ya tiene un modelo mental incompleto que la explicación completa y corrige.",
+    cuando:"Siempre DESPUÉS de una fase Explore. El poder del modelo 5E está en este orden: experiencia primero, concepto después.",
+    fuente:'Bybee, R. (1987). BSCS 5E Instructional Model. Documentado también en: <a href="https://files.eric.ed.gov/fulltext/EJ1058007.pdf" target="_blank">ERIC — 5E Instructional Model review</a>.'
+  },
+  {
+    id:27, cat:"5e", icon:"🔧",
+    nombre:"Elaborate — Elaborar (5E fase 4)",
+    tiempo:"15-20 min", lugar:"Aplicación",
+    resumen:"El alumno aplica lo aprendido a un contexto NUEVO — no al mismo ejemplo del Explore. Profundiza y transfiere.",
+    profe:"'Ahora apliquen lo que aprendieron a esta situación diferente. ¿Cómo explicarían X usando lo que saben?'",
+    alumno:"Transfiere el concepto, lo aplica a caso nuevo, identifica si lo entendió en profundidad o solo en superficie.",
+    ejemplos:["🌿 Después de auxinas en tallo: ¿cómo explican que las raíces crecen hacia abajo? (geotropismo)","⚡ Después de energía mecánica: ¿cómo funciona una presa hidroeléctrica?","🌊 Después de ciclo del carbono: ¿qué pasa con el ciclo si hay deforestación masiva?"],
+    dua:["p1","p3"], duaText:"P. I: La aplicación a un contexto nuevo y real genera relevancia. P. III: El producto de la elaboración puede ser variado: diagrama, escrito, solución de problema.",
+    cuando:"Después de la explicación formal. Es el equivalente a la 'aplicación o indagación' de la secuencia didáctica.",
+    fuente:'Bybee, R. (1987). BSCS 5E Model. La fase Elaborate es la que desarrolla la transferencia del conocimiento — clave para comprensión profunda.'
+  },
+  {
+    id:28, cat:"5e", icon:"✅",
+    nombre:"Evaluate — Evaluar (5E fase 5)",
+    tiempo:"10-15 min", lugar:"Cierre",
+    resumen:"Evaluación formativa al final del ciclo. El alumno demuestra su comprensión y el profe ajusta para la siguiente clase.",
+    profe:"Puede ser: ticket de salida, pregunta de aplicación, producto breve, autoevaluación. Recoge información para saber cómo avanzar.",
+    alumno:"Demuestra comprensión de manera auténtica. Puede incluir autoevaluación: '¿Qué aprendí? ¿Qué no entendí todavía?'",
+    ejemplos:["📝 Ticket de salida: pregunta de la idea fuerza","🎨 Dibujo explicativo del proceso completo","📋 Ficha de aplicación corta","🗣️ Explicación oral a un compañero que actuó como 'confundido'"],
+    dua:["p1","p3"], duaText:"P. I: La autoevaluación es metacognición — aprendiz experto. P. III: La evidencia puede tomarse en múltiples formatos, no solo examen escrito.",
+    cuando:"Al final de cada ciclo 5E (que puede ser una clase o varias). Siempre combina con retroalimentación del profe.",
+    fuente:'Bybee, R. (1987). BSCS 5E. La evaluación formativa como práctica de cierre: Black, P. & Wiliam, D. (1998). <em>Inside the Black Box</em>. Phi Delta Kappan.'
+  }
+];
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+const catColors = {
+  rutinas:'#e67e22',indagacion:'#27ae60',
+  colaborativo:'#2980b9',expresion:'#8e44ad',
+  gamif:'#e74c3c','5e':'#16a085'
+};
+const catNames = {
+  rutinas:'Rutinas de Pensamiento (Project Zero)',
+  indagacion:'Indagación Científica',
+  colaborativo:'Aprendizaje Colaborativo',
+  expresion:'Expresión Alternativa',
+  gamif:'Gamificación',
+  '5e':'Modelo 5E'
+};
+
+function renderGrid(list) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  list.forEach(f => {
+    const div = document.createElement('div');
+    div.className = `card cat-${f.cat}`;
+    div.id = `c${f.id}`;
+    div.onclick = () => openDetail(f.id);
+    div.innerHTML = `
+      <div class="card-head">
+        <div class="card-icon">${f.icon}</div>
+        <div class="card-titles">
+          <h3>${f.nombre}</h3>
+          <div class="card-cat">${catNames[f.cat]}</div>
+        </div>
+      </div>
+      <div class="card-summary">${f.resumen}</div>
+      <div class="card-tags">
+        ${f.dua.map(p=>`<span class="tag ${p}"><span class="dot"></span>${p==='p1'?'P.I Implicación':p==='p2'?'P.II Representación':'P.III Acción/Expr.'}</span>`).join('')}
+        ${(f.comp||[]).map(c=>`<span class="tag-comp tc${c}">${c}</span>`).join('')}
+      </div>
+      <div class="card-footer">
+        <span class="tiempo-chip">⏱ ${f.tiempo}</span>
+        <span class="prep-chip">${f.prep==='sin'?'⚡ Sin prep':f.prep==='minima'?'🟢 5-10min':f.prep==='media'?'🟡 15-30min':'🔴 1h+'}</span>
+        <span class="ver-btn">Ver detalle →</span>
+      </div>`;
+    grid.appendChild(div);
+  });
+  document.getElementById('count').textContent = `${list.length} formatos`;
+  document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+}
+
+/* filtros */
+let activeCat = 'all';
+let activeDUA = 'all';
+let activeComp = 'all';
+let activePrep = 'all';
+let searchQ = '';
+
+function applyFilters() {
+  let r = formatos;
+  if (activeCat !== 'all') r = r.filter(f => f.cat === activeCat);
+  if (activeDUA !== 'all') r = r.filter(f => f.dua.includes(activeDUA));
+  if (activeComp !== 'all') r = r.filter(f => (f.comp||[]).includes(activeComp));
+  if (activePrep !== 'all') r = r.filter(f => f.prep === activePrep);
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    r = r.filter(f =>
+      f.nombre.toLowerCase().includes(q) ||
+      f.resumen.toLowerCase().includes(q) ||
+      f.ejemplos.some(e => e.toLowerCase().includes(q)) ||
+      catNames[f.cat].toLowerCase().includes(q)
+    );
+  }
+  renderGrid(r);
+}
+
+function filterCat(cat, el) {
+  activeCat = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function filterDUA(p) {
+  activeDUA = p;
+  document.querySelectorAll('#dua-btns .fbtn').forEach(b => {
+    b.className = 'fbtn';
+    if (b.id === 'f'+p || (p==='all' && b.id==='fall')) b.classList.add('active-'+p);
+  });
+  applyFilters();
+}
+
+function filterComp(c) {
+  activeComp = c;
+  document.querySelectorAll('#comp-btns .fbtn').forEach(b => {
+    b.className = 'fbtn';
+    if (b.id === 'f'+c.toLowerCase() || (c==='all' && b.id==='fcall')) {
+      b.classList.add(c==='all'?'active-all':'active-comp');
+      if (c==='C1') b.style.background='#fdecea', b.style.color='#c0392b', b.style.borderColor='#c0392b';
+      else if (c==='C2') b.style.background='#eaf4fb', b.style.color='#1a5276', b.style.borderColor='#1a5276';
+      else if (c==='C3') b.style.background='#eafaf1', b.style.color='#1e8449', b.style.borderColor='#1e8449';
+      else b.style.cssText='background:var(--azul);color:#fff;border-color:var(--azul)';
+    } else { b.style.cssText=''; }
+  });
+  applyFilters();
+}
+
+function filterPrep(p) {
+  activePrep = p;
+  document.querySelectorAll('#prep-btns .fbtn').forEach(b => {
+    b.className = 'fbtn';
+    b.style.cssText = '';
+    if (b.id === 'f'+p || (p==='all' && b.id==='fpall')) b.classList.add('active-all');
+  });
+  applyFilters();
+}
+
+function filterSearch(q) {
+  searchQ = q;
+  applyFilters();
+}
+
+/* detalle */
+function openDetail(id) {
+  const f = formatos.find(x => x.id === id);
+  document.getElementById('m-icon').textContent = f.icon;
+  document.getElementById('m-title').textContent = f.nombre;
+  document.getElementById('m-cat').textContent = catNames[f.cat];
+  document.getElementById('m-cat').style.color = catColors[f.cat];
+  document.getElementById('m-tiempo').textContent = `⏱ ${f.tiempo} · ${f.lugar}`;
+  document.getElementById('m-desc').textContent = f.resumen;
+  document.getElementById('m-profe').innerHTML = f.profe;
+  document.getElementById('m-alumno').innerHTML = f.alumno;
+  const ul = document.getElementById('m-ejemplos');
+  ul.innerHTML = f.ejemplos.map(e=>`<li>${e}</li>`).join('');
+  const compLabels = {C1:'C1 — Indaga mediante métodos científicos',C2:'C2 — Explica el mundo físico',C3:'C3 — Diseña y construye soluciones'};
+  document.getElementById('m-tags').innerHTML =
+    f.dua.map(p=>`<span class="tag ${p}"><span class="dot"></span>${p==='p1'?'P.I Implicación':p==='p2'?'P.II Representación':'P.III Acción/Expr.'}</span>`).join('')+
+    (f.comp||[]).map(c=>`<span class="tag-comp tc${c}">${compLabels[c]||c}</span>`).join('')+
+    `<span class="prep-chip" style="margin-left:4px">${f.prep==='sin'?'⚡ Sin prep docente':f.prep==='minima'?'🟢 Prep 5-10 min':f.prep==='media'?'🟡 Prep 15-30 min':'🔴 Prep 1h+'}</span>`;
+  document.getElementById('m-dua').textContent = f.duaText;
+  document.getElementById('m-cuando').textContent = f.cuando;
+  document.getElementById('m-fuente').innerHTML = f.fuente;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+/* DUA modals */
+const duaData = {
+  p1:{
+    title:'Principio I — Implicación (el PORQUÉ)',
+    def:'Responde a la pregunta: ¿por qué el alumno querría aprender esto? Cubre motivación, interés, esfuerzo sostenido y autorregulación. Es el principio que resuelve el problema de "no conectan con la clase".',
+    pautas:'Pautas específicas: (1) Brindar opciones para captar el interés — novedad, elección, autenticidad. (2) Proporcionar opciones para sostener el esfuerzo — relevancia, metas claras, colaboración. (3) Proporcionar opciones para la autorregulación — metacognición, gestión de emociones, aprendiz experto.'
+  },
+  p2:{
+    title:'Principio II — Representación (el QUÉ)',
+    def:'Responde a: ¿de qué maneras distintas presento la información? El mismo concepto en varios formatos: oral, visual, táctil, digital, kinestésico. No todos los alumnos procesan igual.',
+    pautas:'Pautas específicas: (1) Percepción — mismo contenido en varios sentidos. (2) Lenguaje y símbolos — vocabulario, ecuaciones, imágenes. (3) Comprensión — activar conocimientos previos, destacar estructura, guiar procesamiento.'
+  },
+  p3:{
+    title:'Principio III — Acción y Expresión (el CÓMO)',
+    def:'Responde a: ¿de qué maneras distintas puede el alumno demostrar lo que aprendió? No solo escribir — también dibujar, hablar, modelar, construir, actuar, registrar datos.',
+    pautas:'Pautas específicas: (1) Acción física — diversas formas de manipular e interactuar. (2) Expresión y comunicación — texto, voz, dibujo, multimedia. (3) Funciones ejecutivas — planificar, organizar, monitorear, evaluar.'
+  }
+};
+
+function openDUA(p) {
+  const d = duaData[p];
+  document.getElementById('dua-title').textContent = d.title;
+  document.getElementById('dua-def').textContent = d.def;
+  document.getElementById('dua-pautas').textContent = d.pautas;
+  document.getElementById('dua-modal').classList.add('open');
+}
+
+/* ── PATCH: competencias C1/C2/C3 y tiempo de prep por formato ── */
+const metaFormatos = {
+  1: {comp:["C1","C2"], prep:"minima"},   // Ver→Pensar→Preguntarse
+  2: {comp:["C2"],      prep:"sin"},      // Antes pensaba→Ahora pienso
+  3: {comp:["C2"],      prep:"sin"},      // Afirmar→Apoyar→Cuestionar
+  4: {comp:["C2"],      prep:"sin"},      // Partes→Propósitos→Complejidades
+  5: {comp:["C2"],      prep:"sin"},      // Conectar→Extender→Cuestionar
+  6: {comp:["C2"],      prep:"sin"},      // Verdadero o Mito
+  7: {comp:["C2"],      prep:"sin"},      // Juego de la Explicación
+  8: {comp:["C1","C2"], prep:"minima"},   // POE
+  9: {comp:["C1"],      prep:"alta"},     // Mini-Indagación
+  10:{comp:["C1"],      prep:"media"},    // Análisis de Datos Reales
+  11:{comp:["C2","C3"], prep:"media"},    // Estudio de Caso Real
+  12:{comp:["C2"],      prep:"minima"},   // Jigsaw
+  13:{comp:["C2"],      prep:"sin"},      // Think→Pair→Share
+  14:{comp:["C1","C2"], prep:"alta"},     // Estaciones de Aprendizaje
+  15:{comp:["C2","C3"], prep:"minima"},   // Debate Científico
+  16:{comp:["C2"],      prep:"sin"},      // Modelado / Dibujo
+  17:{comp:["C2"],      prep:"sin"},      // Titular de Periódico
+  18:{comp:["C2"],      prep:"minima"},   // Role-Play Científico
+  19:{comp:["C2"],      prep:"media"},    // Ficha de Aplicación
+  20:{comp:["C2"],      prep:"sin"},      // Ticket de Salida
+  21:{comp:["C2"],      prep:"minima"},   // Duelo / Kahoot
+  22:{comp:["C1","C2","C3"], prep:"alta"},// Misión / Narrativa
+  23:{comp:["C2"],      prep:"sin"},      // Simulador HTML
+  24:{comp:["C1","C2"], prep:"minima"},   // Engage 5E
+  25:{comp:["C1"],      prep:"minima"},   // Explore 5E
+  26:{comp:["C2"],      prep:"sin"},      // Explain 5E
+  27:{comp:["C2","C3"], prep:"sin"},      // Elaborate 5E
+  28:{comp:["C1","C2","C3"], prep:"sin"}, // Evaluate 5E
+};
+formatos.forEach(f => Object.assign(f, metaFormatos[f.id] || {comp:["C2"], prep:"sin"}));
+
+/* init */
+renderGrid(formatos);
+
+/* ── DEEP LINK: abre directamente un formato por ?id=X ── */
+(function() {
+  const id = parseInt(new URLSearchParams(window.location.search).get('id'));
+  if (id && formatos.find(f => f.id === id)) {
+    setTimeout(() => openDetail(id), 120);
+  }
+})();
+</script>
+</body>
+</html>
