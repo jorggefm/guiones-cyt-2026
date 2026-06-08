@@ -63,6 +63,14 @@
   .step-label { font-weight: 700; font-size: 13px; flex: 1; text-transform: uppercase; letter-spacing: 0.3px; }
   .step-toggle { font-size: 12px; opacity: 0.6; transition: transform 0.2s; }
   .step-toggle.open { transform: rotate(180deg); }
+  .step-hd-wrap { flex:1; display:flex; flex-direction:column; gap:3px; }
+  .step-hd-wrap .step-label { flex:unset; }
+  .fmt-tag { font-size:10.5px; font-weight:500; color:#555; letter-spacing:0; text-transform:none; margin-top:1px; line-height:1.4; }
+  .fp1 { color:#C0392B; background:#FDECEA; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp2 { color:#8E44AD; background:#F5EEF8; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp3 { color:#16A085; background:#E8F8F5; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fmt-link { color:inherit; text-decoration:none; border-bottom:1px dotted #aaa; cursor:pointer; transition:border-color 0.15s; }
+  .fmt-link:hover { border-bottom-color:#333; color:#222; }
   .step-body { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,0.07); display: none; }
   .step-body.open { display: block; }
 
@@ -157,7 +165,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=6" class="fmt-link" target="_blank" onclick="event.stopPropagation()">⚖️ Verdadero o Mito</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -167,7 +178,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -177,7 +191,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Comprende + Explica causas</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Comprende + Explica causas</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=4" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔍 Partes→Propósitos→Comp.</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -187,7 +204,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (12 min) — C2: Evalúa implicancias</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (12 min) — C2: Evalúa implicancias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -197,7 +217,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (9 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (9 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -228,7 +251,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=13" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🤝 Think→Pair→Share</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -238,7 +264,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -248,7 +277,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica + Integra</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica + Integra</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=7" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗣️ Juego de Explicación</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -258,7 +290,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -268,7 +303,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -299,7 +337,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 POE</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -309,7 +350,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -321,7 +365,10 @@
             <div class="step-card step-hace">
               <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
                 <span class="step-icon">✏️</span>
-                <span class="step-label" style="color:#4A148C">Hace (28 min) — C1: Problematiza + Diseña estrategias</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (28 min) — C1: Problematiza + Diseña estrategias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=9" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🧪 Mini-Indagación</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -331,7 +378,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -341,7 +391,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -372,7 +425,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=25" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔍 Explore (5E)</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -382,7 +438,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (5 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -392,7 +451,10 @@
             <div class="step-card step-hace">
               <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
                 <span class="step-icon">✏️</span>
-                <span class="step-label" style="color:#4A148C">Hace (40 min) — C1: Genera y registra datos</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (40 min) — C1: Genera y registra datos</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Datos Reales</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -402,7 +464,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -412,7 +477,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -443,7 +511,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=2" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔄 Antes/Ahora Pienso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -453,7 +524,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (8 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -467,7 +541,10 @@
             <div class="step-card step-hace">
               <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
                 <span class="step-icon">✏️</span>
-                <span class="step-label" style="color:#4A148C">Hace (32 min) — C1: Analiza + Evalúa y comunica</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (32 min) — C1: Analiza + Evalúa y comunica</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Datos Reales</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -477,7 +554,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (13 min) — C1: Comunica</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (13 min) — C1: Comunica</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌿 Elaborate (5E)</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -487,7 +567,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">✅ Evaluate (5E)</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -518,7 +601,10 @@
             <div class="step-card step-gancho">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
                 <span class="step-icon">🎯</span>
-                <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=6" class="fmt-link" target="_blank" onclick="event.stopPropagation()">⚖️ Verdadero o Mito</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -528,7 +614,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -538,7 +627,10 @@
             <div class="step-card step-explica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
                 <span class="step-icon">📖</span>
-                <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica causas + Integra</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica causas + Integra</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔗 Conectar→Extender→Cuestionar</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -548,7 +640,10 @@
             <div class="step-card step-aplica">
               <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
                 <span class="step-icon">🔗</span>
-                <span class="step-label" style="color:#004D40">Aplica (11 min) — C2: Evalúa implicancias</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (11 min) — C2: Evalúa implicancias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
@@ -558,7 +653,10 @@
             <div class="step-card step-cierra">
               <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
                 <span class="step-icon">🏁</span>
-                <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
                 <span class="step-toggle">▼</span>
               </div>
               <div class="step-body">
