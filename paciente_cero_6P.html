@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Misterio del Paciente Cero — 6P CyT</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1e1b2e;
+  --yellow: #ffe066; --gold: #ffd11a;
+}
+
+html, body { height: 100%; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #fff;
+  overflow: hidden;
+  transition: background 0.6s ease;
+  background: linear-gradient(135deg,#dc2626,#ea580c,#b91c1c);
+}
+
+#app { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.2rem; }
+
+.title { font-size: clamp(2rem,4.6vw,3.9rem); font-weight: 900; line-height: 1.05; text-shadow: 0 2px 14px rgba(0,0,0,0.25); }
+.sub   { font-size: clamp(1rem,2.2vw,1.55rem); font-weight: 600; }
+.body  { font-size: clamp(0.92rem,1.7vw,1.28rem); line-height: 1.5; }
+.dim   { opacity: 0.88; }
+.hi    { color: var(--yellow); font-weight: 800; }
+
+/* Buttons */
+.btn {
+  padding: 0.72em 2.1em; border: none; border-radius: 14px;
+  font-size: clamp(0.95rem,1.8vw,1.25rem); font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.18), 0 10px 22px rgba(0,0,0,0.22);
+}
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 0 rgba(0,0,0,0.18), 0 14px 26px rgba(0,0,0,0.28); }
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.18); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn-gold  { background: var(--gold);   color: #3b2a00; }
+.btn-white { background: #fff;          color: var(--ink); }
+.btn-dark  { background: rgba(0,0,0,0.45); color: #fff; }
+.btn-ghost { background: rgba(255,255,255,0.16); color: #fff; box-shadow: none; border: 2px solid rgba(255,255,255,0.4); padding: 0.5em 1.3em; font-size: 0.95rem; }
+
+/* Header */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 0.75em 2em; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.18); backdrop-filter: blur(6px);
+}
+.badge {
+  padding: 0.32em 1.1em; border-radius: 30px;
+  font-size: 0.82em; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase;
+  background: #fff; color: var(--ink);
+}
+
+.screen { display: flex; flex-direction: column; align-items: center; gap: 1.15rem; width: 100%; max-width: 960px; padding-top: 3.6rem; }
+
+.glass {
+  background: rgba(255,255,255,0.16);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 18px; padding: 1.2rem 1.7rem;
+  backdrop-filter: blur(7px);
+}
+
+.input {
+  background: rgba(255,255,255,0.95); border: 3px solid transparent;
+  color: var(--ink); padding: 0.55em 0.9em; border-radius: 12px;
+  font-size: 1.1rem; font-weight: 700; font-family: inherit; width: 100%; outline: none;
+}
+.input:focus { border-color: var(--gold); }
+.input::placeholder { color: #9aa; font-weight: 500; }
+
+/* Intro steps */
+.steps { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; max-width: 760px; width: 100%; }
+.step { background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 16px; padding: 1.05em 1.2em; display: flex; gap: 0.85em; align-items: flex-start; }
+.step .ico { font-size: 2.1em; line-height: 1; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+.step h3 { font-size: 0.92em; color: var(--yellow); font-weight: 900; margin-bottom: 0.25em; }
+.step p  { font-size: clamp(0.78rem,1.3vw,0.96rem); opacity: 0.95; line-height: 1.38; }
+
+/* Names */
+.names-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75em; max-width: 600px; width: 100%; }
+
+/* Suspect cards */
+.suspects { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.8rem; width: 100%; max-width: 880px; }
+.suspect {
+  background: rgba(255,255,255,0.95); color: var(--ink);
+  border-radius: 16px; padding: 0.9em 1em; text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.22);
+  display: flex; flex-direction: column; gap: 0.15em;
+  animation: pop 0.4s ease both;
+}
+.suspect .av { font-size: 2.6em; line-height: 1; }
+.suspect .nm { font-weight: 900; font-size: 1.05em; }
+.suspect .tag { font-size: 0.72em; font-weight: 800; color: #d9480f; text-transform: uppercase; letter-spacing: 0.03em; }
+.suspect .st { font-size: 0.83em; color: #444; line-height: 1.32; margin-top: 0.2em; }
+
+/* Compact suspect strip */
+.strip { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; width: 100%; max-width: 900px; }
+.chip {
+  background: rgba(255,255,255,0.95); color: var(--ink);
+  border-radius: 12px; padding: 0.45em 0.7em; text-align: center;
+  min-width: 120px; box-shadow: 0 3px 9px rgba(0,0,0,0.2);
+}
+.chip .av { font-size: 1.7em; line-height: 1; }
+.chip .nm { font-weight: 900; font-size: 0.9em; }
+.chip .st { font-size: 0.68em; color: #555; line-height: 1.25; margin-top: 0.1em; }
+
+/* Clues */
+.clue {
+  width: 100%; max-width: 720px;
+  background: rgba(255,255,255,0.95); color: var(--ink);
+  border-radius: 14px; padding: 0.85em 1.3em;
+  display: flex; gap: 0.9em; align-items: flex-start;
+  box-shadow: 0 5px 16px rgba(0,0,0,0.22);
+  animation: slidein 0.45s ease both;
+  border-left: 7px solid #d97706;
+}
+.clue .cico { font-size: 1.9em; line-height: 1; flex-shrink: 0; }
+.clue .ctitle { font-weight: 900; font-size: 0.95em; color: #b45309; }
+.clue .ctext { font-size: clamp(0.86rem,1.5vw,1.05rem); line-height: 1.4; margin-top: 0.1em; }
+.clue.trap { border-left-color: #dc2626; }
+.clue.trap .ctitle { color: #b91c1c; }
+
+/* Compare */
+.cmp { display: flex; gap: 1.8rem; }
+.cbox { flex: 1; border-radius: 18px; padding: 1.3em; text-align: center; background: rgba(255,255,255,0.95); box-shadow: 0 8px 22px rgba(0,0,0,0.25); }
+.cbox .big { font-size: clamp(3.2rem,7vw,5.4rem); font-weight: 900; line-height: 1; }
+.cbox .lbl { font-size: 0.82em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.cbox.bad  .big { color: #dc2626; } .cbox.bad  .lbl { color: #991b1b; }
+.cbox.good .big { color: #16a34a; } .cbox.good .lbl { color: #15803d; }
+
+/* Immune buttons */
+.washer-grid { display: flex; flex-wrap: wrap; gap: 0.6em; justify-content: center; max-width: 820px; }
+.wb {
+  padding: 0.5em 1.2em; border-radius: 30px;
+  border: 3px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.16);
+  color: #fff; font-size: 1rem; font-weight: 800; cursor: pointer; font-family: inherit;
+  transition: all 0.18s;
+}
+.wb.on { background: #fff; color: #15803d; border-color: #fff; }
+
+/* History table */
+.htable { border-collapse: collapse; width: 100%; max-width: 640px; background: rgba(255,255,255,0.95); color: var(--ink); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 22px rgba(0,0,0,0.25); }
+.htable th, .htable td { padding: 0.65em 1em; text-align: center; }
+.htable th { background: rgba(0,0,0,0.08); font-size: 0.82em; text-transform: uppercase; font-weight: 900; }
+.htable tr:nth-child(even) td { background: rgba(0,0,0,0.04); }
+
+.legend { display: flex; gap: 1.3em; flex-wrap: wrap; justify-content: center; font-size: 0.92em; opacity: 0.95; }
+.legend span { display: flex; align-items: center; gap: 0.35em; }
+
+@keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes slidein { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes pulseRed { 0%,100% { filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); } 50% { filter: drop-shadow(0 0 28px var(--gold)); } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// 3 ESCENARIOS — cada partida es una historia distinta (agua → comida → manos)
+// ═══════════════════════════════════════════════════════════════════════════
+const SCENARIOS = [
+  {
+    titulo: "El Misterio del Agua",
+    emoji: "💧",
+    sintomas: "Diarrea, vómitos y dolor de barriga. Nadie tiene tos ni fiebre.",
+    sourceCard: 0,
+    characters: [
+      { av:"💧", tag:"El sediento",       st:"Tomó agua directo del caño viejo del parque, sin hervir, porque tenía sed." },
+      { av:"🤧", tag:"El resfriado",      st:"Llegó estornudando y con tos: agarró frío anoche con el friaje." },
+      { av:"⚽", tag:"El futbolista",     st:"Vino de jugar fútbol, todo sudado, y no se bañó." },
+      { av:"🐕", tag:"El de los perros",  st:"Estuvo acariciando perros de la calle y no se lavó las manos." },
+      { av:"🍬", tag:"El goloso",         st:"Comió caramelos que tenía bien guardados y cerrados en su bolsillo." },
+      { av:"📚", tag:"El lector",         st:"Se la pasó leyendo en la biblioteca; no comió ni tomó nada raro." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Todos tienen diarrea y vómitos, pero NINGUNO tiene tos. → No se contagia por el aire: es una enfermedad del estómago." },
+      { ico:"👄", t:"La puerta de entrada", x:"La enfermedad entró por la BOCA, por algo que comieron o bebieron. ¿Quién consumió algo riesgoso?" },
+      { ico:"🚱", t:"El dato del barrio", x:"Esta semana el agua del caño viejo del parque salió turbia. Varios vecinos se quejaron." },
+      { ico:"⏱️", t:"El tiempo", x:"El primer enfermo empezó con diarrea pocas horas después de la feria: fue algo consumido AHÍ mismo." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"Estar resfriado, sudar o jugar con perros NO da diarrea. Verse sucio no es prueba: importa qué entró por la boca.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el sediento». Los síntomas —diarrea y vómitos, <u>sin tos</u>— dicen que es una enfermedad del <b>estómago</b>, no del aire: por eso el resfriado, aunque estaba enfermo, NO era el culpable. La enfermedad entró <b>por la boca</b>, y ${n} tomó <b>agua sin hervir del caño viejo</b>, que justo esta semana salió turbia. Fue el primero en enfermar y de ahí se propagó.<br><br>💧 <b>Lección: el agua sin hervir puede enfermar a todo un barrio.</b>`
+  },
+  {
+    titulo: "El Misterio de la Comida",
+    emoji: "🌭",
+    sintomas: "Dolor de estómago fuerte e intoxicación, varias horas después del almuerzo.",
+    sourceCard: 0,
+    characters: [
+      { av:"🌭", tag:"El del hot dog",   st:"Comió un hot dog de una carretilla que estuvo al sol toda la mañana." },
+      { av:"🥤", tag:"El precavido",     st:"Tomó una gaseosa bien cerrada que trajo de su casa." },
+      { av:"🌸", tag:"El alérgico",      st:"Estornuda por el polen de primavera: tiene alergia, no gripe." },
+      { av:"🍎", tag:"La saludable",     st:"Comió una manzana que lavó con agua hervida antes de morderla." },
+      { av:"🐈", tag:"El gatero",        st:"Jugó con su gato y no se lavó las manos antes de la lonchera." },
+      { av:"🩹", tag:"El raspado",       st:"Se raspó la rodilla jugando y le duele bastante." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Dolor de estómago e intoxicación. No empezó como contagio entre personas: fue algo que COMIERON." },
+      { ico:"⏱️", t:"El tiempo", x:"Se sintieron mal varias horas después del almuerzo. → Algo del almuerzo cayó mal." },
+      { ico:"☀️", t:"La pista del calor", x:"El alimento culpable se llenó de bacterias por estar mucho tiempo SIN refrigerar, al sol." },
+      { ico:"🔒", t:"Lo que era seguro", x:"La comida sellada o lavada con agua hervida NO fue el problema." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"Una rodilla raspada o una alergia molestan, pero NO se contagian ni dan diarrea.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el del hot dog». Fue una <b>intoxicación por comida</b>: el hot dog pasó toda la mañana <b>al sol</b>, y el calor hace que las bacterias se multipliquen en el alimento. Por eso, horas después del almuerzo, vino el dolor de estómago, y al compartir, otros también cayeron. La rodilla raspada y la alergia eran <b>trampas</b>: molestan, pero no se contagian.<br><br>🌭 <b>Lección: la comida mal guardada, al calor, se llena de bacterias.</b>`
+  },
+  {
+    titulo: "El Misterio de las Manos Sucias",
+    emoji: "🧼",
+    sintomas: "Diarrea y dolor de barriga. Todos los enfermos comieron las mismas galletas.",
+    sourceCard: 0,
+    characters: [
+      { av:"🚽", tag:"El repartidor",     st:"Fue al baño, no se lavó las manos, y luego repartió las galletas a todos." },
+      { av:"🧼", tag:"La limpia",         st:"Se lavó las manos con jabón antes y después de comer." },
+      { av:"🤧", tag:"El mocoso",         st:"Está resfriado, con mocos, desde el fin de semana." },
+      { av:"⚽", tag:"El terroso",        st:"Jugó fútbol; tiene las manos llenas de tierra, pero no tocó la comida." },
+      { av:"🍌", tag:"El del plátano",    st:"Comió un plátano que peló él mismo, sin tocar la parte de adentro." },
+      { av:"💅", tag:"El de uñas largas", st:"Tiene uñas largas y sucias, pero faltó a la hora de la lonchera." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Diarrea otra vez: enfermedad del estómago, no del aire. El resfriado no es el culpable." },
+      { ico:"🍪", t:"El nexo común", x:"TODOS los enfermos comieron las galletas que alguien repartió." },
+      { ico:"🚽", t:"El detalle clave", x:"La persona que repartió las galletas había ido al baño y no se lavó las manos." },
+      { ico:"👀", t:"¡Cuidado con las trampas!", x:"El de uñas largas y el de manos con tierra PARECÍAN culpables, pero no tocaron las galletas. Apariencia ≠ prueba.", trap:true },
+      { ico:"🔬", t:"La conexión", x:"Lo que importa es qué tocaste ANTES de comer. La próxima semana, el agar lo hará visible." },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el repartidor». Fue al baño, <b>no se lavó las manos</b>, y con esas mismas manos <b>repartió las galletas</b> a todos: los microbios pasaron de sus manos a la comida y a la boca de todos. Esa ruta se llama <b>fecal-oral</b>. El de uñas largas y el de manos con tierra <i>parecían</i> culpables, pero no tocaron la comida: <b>verse sucio no es prueba; importa qué tocaste antes de comer</b>.<br><br>🔬 <b>Por eso la próxima semana el agar nos mostrará los microbios invisibles de unas manos sin lavar.</b>`
+  },
+  {
+    titulo: "El Misterio del Zancudo",
+    emoji: "🦟",
+    sintomas: "Fiebre alta, dolor en todo el cuerpo y ronchas en la piel. Nadie tiene diarrea ni tos.",
+    sourceCard: 0,
+    characters: [
+      { av:"🦟", tag:"El del balde",      st:"Dejó un balde con agua empozada en su patio toda la semana; está lleno de zancudos." },
+      { av:"🤧", tag:"El resfriado",      st:"Tose y estornuda desde ayer por el friaje." },
+      { av:"🍢", tag:"El de la brocheta", st:"Comió un anticucho en la calle camino al colegio." },
+      { av:"🐕", tag:"El de los perros",  st:"Jugó con perros de la calle y no se lavó las manos." },
+      { av:"🧴", tag:"El precavido",      st:"Usó repelente y duerme con mosquitero en su cuarto." },
+      { av:"🏊", tag:"El nadador",        st:"Fue a una piscina con cloro el fin de semana." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Fiebre alta, dolor de cuerpo y ronchas. NO hay diarrea ni tos: no es del estómago ni del aire." },
+      { ico:"🩹", t:"La puerta de entrada", x:"La enfermedad entró por la PIEL: por la picadura de un zancudo (mosquito)." },
+      { ico:"💧", t:"¿Dónde nacen los zancudos?", x:"Los zancudos se crían en agua empozada y quieta, sin movimiento." },
+      { ico:"🛡️", t:"Lo que protege", x:"El repelente y el mosquitero evitan las picaduras. La piscina con cloro no cría zancudos." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"Toser o comer en la calle NO causa esta enfermedad. Aquí el problema es la picadura.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el del balde». Los síntomas —fiebre, dolor de cuerpo y ronchas, <u>sin diarrea ni tos</u>— no son del estómago ni del aire: entraron por la <b>piel</b>, por la picadura de un zancudo. Y los zancudos se crían en <b>agua empozada y quieta</b>, como el balde que ${n} dejó toda la semana en su patio. Por eso lo picaron primero a él.<br><br>🦟 <b>Lección: agua estancada = criadero de zancudos = dengue. ¡Hay que voltear los baldes!</b>`
+  },
+  {
+    titulo: "El Misterio del Estornudo",
+    emoji: "😮‍💨",
+    sintomas: "Tos, estornudos, dolor de garganta y fiebre. Esta vez NADIE tiene diarrea.",
+    sourceCard: 0,
+    characters: [
+      { av:"🤧", tag:"El que no se tapa", st:"Vino con gripe y tosió y estornudó sin taparse, frente a todos en el salón." },
+      { av:"💧", tag:"El del agua",       st:"Tomó agua del caño, como otras veces." },
+      { av:"🌭", tag:"El del hot dog",    st:"Comió un hot dog en la calle al venir." },
+      { av:"😷", tag:"La precavida",      st:"Vino con mascarilla y se tapaba al toser." },
+      { av:"🪟", tag:"El de la ventana",  st:"Se sentó junto a la ventana abierta, con aire fresco." },
+      { av:"🤲", tag:"El del codo",       st:"Estornudó una vez, pero se tapó con el codo." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Tos, estornudos y dolor de garganta. ¡Esta vez NO hay diarrea! → no es del estómago." },
+      { ico:"💨", t:"La puerta de entrada", x:"Esta enfermedad viaja por el AIRE, en las gotitas que salen al toser o estornudar." },
+      { ico:"🚪", t:"Cuándo se contagia más", x:"Se propaga cuando alguien tose SIN taparse, en un espacio cerrado y lleno." },
+      { ico:"🛡️", t:"Lo que protege", x:"La mascarilla, taparse con el codo y ventilar el salón reducen el contagio." },
+      { ico:"🔄", t:"¡Cuidado: cambió la regla!", x:"Esta vez tomar agua o comer en la calle NO es la causa. ¡Hay que LEER los síntomas cada vez!", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el que no se tapa». ¡Atención! Esta vez <u>no hubo diarrea</u>: hubo tos, estornudos y dolor de garganta. Esta enfermedad viaja por el <b>aire</b>, en las gotitas del estornudo. ${n} vino con gripe y tosió sin taparse frente a todos, en el salón cerrado. Por eso hoy el resfriado SÍ era el culpable.<br><br>😮‍💨 <b>Lección: hay que leer los síntomas. No todo entra por la boca: algunas enfermedades entran por el aire. Taparse al toser salva.</b>`
+  },
+  {
+    titulo: "El Misterio de la Despensa",
+    emoji: "🐀",
+    sintomas: "Diarrea y fiebre. Sin tos. Empezó después de comer pan en el recreo.",
+    sourceCard: 0,
+    characters: [
+      { av:"🐀", tag:"El del pan abierto", st:"Comió pan que estaba destapado en la despensa, donde se ven huellas de ratón." },
+      { av:"🥫", tag:"El de la lata",      st:"Comió de una conserva sellada que abrió en el momento." },
+      { av:"🤧", tag:"El resfriado",       st:"Está con tos y mocos desde ayer." },
+      { av:"🧊", tag:"El de la refri",     st:"Sacó su comida de la refrigeradora, bien tapada." },
+      { av:"🐈", tag:"El gatero",          st:"Jugó con su gato, pero se lavó las manos antes de comer." },
+      { av:"⚽", tag:"El futbolista",      st:"Jugó fútbol y está sudado, pero no comió pan." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Diarrea y fiebre, sin tos → es una enfermedad del estómago." },
+      { ico:"👄", t:"La puerta de entrada", x:"Entró por la boca, por algo que comieron y que estaba contaminado." },
+      { ico:"🐾", t:"La pista de la despensa", x:"Junto al pan destapado hay huellas y suciedad de ratón." },
+      { ico:"🛡️", t:"Lo que estaba seguro", x:"Lo sellado, lo refrigerado y lo bien tapado no fue el problema." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"Estar sudado o resfriado no da diarrea. Importa qué tocó la comida.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el del pan abierto». Los ratones caminan sobre la comida destapada y la ensucian con sus microbios. El pan estaba <b>abierto en la despensa, con huellas de ratón</b>, y ${n} lo comió. Lo sellado y lo refrigerado quedó a salvo.<br><br>🐀 <b>Lección: hay que tapar bien los alimentos y no dejarlos al alcance de plagas.</b>`
+  },
+  {
+    titulo: "El Misterio de la Leche",
+    emoji: "🥛",
+    sintomas: "Vómitos y dolor de estómago, poco después del desayuno.",
+    sourceCard: 0,
+    characters: [
+      { av:"🥛", tag:"El de la leche",      st:"Tomó leche que estuvo fuera de la refri desde la mañana; olía un poco agrio, pero igual la tomó." },
+      { av:"💧", tag:"La del agua hervida", st:"Tomó agua hervida y enfriada." },
+      { av:"🍊", tag:"El del jugo",         st:"Se exprimió una naranja fresca al momento." },
+      { av:"🤧", tag:"El resfriado",        st:"Tiene tos y mocos." },
+      { av:"🩹", tag:"El raspado",          st:"Se raspó la rodilla y le duele." },
+      { av:"🍪", tag:"El de la galleta",    st:"Comió una galleta de un paquete sellado." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Vómitos y dolor de estómago → es del estómago, por algo que tomaron." },
+      { ico:"⏱️", t:"El tiempo", x:"Empezó poco después del desayuno: algo que bebieron estaba en mal estado." },
+      { ico:"🧊", t:"La pista del frío", x:"Los lácteos (leche, yogur) se echan a perder rápido fuera de la refrigeradora." },
+      { ico:"👃", t:"La señal de alarma", x:"Si huele agrio o raro, ya tiene bacterias. ¡No se debe tomar!" },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"Un raspón o un resfriado no provocan vómitos por comida.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el de la leche». La leche fuera de la refrigeradora se llena de bacterias en pocas horas. <b>Olía agrio</b> —señal de que ya estaba mala— y ${n} igual la tomó. Por eso, poco después, los vómitos.<br><br>🥛 <b>Lección: los lácteos van siempre a la refri, y si huele raro, se bota.</b>`
+  },
+  {
+    titulo: "El Misterio del Pollo Crudo",
+    emoji: "🍗",
+    sintomas: "Diarrea fuerte y fiebre, un día después del almuerzo.",
+    sourceCard: 0,
+    characters: [
+      { av:"🍗", tag:"El del pollo rosado", st:"Comió pollo que por dentro estaba rosado, medio crudo." },
+      { av:"🔥", tag:"La de la parrilla",   st:"Comió pollo bien cocido, doradito y sin partes rosadas." },
+      { av:"🥗", tag:"El de la ensalada",   st:"Comió ensalada lavada con agua segura." },
+      { av:"🤧", tag:"El resfriado",        st:"Está con tos desde el fin de semana." },
+      { av:"🐕", tag:"El de los perros",    st:"Jugó con perros y tiene las manos sucias." },
+      { av:"🍚", tag:"El del arroz",        st:"Comió solo arroz blanco bien cocido." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Diarrea fuerte y fiebre, un día después → enfermedad del estómago, por la comida." },
+      { ico:"🔬", t:"La pista de la cocción", x:"La carne y el pollo crudos tienen bacterias que solo mueren con el calor de cocinarlos bien." },
+      { ico:"🍗", t:"El detalle clave", x:"El pollo culpable estaba rosado por dentro: no llegó a cocinarse del todo." },
+      { ico:"🛡️", t:"Lo que estaba seguro", x:"El pollo doradito, el arroz cocido y la ensalada lavada eran seguros." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"El resfriado y las manos sucias de jugar no fueron la causa esta vez.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el del pollo rosado». El pollo crudo o mal cocido tiene bacterias (como la salmonela) que <b>solo mueren con el calor</b> de una buena cocción. El de ${n} estaba <b>rosado por dentro</b>. El pollo bien doradito quedó a salvo.<br><br>🍗 <b>Lección: la carne y el pollo se comen bien cocidos, sin partes rosadas.</b>`
+  },
+  {
+    titulo: "El Misterio de la Botella Compartida",
+    emoji: "🚰",
+    sintomas: "Dolor de garganta y fiebre. Sin diarrea. Todos tomaron de la misma botella.",
+    sourceCard: 0,
+    characters: [
+      { av:"🚰", tag:"El de la botella",   st:"Repartió su botella y todos tomaron del mismo pico, sin vasos." },
+      { av:"🥤", tag:"La del vaso propio", st:"Tomó solo de su propio vaso; no compartió con nadie." },
+      { av:"🍎", tag:"El de la fruta",     st:"Comió una fruta lavada." },
+      { av:"🌸", tag:"El alérgico",        st:"Estornuda por el polen; tiene alergia, no infección." },
+      { av:"🎽", tag:"El deportista",      st:"Sudó mucho jugando en el recreo." },
+      { av:"📱", tag:"El del celular",     st:"Prestó su celular a varios compañeros." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Dolor de garganta y fiebre, SIN diarrea → no es del estómago." },
+      { ico:"🍾", t:"El nexo común", x:"Todos los enfermos tomaron de la MISMA botella, del mismo pico." },
+      { ico:"💦", t:"La puerta de entrada", x:"Al compartir el pico, pasa la saliva de uno a otro, y con ella los microbios." },
+      { ico:"🛡️", t:"Lo que protege", x:"Usar tu propio vaso evita ese contagio directo." },
+      { ico:"🚫", t:"¡Cuidado con las trampas!", x:"La alergia y el sudor no contagian. Prestar el celular ensucia las manos, pero no pasa saliva a la boca.", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el de la botella». Al compartir el pico de la botella, la <b>saliva</b> (y los microbios) de uno pasa a la boca de todos: es un contagio directo. Por eso se enfermaron solo los que tomaron de ahí. La alergia y el sudor eran trampas.<br><br>🚰 <b>Lección: no compartas botellas ni cubiertos; usa tu propio vaso.</b>`
+  },
+  {
+    titulo: "El Misterio del Río",
+    emoji: "🏊",
+    sintomas: "Diarrea y dolor de barriga, el día después de ir a nadar.",
+    sourceCard: 0,
+    characters: [
+      { av:"🏊", tag:"El del río",         st:"Nadó en el río y tragó agua mientras jugaba con sus amigos." },
+      { av:"🤽", tag:"La de la piscina",   st:"Nadó en una piscina tratada con cloro." },
+      { av:"🥽", tag:"El de los lentes",   st:"Nadó con lentes y gorra, y cuidó de no tragar agua." },
+      { av:"🤧", tag:"El resfriado",       st:"Está con tos y mocos." },
+      { av:"🍢", tag:"El de la brocheta",  st:"Comió un anticucho bien cocido." },
+      { av:"🦟", tag:"El del balde",       st:"Tiene un balde con agua empozada en casa, lleno de zancudos." },
+    ],
+    clues: [
+      { ico:"🌡️", t:"Los síntomas", x:"Diarrea, sin tos ni ronchas → del estómago, no del aire ni de picadura." },
+      { ico:"👄", t:"La puerta de entrada", x:"Entró por la boca: tragó algo contaminado mientras nadaba." },
+      { ico:"🌊", t:"La pista del agua", x:"El río llevaba agua sucia con desagües. Tragar esa agua enferma." },
+      { ico:"🛡️", t:"Lo que era seguro", x:"La piscina con cloro mata los microbios; nadar sin tragar agua es más seguro." },
+      { ico:"🔀", t:"¡Cuidado con las trampas!", x:"El agua empozada del balde cría zancudos (dengue), pero NO da diarrea. ¡Recuerden la diferencia!", trap:true },
+    ],
+    arg: (n) => `🔎 El paciente cero es <b>${n}</b>, «el del río». Al nadar en el río y <b>tragar agua contaminada</b> con desagües, los microbios entran por la boca. El cloro de una piscina los mata, pero el río sucio no. Ojo: el del balde parecía sospechoso, pero el agua empozada da <u>dengue</u> (picadura), no diarrea.<br><br>🏊 <b>Lección: no tragues agua de ríos o pozas sucias.</b>`
+  },
+];
+
+const BG = {
+  intro:   "linear-gradient(135deg,#dc2626,#ea580c,#b91c1c)",
+  setup:   "linear-gradient(135deg,#7c3aed,#4f46e5,#6d28d9)",
+  reparto: "linear-gradient(135deg,#7c3aed,#2563eb)",
+  fair:    "linear-gradient(135deg,#0891b2,#2563eb,#0e7490)",
+  clues:   "linear-gradient(135deg,#ea580c,#d97706,#b45309)",
+  reveal:  "linear-gradient(135deg,#b91c1c,#7f1d1d,#991b1b)",
+  sweep:   "linear-gradient(135deg,#dc2626,#991b1b,#7f1d1d)",
+  variable:"linear-gradient(135deg,#059669,#047857,#0e7490)",
+  compare: "linear-gradient(135deg,#2563eb,#7c3aed)",
+  end:     "linear-gradient(135deg,#059669,#0891b2,#2563eb)",
+};
+
+// ═══ STATE ═══
+let G = {
+  phase:'intro', names:[], cards:[], pz:-1, scenario:null,
+  adj:[], immune:new Set(), part:1,
+  clueShown:0, sweepStep:0, sweepRounds:[], sweepRoundsI:[],
+  cleanCount:0, immuneCount:0, history:[], sel:-1,
+};
+
+// ═══ HELPERS ═══
+function el(id){ return document.getElementById(id); }
+function render(html, phase){
+  if (phase) document.body.style.background = BG[phase] || BG.intro;
+  el('app').innerHTML = html;
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function short(n){ return n.length>9 ? n.slice(0,8)+'.' : n; }
+function head(title, badge){ return `<div class="header"><div class="sub">${title}</div><div class="badge">${badge}</div></div>`; }
+
+function nodePos(n, vw, vh){
+  const cx=vw/2, cy=vh/2, r=Math.min(vw,vh)*0.34;
+  return Array.from({length:n},(_,i)=>{ const a=(i*360/n-90)*Math.PI/180; return {x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}; });
+}
+
+function computeSweep(immuneSet=new Set()){
+  const inf=new Set([G.pz]); const rounds=[[G.pz]]; let changed=true;
+  while(changed){ changed=false; const wave=[];
+    for(const i of inf){ for(const j of (G.adj[i]||new Set())){
+      if(!inf.has(j) && !immuneSet.has(j)){ inf.add(j); wave.push(j); changed=true; } } }
+    if(wave.length) rounds.push(wave);
+  }
+  return {infected:inf, rounds};
+}
+
+// ═══ NETWORK DRAW ═══
+function drawNet(mode, infSet=new Set(), immSet=new Set()){
+  const svg=el('net'); if(!svg) return;
+  const vw=560, vh=420, n=G.names.length; const pos=nodePos(n,vw,vh);
+  let edges='';
+  for(let i=0;i<n;i++) for(const j of (G.adj[i]||new Set())){
+    if(j<=i) continue;
+    const active=infSet.has(i)&&infSet.has(j);
+    edges+=`<line x1="${pos[i].x.toFixed(1)}" y1="${pos[i].y.toFixed(1)}" x2="${pos[j].x.toFixed(1)}" y2="${pos[j].y.toFixed(1)}" stroke="${active?'#fff':'rgba(255,255,255,0.4)'}" stroke-width="${active?4:2.5}"/>`;
+  }
+  let nodes='';
+  for(let i=0;i<n;i++){
+    const {x,y}=pos[i];
+    const isPZ=infSet.size>0 && i===G.pz, isInf=infSet.has(i), isImm=immSet.has(i), isSel=mode==='fair'&&G.sel===i;
+    const fill = isImm?'#16a34a' : (isInf?(isPZ?'#7f1d1d':'#dc2626') : 'rgba(20,20,40,0.55)');
+    const stroke = isSel?'#ffe066' : (isImm?'#fff':(isPZ?'#ffe066':(isInf?'#fff':'rgba(255,255,255,0.85)')));
+    const sw = isSel||isPZ?5:(isInf||isImm?3.5:2.5);
+    const glow = isPZ?'filter:drop-shadow(0 0 16px #ffe066);':'';
+    const icon = G.cards[i] ? G.cards[i].av : '';
+    const cur = mode==='fair'?'cursor:pointer;':'';
+    const showIcon = (mode!=='fair') ? (isImm?'🧼':(isPZ?'🦠':(isInf?'😷':icon))) : icon;
+    nodes+=`<g style="${cur}" onclick="nodeClick(${i})">
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="37" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" style="${glow}"/>
+      <text x="${x.toFixed(1)}" y="${(y-2).toFixed(1)}" text-anchor="middle" font-size="20" pointer-events="none">${showIcon}</text>
+      <text x="${x.toFixed(1)}" y="${(y+18).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff" pointer-events="none">${short(G.names[i])}</text>
+    </g>`;
+  }
+  svg.innerHTML=edges+nodes;
+}
+
+function nodeClick(i){
+  if(G.phase!=='fair') return;
+  if(G.sel===-1){ G.sel=i; drawNet('fair'); return; }
+  if(G.sel===i){ G.sel=-1; drawNet('fair'); return; }
+  const a=G.sel,b=i;
+  if(G.adj[a].has(b)){ G.adj[a].delete(b); G.adj[b].delete(a); } else { G.adj[a].add(b); G.adj[b].add(a); }
+  G.sel=-1; renderFair();
+}
+
+// ═══ DEAL CARDS ═══
+function dealCards(){
+  const sc = SCENARIOS[(G.part-1) % SCENARIOS.length];
+  G.scenario = sc;
+  const n = G.names.length;
+  let pool = sc.characters.map((c,idx)=>({...c, isSource: idx===sc.sourceCard}));
+  let chosen;
+  if(n >= pool.length){ chosen = shuffle(pool); }
+  else {
+    const src = pool.find(c=>c.isSource);
+    const rest = shuffle(pool.filter(c=>!c.isSource)).slice(0, n-1);
+    chosen = shuffle([src, ...rest]);
+  }
+  G.cards = chosen.slice(0, n);
+  G.pz = G.cards.findIndex(c=>c.isSource);
+}
+
+// ═══════════════════════════════════════════════ SCREENS ═══
+
+function renderIntro(){
+  render(`
+    <div class="screen" style="padding-top:0.5rem;gap:1rem;">
+      <div style="text-align:center;">
+        <div style="font-size:4rem;">🕵️</div>
+        <div class="title">El Misterio del Paciente Cero</div>
+        <div class="sub dim" style="margin-top:0.3em;">Un brote estalló en <b>Nueva Villa</b>. Tú eres el detective de la salud. ¿Quién lo empezó?</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="ico">🪪</div><div><h3>① Los sospechosos</h3><p>Cada alumno recibe la historia de un personaje. Algunos hicieron cosas sospechosas ese día.</p></div></div>
+        <div class="step"><div class="ico">🤝</div><div><h3>② La feria</h3><p>Todos se saludan. El profesor registra quién saludó a quién: así se ve cómo pudo viajar la enfermedad.</p></div></div>
+        <div class="step"><div class="ico">🔍</div><div><h3>③ Las pistas</h3><p>Aparecen pistas sobre los síntomas y la ruta de contagio. El grupo razona y acusa a un sospechoso.</p></div></div>
+        <div class="step"><div class="ico">🦠</div><div><h3>④ La revelación</h3><p>Se descubre al paciente cero con el argumento de POR QUÉ fue él. Luego se ve el contagio… ¡y cómo el lavado de manos lo frena!</p></div></div>
+      </div>
+      <div class="body" style="text-align:center;"><b>Hasta 10 misterios</b> distintos: agua 💧, comida 🌭, manos sucias 🧼, zancudos 🦟, estornudos 😮‍💨 y más. ¡Cada uno enseña una forma diferente de contagio!</div>
+      <button class="btn btn-gold" style="font-size:1.25rem;padding:0.8em 3em;" onclick="go('setup')">¡Empezar la investigación! →</button>
+    </div>
+  `, 'intro');
+}
+
+function renderSetup(){
+  render(`
+    ${head('🪪 ¿Quiénes están hoy?', 'PREPARACIÓN')}
+    <div class="screen">
+      <div class="title" style="margin-top:0.4rem;text-align:center;">Escribe los nombres</div>
+      <div class="names-grid">
+        ${[0,1,2,3,4,5].map(i=>`
+          <div>
+            <div class="dim" style="font-size:0.82em;margin-bottom:0.25em;font-weight:700;">Alumno ${i+1}</div>
+            <input class="input" id="n${i}" placeholder="Nombre..." onkeyup="setupCheck()"/>
+          </div>`).join('')}
+      </div>
+      <div class="body dim" style="text-align:center;max-width:520px;">A cada uno le va a tocar la historia de un personaje. <b>Nadie sabe quién será el paciente cero.</b></div>
+      <button class="btn btn-gold" id="setup-btn" disabled onclick="setupStart()" style="font-size:1.15rem;">Repartir personajes →</button>
+    </div>
+  `, 'setup');
+}
+function setupCheck(){
+  const f=[0,1,2,3,4,5].filter(i=>el(`n${i}`).value.trim().length>0);
+  el('setup-btn').disabled = f.length<3;
+}
+function setupStart(){
+  G.names=[0,1,2,3,4,5].map(i=>el(`n${i}`).value.trim()).filter(n=>n.length>0);
+  G.adj=G.names.map(()=>new Set());
+  dealCards();
+  go('reparto');
+}
+
+function renderReparto(){
+  render(`
+    ${head(`${G.scenario.emoji} ${G.scenario.titulo}`, `PARTIDA ${G.part} · SOSPECHOSOS`)}
+    <div class="screen">
+      <div class="title" style="margin-top:0.3rem;text-align:center;">Los sospechosos de hoy</div>
+      <div class="body" style="text-align:center;max-width:700px;">Lean en voz alta lo que hizo cada uno. <b>Una de estas historias esconde al paciente cero.</b></div>
+      <div class="suspects">
+        ${G.cards.map((c,i)=>`
+          <div class="suspect" style="animation-delay:${i*0.08}s">
+            <div class="av">${c.av}</div>
+            <div class="nm">${G.names[i]}</div>
+            <div class="tag">${c.tag}</div>
+            <div class="st">${c.st}</div>
+          </div>`).join('')}
+      </div>
+      <button class="btn btn-white" style="font-size:1.1rem;" onclick="go('fair')">Ir a la feria 🤝 →</button>
+    </div>
+  `, 'reparto');
+}
+
+function renderFair(){
+  G.phase='fair';
+  const total=G.names.reduce((s,_,i)=>s+G.adj[i].size,0)/2;
+  const allMin=G.names.every((_,i)=>G.adj[i].size>=2);
+  const ok=total>=G.names.length && allMin;
+  render(`
+    ${head('🤝 La Feria — ¿quién saludó a quién?', `PARTIDA ${G.part} · LA FERIA`)}
+    <div class="screen" style="gap:0.7rem;">
+      <div class="body" style="text-align:center;margin-top:0.2rem;">
+        Los alumnos se saludan de verdad. Tú haz clic en <b>dos círculos</b> para conectarlos. Cada uno necesita <b class="hi">al menos 2 contactos</b>.
+        ${G.sel>=0?`<br><b class="hi">→ ${G.names[G.sel]} seleccionado. Haz clic en otra persona.</b>`:''}
+      </div>
+      <svg id="net" viewBox="0 0 560 420" style="width:min(560px,92vw);height:min(390px,55vh);"></svg>
+      <div style="display:flex;gap:0.7rem;align-items:center;flex-wrap:wrap;justify-content:center;">
+        <div class="body">Conexiones: <b class="hi">${Math.round(total)}</b></div>
+        <button class="btn btn-ghost" onclick="clearFair()">Limpiar</button>
+        <button class="btn btn-gold" ${ok?'':'disabled'} onclick="go('clues')">Investigar las pistas 🔍 →</button>
+      </div>
+    </div>
+  `, 'fair');
+  drawNet('fair');
+}
+function clearFair(){ G.adj=G.names.map(()=>new Set()); G.sel=-1; renderFair(); }
+
+function renderClues(){
+  const sc=G.scenario;
+  render(`
+    ${head('🔍 Las Pistas', `PARTIDA ${G.part} · LAS PISTAS`)}
+    <div class="screen" style="gap:0.8rem;">
+      <div class="glass" style="text-align:center;padding:0.7em 1.4em;">
+        <b>🩺 Síntomas del brote:</b> ${sc.sintomas}
+      </div>
+      <div class="strip">
+        ${G.cards.map((c,i)=>`<div class="chip"><div class="av">${c.av}</div><div class="nm">${G.names[i]}</div><div class="st">${c.tag}</div></div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.55em;width:100%;align-items:center;">
+        ${sc.clues.slice(0,G.clueShown).map(c=>`
+          <div class="clue ${c.trap?'trap':''}">
+            <div class="cico">${c.ico}</div>
+            <div><div class="ctitle">${c.t}</div><div class="ctext">${c.x}</div></div>
+          </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+        ${G.clueShown < sc.clues.length
+          ? `<button class="btn btn-white" onclick="showClue()">Revelar pista ${G.clueShown+1} de ${sc.clues.length} →</button>`
+          : `<div class="body"><b>¿Ya saben quién es? ¡Acusen a un sospechoso!</b></div>
+             <button class="btn btn-gold" style="font-size:1.1rem;" onclick="go('reveal')">🦠 Revelar al Paciente Cero</button>`}
+      </div>
+    </div>
+  `, 'clues');
+}
+function showClue(){ G.clueShown++; renderClues(); }
+
+function renderReveal(){
+  render(`
+    ${head('🦠 La Revelación', `PARTIDA ${G.part} · LA REVELACIÓN`)}
+    <div class="screen" style="justify-content:center;text-align:center;gap:1rem;">
+      <div class="sub dim">El paciente cero fue...</div>
+      <div id="cd" style="font-size:clamp(7rem,17vw,14rem);font-weight:900;line-height:1;color:var(--yellow);">3</div>
+    </div>
+  `, 'reveal');
+  let n=3; const t=setInterval(()=>{ n--; if(n>0) el('cd').textContent=n; else { clearInterval(t); showReveal(); } },900);
+}
+function showReveal(){
+  const c=G.cards[G.pz];
+  render(`
+    ${head('🦠 La Revelación', `PARTIDA ${G.part} · LA REVELACIÓN`)}
+    <div class="screen" style="justify-content:center;text-align:center;gap:1.1rem;">
+      <div style="font-size:4.5rem;animation:pulseRed 1.6s infinite;">${c.av}</div>
+      <div class="title" style="color:var(--yellow);">${G.names[G.pz]}</div>
+      <div class="sub">«${c.tag}»</div>
+      <div class="glass body" style="max-width:680px;text-align:left;">${G.scenario.arg(G.names[G.pz])}</div>
+      <button class="btn btn-gold" style="font-size:1.1rem;" onclick="startSweep()">Ver cómo se propagó 🦠 →</button>
+    </div>
+  `, 'reveal');
+}
+
+function startSweep(){
+  const r=computeSweep(new Set());
+  G.sweepRounds=r.rounds; G.cleanCount=r.infected.size; G.sweepStep=0; go('sweep');
+}
+function renderSweep(){
+  G.phase='sweep';
+  const allInf=new Set(G.sweepRounds.slice(0,G.sweepStep+1).flat());
+  const isLast=G.sweepStep>=G.sweepRounds.length-1;
+  render(`
+    ${head('🦠 El Barrido del Contagio', `PARTIDA ${G.part} · EL BARRIDO`)}
+    <div class="screen" style="gap:0.7rem;">
+      <div class="sub" style="text-align:center;margin-top:0.2rem;">
+        Enfermos: <b class="hi" style="font-size:1.3em;">${allInf.size}</b> de ${G.names.length}
+        <span class="dim" style="font-size:0.8em;"> — ${G.sweepStep===0?'paciente cero':`oleada ${G.sweepStep}`}</span>
+      </div>
+      <svg id="net" viewBox="0 0 560 420" style="width:min(560px,92vw);height:min(375px,54vh);"></svg>
+      <div class="legend"><span>🦠 Paciente cero</span><span>😷 Infectado</span><span>⚪ Sano</span></div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        ${!isLast
+          ? `<button class="btn btn-white" onclick="advSweep()">Oleada ${G.sweepStep+1} del contagio →</button>`
+          : `<button class="btn btn-gold" onclick="go('variable')">¿Y si se lavaban las manos? 🧼 →</button>`}
+      </div>
+    </div>
+  `, 'sweep');
+  drawNet('sweep', allInf, new Set());
+}
+function advSweep(){ if(G.sweepStep<G.sweepRounds.length-1){ G.sweepStep++; renderSweep(); } }
+
+function renderVariable(){
+  render(`
+    ${head('🧼 La Variable: Lavado de Manos', `PARTIDA ${G.part} · EL LAVADO`)}
+    <div class="screen">
+      <div class="title" style="text-align:center;margin-top:0.3rem;">¿Y si alguien se <span class="hi">lavaba las manos</span>?</div>
+      <div class="glass body" style="max-width:660px;text-align:center;">
+        Quien se lava bien las manos con jabón queda <b>protegido</b>: no se infecta y <b>no contagia a nadie</b>. Eso <b>corta la cadena</b> en ese punto de la red.
+      </div>
+      <div class="body">Elige <b class="hi">1 o 2 personas</b> que se lavaron las manos:</div>
+      <div class="washer-grid">
+        ${G.names.map((nm,i)=> i===G.pz?'':`<button class="wb ${G.immune.has(i)?'on':''}" onclick="toggleImm(${i})">${G.immune.has(i)?'🧼 ✓ ':''}${nm}</button>`).join('')}
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+        <div class="body">Elegidos: <b class="hi">${G.immune.size}</b></div>
+        <button class="btn btn-gold" ${G.immune.size>0?'':'disabled'} onclick="runImmSweep()">Ver el nuevo barrido →</button>
+        <button class="btn btn-ghost" onclick="skipCompare()">Omitir →</button>
+      </div>
+    </div>
+  `, 'variable');
+}
+function toggleImm(i){ if(G.immune.has(i)) G.immune.delete(i); else if(G.immune.size<2) G.immune.add(i); renderVariable(); }
+function runImmSweep(){ const r=computeSweep(G.immune); G.sweepRoundsI=r.rounds; G.immuneCount=r.infected.size; G.sweepStep=0; go('sweepv'); }
+function skipCompare(){ G.immuneCount=G.cleanCount; go('compare'); }
+
+function renderSweepV(){
+  G.phase='sweepv';
+  const allInf=new Set(G.sweepRoundsI.slice(0,G.sweepStep+1).flat());
+  const isLast=G.sweepStep>=G.sweepRoundsI.length-1;
+  render(`
+    ${head('🧼 Barrido con Lavado de Manos', `PARTIDA ${G.part} · EL LAVADO`)}
+    <div class="screen" style="gap:0.7rem;">
+      <div class="sub" style="text-align:center;margin-top:0.2rem;">
+        Enfermos: <b class="hi" style="font-size:1.3em;">${allInf.size}</b> de ${G.names.length}
+        <span class="dim" style="font-size:0.8em;"> — con lavado de manos 🧼</span>
+      </div>
+      <svg id="net" viewBox="0 0 560 420" style="width:min(560px,92vw);height:min(375px,54vh);"></svg>
+      <div class="legend"><span>🦠 Paciente cero</span><span>😷 Infectado</span><span>🧼 Protegido</span><span>⚪ Sano</span></div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        ${!isLast
+          ? `<button class="btn btn-white" onclick="advSweepV()">Oleada ${G.sweepStep+1} →</button>`
+          : `<button class="btn btn-gold" onclick="go('compare')">Ver la comparación 📊 →</button>`}
+      </div>
+    </div>
+  `, 'sweepv');
+  drawNet('sweepv', allInf, G.immune);
+}
+function advSweepV(){ if(G.sweepStep<G.sweepRoundsI.length-1){ G.sweepStep++; renderSweepV(); } }
+
+function renderCompare(){
+  G.history.push({part:G.part, pzName:G.names[G.pz], clean:G.cleanCount, imm:G.immuneCount});
+  const diff=G.cleanCount-G.immuneCount, n=G.names.length;
+  render(`
+    ${head('📊 Comparación', `PARTIDA ${G.part} · RESULTADO`)}
+    <div class="screen" style="text-align:center;">
+      <div class="title" style="margin-top:0.3rem;">¿Qué cambió el <span class="hi">lavado de manos</span>?</div>
+      <div class="body" style="max-width:640px;">Mismo barrido, cambiando <b>solo una cosa</b>: si alguien se lavó las manos. Eso es una <b class="hi">variable controlada</b>.</div>
+      <div class="cmp">
+        <div class="cbox bad"><div class="lbl">❌ Sin lavar</div><div class="big">${G.cleanCount}</div><div class="lbl">de ${n} enfermos</div></div>
+        <div class="cbox good"><div class="lbl">🧼 Con lavado</div><div class="big">${G.immuneCount}</div><div class="lbl">de ${n} enfermos</div></div>
+      </div>
+      <div class="glass body" style="max-width:640px;text-align:left;">
+        ${diff>0
+          ? `✅ El lavado de manos <b>salvó a ${diff} persona${diff!==1?'s':''}</b>: cortó la cadena de contagio.`
+          : `⚠️ Aquí el contagio llegó igual por otro camino. <b>¿A quién habría convenido que se lavara para cortar la cadena?</b>`}
+      </div>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+        ${G.part<SCENARIOS.length
+          ? `<button class="btn btn-gold" style="font-size:1.15rem;" onclick="nextPart()">→ Partida ${G.part+1} de ${SCENARIOS.length}: nuevo misterio</button>
+             <button class="btn btn-ghost" onclick="go('end')">🏁 Terminar aquí</button>`
+          : `<button class="btn btn-white" style="font-size:1.15rem;" onclick="go('end')">🏁 Resumen final</button>`}
+      </div>
+    </div>
+  `, 'compare');
+}
+
+function renderEnd(){
+  render(`
+    ${head('🏁 Caso cerrado', 'RESUMEN FINAL')}
+    <div class="screen" style="text-align:center;">
+      <div class="title hi" style="margin-top:0.3rem;">¡Investigación completa!</div>
+      <table class="htable">
+        <thead><tr><th>Partida</th><th>Paciente cero</th><th>Sin lavar</th><th>Con lavado</th><th>Salvados</th></tr></thead>
+        <tbody>
+          ${G.history.map(h=>`<tr><td>${h.part} · ${SCENARIOS[(h.part-1)%SCENARIOS.length].emoji}</td><td>🦠 ${h.pzName}</td><td style="color:#dc2626;font-weight:800;">${h.clean}</td><td style="color:#16a34a;font-weight:800;">${h.imm}</td><td style="color:#b45309;font-weight:800;">${h.clean-h.imm}</td></tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="glass body" style="max-width:660px;text-align:left;">
+        🔬 <b>Lo que descubrimos:</b> las enfermedades del estómago entran <b>por la boca</b> (agua, comida o manos sucias). Verse sucio no es prueba; lo que importa es <b>qué tocó la comida</b>. Y lavarse las manos <b>corta la cadena</b>.<br><br>
+        👉 <b>La próxima semana, el agar nos mostrará con bacterias reales lo que hoy simulamos.</b>
+      </div>
+      <button class="btn btn-white" onclick="restart()">Jugar de nuevo →</button>
+    </div>
+  `, 'end');
+}
+
+// ═══ NAV ═══
+function go(p){
+  G.phase=p;
+  ({intro:renderIntro,setup:renderSetup,reparto:renderReparto,fair:renderFair,
+    clues:()=>{G.clueShown=0;renderClues();},reveal:renderReveal,sweep:renderSweep,
+    variable:()=>{G.immune=new Set();renderVariable();},sweepv:renderSweepV,
+    compare:renderCompare,end:renderEnd}[p])();
+}
+function nextPart(){
+  G.part++; G.adj=G.names.map(()=>new Set()); G.immune=new Set();
+  G.sel=-1; G.clueShown=0; G.sweepStep=0;
+  dealCards(); go('reparto');
+}
+function restart(){
+  G={phase:'intro',names:[],cards:[],pz:-1,scenario:null,adj:[],immune:new Set(),
+     part:1,clueShown:0,sweepStep:0,sweepRounds:[],sweepRoundsI:[],
+     cleanCount:0,immuneCount:0,history:[],sel:-1};
+  go('intro');
+}
+
+go('intro');
+</script>
+</body>
+</html>
