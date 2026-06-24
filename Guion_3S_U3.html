@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3S — Secuencias Didácticas · Semana 15-19 junio 2026</title>
+<style>
+  :root {
+    --gancho:  #1B5E20;
+    --explica: #0D47A1;
+    --hace:    #4A148C;
+    --aplica:  #004D40;
+    --cierra:  #3E2723;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; color: #212121; background: #F5F7FA; }
+
+  /* TOP BAR */
+  .top-bar { background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%); color: white; padding: 18px 24px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .top-bar h1 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .top-bar .subtitle { font-size: 12px; opacity: 0.85; margin-bottom: 10px; }
+  .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn-pdf { background: #FF6F00; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.2s; }
+  .btn-pdf:hover { background: #E65100; }
+  .btn-expand { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn-expand:hover { background: rgba(255,255,255,0.35); }
+
+  /* NAV TABS */
+  .nav-tabs { display: flex; overflow-x: auto; background: #E8F5E9; border-bottom: 2px solid #C8E6C9; padding: 0 8px; gap: 2px; scrollbar-width: thin; align-items: stretch; }
+  .week-separator { display: flex; align-items: center; padding: 0 8px; font-size: 10px; font-weight: 700; color: #1B5E20; white-space: nowrap; background: #C8E6C9; border-radius: 4px; margin: 6px 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tab-btn { background: transparent; border: none; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #388E3C; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; text-align: center; line-height: 1.3; }
+  .tab-btn:hover { background: #C8E6C9; }
+  .tab-btn.active { color: #1B5E20; border-bottom-color: #1B5E20; background: #C8E6C9; }
+  .tab-btn small { font-weight: 400; color: #555; }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* META */
+  .meta-info { background: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .meta-info p { margin: 3px 0; }
+  .meta-info strong { color: #1B5E20; }
+
+  /* CLASS SECTION */
+  .class-section { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .class-banner { background: linear-gradient(135deg, #0D47A1, #1565C0); color: white; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 3px 10px rgba(13,71,161,0.3); }
+  .class-num { font-size: 26px; font-weight: 900; opacity: 0.6; min-width: 40px; }
+  .class-day { font-size: 17px; font-weight: 700; }
+  .class-time { font-size: 13px; opacity: 0.8; margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+
+  .week-badge { background: rgba(255,255,255,0.25); border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+
+  /* IDEA FUERZA */
+  .idea-fuerza { background: #FFF8E1; border-left: 5px solid #FF6F00; border-radius: 0 8px 8px 0; padding: 12px 16px; font-weight: 600; color: #E65100; margin-bottom: 16px; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* STEP CARDS */
+  .step-card { border-radius: 8px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background: white; }
+  .step-header { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; user-select: none; gap: 10px; transition: filter 0.15s; }
+  .step-header:hover { filter: brightness(0.96); }
+  .step-icon { font-size: 18px; }
+  .step-label { font-weight: 700; font-size: 13px; flex: 1; text-transform: uppercase; letter-spacing: 0.3px; }
+  .step-toggle { font-size: 12px; opacity: 0.6; transition: transform 0.2s; }
+  .step-toggle.open { transform: rotate(180deg); }
+  .step-hd-wrap { flex:1; display:flex; flex-direction:column; gap:3px; }
+  .step-hd-wrap .step-label { flex:unset; }
+  .fmt-tag { font-size:10.5px; font-weight:500; color:#555; letter-spacing:0; text-transform:none; margin-top:1px; line-height:1.4; }
+  .fp1 { color:#C0392B; background:#FDECEA; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp2 { color:#8E44AD; background:#F5EEF8; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp3 { color:#16A085; background:#E8F8F5; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fmt-link { color:inherit; text-decoration:none; border-bottom:1px dotted #aaa; cursor:pointer; transition:border-color 0.15s; }
+  .fmt-link:hover { border-bottom-color:#333; color:#222; }
+  .step-body { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,0.07); display: none; }
+  .step-body.open { display: block; }
+
+  /* BODY CONTENT */
+  .step-body p { margin: 5px 0; line-height: 1.55; }
+  .step-body ul { margin: 6px 0 6px 20px; }
+  .step-body ol { margin: 6px 0 6px 20px; }
+  .step-body li { margin: 3px 0; line-height: 1.5; }
+  .step-body li.sub-item { margin-left: 16px; }
+  .step-body strong { color: #1A237E; }
+  .step-body em { color: #555; }
+  .step-body code { background: #F5F5F5; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: 'Courier New', monospace; }
+  blockquote { border-left: 4px solid #90A4AE; padding: 8px 14px; color: #555; font-style: italic; background: #FAFAFA; border-radius: 0 6px 6px 0; margin: 8px 0; }
+  .warning { background: #FFF3E0; border-left: 4px solid #FF6F00; padding: 8px 14px; border-radius: 0 6px 6px 0; color: #E65100; font-weight: 600; font-size: 13px; margin: 8px 0; }
+  pre { background: #F5F5F5; border: 1px solid #E0E0E0; border-radius: 6px; padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 12px; overflow-x: auto; color: #444; margin: 8px 0; white-space: pre; }
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th { background: #E3F2FD; color: #0D47A1; font-weight: 700; padding: 7px 10px; text-align: left; border: 1px solid #BBDEFB; }
+  td { padding: 6px 10px; border: 1px solid #E0E0E0; vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFAFA; }
+  h4 { color: #333; font-size: 13px; margin: 10px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .top-bar { position: static; background: #1B5E20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .btn-pdf, .btn-expand, .nav-tabs { display: none !important; }
+    .main { max-width: 100%; padding: 10px; }
+    .class-section { display: block !important; page-break-before: always; }
+    .class-section:first-child { page-break-before: avoid; }
+    .class-banner { background: #0D47A1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 4px; margin-bottom: 10px; }
+    .step-body { display: block !important; }
+    .step-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .step-card { page-break-inside: avoid; box-shadow: none; border: 1px solid #E0E0E0; margin-bottom: 6px; }
+    .step-toggle { display: none; }
+    .idea-fuerza { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { page-break-inside: avoid; }
+    th { background: #E3F2FD !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .meta-info { box-shadow: none; border: 1px solid #E0E0E0; }
+    .week-badge { background: rgba(0,0,0,0.15) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>3S — Secuencias Didácticas · Semana 15-19 junio 2026</h1>
+  <div class="subtitle">Semanas 8-12 y 15-19 junio 2026 · CyT MDD</div>
+  <div class="top-actions">
+    <button class="btn-pdf" onclick="imprimirPDF()">⬇ Descargar PDF</button>
+    <button class="btn-expand" onclick="expandAll()">Expandir todo</button>
+    <button class="btn-expand" onclick="collapseAll()">Colapsar todo</button>
+  </div>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+<div class="week-separator">8-12 jun</div>
+<button class="tab-btn active" onclick="showClass(0)" id="tab-0">Lunes<br><small>9:35-10:40 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(1)" id="tab-1">Martes<br><small>9:35-10:40 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(2)" id="tab-2">Miércoles<br><small>9:35-10:40 (65 min)</small></button>
+<div class="week-separator">15-19 jun</div>
+<button class="tab-btn " onclick="showClass(3)" id="tab-3">Lunes<br><small>9:35-10:40 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(4)" id="tab-4">Martes<br><small>9:35-10:40 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(5)" id="tab-5">Miércoles<br><small>9:35-10:40 (65 min)</small></button>
+
+</div>
+
+<div class="main">
+  <div class="meta-info"><p><strong>Horario:</strong> Lunes 9:35 · Martes 9:35 · Miércoles 9:35</p><p><strong>Unidad 3:</strong> Enlaces químicos y propiedades de la materia</p><p><strong>Estado:</strong> L4 (Puentes de hidrógeno — C2) + L5 (C1 indagación electrolitos — inicio)</p><blockquote>Fuente: B2_planificacion_estado.md → <em>"L4: Lun8jun/Mar9jun · L5: Mié10jun"</em></blockquote><div class="warning">⚠️ El <strong>miércoles inicia la evidencia C1</strong> (L5 — electrolitos y conductividad eléctrica).</div></div>
+  
+        <div class="class-section" id="class-0" style="display:block">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 8 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L4 S1 — Puentes de hidrógeno y propiedades físicas del agua | C2</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Las propiedades "raras" del agua (que el hielo flote, que tenga tensión superficial) no son magia — son consecuencia directa de los puentes de hidrógeno entre sus moléculas.</div><div class="warning">⚠️ 🖥️ <strong>CLASE VIRTUAL</strong> — lunes 8 jun se dicta por videoconferencia. La secuencia de 5 pasos y la justificación DUA se mantienen; solo cambian las herramientas. Es una clase conceptual (sin laboratorio), así que se adapta completa sin perder ninguna actividad.</div><p><strong>Cómo se dicta cada paso a distancia:</strong></p><div class="table-wrap"><table><thead><tr><th>Paso</th><th>Herramienta / acción virtual</th><th>DUA</th></tr></thead><tbody><tr><td>Gancho (Verdadero/Mito)</td><td>Encuesta en vivo: votan por chat, reacción o Mentimeter antes del desvelamiento.</td><td>P.I — múltiples vías de voto y participación</td></tr><tr><td>Explica</td><td>Compartir pantalla con el dibujo de la molécula H₂O y los puentes de H (pizarra digital / Jamboard). <strong>Grabar</strong> la sesión y subir a Classroom.</td><td>P.II — representación visual + material asincrónico</td></tr><tr><td>Hace (3 columnas)</td><td>Esquema en cuaderno físico (foto al Classroom) o en documento compartido.</td><td>P.III — entrega por foto o texto</td></tr><tr><td>Aplica (caso Titicaca)</td><td>Caso en pantalla; responden en chat o documento colaborativo.</td><td>P.I — contexto peruano real</td></tr><tr><td>Cierra</td><td>Ticket de salida por <strong>Google Forms</strong> (registro automático).</td><td>P.III — expresión escrita</td></tr></tbody></table></div><p><strong>Plataforma:</strong> videoconferencia (Meet/Zoom) + aula virtual (Classroom o equivalente). <strong>Subir antes a Classroom:</strong> el esquema de la molécula y el enlace al formulario de salida.</p>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=6" class="fmt-link" target="_blank" onclick="event.stopPropagation()">⚖️ Verdadero o Mito</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Verdadero o Mito (P.I — conflicto cognitivo)</li><li class="bullet "><strong>Qué escribe en pizarra:</strong></li><li class="bullet "><em>"El hielo flota en el agua porque pesa menos."</em> → <strong>MITO</strong> (flota porque es MENOS denso — estructura cristalina más abierta)</li><li class="bullet "><em>"El agua puede 'doblar' porque sus moléculas se atraen entre sí."</em> → <strong>VERDADERO</strong> (tensión superficial)</li><li class="bullet "><em>"El etanol hierve a menor temperatura que el agua aunque su molécula sea más grande."</em> → <strong>VERDADERO</strong> (menos puentes H)</li><li class="bullet "><strong>Qué hace el alumno:</strong> Vota + justifica cada respuesta antes del desvelamiento</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + dibujo en pizarra (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li><li class="bullet ">Molécula H₂O con δ+ en H y δ- en O</li><li class="bullet ">Puente de hidrógeno entre dos moléculas (línea punteada H···O)</li><li class="bullet ">Agua líquida (moléculas cerca) vs hielo (estructura hexagonal abierta)</li><li class="bullet "><strong>Frase clave:</strong> <em>"El puente de hidrógeno no es un enlace covalente — es una atracción débil pero colectiva. Una molécula de agua forma hasta 4 puentes a la vez. En conjunto, explican las propiedades más importantes del agua para la vida."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Comprende + Explica causas</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=4" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔍 Partes→Propósitos→Comp.</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Partes → Propósitos → Complejidades (P.III)</li><li class="bullet "><strong>Tarea:</strong> Para el sistema "agua + puentes de hidrógeno":</li></ul><ol><li class="numbered"><strong>Partes:</strong> ¿Qué elementos forman el puente de hidrógeno? ¿Qué característica tiene el átomo aceptor?</li><li class="numbered"><strong>Propósitos:</strong> ¿Para qué "sirven"? Lista al menos 3 propiedades que explican</li><li class="numbered"><strong>Complejidades:</strong> ¿Por qué el hielo es menos denso que el agua líquida si tiene más puentes H? ¿Cómo afecta a los peces en invierno?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Esquema de 3 columnas en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (12 min) — C2: Evalúa implicancias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En Puno, durante el friaje, el lago Titicaca no se congela completamente aunque la temperatura baje de 0°C en la orilla. ¿Qué papel juegan los puentes de hidrógeno para que los peces sobrevivan?"</em></li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">¿Por qué el agua del fondo permanece líquida?</li><li class="numbered">¿Qué pasaría si el hielo fuera más denso?</li><li class="numbered">¿Qué propiedad del enlace de hidrógeno permite que la vida acuática sobreviva el friaje?</li></ol>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (9 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué el agua hierve a 100°C y no a 19°C como esperaríamos por su masa molecular?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Porque hay que romper múltiples puentes de hidrógeno simultáneamente, lo que requiere más energía de la esperada por la masa sola</li><li class="bullet "><strong>Palabras clave:</strong> puente de hidrógeno, electronegatividad, tensión superficial, densidad del hielo, anomalía del agua</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-1" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Martes 9 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L4 S2 — Propiedades físicas según el tipo de enlace | C2</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El tipo de enlace entre partículas determina las propiedades macroscópicas: punto de fusión, solubilidad, conductividad. Podemos predecir propiedades antes de medir, solo conociendo el enlace.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=13" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🤝 Think→Pair→Share</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Think → Pair → Share con predicción (P.I)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Sin buscar en el libro, ordenen de menor a mayor punto de ebullición: etanol, propano, agua, NaCl. ¿Por qué ese orden?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Etanol · Propano · Agua · NaCl</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Ordena individual (2 min) → compara con compañero → justifica al pleno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Tabla comparativa:</li></ul><div class="table-wrap"><table><thead><tr><th>Sustancia</th><th>Tipo de enlace</th><th>Fuerza entre partículas</th><th>Punto de ebullición</th></tr></thead><tbody><tr><td>Propano</td><td>Covalente no polar</td><td>Van der Waals</td><td>−42 °C</td></tr><tr><td>Etanol</td><td>Covalente polar + puentes H</td><td>Puentes H moderados</td><td>78 °C</td></tr><tr><td>Agua</td><td>Covalente polar + puentes H</td><td>Puentes H intensos</td><td>100 °C</td></tr><tr><td>NaCl</td><td>Iónico</td><td>Atracción ión-ión</td><td>1413 °C</td></tr></tbody></table></div><ul><li class="bullet "><strong>Frase clave:</strong> <em>"Más fuerte la interacción entre partículas → más energía para separarlas → mayor punto de ebullición. Esta tabla resume todo lo que estudiamos en una sola idea."</em></li><li class="bullet "><strong>Concepto adicional:</strong> Alótropos del carbono — diamante (covalente 3D → durísimo, no conductor) vs grafito (capas + London → blando, conductor)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica + Integra</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=7" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗣️ Juego de Explicación</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Juego de la Explicación (P.III — enseñar es la mejor forma de consolidar)</li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Cada estudiante elige UNA sustancia de la tabla y la explica a su compañero en 2 min: enlace, punto de ebullición, visualización</li><li class="numbered">Responden en cuaderno: ¿Por qué el diamante es el mineral más duro? ¿Por qué el grafito sirve como lubricante? (desde el tipo de enlace)</li></ol><ul><li class="bullet "><strong>Producto:</strong> Respuesta escrita diamante/grafito (5-7 líneas)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"Un investigador del IGP analiza muestras de suelo del desierto de Ica. Una sustancia se disuelve en agua y conduce electricidad. Otra no se disuelve pero sí conduce calor. ¿Qué tipo de enlace tiene cada una?"</em></li><li class="bullet "><strong>Tarea:</strong> Identifica el enlace y justifica la propiedad observada</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Qué tipo de enlace tiene una sustancia que se disuelve fácilmente en agua y conduce electricidad en disolución?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Enlace iónico — al disolverse los iones se separan y conducen corriente</li><li class="bullet "><strong>Palabras clave:</strong> punto de ebullición, fuerzas intermoleculares, London, alótropo, conductividad</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-2" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 10 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L5 S1 — Indagación: ¿Qué líquidos conducen mejor la electricidad? | C1 · Diseño</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Diseñar un experimento es tomar decisiones: qué medir, cómo controlar, qué comparar. No es seguir una receta — es planear cómo obtener evidencia confiable.</div><div class="warning">⚠️ Inicia la evidencia C1. Instrumento: rúbrica de indagación (5 capacidades).</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 POE</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> POE con circuito eléctrico (P.I — sorpresa ante resultado inesperado)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Voy a conectar este circuito (pila + LED + cables) a diferentes líquidos. Predigan: ¿cuáles harán brillar la luz?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> Agua destilada / Agua con sal / Vinagre / Aceite → ¿enciende?</li><li class="bullet "><strong>Qué hace el alumno:</strong> Vota y justifica desde el tipo de enlace visto en L1-L4</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li></ul><pre><code>  Electrolito: al disolverse libera iones → conduce electricidad
+  No electrolito: covalente no polar → sin iones → no conduce
+  NaCl → Na⁺ + Cl⁻ (electrolito fuerte) · Glucosa → sin disociación (no electrolito)</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"La conductividad depende de si hay iones en movimiento. El tipo de enlace lo predice."</em></li><li class="bullet "><strong>Conexión salud:</strong> electrolitos en la sangre — sodio, potasio, calcio. Anemia infantil en Perú.</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (28 min) — C1: Problematiza + Diseña estrategias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=9" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🧪 Mini-Indagación</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Diseño del experimento en grupos de 3</li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered"><strong>Pregunta:</strong> <em>"¿Cómo afecta el tipo de líquido (agua destilada / agua salada / vinagre / jugo de naranja / rehidratante) a su capacidad de conducir electricidad?"</em></li><li class="numbered"><strong>Hipótesis:</strong> predecir qué líquido conducirá mejor y por qué (desde el tipo de enlace)</li><li class="numbered"><strong>Variables:</strong> independiente (tipo de líquido) · dependiente (brillo del LED) · control (mismo circuito, misma cantidad, mismo tiempo)</li><li class="numbered"><strong>Plan:</strong> materiales (pila 9V, cables, LED, recipiente), procedimiento, tabla de registro, medidas de seguridad</li></ol><ul><li class="bullet "><strong>Producto:</strong> Ficha de diseño completa en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"¿Por qué los rehidratantes (Gatorade) son más efectivos que el agua sola después de sudar mucho?"</em></li><li class="bullet "><strong>Tarea:</strong> ¿El agua destilada conduce electricidad? ¿Y el agua del grifo? ¿Por qué son diferentes? (aplica el concepto de electrolito)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué el aceite no conduce electricidad aunque sea un líquido?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Enlace covalente no polar — no produce iones al disolverse, sin portadores de carga</li><li class="bullet "><strong>Adelanto:</strong> <em>"La próxima clase ejecutamos el experimento."</em></li><li class="bullet "><strong>Palabras clave:</strong> electrolito, ión, conductividad eléctrica, disociación, enlace iónico, covalente polar</li></ul><p><em>Generado: 2026-06-07 | Fuente: 3S_B2.md + B2_planificacion_estado.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-3" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 15 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L5 S2 — Indagación: Ejecución del experimento con electrolitos | C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El circuito eléctrico no miente: si el LED brilla, hay iones. Si no brilla, no los hay. Los datos son la voz del experimento.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=25" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔍 Explore (5E)</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Revisen el plan del miércoles pasado. Hoy ejecutamos. ¿Cuál era su hipótesis? ¿Qué líquido predijeron que conduciría mejor?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Hipótesis: ___ conducirá mejor porque ___</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Revisa la ficha de diseño de la sesión anterior</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Protocolo de seguridad + tabla modelo:</strong></li><li class="bullet ">⚠️ Nunca tocar los cables con las manos mojadas</li><li class="bullet ">⚠️ Usar guantes si hay líquidos ácidos (vinagre)</li><li class="bullet ">Tabla de registro:</li></ul><div class="table-wrap"><table><thead><tr><th>Líquido</th><th>Brilla LED</th><th>Intensidad (0/1/2/3)</th><th>Observaciones</th></tr></thead><tbody><tr><td>Agua destilada</td><td></td><td></td><td></td></tr><tr><td>Agua con sal</td><td></td><td></td><td></td></tr><tr><td>Vinagre</td><td></td><td></td><td></td></tr><tr><td>Jugo de naranja</td><td></td><td></td><td></td></tr><tr><td>Rehidratante (Gatorade)</td><td></td><td></td><td></td></tr><tr><td>Aceite</td><td></td><td></td><td></td></tr></tbody></table></div>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (40 min) — C1: Genera y registra datos</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Datos Reales</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Materiales:</strong> pila 9V, cables con caimanes, LED, recipiente pequeño (para cada muestra)</li><li class="bullet "><strong>Procedimiento:</strong></li></ul><ol><li class="numbered">Conectar el circuito base (verificar que el LED funciona con los cables en la pila)</li><li class="numbered">Sumergir los extremos del cable en cada líquido (50 mL)</li><li class="numbered">Observar el LED → registrar brillo</li><li class="numbered">Limpiar y secar los electrodos antes de cada prueba</li><li class="numbered">Repetir con cada líquido de la tabla</li></ol><ul><li class="bullet "><strong>Producto:</strong> Tabla completa con observaciones y notas cualitativas</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación:</strong> <em>"¿Por qué el agua del grifo de Lima conduce más electricidad que el agua destilada, aunque ambas son 'agua'?"</em></li><li class="bullet "><strong>Tarea:</strong> Explica con el concepto de iones y electrolitos (3-4 líneas)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Cuál fue el resultado más sorprendente de tu experimento? ¿Coincidió con tu hipótesis?"</em></li><li class="bullet "><strong>Adelanto:</strong> <em>"Mañana: análisis, gráfico y conclusión. Se entrega la rúbrica C1."</em></li><li class="bullet "><strong>Palabras clave:</strong> electrolito, iones, conductividad, circuito, LED, disociación</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-4" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Martes 16 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L5 S3 — Indagación: Análisis y comunicación | C1 | ✅ EVIDENCIA C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: La conclusión científica no solo responde la pregunta — explica el mecanismo. No es suficiente decir "el agua salada conduce más": hay que explicar por qué, desde los iones.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (5 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=2" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔄 Antes/Ahora Pienso</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Antes pensaba → Ahora pienso (P.I — metacognición)</li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>Antes pensaba... → Los datos muestran que...</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Completa las frases usando los datos de ayer</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (8 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Escala de conductividad por tipo de enlace:</li></ul><pre><code>  No conduce → Conduce débil → Conduce fuerte
+  Aceite       Agua pura       Agua salada / rehidratante
+  (C no polar) (covalente polar) (electrolito fuerte)</code></pre><ul><li class="bullet "><strong>Estructura de la conclusión:</strong></li></ul><pre><code>  "Según los datos, el líquido que mejor condujo fue ___ porque contiene ___
+  que al disolverse libera ___. Esto [apoya/contradice] la hipótesis porque...
+  Una limitación fue ___. Para mejorar haríamos ___."</code></pre>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#4A148C">Hace (32 min) — C1: Analiza + Evalúa y comunica</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Datos Reales</a> <span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Gráfico de barras: intensidad de conducción por líquido (ordenado de menor a mayor)</li><li class="numbered">Análisis: ¿qué tipo de enlace tienen los líquidos que más conducen? ¿Los que no conducen?</li><li class="numbered">Redactar conclusión con la estructura de la pizarra (incluir nombres de iones)</li><li class="numbered">Identificar 2 limitaciones (¿el LED es suficientemente sensible para diferencias pequeñas?)</li><li class="numbered"><strong>Conexión salud:</strong> ¿Por qué los rehidratantes son más eficaces que el agua pura para reponer electrolitos? ¿Qué relación tiene con la anemia infantil en Perú?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Gráfico + conclusión + evaluación → <strong>evidencia C1</strong></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (13 min) — C1: Comunica</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌿 Elaborate (5E)</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Presentación oral por grupo</strong> (2-3 min): pregunta → hipótesis → resultados (con gráfico) → conclusión (mecanismo iónico) → limitación</li><li class="bullet "><strong>Conexión final:</strong> <em>"Lo que midieron hoy ocurre dentro de su cuerpo ahora mismo. La sangre conduce electricidad porque tiene Na⁺, K⁺, Ca²⁺ — sin ellos, el corazón no late."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">✅ Evaluate (5E)</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Se recoge el informe / cuaderno</strong> → ✅ rúbrica C1 aplicada</li><li class="bullet "><strong>Ticket de salida:</strong> <em>"Si el vinagre (ácido acético) condujo débil, ¿es un electrolito o no? ¿Fuerte o débil? Justifica."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Electrolito débil — se disocia parcialmente en iones, por eso conduce algo pero no tanto como el NaCl</li><li class="bullet "><strong>Palabras clave:</strong> electrolito fuerte/débil, disociación, ión, conclusión, evidencia, comunicación científica</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-5" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 17 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">Punto de llegada — Alótropos del carbono y propiedades de la materia | C2 · Cierre U3</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El mismo elemento puede tener propiedades completamente opuestas según cómo se ordenen sus átomos. El diamante y el grafito son ambos carbono puro — la diferencia está en cómo están enlazados.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=6" class="fmt-link" target="_blank" onclick="event.stopPropagation()">⚖️ Verdadero o Mito</a> <span class="fp1">DUA · P.I</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Verdadero o Mito (P.I — conflicto cognitivo)</li><li class="bullet "><strong>Qué escribe en pizarra:</strong></li><li class="bullet "><em>"El diamante y el grafito son el mismo elemento químico."</em> → <strong>VERDADERO</strong> (ambos son carbono puro)</li><li class="bullet "><em>"El diamante es más duro que el grafito porque tiene más átomos."</em> → <strong>MITO</strong> (misma cantidad — diferente ordenación de enlaces)</li><li class="bullet "><em>"El grafito conduce electricidad y el diamante no."</em> → <strong>VERDADERO</strong></li><li class="bullet "><strong>Qué hace el alumno:</strong> Vota + justifica (2 min) → docente guarda la respuesta para el Explica</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado Visual</a> <span class="fp2">DUA · P.II</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + dibujo en pizarra (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li><li class="bullet ">Diamante: estructura 3D — cada C enlazado a 4 C vecinos en tetraedro → red rígida → muy duro, no conduce</li><li class="bullet ">Grafito: láminas de hexágonos apiladas → enlace fuerte dentro de la capa, débil entre capas → blando (capas se deslizan), conduce (electrón libre por capa)</li><li class="bullet ">Tabla comparativa:</li></ul><div class="table-wrap"><table><thead><tr><th>Propiedad</th><th>Diamante</th><th>Grafito</th></tr></thead><tbody><tr><td>Enlace</td><td>Covalente 3D</td><td>Covalente 2D + London</td></tr><tr><td>Dureza</td><td>Durísimo (10 Mohs)</td><td>Blando (1-2 Mohs)</td></tr><tr><td>Conductividad</td><td>No conduce</td><td>Conduce</td></tr><tr><td>Usos</td><td>Joyería, taladros</td><td>Lápiz, lubricante, electrodos</td></tr></tbody></table></div><ul><li class="bullet "><strong>Frase clave:</strong> <em>"No es la composición lo que determina las propiedades — es la arquitectura del enlace."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#0D47A1">Hace (22 min) — C2: Explica causas + Integra</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔗 Conectar→Extender→Cuestionar</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Tarea:</strong> Conectar alótropos con todo lo estudiado en U3:</li></ul><ol><li class="numbered">¿Por qué el grafito se usa como lápiz? (explica desde la estructura de capas)</li><li class="numbered">¿Por qué el diamante se usa en herramientas de corte? (explica desde el enlace 3D)</li><li class="numbered">¿Qué tipo de enlace tiene el grafito? ¿Cómo explicas que conduzca electricidad si el enlace es covalente? (pista: electrón deslocalizados)</li><li class="numbered"><strong>Integrador U3:</strong> <em>"El grafito tiene puntos de ebullición muy altos aunque sus capas se deslizan fácilmente. ¿Cómo explicas esto?"</em> (pista: enlace dentro de la capa vs entre capas)</li></ol><ul><li class="bullet "><strong>Producto:</strong> Respuestas argumentadas en cuaderno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#004D40">Aplica (11 min) — C2: Evalúa implicancias</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📋 Estudio de Caso</a> <span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En Madre de Dios, los mineros usan mercurio para recuperar oro. El carbón activado (una forma amorfa del carbono) puede absorber ese mercurio del agua. ¿Qué propiedades del carbono permiten esto?"</em></li><li class="bullet "><strong>Tarea:</strong> Conecta estructura del carbono + propiedad de adsorción + aplicación ambiental (4-5 líneas)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap">
+                  <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+                  <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎫 Ticket de Salida</a> <span class="fp3">DUA · P.III</span></span>
+                </div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Cierre integrador U3:</strong> <em>"Empezamos con el enlace iónico, pasamos por el covalente, los puentes de hidrógeno, los electrolitos... Todo lleva a la misma idea: la estructura determina la función. Igual que en biología — la forma de una proteína determina lo que puede hacer."</em></li><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué dos sustancias con la misma fórmula (como los alótropos del carbono) pueden tener propiedades tan diferentes?"</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Porque la disposición de los átomos y el tipo de enlace entre ellos determina las propiedades macroscópicas, no solo la composición química</li><li class="bullet "><strong>Palabras clave:</strong> alótropo, diamante, grafito, carbono amorfo, enlace covalente 3D, capas, conductividad, dureza</li></ul><p><em>Generado: 2026-06-07 | Fuente: 3S_B2.md + B2_planificacion_estado.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+</div>
+
+<script>
+  function showClass(idx) {
+    document.querySelectorAll('.class-section').forEach((el, i) => {
+      el.style.display = i === idx ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+  }
+
+  function toggleStep(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.step-toggle');
+    body.classList.toggle('open', !body.classList.contains('open'));
+    if (toggle) toggle.classList.toggle('open', !toggle.classList.contains('open'));
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.add('open'));
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.remove('open'));
+  }
+
+  function imprimirPDF() {
+    document.querySelectorAll('.step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section').forEach(el => el.style.display = 'block');
+    window.print();
+    setTimeout(() => {
+      document.querySelectorAll('.class-section').forEach((el, i) => {
+        el.style.display = i === 0 ? 'block' : 'none';
+      });
+    }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const firstStep = document.querySelector('.class-section .step-body');
+    if (firstStep) {
+      firstStep.classList.add('open');
+      const toggle = firstStep.previousElementSibling.querySelector('.step-toggle');
+      if (toggle) toggle.classList.add('open');
+    }
+  });
+</script>
+</body>
+</html>

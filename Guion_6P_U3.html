@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6P — Secuencias Didácticas · Semana 15-19 junio 2026</title>
+<style>
+  :root {
+    --gancho:  #1B5E20;
+    --explica: #0D47A1;
+    --hace:    #4A148C;
+    --aplica:  #004D40;
+    --cierra:  #3E2723;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; color: #212121; background: #F5F7FA; }
+
+  /* TOP BAR */
+  .top-bar { background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%); color: white; padding: 18px 24px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .top-bar h1 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .top-bar .subtitle { font-size: 12px; opacity: 0.85; margin-bottom: 10px; }
+  .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn-pdf { background: #FF6F00; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.2s; }
+  .btn-pdf:hover { background: #E65100; }
+  .btn-expand { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn-expand:hover { background: rgba(255,255,255,0.35); }
+
+  /* NAV TABS */
+  .nav-tabs { display: flex; overflow-x: auto; background: #E8F5E9; border-bottom: 2px solid #C8E6C9; padding: 0 8px; gap: 2px; scrollbar-width: thin; align-items: stretch; }
+  .week-separator { display: flex; align-items: center; padding: 0 8px; font-size: 10px; font-weight: 700; color: #1B5E20; white-space: nowrap; background: #C8E6C9; border-radius: 4px; margin: 6px 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tab-btn { background: transparent; border: none; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #388E3C; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; text-align: center; line-height: 1.3; }
+  .tab-btn:hover { background: #C8E6C9; }
+  .tab-btn.active { color: #1B5E20; border-bottom-color: #1B5E20; background: #C8E6C9; }
+  .tab-btn small { font-weight: 400; color: #555; }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* META */
+  .meta-info { background: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .meta-info p { margin: 3px 0; }
+  .meta-info strong { color: #1B5E20; }
+
+  /* CLASS SECTION */
+  .class-section { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .class-banner { background: linear-gradient(135deg, #0D47A1, #1565C0); color: white; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 3px 10px rgba(13,71,161,0.3); }
+  .class-num { font-size: 26px; font-weight: 900; opacity: 0.6; min-width: 40px; }
+  .class-day { font-size: 17px; font-weight: 700; }
+  .class-time { font-size: 13px; opacity: 0.8; margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+
+  .week-badge { background: rgba(255,255,255,0.25); border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+
+  /* IDEA FUERZA */
+  .idea-fuerza { background: #FFF8E1; border-left: 5px solid #FF6F00; border-radius: 0 8px 8px 0; padding: 12px 16px; font-weight: 600; color: #E65100; margin-bottom: 16px; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* STEP CARDS */
+  .step-card { border-radius: 8px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background: white; }
+  .step-header { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; user-select: none; gap: 10px; transition: filter 0.15s; }
+  .step-header:hover { filter: brightness(0.96); }
+  .step-icon { font-size: 18px; }
+  .step-label { font-weight: 700; font-size: 13px; flex: 1; text-transform: uppercase; letter-spacing: 0.3px; }
+  .step-toggle { font-size: 12px; opacity: 0.6; transition: transform 0.2s; }
+  .step-toggle.open { transform: rotate(180deg); }
+  .step-body { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,0.07); display: none; }
+  .step-body.open { display: block; }
+
+  /* BODY CONTENT */
+  .step-body p { margin: 5px 0; line-height: 1.55; }
+  .step-body ul { margin: 6px 0 6px 20px; }
+  .step-body ol { margin: 6px 0 6px 20px; }
+  .step-body li { margin: 3px 0; line-height: 1.5; }
+  .step-body li.sub-item { margin-left: 16px; }
+  .step-body strong { color: #1A237E; }
+  .step-body em { color: #555; }
+  .step-body code { background: #F5F5F5; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: 'Courier New', monospace; }
+  blockquote { border-left: 4px solid #90A4AE; padding: 8px 14px; color: #555; font-style: italic; background: #FAFAFA; border-radius: 0 6px 6px 0; margin: 8px 0; }
+  .warning { background: #FFF3E0; border-left: 4px solid #FF6F00; padding: 8px 14px; border-radius: 0 6px 6px 0; color: #E65100; font-weight: 600; font-size: 13px; margin: 8px 0; }
+  pre { background: #F5F5F5; border: 1px solid #E0E0E0; border-radius: 6px; padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 12px; overflow-x: auto; color: #444; margin: 8px 0; white-space: pre; }
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th { background: #E3F2FD; color: #0D47A1; font-weight: 700; padding: 7px 10px; text-align: left; border: 1px solid #BBDEFB; }
+  td { padding: 6px 10px; border: 1px solid #E0E0E0; vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFAFA; }
+  h4 { color: #333; font-size: 13px; margin: 10px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+
+  /* PRINT */
+  /* ── FORMATO DUA (badge en cabecera de paso) ── */
+  .step-hd-wrap { flex:1; display:flex; flex-direction:column; gap:3px; }
+  .step-hd-wrap .step-label { flex:unset; }
+  .fmt-tag { font-size:10.5px; font-weight:500; color:#555; letter-spacing:0; text-transform:none; margin-top:1px; line-height:1.4; }
+  .fp1 { color:#C0392B; background:#FDECEA; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp2 { color:#8E44AD; background:#F5EEF8; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fp3 { color:#16A085; background:#E8F8F5; padding:1px 6px; border-radius:6px; font-size:9.5px; font-weight:700; display:inline-block; }
+  .fmt-link { color:inherit; text-decoration:none; border-bottom:1px dotted #aaa; cursor:pointer; transition:border-color 0.15s; }
+  .fmt-link:hover { border-bottom-color:#333; color:#222; }
+
+  @media print {
+    body { background: white; font-size: 11px; }
+    .top-bar { position: static; background: #1B5E20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .btn-pdf, .btn-expand, .nav-tabs { display: none !important; }
+    .main { max-width: 100%; padding: 10px; }
+    .class-section { display: block !important; page-break-before: always; }
+    .class-section:first-child { page-break-before: avoid; }
+    .class-banner { background: #0D47A1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 4px; margin-bottom: 10px; }
+    .step-body { display: block !important; }
+    .step-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .step-card { page-break-inside: avoid; box-shadow: none; border: 1px solid #E0E0E0; margin-bottom: 6px; }
+    .step-toggle { display: none; }
+    .idea-fuerza { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { page-break-inside: avoid; }
+    th { background: #E3F2FD !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .meta-info { box-shadow: none; border: 1px solid #E0E0E0; }
+    .week-badge { background: rgba(0,0,0,0.15) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>6P — Secuencias Didácticas · Semana 15-19 junio 2026</h1>
+  <div class="subtitle">Semanas 8-12 y 15-19 junio 2026 · CyT MDD</div>
+  <div class="top-actions">
+    <button class="btn-pdf" onclick="imprimirPDF()">⬇ Descargar PDF</button>
+    <button class="btn-expand" onclick="expandAll()">Expandir todo</button>
+    <button class="btn-expand" onclick="collapseAll()">Colapsar todo</button>
+  </div>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+<div class="week-separator">8-12 jun</div>
+<button class="tab-btn active" onclick="showClass(0)" id="tab-0">Lunes<br><small>7:50-8:55 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(1)" id="tab-1">Miércoles<br><small>11:00-12:05 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(2)" id="tab-2">Jueves<br><small>9:35-10:40 (65 min)</small></button>
+<div class="week-separator">15-19 jun</div>
+<button class="tab-btn " onclick="showClass(3)" id="tab-3">Lunes<br><small>7:50-8:55 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(4)" id="tab-4">Miércoles<br><small>11:00-12:05 (65 min)</small></button>
+<button class="tab-btn " onclick="showClass(5)" id="tab-5">Jueves<br><small>9:35-10:40 (65 min)</small></button>
+
+</div>
+
+<div class="main">
+  <div class="meta-info"><p><strong>Horario:</strong> Lunes 7:50 · Miércoles 11:00 · Jueves 9:35</p><p><strong>Unidad 3:</strong> La salud humana — <em>Situación significativa: Nueva Villa</em></p><p><strong>Estado:</strong> Sesiones 10-12 de 15</p><div class="warning">⚠️ Esta semana se completa la <strong>evidencia C1</strong> (S10-S11) y se cierra la unidad (S12)</div></div>
+  
+        <div class="class-section" id="class-0" style="display:block">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 8 junio</div>
+              <div class="class-time">7:50-8:55 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L6: Indagación — DISEÑO + EJECUCIÓN VIRTUAL | C1 · Sesiones 1-2 de 3</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Para saber si el lavado de manos reduce bacterias, primero diseñamos el experimento (qué medir, cómo, por qué) y luego observamos datos reales. Lo que "debería pasar" no cuenta; solo los datos.</div><div class="warning">⚠️ <strong>Ajuste:</strong> La sesión de diseño (S1) no se realizó la semana pasada. Esta clase condensa <strong>S1 Diseño (20 min)</strong> + <strong>S2 Ejecución virtual con imágenes de referencia (15 min)</strong> en 65 min.</div><div class="warning">⚠️ 🖥️ <strong>CLASE VIRTUAL</strong> — lunes 8 jun. <strong>Antes de la clase, preparar en Classroom:</strong> 2 fotos en alta resolución de placas Petri con colonias (pueden ser imágenes de referencia científica de experimentos de lavado de manos) + enlace al Google Forms de salida.</div><p><strong>Cómo se dicta cada paso a distancia:</strong></p><div class="table-wrap"><table><thead><tr><th>Paso</th><th>Herramienta / acción virtual</th><th>DUA</th></tr></thead><tbody><tr><td>Gancho</td><td>Foto de colonias en pantalla; estudiantes estiman en chat.</td><td>P.I — participación anónima</td></tr><tr><td>Explica</td><td>Pizarra digital: variables + esquema A/B. <strong>Grabar</strong> y subir a Classroom.</td><td>P.II — visual + acceso asincrónico</td></tr><tr><td>Hace S1 — Diseño (20 min)</td><td>Ficha guiada en cuaderno o doc compartido.</td><td>P.III — entrega flexible</td></tr><tr><td>Hace S2 — Ejecución (15 min)</td><td>Fotos de placas en pantalla + Classroom; tabla de datos en cuaderno.</td><td>P.III — registro visual</td></tr><tr><td>Aplica</td><td>Caso mercado en chat; 2-3 alumnos responden en voz.</td><td>P.I — contexto real</td></tr><tr><td>Cierra</td><td>Google Forms — 3 preguntas.</td><td>P.III — registro automático</td></tr></tbody></table></div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👁️ Ver → Pensar → Preguntarse</a><span class="fp1">DUA · P.I</span> <span class="fp2">P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Pregunta provocadora con imagen (P.I — asombro + activación)</li><li class="bullet "><strong>Qué comparte en pantalla:</strong> Fotografía de colonias de bacterias en placa Petri (imagen de referencia)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"¿Qué están viendo? ¿De dónde vienen estas manchas? ¿Cuántas bacterias creen que hay ahora mismo en sus manos?"</em></li><li class="bullet "><strong>Mecánica:</strong> Estudiantes escriben en el chat un número estimado. Docente revela: <strong>una mano sin lavar puede tener hasta 3 000 bacterias por cm²</strong>.</li><li class="bullet "><strong>Pregunta puente:</strong> <em>"¿Creen que lavarse las manos con jabón las reduce? Hoy vamos a demostrarlo como científicos: primero diseñamos, luego observamos."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=26" class="fmt-link" target="_blank" onclick="event.stopPropagation()">💡 Explain — Explicar (5E fase 3)</a><span class="fp2">DUA · P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + pizarra digital (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li></ul><pre>PREGUNTA → HIPÓTESIS → VARIABLES → PROCEDIMIENTO → DATOS → CONCLUSIÓN</pre><ul><li class="bullet "><strong>Qué explica:</strong></li></ul><ul><li class="sub-item"><strong>Variable independiente:</strong> lo que cambiamos (condición de higiene: sin lavar vs. con jabón)</li><li class="sub-item"><strong>Variable dependiente:</strong> lo que medimos (número de colonias de bacterias)</li><li class="sub-item"><strong>Variable de control:</strong> lo que mantenemos igual (tipo de placa, temperatura, tiempo de incubación)</li><li class="sub-item"><strong>Hipótesis:</strong> "Yo creo que… porque…"</li></ul><ul><li class="bullet "><strong>Muestra en pantalla:</strong> <code>Muestra A: dedos sin lavar → placa</code> · <code>Muestra B: manos lavadas con jabón → placa</code> → incubación 48 h → colonias visibles</li><li class="bullet "><strong>Frase clave:</strong> <em>"Un científico no hace el experimento para confirmar lo que ya cree. Lo hace para ver qué pasa realmente."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace S1 — Diseño (20 min) · C1: Problematiza + Diseña estrategias</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Ficha de Aplicación</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Ficha guiada en cuaderno (P.III — expresión escrita estructurada)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Tienen 15 minutos. No copien — piensen primero, luego escriban. Si tienen dudas, pregunten por chat."</em></li><li class="bullet "><strong>Tarea:</strong> Completar la ficha de diseño en el cuaderno:</li></ul><div class="table-wrap"><table><thead><tr><th>Campo</th><th>Lo que escribe el alumno</th></tr></thead><tbody><tr><td><strong>Pregunta de indagación</strong></td><td>¿El lavado de manos con jabón reduce la cantidad de colonias de bacterias en una placa Petri?</td></tr><tr><td><strong>Hipótesis</strong></td><td>Yo creo que ___ porque ___</td></tr><tr><td><strong>Variable independiente</strong></td><td></td></tr><tr><td><strong>Variable dependiente</strong></td><td></td></tr><tr><td><strong>Variable de control</strong> (mínimo 2)</td><td></td></tr><tr><td><strong>Procedimiento resumido</strong> (4-5 pasos)</td><td>1. Tocar la placa A con dedos sin lavar… 2. Tocar la placa B con manos lavadas… 3. Tapar las placas… 4. Incubar 48 h… 5. Contar colonias</td></tr><tr><td><strong>¿Cómo mediremos?</strong></td><td>Contando el número de colonias visibles</td></tr></tbody></table></div><ul><li class="bullet "><strong>Producto:</strong> Ficha de diseño completa en cuaderno (foto a Classroom)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">🔬</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace S2 — Ejecución virtual (15 min) · C1: Genera y registra datos</span><span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Análisis de Datos Reales</a><span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Contexto:</strong> El docente comparte en pantalla y en Classroom fotos en alta resolución de placas Petri reales (imágenes de referencia científica de un experimento de lavado de manos).</li><li class="bullet "><strong>Tarea del alumno:</strong></li></ul><ol><li class="numbered">Observar con atención las placas A (dedos sin lavar) y B (manos lavadas con jabón) en la pantalla</li><li class="numbered">Contar las colonias visibles en cada placa (ampliar la foto para precisar)</li><li class="numbered">Describir color y forma de las colonias</li><li class="numbered">Completar la tabla en el cuaderno:</li></ol><div class="table-wrap"><table><thead><tr><th>Condición</th><th>N.° colonias</th><th>Color</th><th>Forma</th><th>Observaciones</th></tr></thead><tbody><tr><td>A — sin lavar</td><td></td><td></td><td></td><td></td></tr><tr><td>B — con jabón</td><td></td><td></td><td></td><td></td></tr></tbody></table></div><ul><li class="bullet "><strong>Pregunta al completar:</strong> <em>"¿Coincide lo que ves con tu hipótesis? Escribe: SÍ / NO / PARCIALMENTE, y una razón."</em></li><li class="bullet "><strong>Producto:</strong> Tabla + respuesta en cuaderno (foto a Classroom)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (8 min) — C1: Contextualiza</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Estudio de Caso Real</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En los mercados de Lima, hay vendedores que tocan dinero, pescado y luego preparan comida sin lavarse las manos. ¿Cuál de las dos placas simula esa situación? Respondan por chat: A o B, y una razón."</em></li><li class="bullet "><strong>Cierre oral:</strong> 2-3 alumnos expanden su respuesta en voz</li><li class="bullet "><strong>DUA:</strong> P.I — conexión con vida real cercana (Nueva Villa)</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (7 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎤 Ticket de Salida</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Síntesis oral (2 min):</strong> <em>"¿Qué diferencia hay entre decir 'el jabón sirve' y demostrarlo con datos?"</em> → 1-2 alumnos responden en voz</li><li class="bullet "><strong>Google Forms — 3 preguntas:</strong></li></ul><ol><li class="numbered">¿Cuál es la variable dependiente de este experimento?</li><li class="numbered">¿Cuántas colonias observaste en la placa A y en la B? ¿Qué concluyes provisionalmente?</li><li class="numbered">¿Por qué es necesario mantener variables de control en un experimento?</li></ol><ul><li class="bullet "><strong>Adelanto:</strong> <em>"El miércoles: con los datos de hoy, escribimos la conclusión científica y la presentamos."</em></li><li class="bullet "><strong>Palabras clave:</strong> variable independiente, variable dependiente, variable de control, hipótesis, colonia, placa Petri, dato, registro</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-1" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 10 junio</div>
+              <div class="class-time">11:00-12:05 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">L6: Indagación — ANÁLISIS Y CIERRE | C1 · Sesión 3 de 3 | ✅ EVIDENCIA C1</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: La conclusión científica responde la pregunta de indagación usando los datos registrados, no la intuición ni lo que "se supone".</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👁️ Ver → Pensar → Preguntarse</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Ver → Pensar → Preguntarse (P.I — asombro genuino ante los propios datos)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Abran su cuaderno en la tabla que llenaron el lunes. Observen sus datos durante 1 minuto en silencio. No hablen todavía. Solo miren los números."</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>VEO · PIENSO · ME PREGUNTO</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Escribe una frase en cada categoría mirando su tabla de datos del lunes</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado y Dibujo Explicativo</a><span class="fp2">DUA · P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + dibujo (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Dos placas comparadas — izquierda con muchos puntos (A), derecha con pocos (B). Flecha: <em>"¿Cuánto más?"</em></li><li class="bullet "><strong>Frase clave:</strong> <em>"Comparar es la herramienta central del científico. No decimos 'hay más' — decimos cuánto más, y lo justificamos con los datos de la tabla."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (25 min) — C1: Analiza datos · Evalúa y comunica</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Ficha de Aplicación</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>DUA:</strong> P.III — escritura con estructura guiada</li><li class="bullet "><strong>Tarea del alumno:</strong></li></ul><ol><li class="numbered">Completar tabla final de observaciones</li><li class="numbered">Análisis comparativo: ¿cuál placa tiene más colonias? ¿La diferencia es grande o pequeña?</li><li class="numbered">Escribir la conclusión:</li></ol><blockquote><em>"Según los datos obtenidos, el lavado de manos [sí / no] reduce la cantidad de colonias de bacterias porque en la Muestra A se observaron ___ colonias y en la Muestra B se observaron ___, lo que representa una diferencia de ___."</em></blockquote><ol><li class="numbered">Evaluar: 2 limitaciones del experimento + 1 propuesta de mejora</li></ol><ul><li class="bullet "><strong>Producto:</strong> Conclusión + evaluación escritas en cuaderno → <strong>evidencia C1</strong></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (15 min) — C1: Comunica</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔧 Elaborate — Elaborar (5E fase 4)</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Presentación oral breve por grupo (2-3 min)</li><li class="bullet "><strong>Estructura:</strong> pregunta → hipótesis → resultados → conclusión</li><li class="bullet "><strong>DUA:</strong> P.III — expresión oral</li><li class="bullet "><strong>Situación auténtica:</strong> <em>"Imaginen que presentan estos resultados al alcalde de Nueva Villa. ¿Qué datos le mostrarían para convencerlo de invertir en jabón para los mercados?"</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (12 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">✅ Evaluate — Evaluar (5E fase 5)</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Regreso al gancho:</strong> <em>"¿Se cumplió lo que escribieron en 'Pienso'? ¿Qué los sorprendió más de sus resultados?"</em></li><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿El lavado de manos reduce las bacterias? Responde usando datos de tu experimento, no lo que 'ya sabías'."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Cita datos propios (nº de colonias por condición) y concluye alineado a la hipótesis</li><li class="bullet "><strong>Acción:</strong> Se recoge el cuaderno / informe → ✅ rúbrica C1 aplicada</li><li class="bullet "><strong>Palabras clave:</strong> conclusión, limitación, informe científico, evidencia, comunicar resultados</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-2" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Jueves 11 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">8-12 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">S12: Punto de llegada — La salud y las enfermedades | C2 · Sesión integradora</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: La salud es un sistema: prevención + defensa + primeros auxilios + hábitos. En Nueva Villa, entender este sistema puede salvar vidas.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=13" class="fmt-link" target="_blank" onclick="event.stopPropagation()">💬 Think → Pair → Share</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Think → Pair → Share (P.I — dar sentido global a la unidad)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Hemos recorrido toda la unidad. Piensen: si pudieran darle UN solo consejo de salud a un vecino de Nueva Villa, ¿cuál sería? ¿Por qué ese y no otro?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>¿Qué le aconsejarías a Nueva Villa?</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Escribe su respuesta (1 min) → comparte con un compañero (1 min) → 3 parejas al pleno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado y Dibujo Explicativo</a><span class="fp2">DUA · P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + mapa visual (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li></ul><pre><code>  L1 ¿Qué es salud? → L2 ¿Cómo nos enfermamos? → L3 ¿Cómo nos defendemos?
+  → L4 ¿Qué hacemos en emergencias? → L5 ¿Cuándo los órganos fallan?
+  → L6 ¿Qué hábitos previenen todo? → L7 (próximo: filtros de agua)</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"Todo lo que estudiamos es un sistema. El cuerpo se enferma, se defiende, puede fallar, necesita ayuda. Hoy lo conectamos todo."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (25 min) — C2: Evalúa implicancias + Integra</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Estudio de Caso Real</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Propuesta en grupos de 3 para Nueva Villa</li><li class="bullet "><strong>DUA:</strong> P.III — múltiples formatos de expresión aceptados</li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">Una medida de <strong>prevención</strong> (L2/L3) con justificación científica</li><li class="numbered">Un <strong>primero auxilios</strong> (L4) con procedimiento completo</li><li class="numbered">Una solución al <strong>problema del agua</strong> (adelanto L7): ¿filtro o lavado de manos? ¿Por qué?</li></ol><ul><li class="bullet "><strong>Producto:</strong> Media página con las 3 propuestas justificadas</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=2" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔀 Antes pensaba… Ahora pienso…</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet ">Actividades "¿Qué aprendí?" del libro (pág. 78)</li><li class="bullet ">Metacognición: <em>"¿Qué fue lo más difícil de entender? ¿Qué cambiarías en tu forma de cuidarte?"</em></li><li class="bullet "><strong>DUA:</strong> P.I — autorregulación</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (12 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎤 Ticket de Salida</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Regreso al gancho:</strong> <em>"¿Cambió tu consejo inicial después de hacer la propuesta en grupo?"</em></li><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Por qué el lavado de manos es la medida de prevención más accesible para Nueva Villa? Da 2 razones."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Reduce bacterias (evidencia C1), no requiere infraestructura, bajo costo, enseñable a todos</li><li class="bullet "><strong>Adelanto:</strong> <em>"La próxima semana: filtros de agua — la solución tecnológica."</em></li><li class="bullet "><strong>Palabras clave:</strong> prevención, sistema inmune, primeros auxilios, hábito, salud integral, sistema</li></ul><p><em>Generado: 2026-06-07 | Fuente: 6P_U3_sesiones.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-3" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 1</div>
+            <div class="class-meta">
+              <div class="class-day">Lunes 15 junio</div>
+              <div class="class-time">7:50-8:55 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">S13 — Me interesa y comparto: Los filtros de agua | C2 · Extensión</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: El conocimiento científico tiene valor cuando se aplica a problemas reales. Los filtros de agua son tecnología accesible que conecta directamente lo que aprendimos sobre bacterias y salud con la vida de comunidades como Nueva Villa.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👁️ Ver → Pensar → Preguntarse</a><span class="fp1">DUA · P.I</span> <span class="fp2">P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Ver → Pensar → Preguntarse con imagen (P.I — curiosidad aplicada)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Les muestro la imagen de un filtro de agua casero hecho con arena, gravilla y carbón. ¿Qué piensan que hace? ¿Por qué puede funcionar?"</em></li><li class="bullet "><strong>Qué escribe en pizarra:</strong> <code>¿Qué VEO? · ¿Qué PIENSO que hace? · ¿Qué me PREGUNTO?</code></li><li class="bullet "><strong>Qué hace el alumno:</strong> Completa las 3 columnas (2 min) → 3 comparten al pleno</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (12 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado y Dibujo Explicativo</a><span class="fp2">DUA · P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Oral + dibujo por capas (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong> Filtro de agua en corte transversal:</li></ul><pre><code>  Agua sucia → Tela / algodón (sólidos grandes)
+                ↓
+              Carbón activado (compuestos químicos + olor)
+                ↓
+              Arena fina (bacterias + partículas)
+                ↓
+              Gravilla (sedimentos)
+                ↓
+             Agua más limpia (NO estéril — no elimina todos los patógenos)</code></pre><ul><li class="bullet "><strong>Frase clave:</strong> <em>"Un filtro reduce contaminantes pero NO reemplaza la desinfección. Si el agua filtrada no se hierve o trata con cloro, sigue teniendo riesgo biológico."</em></li><li class="bullet "><strong>Conexión:</strong> ODS 6 — agua limpia y saneamiento básico como derecho</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (25 min) — C2: Comprende + Evalúa implicancias</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Ficha de Aplicación</a><span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Fuente:</strong> Libro págs. 80-81 "Me interesa y comparto"</li><li class="bullet "><strong>Tarea:</strong> Leer el texto + responder:</li></ul><ol><li class="numbered">¿Qué materiales usa el filtro del libro? ¿Para qué sirve cada capa?</li><li class="numbered">¿Qué microorganismos elimina? ¿Cuáles NO elimina?</li><li class="numbered">¿Sería esta solución suficiente para Nueva Villa? ¿Qué le faltaría?</li></ol><ul><li class="bullet "><strong>Lista de cotejo:</strong> completar con el docente:</li><li class="bullet ">☐ Identifica las capas del filtro</li><li class="bullet ">☐ Explica qué elimina cada capa</li><li class="bullet ">☐ Reconoce la limitación (no es agua estéril)</li><li class="bullet ">☐ Propone complemento (hervir, clorar)</li><li class="bullet "><strong>Producto:</strong> Respuestas escritas + lista de cotejo completada</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (13 min) — C2: Evalúa implicancias</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Estudio de Caso Real</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Situación auténtica:</strong> <em>"En Loreto, comunidades ribereñas toman agua del río sin tratar. La ONG local propone repartir filtros caseros. ¿Es suficiente? ¿Qué condiciones se necesitan para que la solución funcione?"</em></li><li class="bullet "><strong>Tarea:</strong></li></ul><ol><li class="numbered">¿Qué riesgos quedan si solo usan el filtro?</li><li class="numbered">¿Qué otros hábitos de higiene deberían enseñar junto con el filtro?</li><li class="numbered">¿Qué conexión tiene esto con lo que aprendieron sobre vías de transmisión (L2)?</li></ol>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (7 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎤 Ticket de Salida</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"Si solo pudieras darle una solución a Nueva Villa — lavado de manos o filtro de agua — ¿cuál elegirías? Justifica con al menos 2 razones científicas."</em></li><li class="bullet "><strong>Respuesta esperada:</strong> Lavado de manos: más accesible, rompe más vías de transmisión. Filtro: más efecto sobre el agua pero necesita mantenimiento y no elimina todo. Ambas se complementan.</li><li class="bullet "><strong>Palabras clave:</strong> filtración, carbón activado, sedimentación, potabilización, ODS 6</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-4" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 2</div>
+            <div class="class-meta">
+              <div class="class-day">Miércoles 17 junio</div>
+              <div class="class-time">11:00-12:05 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">S14 — Repaso integrador de la Unidad 3 | C2 · Preparación para práctica</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Repasar no es repetir definiciones — es construir el mapa completo de cómo se conectan todas las lecciones para responder la pregunta de Nueva Villa.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=13" class="fmt-link" target="_blank" onclick="event.stopPropagation()">💬 Think → Pair → Share</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Crucigrama o lluvia de palabras (P.I — activar memoria)</li><li class="bullet "><strong>Qué dice el docente:</strong> <em>"Tienen 3 minutos para escribir todas las palabras que recuerden de la Unidad 3. Sin notas."</em></li><li class="bullet "><strong>Qué hace el alumno:</strong> Lista personal → comparte con compañero → se construye lista de clase en pizarra</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-explica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E3F2FD; border-left: 5px solid #0D47A1;">
+                <span class="step-icon">📖</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (15 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Modelado y Dibujo Explicativo</a><span class="fp2">DUA · P.II</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Esquema integrador en pizarra — docente lo construye CON los estudiantes (P.II)</li><li class="bullet "><strong>Qué dibuja en pizarra:</strong></li></ul><pre><code>  ¿Qué es la salud? (L1)
+           ↓
+  ¿Cómo nos enfermamos? (L2) → vías de contagio: directa / indirecta
+           ↓
+  ¿Cómo nos defendemos? (L3) → barreras físicas → leucocitos → anticuerpos → vacunas
+           ↓
+  ¿Qué hacemos en emergencias? (L4) → urgencia vs emergencia → primeros auxilios
+           ↓
+  ¿Cuándo los órganos fallan? (L5) → trasplante y donación
+           ↓
+  ¿Qué hábito previene todo esto? (L6) → lavado de manos (evidencia C1)
+           ↓
+  ¿Cómo conseguimos agua segura? (S13) → filtros + desinfección</code></pre>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (25 min) — C2: Integra y aplica</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🗂️ Estudio de Caso Real</a><span class="fp2">DUA · P.II</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Formato:</strong> Preguntas tipo caso (práctica simulada)</li><li class="bullet "><strong>Caso 1:</strong> <em>"Sebastián toca una manija de puerta contaminada y luego se come un bocadillo sin lavarse las manos. Al día siguiente tiene fiebre. ¿Qué vía de transmisión fue? ¿Qué barreras corporales debería haber activado? ¿Qué tipo de enfermedad es probablemente?"</em></li><li class="bullet "><strong>Caso 2:</strong> <em>"María, 8 años, necesita un trasplante de riñón. Su mamá es donante compatible vivo. ¿Qué requiere el proceso? ¿Qué significa la compatibilidad?"</em></li><li class="bullet "><strong>Producto:</strong> Respuestas escritas, completas, usando vocabulario correcto</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-aplica">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E0F2F1; border-left: 5px solid #004D40;">
+                <span class="step-icon">🔗</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=2" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔀 Antes pensaba… Ahora pienso…</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Autoevaluación:</strong> Escala de confianza para cada lección (1-3):</li><li class="bullet ">L1 Salud integral: \_\_\_</li><li class="bullet ">L2 Vías de transmisión: \_\_\_</li><li class="bullet ">L3 Sistema inmune: \_\_\_</li><li class="bullet ">L4 Primeros auxilios: \_\_\_</li><li class="bullet ">L5 Trasplante: \_\_\_</li><li class="bullet ">L6 Lavado de manos: \_\_\_</li><li class="bullet "><strong>Tarea:</strong> Dedicar los últimos 5 min a repasar las lecciones con puntaje 1</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (7 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎤 Ticket de Salida</a><span class="fp3">DUA · P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Ticket de salida:</strong> <em>"¿Cuál fue el concepto más difícil de la unidad? ¿Cómo lo explicarías ahora con tus propias palabras?"</em></li><li class="bullet "><strong>Adelanto:</strong> <em>"Mañana es la práctica. El caso será sobre Nueva Villa — ya lo conocen bien."</em></li><li class="bullet "><strong>Palabras clave:</strong> (repaso general — todas las palabras clave de L1 a L6)</li></ul>
+              </div>
+            </div>
+        </div>
+        <div class="class-section" id="class-5" style="display:none">
+          <div class="class-banner">
+            <div class="class-num">Clase 3</div>
+            <div class="class-meta">
+              <div class="class-day">Jueves 18 junio</div>
+              <div class="class-time">9:35-10:40 (65 min)&nbsp;&nbsp;<span class="week-badge">15-19 jun</span></div>
+            </div>
+          </div>
+          
+          
+            <div class="step-card step-other">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F5F5F5; border-left: 5px solid #333;">
+                <span class="step-icon">•</span>
+                <span class="step-label" style="color:#333">S15 — Práctica de la Unidad 3 | ✅ C2 EVIDENCIA</span>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <div class="idea-fuerza">💡 Idea Fuerza: Una práctica no mide si memorizaste — mide si puedes usar lo que aprendiste para explicar un problema nuevo.</div><div class="warning">⚠️ Esta sesión es la <strong>evidencia C2</strong>. Instrumento: práctica escrita con criterios de lectura.</div>
+              </div>
+            </div>
+            <div class="step-card step-gancho">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#E8F5E9; border-left: 5px solid #1B5E20;">
+                <span class="step-icon">🎯</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=24" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔄 Engage — Enganchar (5E fase 1)</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Qué dice el docente:</strong> <em>"La práctica tiene un solo caso — la comunidad de Nueva Villa. Todo lo que estudiamos en la unidad aparece en ese caso. Lean con calma."</em></li><li class="bullet "><strong>Regla clave:</strong> <em>"Respondan con lo que aprendieron. Si no están seguros de un término, descríbanlo."</em></li></ul>
+              </div>
+            </div>
+            <div class="step-card step-hace">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#F3E5F5; border-left: 5px solid #4A148C;">
+                <span class="step-icon">✏️</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (50 min) — C2: Evidencia</span><span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">✅ Evaluate — Evaluar (5E fase 5)</a><span class="fp1">DUA · P.I</span> <span class="fp3">P.III</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <blockquote><strong>Caso integrador:</strong></blockquote><blockquote><em>"La comunidad de Nueva Villa está viviendo un brote de diarrea. Los vecinos no saben cómo se están contagiando ni qué hacer. Algunos niños ya están graves. El agua del pozo huele mal y no se trata antes de beberla."</em></blockquote><ol><li class="numbered">¿Qué tipo de enfermedad es la diarrea por agua contaminada? ¿Cuál sería el agente causante más probable? <em>(L1 + L2)</em></li><li class="numbered">¿Por qué vía de transmisión se está propagando en Nueva Villa? ¿Es directa o indirecta? <em>(L2)</em></li><li class="numbered">Explica cómo reacciona el sistema inmune de un niño de 7 años ante la infección. Menciona al menos 2 barreras o mecanismos de defensa. <em>(L3)</em></li><li class="numbered">Un niño presenta fiebre alta de 40°C y convulsiones. ¿Es una urgencia o una emergencia? ¿Qué harías tú antes de que llegue ayuda médica? <em>(L4)</em></li><li class="numbered">¿Qué hábito de higiene específico podría haber prevenido el brote? Justifica tu respuesta con lo que aprendiste en la indagación de L6. <em>(L6)</em></li><li class="numbered">La ONG quiere instalar filtros de agua en Nueva Villa. ¿Es suficiente con solo el filtro? ¿Qué más necesitarían? <em>(S13)</em></li></ol><ul><li class="bullet "><strong>Producto:</strong> Práctica escrita individual — evidencia C2</li></ul>
+              </div>
+            </div>
+            <div class="step-card step-cierra">
+              <div class="step-header" onclick="toggleStep(this)" style="background:#EFEBE9; border-left: 5px solid #3E2723;">
+                <span class="step-icon">🏁</span>
+                <div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=2" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔀 Antes pensaba… Ahora pienso…</a><span class="fp1">DUA · P.I</span></span></div>
+                <span class="step-toggle">▼</span>
+              </div>
+              <div class="step-body">
+                <ul><li class="bullet "><strong>Docente recoge la práctica</strong></li><li class="bullet "><strong>Reflexión final de la unidad (oral, 5 min):</strong> <em>"¿Qué fue lo que más les impactó de la salud de Nueva Villa? ¿Algo de lo que aprendieron cambió un hábito de ustedes?"</em></li><li class="bullet "><strong>Adelanto U4:</strong> <em>"La próxima semana empezamos Unidad 4 — ecosistemas y pérdida de biodiversidad."</em></li><li class="bullet "><strong>Palabras clave:</strong> (evaluación — todos los términos de la unidad)</li></ul><p><strong>Criterios de evaluación C2:</strong></p><ul><li class="bullet ">Comprende y usa correctamente los conceptos científicos</li><li class="bullet ">Establece relaciones causa-efecto</li><li class="bullet ">Reflexiona sobre implicancias para la salud pública</li><li class="bullet ">Conecta los temas de la unidad como sistema</li></ul><p><em>Generado: 2026-06-07 | Fuente: 6P_U3_sesiones.md + 6P_B2.md + diseno_clase.md</em></p>
+              </div>
+            </div>
+        </div>
+</div>
+
+<script>
+  function showClass(idx) {
+    document.querySelectorAll('.class-section').forEach((el, i) => {
+      el.style.display = i === idx ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+  }
+
+  function toggleStep(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.step-toggle');
+    body.classList.toggle('open', !body.classList.contains('open'));
+    if (toggle) toggle.classList.toggle('open', !toggle.classList.contains('open'));
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.add('open'));
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.class-section[style*="block"] .step-body').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.class-section[style*="block"] .step-toggle').forEach(el => el.classList.remove('open'));
+  }
+
+  function imprimirPDF() {
+    document.querySelectorAll('.step-body').forEach(el => el.classList.add('open'));
+    document.querySelectorAll('.class-section').forEach(el => el.style.display = 'block');
+    window.print();
+    setTimeout(() => {
+      document.querySelectorAll('.class-section').forEach((el, i) => {
+        el.style.display = i === 0 ? 'block' : 'none';
+      });
+    }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const firstStep = document.querySelector('.class-section .step-body');
+    if (firstStep) {
+      firstStep.classList.add('open');
+      const toggle = firstStep.previousElementSibling.querySelector('.step-toggle');
+      if (toggle) toggle.classList.add('open');
+    }
+  });
+</script>
+</body>
+</html>
