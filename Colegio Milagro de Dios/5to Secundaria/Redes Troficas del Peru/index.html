@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redes Tróficas del Perú</title>
+  <style>
+    :root {
+      --bg: #f4efe5;
+      --panel: #fffaf1;
+      --ink: #1c2b21;
+      --muted: #5a695f;
+      --green: #2f6b3d;
+      --olive: #6d7b2f;
+      --gold: #b87d2a;
+      --line: rgba(28, 43, 33, 0.12);
+      --shadow: 0 18px 40px rgba(38, 48, 34, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(184, 125, 42, 0.12), transparent 28%),
+        linear-gradient(135deg, #f8f2e8, #ece4d3 55%, #e7dfcf);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .deck {
+      display: flex;
+      width: 500vw;
+      height: 100vh;
+      transition: transform 0.45s ease;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      padding: 3.2rem 4rem 4rem;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 1.4rem;
+      position: relative;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 1rem;
+      border: 1px solid rgba(47, 107, 61, 0.14);
+      border-radius: 28px;
+      pointer-events: none;
+    }
+
+    .topbar, .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow, .counter {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    h1, h2 {
+      margin: 0;
+      line-height: 0.96;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 5vw, 5.3rem);
+      max-width: 10ch;
+    }
+
+    h2 {
+      font-size: clamp(2.1rem, 4vw, 4rem);
+      max-width: 12ch;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.03rem;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .layout-hero,
+    .layout-split,
+    .layout-grid {
+      display: grid;
+      gap: 1.6rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .layout-hero {
+      grid-template-columns: 1.05fr 1.2fr;
+    }
+
+    .layout-split {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .layout-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .layout-media-heavy {
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 1.2rem;
+    }
+
+    .card, .quote, .formula, .mini-card {
+      background: rgba(255, 250, 241, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+
+    .card {
+      padding: 1.5rem;
+    }
+
+    .quote {
+      padding: 1.25rem 1.4rem;
+      border-left: 6px solid var(--gold);
+    }
+
+    .formula {
+      padding: 1.2rem 1.35rem;
+      font-family: "Courier New", monospace;
+      color: #243427;
+      font-size: 1.02rem;
+    }
+
+    .formula strong {
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+      color: var(--green);
+      font-size: 0.74rem;
+    }
+
+    .image-frame {
+      background: #dde4d5;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      min-height: 280px;
+      border: 1px solid rgba(47, 107, 61, 0.14);
+    }
+
+    .image-frame.tall {
+      min-height: 64vh;
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .lead {
+      font-size: 1.18rem;
+      color: #334338;
+      max-width: 58ch;
+    }
+
+    .bullets {
+      display: grid;
+      gap: 0.85rem;
+      margin-top: 1.15rem;
+    }
+
+    .bullets div {
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(47, 107, 61, 0.12);
+      font-size: 0.97rem;
+      color: #304034;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .mini-card {
+      padding: 1rem;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 1.45rem;
+      color: var(--green);
+      margin-bottom: 0.35rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .nav {
+      position: fixed;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      display: flex;
+      gap: 0.6rem;
+      z-index: 10;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.85rem 1rem;
+      background: #254f31;
+      color: white;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    button:hover {
+      background: #1e4328;
+    }
+
+    .dots {
+      position: fixed;
+      left: 50%;
+      bottom: 1.45rem;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(36, 52, 39, 0.25);
+      border: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+
+    .dot.active {
+      background: var(--gold);
+      transform: scale(1.18);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(184, 125, 42, 0.13);
+      color: #79511f;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .small {
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .deck {
+        width: 100%;
+        height: auto;
+        display: block;
+        transform: none !important;
+      }
+
+      .slide {
+        width: 100%;
+        min-height: 100vh;
+        height: auto;
+        padding: 2rem 1.25rem 5rem;
+      }
+
+      .layout-hero,
+      .layout-split,
+      .layout-grid,
+      .layout-media-heavy,
+      .two-col,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav, .dots {
+        display: none;
+      }
+
+      .slide::before {
+        inset: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="topbar">
+        <span class="eyebrow">Biología · 5.° de secundaria</span>
+        <span class="counter">01 / 05</span>
+      </div>
+      <div class="layout-hero layout-media-heavy">
+        <div>
+          <span class="tag">Redes tróficas del Perú</span>
+          <h1>La vida no funciona en línea recta.</h1>
+          <p class="lead">Una <strong>red trófica</strong> conecta muchas rutas de alimentación al mismo tiempo y muestra cómo circulan la materia y la energía en un ecosistema real.</p>
+          <div class="bullets">
+            <div><strong>Productores:</strong> forman la base con materia orgánica.</div>
+            <div><strong>Consumidores:</strong> transfieren energía entre niveles.</div>
+            <div><strong>Descomponedores:</strong> reciclan nutrientes.</div>
+          </div>
+        </div>
+        <div class="image-frame tall">
+          <img src="assets/red-trofica-jaguar.png" alt="Red trófica amazónica con jaguar">
+        </div>
+      </div>
+      <div class="footer">
+        <p class="small">Pregunta guía: ¿por qué una red trófica representa mejor la realidad que una cadena aislada?</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar">
+        <span class="eyebrow">Pirámide de energía</span>
+        <span class="counter">02 / 05</span>
+      </div>
+      <div class="layout-split">
+        <div class="image-frame">
+          <img src="assets/piramide-energia.png" alt="Pirámide trófica de energía">
+        </div>
+        <div>
+          <h2>Energía, biomasa y niveles tróficos</h2>
+          <p>La energía disminuye en cada transferencia porque una parte se usa en movimiento, respiración y metabolismo, y otra se pierde en forma de calor.</p>
+          <div class="formula">
+            <strong>Regla aproximada</strong>
+            E<sub>n+1</sub> ≈ 0.1 · E<sub>n</sub>
+          </div>
+          <div class="quote">
+            Si los productores almacenan <strong>10 000 kcal</strong>, los consumidores primarios reciben cerca de <strong>1 000 kcal</strong>, los secundarios <strong>100 kcal</strong> y los terciarios apenas <strong>10 kcal</strong>.
+          </div>
+          <div class="stats">
+            <div class="mini-card"><strong>Base amplia</strong> Más biomasa en productores.</div>
+            <div class="mini-card"><strong>Cima estrecha</strong> Menos depredadores tope.</div>
+            <div class="mini-card"><strong>Idea clave</strong> Más energía abajo, menos arriba.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <p class="small">La pirámide no solo ordena especies: también explica por qué no puede haber muchos grandes depredadores.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar">
+        <span class="eyebrow">Caso peruano principal</span>
+        <span class="counter">03 / 05</span>
+      </div>
+      <div class="layout-grid">
+        <div class="card">
+          <h2>Amazonía peruana: la red del jaguar</h2>
+          <p>El <strong>jaguar</strong> actúa como <strong>depredador tope</strong>. Su presencia ayuda a regular poblaciones de mamíferos medianos y mantiene el equilibrio ecológico.</p>
+          <div class="bullets">
+            <div><strong>Productores:</strong> árboles, hojas, frutos, semillas y plantas del sotobosque.</div>
+            <div><strong>Consumidores primarios:</strong> insectos, roedores, pecaríes y algunos monos frugívoros.</div>
+            <div><strong>Consumidores secundarios:</strong> serpientes, aves insectívoras y pequeños carnívoros.</div>
+            <div><strong>Consumidor terciario:</strong> jaguar.</div>
+          </div>
+          <div class="formula">
+            <strong>Eficiencia de transferencia</strong>
+            % eficiencia = (Energía del nivel superior / Energía del nivel inferior) × 100
+          </div>
+        </div>
+        <div>
+          <div class="quote">
+            Ejemplo: si las plantas fijan <strong>20 000 kcal</strong> y la eficiencia es de 10 %, al tercer nivel solo llegarían aproximadamente <strong>200 kcal</strong>.
+          </div>
+          <div class="two-col" style="margin-top: 1rem;">
+            <div class="mini-card">
+              <strong>Relación ecológica</strong>
+              Menos jaguares puede significar más presas, sobreconsumo de vegetación y desbalance en toda la red.
+            </div>
+            <div class="mini-card">
+              <strong>Idea para exponer</strong>
+              Una especie no afecta solo a su presa directa: afecta a toda la red.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <p class="small">Secuencia simplificada: plantas → insectos / roedores / pecaríes → serpientes / aves → jaguar.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar">
+        <span class="eyebrow">Impacto humano</span>
+        <span class="counter">04 / 05</span>
+      </div>
+      <div class="layout-split layout-media-heavy">
+        <div>
+          <h2>Cuando se altera una especie, se altera toda la red</h2>
+          <p>La deforestación y la contaminación reducen productores, desplazan consumidores y rompen rutas de alimentación.</p>
+          <div class="bullets">
+            <div><strong>Menos bosque:</strong> menos frutos, semillas y refugio.</div>
+            <div><strong>Agua contaminada:</strong> menos organismos acuáticos.</div>
+            <div><strong>Menos depredadores:</strong> algunas poblaciones crecen sin control.</div>
+          </div>
+          <div class="quote">
+            La red trófica tiene <strong>estabilidad dinámica</strong>: resiste cambios pequeños, pero puede colapsar si la perturbación es intensa o continua.
+          </div>
+        </div>
+        <div class="image-frame tall">
+          <img src="assets/impacto-amazonia.png" alt="Impacto humano en la red trófica amazónica">
+        </div>
+      </div>
+      <div class="footer">
+        <p class="small">Mensaje central: conservar biodiversidad también significa conservar el flujo de energía y materia.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar">
+        <span class="eyebrow">Segundo ejemplo peruano</span>
+        <span class="counter">05 / 05</span>
+      </div>
+      <div class="layout-split layout-media-heavy">
+        <div class="image-frame tall">
+          <img src="assets/red-andina-condor.png" alt="Red trófica andina con cóndor">
+        </div>
+        <div>
+          <h2>Andes del Perú: el cóndor y la carroña</h2>
+          <p>En la región andina, el <strong>cóndor andino</strong> es un <strong>consumidor carroñero</strong> clave en el reciclaje de materia orgánica.</p>
+          <div class="bullets">
+            <div><strong>Productores:</strong> ichu, pastos altoandinos y plantas de puna.</div>
+            <div><strong>Consumidores:</strong> insectos, vizcachas, roedores y herbívoros.</div>
+            <div><strong>Interacciones:</strong> zorro andino, aves pequeñas y cóndor comparten recursos.</div>
+            <div><strong>Idea clave:</strong> también existen redes basadas en descomposición y carroña.</div>
+          </div>
+          <div class="quote">
+            Cierre: una red trófica peruana puede incluir depredadores tope, herbívoros, insectos, carroñeros y descomponedores al mismo tiempo.
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <p class="small">Comparación final: jaguar amazónico = depredador tope; cóndor andino = carroñero clave en el reciclaje de materia.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="dots" id="dots"></div>
+  <div class="nav">
+    <button id="prev" type="button">Anterior</button>
+    <button id="next" type="button">Siguiente</button>
+  </div>
+
+  <script>
+    const deck = document.getElementById("deck");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dots = document.getElementById("dots");
+    let index = 0;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.className = "dot";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Ir a la diapositiva ${i + 1}`);
+      dot.addEventListener("click", () => goTo(i));
+      dots.appendChild(dot);
+    });
+
+    const dotEls = Array.from(document.querySelectorAll(".dot"));
+
+    function render() {
+      deck.style.transform = `translateX(-${index * 100}vw)`;
+      dotEls.forEach((dot, i) => dot.classList.toggle("active", i === index));
+    }
+
+    function goTo(nextIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      render();
+    }
+
+    document.getElementById("prev").addEventListener("click", () => goTo(index - 1));
+    document.getElementById("next").addEventListener("click", () => goTo(index + 1));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown") goTo(index + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") goTo(index - 1);
+    });
+
+    render();
+  </script>
+</body>
+</html>
