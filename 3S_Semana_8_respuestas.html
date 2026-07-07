@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3S U4 - Semana 8 respuestas</title>
+<style>
+  :root{
+    --bg:#f2f5f3;
+    --paper:#ffffff;
+    --ink:#1b2520;
+    --muted:#5d6863;
+    --line:#d7dfd9;
+    --green:#295f52;
+    --green-2:#173d34;
+    --wash:#edf4f1;
+    --gold:#bb8a34;
+    --shadow:0 18px 40px rgba(23,61,52,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:"Segoe UI", system-ui, sans-serif;
+    color:var(--ink);
+    background:
+      linear-gradient(180deg, rgba(41,95,82,.08), transparent 260px),
+      linear-gradient(180deg, #f8fbf9, #eef3ef);
+  }
+  .page{
+    width:min(980px, calc(100% - 28px));
+    margin:0 auto;
+    padding:24px 0 48px;
+  }
+  .hero{
+    background:linear-gradient(135deg, var(--green), var(--green-2));
+    color:#fff;
+    border-radius:28px;
+    padding:26px;
+    box-shadow:var(--shadow);
+  }
+  .hero h1{
+    margin:0;
+    font-size:clamp(28px, 5vw, 46px);
+    line-height:1.05;
+  }
+  .hero p{
+    margin:12px 0 0;
+    max-width:760px;
+    line-height:1.6;
+    color:rgba(255,255,255,.88);
+  }
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .btn{
+    appearance:none;
+    border:none;
+    border-radius:999px;
+    padding:12px 16px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn-primary{background:#fff;color:var(--green-2)}
+  .btn-soft{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.18)}
+  .note{
+    margin-top:18px;
+    background:#fff8eb;
+    color:#704c05;
+    border:1px solid #ecd59d;
+    border-radius:18px;
+    padding:14px 16px;
+    line-height:1.55;
+  }
+  .section{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:26px;
+    padding:24px;
+    margin-top:18px;
+    box-shadow:var(--shadow);
+  }
+  .section h2{
+    margin:0 0 8px;
+    font-size:28px;
+    color:var(--green-2);
+  }
+  .section p{
+    margin:0 0 14px;
+    line-height:1.6;
+    color:var(--muted);
+  }
+  .prompt{
+    margin-top:14px;
+    padding:16px;
+    border-radius:18px;
+    background:var(--wash);
+    border:1px solid #cfddd6;
+  }
+  .prompt strong{
+    display:block;
+    margin-bottom:6px;
+    color:var(--green-2);
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .prompt p{
+    margin:0;
+    color:var(--ink);
+  }
+  textarea, input{
+    width:100%;
+    margin-top:10px;
+    border:1px solid #bccbc3;
+    border-radius:16px;
+    padding:14px;
+    font:inherit;
+    color:var(--ink);
+    background:#fff;
+  }
+  textarea{
+    min-height:120px;
+    resize:vertical;
+    line-height:1.55;
+  }
+  .short{min-height:88px}
+  .long{min-height:180px}
+  .grid-2{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:14px;
+  }
+  .footer{
+    margin-top:18px;
+    text-align:center;
+    color:var(--muted);
+    font-size:14px;
+  }
+  @media print{
+    .actions,.note{display:none}
+    body{background:#fff}
+    .page{width:100%;padding:0}
+    .section,.hero{box-shadow:none}
+  }
+  @media (max-width: 720px){
+    .grid-2{grid-template-columns:1fr}
+    .section,.hero{padding:20px}
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1>3S U4 · Semana 8<br>Cuaderno de respuestas</h1>
+      <p>Este archivo acompaña la clase integrada de la semana. Aquí los estudiantes pueden responder con más calma, dejar sus hipótesis, resolver ejercicios y construir una explicación final completa.</p>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar PDF</button>
+        <button class="btn btn-soft" onclick="resetAnswers()">Borrar respuestas</button>
+        <button class="btn btn-soft" onclick="goToClass()">Abrir clase integrada</button>
+      </div>
+      <div class="note">Las respuestas se guardan automáticamente en este navegador usando almacenamiento local. Si luego quieres dejarlo limpio, usa el botón “Borrar respuestas”.</div>
+    </header>
+
+    <section class="section">
+      <h2>Parte 1 · Reacciones químicas y laboratorio</h2>
+      <p>Esta parte recoge la clase del lunes: observar una reacción, decidir si realmente ocurrió, clasificarla y justificar por qué la masa se conserva.</p>
+
+      <div class="prompt">
+        <strong>Observación</strong>
+        <p>Escribe tres evidencias que te harían afirmar que en una mezcla de bicarbonato y vinagre ocurrió una reacción química real.</p>
+      </div>
+      <textarea data-save="p1_observacion" class="short"></textarea>
+
+      <div class="grid-2">
+        <div>
+          <div class="prompt">
+            <strong>Clasificación</strong>
+            <p>Explica por qué clasificar una reacción ayuda a pensar mejor qué productos podrían aparecer.</p>
+          </div>
+          <textarea data-save="p1_clasificacion"></textarea>
+        </div>
+        <div>
+          <div class="prompt">
+            <strong>Conservación de masa</strong>
+            <p>Si un gas se escapa del recipiente, ¿por qué parece que la masa cambia? Explica con precisión.</p>
+          </div>
+          <textarea data-save="p1_masa"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Parte 2 · Energía de las reacciones</h2>
+      <p>Esta parte corresponde a la clase de hoy: distinguir reacciones exotérmicas y endotérmicas, y relacionar esa diferencia con energía de activación y seguridad.</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="prompt">
+            <strong>Contraste</strong>
+            <p>Explica con tus palabras la diferencia entre una reacción exotérmica y una endotérmica.</p>
+          </div>
+          <textarea data-save="p2_contraste"></textarea>
+        </div>
+        <div>
+          <div class="prompt">
+            <strong>Ejemplo propio</strong>
+            <p>Escribe un ejemplo de reacción exotérmica y otro de endotérmica. Justifica por qué los ubicas allí.</p>
+          </div>
+          <textarea data-save="p2_ejemplos"></textarea>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <strong>Pregunta alta</strong>
+        <p>¿Es mejor decir que una reacción “produce energía” o que “transforma energía química en formas que salen o entran del sistema”? Responde y defiende tu opción.</p>
+      </div>
+      <textarea data-save="p2_pregunta_alta" class="long"></textarea>
+
+      <div class="prompt">
+        <strong>Seguridad</strong>
+        <p>Explica por qué controlar el calor de una reacción puede ser importante en procesos domésticos o sanitarios.</p>
+      </div>
+      <textarea data-save="p2_seguridad"></textarea>
+    </section>
+
+    <section class="section">
+      <h2>Parte 3 · Estequiometría y reactivo limitante</h2>
+      <p>Esta parte acompaña la clase de mañana: usar una ecuación balanceada para calcular cantidades y reconocer el reactivo limitante.</p>
+
+      <div class="prompt">
+        <strong>Puente conceptual</strong>
+        <p>Explica por qué una ecuación balanceada es necesaria antes de pasar a cantidades reales.</p>
+      </div>
+      <textarea data-save="p3_balanceo"></textarea>
+
+      <div class="grid-2">
+        <div>
+          <div class="prompt">
+            <strong>Reactivo limitante</strong>
+            <p>Define qué es el reactivo limitante sin repetir una definición de memoria. Usa una explicación clara.</p>
+          </div>
+          <textarea data-save="p3_limitante"></textarea>
+        </div>
+        <div>
+          <div class="prompt">
+            <strong>Reactivo en exceso</strong>
+            <p>¿Qué ocurre si duplicas la cantidad de un reactivo que ya estaba en exceso? Explica por qué.</p>
+          </div>
+          <textarea data-save="p3_exceso"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Explicación final integrada</h2>
+      <p>Ahora une toda la semana en una sola respuesta: qué pasó, cómo pasó y cuánto pasó.</p>
+
+      <div class="prompt">
+        <strong>Situación integradora</strong>
+        <p>Un equipo mezcla sustancias para preparar una solución de uso sanitario. Observa burbujas, cambio de temperatura y luego necesita decidir cantidades seguras. Explica científicamente esa situación usando ideas de reacción química, energía y estequiometría.</p>
+      </div>
+      <textarea data-save="final_integrada" class="long"></textarea>
+
+      <div class="prompt">
+        <strong>Metacognición</strong>
+        <p>¿Cuál de las tres partes de esta semana te exigió pensar más y por qué?</p>
+      </div>
+      <textarea data-save="final_metacognicion" class="short"></textarea>
+    </section>
+
+    <div class="footer">
+      Archivo vinculado a <code>3S_Semana_8_clase_integrada.html</code>
+    </div>
+  </div>
+
+<script>
+  const fields = document.querySelectorAll("[data-save]");
+
+  function loadAnswers() {
+    fields.forEach((field) => {
+      const key = "3s_sem8_" + field.dataset.save;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) field.value = saved;
+      field.addEventListener("input", () => localStorage.setItem(key, field.value));
+    });
+  }
+
+  function resetAnswers() {
+    if (!confirm("Se borrarán las respuestas guardadas de este archivo. ¿Continuar?")) return;
+    fields.forEach((field) => {
+      const key = "3s_sem8_" + field.dataset.save;
+      localStorage.removeItem(key);
+      field.value = "";
+    });
+  }
+
+  function goToClass() {
+    window.open("3S_Semana_8_clase_integrada.html", "_blank");
+  }
+
+  loadAnswers();
+</script>
+</body>
+</html>
