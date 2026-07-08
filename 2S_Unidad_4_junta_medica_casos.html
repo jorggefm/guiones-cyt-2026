@@ -7,15 +7,13 @@
 <style>
   :root {
     --bg: #080608;
-    --panel: rgba(14, 10, 12, .78);
+    --panel: rgba(18, 12, 14, .92);
     --ink: #fff7ef;
     --muted: #e8cfc5;
     --accent: #ffb36b;
     --accent2: #ff5e56;
     --line: rgba(255,255,255,.18);
     --case: #ffdfb8;
-    --top-space: 100px;
-    --note-space: 360px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -48,143 +46,143 @@
   .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
   .imageWrap {
     position: absolute;
-    top: var(--top-space);
-    right: 18px;
-    bottom: calc(var(--note-space) + 18px);
-    left: 18px;
+    inset: 0;
     display: grid;
     place-items: center;
     overflow: hidden;
   }
-  .imageWrap img { width: 100%; height: 100%; object-fit: contain; filter: saturate(1.03) contrast(1.04); }
-  .shade {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+  .imageWrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: saturate(1.03) contrast(1.04);
+  }
+  .textSlide {
+    width: min(1120px, calc(100vw - 44px));
+    min-height: min(760px, calc(100vh - 70px));
+    display: grid;
+    align-content: center;
+    gap: 20px;
+    padding: clamp(24px, 5vw, 58px);
     background:
-      linear-gradient(to bottom, rgba(0,0,0,.62), rgba(0,0,0,.04) 28%, rgba(0,0,0,.08) 60%, rgba(0,0,0,.82)),
-      radial-gradient(circle at 78% 24%, rgba(255,120,80,.10), transparent 35%);
-  }
-  .topbar {
-    position: absolute;
-    top: 18px;
-    left: 22px;
-    right: 22px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    z-index: 4;
-  }
-  .titleBox {
-    max-width: min(930px, 78vw);
-    padding: 12px 16px 10px;
-    background: linear-gradient(135deg, rgba(20,10,10,.80), rgba(58,18,14,.55));
+      linear-gradient(135deg, rgba(30,14,13,.94), rgba(9,7,8,.96)),
+      radial-gradient(circle at 80% 20%, rgba(255,179,107,.18), transparent 35%);
     border: 1px solid var(--line);
-    border-radius: 18px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 10px 40px rgba(0,0,0,.25);
+    box-shadow: 0 22px 80px rgba(0,0,0,.45);
   }
-  h1 {
+  .textSlide h1 {
     margin: 0;
-    font-size: clamp(20px, 2.15vw, 37px);
-    line-height: 1.08;
+    font-size: clamp(34px, 6vw, 76px);
+    line-height: 1.02;
     letter-spacing: 0;
-    text-shadow: 0 2px 12px rgba(0,0,0,.55);
   }
-  .counter {
-    min-width: 84px;
-    text-align: center;
-    padding: 10px 12px;
-    border-radius: 999px;
-    background: rgba(10,7,7,.66);
-    border: 1px solid var(--line);
+  .textSlide h2 {
+    margin: 0;
+    color: var(--accent);
+    font-size: clamp(18px, 2.3vw, 28px);
+    line-height: 1.2;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .lead {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(20px, 2.6vw, 34px);
+    line-height: 1.22;
+    font-weight: 750;
+  }
+  .bodyText {
+    margin: 0;
     color: var(--muted);
+    font-size: clamp(16px, 1.55vw, 22px);
+    line-height: 1.45;
+  }
+  .choiceGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .caseButton {
+    border: 1px solid rgba(255,255,255,.20);
+    background: linear-gradient(135deg, rgba(255,179,107,.18), rgba(255,94,86,.12));
+    color: #fff7ef;
+    padding: 22px;
+    min-height: 138px;
+    cursor: pointer;
+    text-align: left;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+  .caseButton:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,179,107,.8);
+    background: linear-gradient(135deg, rgba(255,179,107,.28), rgba(255,94,86,.18));
+  }
+  .caseButton strong {
+    display: block;
+    font-size: clamp(20px, 2.4vw, 30px);
+    margin-bottom: 8px;
+  }
+  .caseButton span {
+    display: block;
+    color: var(--muted);
+    font-size: clamp(14px, 1.25vw, 18px);
+    line-height: 1.32;
+  }
+  .pillRow { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    padding: 8px 11px;
+    border-radius: 999px;
+    color: #ffe6cf;
+    border: 1px solid rgba(255,179,107,.36);
+    background: rgba(255,179,107,.13);
     font-weight: 800;
     font-size: 14px;
-    backdrop-filter: blur(8px);
-  }
-  .notes {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 18px;
-    height: calc(var(--note-space) - 36px);
-    z-index: 4;
-    display: grid;
-    grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.45fr);
-    gap: 14px;
-    align-items: stretch;
-  }
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 14px 16px;
-    box-shadow: 0 14px 50px rgba(0,0,0,.34);
-    backdrop-filter: blur(9px);
-    overflow: auto;
-  }
-  .label {
-    text-transform: uppercase;
-    letter-spacing: .13em;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 900;
-    margin-bottom: 8px;
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip {
-    padding: 7px 10px;
-    border-radius: 999px;
-    background: rgba(255,179,107,.14);
-    border: 1px solid rgba(255,179,107,.38);
-    color: #ffe6cf;
-    font-size: clamp(13px, 1.05vw, 16px);
-    font-weight: 800;
-    white-space: nowrap;
-  }
-  .comment {
-    font-size: clamp(15px, 1.35vw, 20px);
-    line-height: 1.36;
-    margin: 0;
-    font-weight: 650;
-    color: #fff6ef;
-  }
-  .focus {
-    margin: 9px 0 0;
-    color: var(--muted);
-    font-size: clamp(13px, 1.02vw, 16px);
-    line-height: 1.35;
-  }
-  .caseTag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    color: var(--case);
-    font-size: 12px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .12em;
   }
   .options {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
-    margin-top: 10px;
+    gap: 11px;
   }
   .option {
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 12px;
-    padding: 7px 9px;
-    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255,255,255,.055);
+    padding: 12px 13px;
     color: #fff3ea;
-    font-size: clamp(11px, .88vw, 13px);
-    line-height: 1.25;
-    font-weight: 760;
+    font-size: clamp(14px, 1.18vw, 18px);
+    line-height: 1.28;
+    font-weight: 700;
   }
-  .sourceRow { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 13px; }
+  .sourceRow { display: flex; flex-wrap: wrap; gap: 14px; font-size: 15px; }
+  .miniNav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .jump {
+    width: auto;
+    height: auto;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 850;
+    background: rgba(255,255,255,.09);
+  }
+  .counter {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    z-index: 8;
+    text-align: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(10,7,7,.55);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+  }
   .controls {
     position: absolute;
     right: 16px;
@@ -194,7 +192,7 @@
     flex-direction: column;
     gap: 10px;
     z-index: 8;
-    opacity: .22;
+    opacity: .18;
     transition: opacity .2s ease;
   }
   .controls:hover { opacity: .94; }
@@ -245,19 +243,10 @@
   .close { width: auto; height: auto; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; }
   .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; z-index: 10; transition: width .25s ease; }
   @media (max-width: 900px) {
-    :root {
-      --top-space: 86px;
-      --note-space: 360px;
-    }
-    .imageWrap { left: 10px; right: 10px; bottom: calc(var(--note-space) + 10px); }
-    .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
-    .topbar { top: 10px; left: 12px; right: 12px; }
-    .titleBox { max-width: 74vw; padding: 10px 12px; }
-    .card { padding: 10px 12px; border-radius: 16px; }
-    .focus { display: none; }
+    .textSlide { width: calc(100vw - 22px); min-height: calc(100vh - 34px); padding: 22px; }
+    .choiceGrid, .options { grid-template-columns: 1fr; }
+    .caseButton { min-height: 96px; padding: 16px; }
     .controls { right: 8px; }
-    .chip { padding: 6px 8px; }
-    .options { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -287,53 +276,37 @@
 </div>
 <script>
 const slides = [
+  { type: "image", title: "Portada", image: "assets/2s_u4_junta/01_portada.png" },
   {
-    title: "Junta m&eacute;dica escolar: decisiones en el desarrollo embrionario",
-    image: "assets/2s_u4_junta/01_portada.png",
-    keywords: ["4 mesas", "1 caso real", "diagn&oacute;stico", "decisi&oacute;n"],
-    comment: "Hoy cada mesa funciona como una junta m&eacute;dica. Su tarea no es adivinar: deben leer evidencias, ubicar el momento del desarrollo embrionario y recomendar una decisi&oacute;n razonada.",
-    focus: "Producto: reporte de junta m&eacute;dica con diagn&oacute;stico, etapa afectada, riesgos y opci&oacute;n elegida."
+    type: "text",
+    title: "Junta m&eacute;dica escolar",
+    kicker: "Actividad pr&aacute;ctica U4",
+    lead: "Hoy no miramos casos para asustarnos: los miramos para diagnosticar, decidir y justificar como una junta m&eacute;dica.",
+    body: "Cada mesa trabajar&aacute; un caso. Primero observar&aacute;n dos im&aacute;genes limpias, luego recibir&aacute;n la ficha cl&iacute;nica con preguntas y opciones de decisi&oacute;n. El viernes confrontaremos esas decisiones con desenlaces posibles.",
+    pills: ["diagn&oacute;stico", "etapa embrionaria", "riesgo", "decisi&oacute;n"]
   },
   {
-    title: "Reglas del juego cl&iacute;nico",
-    image: "assets/2s_u4_junta/12_cierre.png",
-    keywords: ["evidencia", "riesgo", "beneficio", "justificaci&oacute;n"],
-    comment: "Cada equipo recibe un caso. Primero identifica qu&eacute; est&aacute; ocurriendo; luego decide entre varias opciones. El viernes veremos las consecuencias m&eacute;dicas posibles de cada decisi&oacute;n.",
-    focus: "Roles sugeridos: lector del caso, dibujante del proceso, defensor de la decisi&oacute;n y relator de la junta."
-  },
-  {
-    title: "Qu&eacute; debe contener el reporte",
-    image: "assets/2s_u4_junta/01_portada.png",
-    keywords: ["condici&oacute;n", "fase", "riesgos", "opci&oacute;n A-F"],
-    comment: "La nota sale de la calidad del razonamiento: no basta con escoger una opci&oacute;n. Deben explicar qu&eacute; evidencia del caso sostiene su diagn&oacute;stico y por qu&eacute; su decisi&oacute;n cuida mejor al paciente.",
-    focus: "Checklist: diagn&oacute;stico probable, proceso embrionario implicado, persona en mayor riesgo, decisi&oacute;n elegida y argumento cient&iacute;fico."
-  },
-  {
-    title: "Caso 1: gemelos unidos y cirug&iacute;a de separaci&oacute;n",
-    caseTag: "Mesa 1",
-    image: "assets/2s_u4_junta/02_caso1_siameses.png",
-    keywords: ["monocig&oacute;ticos", "separaci&oacute;n incompleta", "anatom&iacute;a compartida"],
-    comment: "Una ecograf&iacute;a avanzada muestra dos fetos unidos por una regi&oacute;n del cuerpo. La gran pregunta de la familia es si podr&aacute;n vivir separados despu&eacute;s del nacimiento.",
-    focus: "Caso inspirado en informaci&oacute;n cl&iacute;nica real sobre gemelos unidos evaluados por centros fetales.",
-    sources: [
-      ["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/conjoined-twins"]
+    type: "menu",
+    title: "Elige tu caso",
+    kicker: "Cada mesa entra a una ruta",
+    lead: "Selecciona el caso asignado. Las im&aacute;genes se ver&aacute;n solas, sin texto encima.",
+    choices: [
+      { label: "Caso 1", desc: "Gemelos unidos y cirug&iacute;a de separaci&oacute;n", target: "case1" },
+      { label: "Caso 2", desc: "Transfusi&oacute;n feto-fetal: un gemelo recibe demasiado", target: "case2" },
+      { label: "Caso 3", desc: "Secuencia TRAP: gemelo bomba y gemelo acardiaco", target: "case3" },
+      { label: "Caso 4", desc: "Espina b&iacute;fida: cierre incompleto del tubo neural", target: "case4" }
     ]
   },
+  { id: "case1", type: "image", title: "Caso 1 imagen 1", image: "assets/2s_u4_junta/02_caso1_siameses.png" },
+  { type: "image", title: "Caso 1 imagen 2", image: "assets/2s_u4_junta/03_caso1_anatomia.png" },
   {
-    title: "Caso 1: qu&eacute; est&aacute; pasando",
-    caseTag: "Mesa 1",
-    image: "assets/2s_u4_junta/03_caso1_anatomia.png",
-    keywords: ["un embri&oacute;n", "divisi&oacute;n tard&iacute;a", "organos compartidos"],
-    comment: "Los gemelos unidos suelen ser monocig&oacute;ticos: vienen de un mismo cigoto. El problema aparece cuando la separaci&oacute;n embrionaria ocurre muy tarde o queda incompleta.",
-    focus: "Pista clave: si comparten coraz&oacute;n u otros &oacute;rganos vitales, la separaci&oacute;n puede ser extremadamente riesgosa o imposible."
-  },
-  {
-    title: "Caso 1: decisi&oacute;n de la junta",
-    caseTag: "Mesa 1",
-    image: "assets/2s_u4_junta/03_caso1_anatomia.png",
-    keywords: ["decidir", "priorizar", "justificar"],
-    comment: "Elijan una ruta m&eacute;dica. La junta debe explicar qu&eacute; informaci&oacute;n necesita antes de operar y qu&eacute; riesgo acepta o no acepta.",
-    focus: "Marquen una opci&oacute;n y preparen una defensa oral de 45 segundos.",
+    type: "case",
+    title: "Caso 1: gemelos unidos",
+    kicker: "Mesa 1",
+    lead: "Una ecograf&iacute;a avanzada muestra dos fetos unidos por una regi&oacute;n del cuerpo. La familia pregunta si podr&aacute;n vivir separados despu&eacute;s del nacimiento.",
+    body: "Sospecha: gemelos monocig&oacute;ticos con separaci&oacute;n embrionaria incompleta. La decisi&oacute;n depende de qu&eacute; &oacute;rganos comparten y del riesgo de separar demasiado pronto.",
+    pills: ["monocig&oacute;ticos", "separaci&oacute;n tard&iacute;a", "anatom&iacute;a compartida"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/conjoined-twins"]],
     options: [
       "A. Operar apenas nazcan, sin esperar m&aacute;s estudios.",
       "B. Hacer ecograf&iacute;a, ecocardiograma y RM fetal antes de decidir.",
@@ -343,32 +316,16 @@ const slides = [
       "F. Priorizar cuidados paliativos si comparten un coraz&oacute;n funcionalmente inseparable."
     ]
   },
+  { id: "case2", type: "image", title: "Caso 2 imagen 1", image: "assets/2s_u4_junta/10_caso2_ttts_v2.png" },
+  { type: "image", title: "Caso 2 imagen 2", image: "assets/2s_u4_junta/05_caso2_ttts_placenta.png" },
   {
-    title: "Caso 2: un gemelo recibe demasiado, el otro demasiado poco",
-    caseTag: "Mesa 2",
-    image: "assets/2s_u4_junta/10_caso2_ttts_v2.png",
-    keywords: ["TTTS", "placenta compartida", "desequilibrio"],
-    comment: "En un embarazo de gemelos id&eacute;nticos con una sola placenta, uno crece con exceso de l&iacute;quido y esfuerzo cardiaco; el otro queda peque&ntilde;o y con poco l&iacute;quido.",
-    focus: "Esto apunta a s&iacute;ndrome de transfusi&oacute;n feto-fetal: la placenta conecta vasos de ambos fetos de manera desigual.",
-    sources: [
-      ["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-twin-transfusion-syndrome-ttts"]
-    ]
-  },
-  {
-    title: "Caso 2: el problema est&aacute; en la placenta",
-    caseTag: "Mesa 2",
-    image: "assets/2s_u4_junta/05_caso2_ttts_placenta.png",
-    keywords: ["donante", "receptor", "vasos comunicantes"],
-    comment: "El gemelo donante pierde volumen sangu&iacute;neo y puede producir poca orina; el receptor recibe demasiado y su coraz&oacute;n trabaja de m&aacute;s. Ambos pueden estar en peligro.",
-    focus: "Pista clave: no es que uno sea 'm&aacute;s fuerte'; es un problema de circulaci&oacute;n placentaria."
-  },
-  {
-    title: "Caso 2: decisi&oacute;n de la junta",
-    caseTag: "Mesa 2",
-    image: "assets/2s_u4_junta/05_caso2_ttts_placenta.png",
-    keywords: ["laser fetal", "monitoreo", "parto prematuro"],
-    comment: "La junta debe decidir si observa, interviene o adelanta el parto. El riesgo cambia seg&uacute;n la semana de gestaci&oacute;n y la gravedad.",
-    focus: "Defiendan su opci&oacute;n usando la idea de placenta compartida y circulaci&oacute;n desigual.",
+    type: "case",
+    title: "Caso 2: transfusi&oacute;n feto-fetal",
+    kicker: "Mesa 2",
+    lead: "En un embarazo de gemelos id&eacute;nticos con una sola placenta, uno crece con exceso de l&iacute;quido y esfuerzo cardiaco; el otro queda peque&ntilde;o y con poco l&iacute;quido.",
+    body: "Sospecha: TTTS. El problema no est&aacute; en que un gemelo sea m&aacute;s fuerte, sino en conexiones placentarias desiguales que alteran el flujo de sangre.",
+    pills: ["TTTS", "placenta compartida", "donante", "receptor"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-twin-transfusion-syndrome-ttts"]],
     options: [
       "A. Solo reposo e hidrataci&oacute;n; no hacer seguimiento especializado.",
       "B. Monitoreo frecuente con ecograf&iacute;as si el caso es leve.",
@@ -378,32 +335,16 @@ const slides = [
       "F. Separar quir&uacute;rgicamente a los fetos dentro del &uacute;tero."
     ]
   },
+  { id: "case3", type: "image", title: "Caso 3 imagen 1", image: "assets/2s_u4_junta/06_caso3_trap.png" },
+  { type: "image", title: "Caso 3 imagen 2", image: "assets/2s_u4_junta/07_caso3_trap_explica.png" },
   {
-    title: "Caso 3: el gemelo bomba y el gemelo sin coraz&oacute;n funcional",
-    caseTag: "Mesa 3",
-    image: "assets/2s_u4_junta/06_caso3_trap.png",
-    keywords: ["TRAP", "acardiaco", "gemelo bomba"],
-    comment: "En una gestaci&oacute;n monocorial, un feto parece desarrollarse sin un coraz&oacute;n funcional. El otro feto bombea sangre para ambos y empieza a mostrar sobrecarga.",
-    focus: "Este caso se parece a la secuencia TRAP, una complicaci&oacute;n rara de gemelos que comparten placenta.",
-    sources: [
-      ["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-reversed-arterial-perfusion-sequence-and-bipolar-cord-coagulation-for-acardiac-acephalic-twins"]
-    ]
-  },
-  {
-    title: "Caso 3: una circulaci&oacute;n invertida",
-    caseTag: "Mesa 3",
-    image: "assets/2s_u4_junta/07_caso3_trap_explica.png",
-    keywords: ["flujo invertido", "riesgo cardiaco", "placenta"],
-    comment: "El feto acardiaco no puede sobrevivir por s&iacute; mismo. El dilema es que, si sigue recibiendo sangre, puede poner en falla cardiaca al gemelo que s&iacute; podr&iacute;a vivir.",
-    focus: "Pista clave: la decisi&oacute;n busca salvar al gemelo bomba reduciendo la carga circulatoria."
-  },
-  {
-    title: "Caso 3: decisi&oacute;n de la junta",
-    caseTag: "Mesa 3",
-    image: "assets/2s_u4_junta/07_caso3_trap_explica.png",
-    keywords: ["intervenir", "observar", "salvar al viable"],
-    comment: "El equipo debe decidir si act&uacute;a sobre la conexi&oacute;n vascular o espera. Es un caso duro porque uno de los fetos no es viable.",
-    focus: "La justificaci&oacute;n debe reconocer el conflicto: proteger al gemelo viable sin simplificar el problema moral.",
+    type: "case",
+    title: "Caso 3: secuencia TRAP",
+    kicker: "Mesa 3",
+    lead: "En una gestaci&oacute;n monocorial, un feto parece desarrollarse sin un coraz&oacute;n funcional. El otro feto bombea sangre para ambos y empieza a mostrar sobrecarga.",
+    body: "Sospecha: secuencia TRAP. El dilema es fuerte: el feto acardiaco no es viable, pero puede poner en riesgo al gemelo bomba que s&iacute; podr&iacute;a sobrevivir.",
+    pills: ["TRAP", "acardiaco", "gemelo bomba", "flujo invertido"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-reversed-arterial-perfusion-sequence-and-bipolar-cord-coagulation-for-acardiac-acephalic-twins"]],
     options: [
       "A. No intervenir nunca, aunque el gemelo bomba muestre falla cardiaca.",
       "B. Monitoreo estricto si el acardiaco es peque&ntilde;o y no sobrecarga al gemelo bomba.",
@@ -413,32 +354,16 @@ const slides = [
       "F. Operar al gemelo bomba para que bombee con m&aacute;s fuerza."
     ]
   },
+  { id: "case4", type: "image", title: "Caso 4 imagen 1", image: "assets/2s_u4_junta/08_caso4_espina_bifida.png" },
+  { type: "image", title: "Caso 4 imagen 2", image: "assets/2s_u4_junta/11_caso4_espina_bifida_explica_v2.png" },
   {
-    title: "Caso 4: el tubo neural no cerr&oacute; completamente",
-    caseTag: "Mesa 4",
-    image: "assets/2s_u4_junta/08_caso4_espina_bifida.png",
-    keywords: ["tubo neural", "m&eacute;dula", "espina b&iacute;fida"],
-    comment: "Una ecograf&iacute;a detecta un defecto en la columna del feto. El equipo sospecha espina b&iacute;fida abierta: parte del sistema nervioso queda expuesto durante el desarrollo.",
-    focus: "Este caso conecta directamente con neurulaci&oacute;n: el cierre del tubo neural en etapas tempranas.",
-    sources: [
-      ["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/spina-bifida"]
-    ]
-  },
-  {
-    title: "Caso 4: por qu&eacute; importa la etapa",
-    caseTag: "Mesa 4",
-    image: "assets/2s_u4_junta/11_caso4_espina_bifida_explica_v2.png",
-    keywords: ["neurulaci&oacute;n", "primeras semanas", "sistema nervioso"],
-    comment: "El tubo neural dar&aacute; origen al enc&eacute;falo y la m&eacute;dula espinal. Si no cierra bien, pueden aparecer da&ntilde;os neurol&oacute;gicos, hidrocefalia y problemas motores.",
-    focus: "Pista clave: aqu&iacute; no hablamos de placenta compartida, sino de formaci&oacute;n del sistema nervioso."
-  },
-  {
-    title: "Caso 4: decisi&oacute;n de la junta",
-    caseTag: "Mesa 4",
-    image: "assets/2s_u4_junta/11_caso4_espina_bifida_explica_v2.png",
-    keywords: ["cirug&iacute;a fetal", "cuidado neonatal", "riesgo materno"],
-    comment: "La junta debe equilibrar beneficio para el feto y riesgo para la madre. Algunas intervenciones pueden mejorar pron&oacute;stico, pero no son simples ni siempre posibles.",
-    focus: "La mejor decisi&oacute;n depende de gravedad, edad gestacional, salud materna y equipo especializado disponible.",
+    type: "case",
+    title: "Caso 4: espina b&iacute;fida",
+    kicker: "Mesa 4",
+    lead: "Una ecograf&iacute;a detecta un defecto en la columna del feto. El equipo sospecha espina b&iacute;fida abierta: parte del sistema nervioso queda expuesto durante el desarrollo.",
+    body: "Sospecha: cierre incompleto del tubo neural. Este caso se relaciona con neurulaci&oacute;n y exige equilibrar beneficio fetal con riesgo materno.",
+    pills: ["tubo neural", "neurulaci&oacute;n", "m&eacute;dula", "riesgo materno"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/spina-bifida"]],
     options: [
       "A. Ignorar el diagn&oacute;stico hasta el nacimiento.",
       "B. Derivar a centro fetal para evaluar cirug&iacute;a prenatal si cumple criterios.",
@@ -449,25 +374,12 @@ const slides = [
     ]
   },
   {
-    title: "Comparaci&oacute;n r&aacute;pida: no todos los casos nacen del mismo problema",
-    image: "assets/2s_u4_junta/12_cierre.png",
-    keywords: ["separaci&oacute;n", "placenta", "flujo", "neurulaci&oacute;n"],
-    comment: "Caso 1: separaci&oacute;n embrionaria incompleta. Caso 2: conexiones placentarias desiguales. Caso 3: flujo invertido en gemelos monocoriales. Caso 4: cierre incompleto del tubo neural.",
-    focus: "Este mapa les ayuda a no mezclar conceptos: cada diagn&oacute;stico pertenece a un proceso biol&oacute;gico distinto."
-  },
-  {
-    title: "Formato del dictamen final",
-    image: "assets/2s_u4_junta/01_portada.png",
-    keywords: ["dictamen", "evidencia", "opci&oacute;n", "defensa"],
-    comment: "Escriban: 1) diagn&oacute;stico probable, 2) etapa/proceso afectado, 3) riesgos principales, 4) opci&oacute;n elegida, 5) argumento de la junta.",
-    focus: "Una buena respuesta usa vocabulario cient&iacute;fico, pero se entiende con claridad. No gana la opci&oacute;n m&aacute;s dram&aacute;tica; gana la mejor justificada."
-  },
-  {
-    title: "El viernes: desenlace cl&iacute;nico",
-    image: "assets/2s_u4_junta/12_cierre.png",
-    keywords: ["HTML 2", "consecuencias", "vida o muerte", "aprendizaje"],
-    comment: "El viernes confrontaremos cada decisi&oacute;n con un desenlace posible: qu&eacute; mejora, qu&eacute; empeora, qui&eacute;n sobrevive y por qu&eacute;.",
-    focus: "La medicina real no es magia: cada decisi&oacute;n abre riesgos, costos y consecuencias."
+    type: "text",
+    title: "Dictamen de la junta",
+    kicker: "Producto evaluable",
+    lead: "Entreguen una decisi&oacute;n, pero sobre todo entreguen el razonamiento.",
+    body: "El reporte debe incluir: diagn&oacute;stico probable, etapa o proceso embrionario afectado, riesgos principales, opci&oacute;n elegida y argumento cient&iacute;fico. El viernes veremos el desenlace de cada opci&oacute;n.",
+    pills: ["diagn&oacute;stico", "evidencia", "opci&oacute;n A-F", "sustento"]
   }
 ];
 
@@ -486,27 +398,35 @@ function renderOptions(s) {
 }
 
 function makeSlide(s, i) {
-  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
-    <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
-    <div class="shade"></div>
-    <div class="topbar">
-      <div class="titleBox"><h1>${s.title}</h1></div>
+  if (s.type === "image") {
+    return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}" id="${s.id || ""}">
+      <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
       <div class="counter">${i + 1} / ${slides.length}</div>
-    </div>
-    <div class="notes">
-      <div class="card">
-        ${s.caseTag ? `<div class="caseTag">${s.caseTag}</div>` : ""}
-        <div class="label">Palabras clave</div>
-        <div class="chips">${s.keywords.map(k => `<span class="chip">${k}</span>`).join("")}</div>
-        ${renderLinks(s)}
+    </section>`;
+  }
+  if (s.type === "menu") {
+    return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+      <div class="textSlide">
+        <h2>${s.kicker}</h2>
+        <h1>${s.title}</h1>
+        <p class="lead">${s.lead}</p>
+        <div class="choiceGrid">${s.choices.map(c => `<button class="caseButton" onclick="goToId('${c.target}')"><strong>${c.label}</strong><span>${c.desc}</span></button>`).join("")}</div>
       </div>
-      <div class="card">
-        <div class="label">Comentario para explicar</div>
-        <p class="comment">${s.comment}</p>
-        <p class="focus">${s.focus}</p>
-        ${renderOptions(s)}
-      </div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </section>`;
+  }
+  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+    <div class="textSlide">
+      <h2>${s.kicker || ""}</h2>
+      <h1>${s.title}</h1>
+      <p class="lead">${s.lead}</p>
+      <p class="bodyText">${s.body}</p>
+      ${s.pills ? `<div class="pillRow">${s.pills.map(p => `<span class="pill">${p}</span>`).join("")}</div>` : ""}
+      ${renderLinks(s)}
+      ${renderOptions(s)}
+      <div class="miniNav"><button class="jump" onclick="goTo(2)">Elegir otro caso</button><button class="jump" onclick="nextSlide()">Continuar</button></div>
     </div>
+    <div class="counter">${i + 1} / ${slides.length}</div>
   </section>`;
 }
 
@@ -531,6 +451,10 @@ function showSlide(i) {
 function nextSlide() { showSlide(current + 1); }
 function prevSlide() { showSlide(current - 1); }
 function goTo(i) { showSlide(i); }
+function goToId(id) {
+  const i = slides.findIndex(s => s.id === id);
+  if (i >= 0) showSlide(i);
+}
 
 function toggleOverview(force) {
   const ov = document.getElementById("overview");
