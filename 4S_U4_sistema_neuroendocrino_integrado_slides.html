@@ -105,6 +105,23 @@
     font-weight: 800;
   }
   .textLinks a:hover { text-decoration: underline; }
+  .slideNum {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 7;
+    min-width: 74px;
+    text-align: center;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(10,7,7,.46);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    backdrop-filter: blur(8px);
+  }
   .controls {
     position: absolute;
     right: 16px;
@@ -225,6 +242,7 @@
   }
   @media (max-width: 900px) {
     .textSlide { width: calc(100vw - 24px); padding: 24px 18px; border-radius: 20px; }
+    .slideNum { top: 10px; right: 10px; min-width: 68px; padding: 7px 9px; font-size: 12px; }
     .controls { right: 8px; }
     .imageWrap {
       inset: 0;
@@ -413,103 +431,6 @@ const slides = [
     focus: "Nos prepara para leer los casos con más rigor."
   },
   {
-    kind: "caseimage",
-    section: "Caso real 1",
-    title: "Epilepsia en adolescente: presentación del caso",
-    image: "assets/4s_casos_reales/01_epilepsia_caso.png",
-    summary: "Caso neurológico. La epilepsia ocurre cuando grupos de neuronas generan actividad eléctrica anormal que puede provocar desconexiones breves, convulsiones u otras alteraciones del comportamiento.",
-    detail: "En clase sirve para conectar impulso nervioso, sinapsis, circuitos neuronales y coordinación del sistema nervioso.",
-    links: [
-      { label: "Fuente médica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
-      { label: "Video testimonio: Tyler's Patient Story", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 1",
-    title: "Epilepsia: lectura científica del caso",
-    image: "assets/4s_casos_reales/02_epilepsia_tecnica.png",
-    summary: "Aquí el caso se reinterpreta con los contenidos de la clase: redes neuronales, sinapsis y descargas eléctricas excesivas y sincronizadas.",
-    detail: "La epilepsia es un excelente ejemplo de cómo un problema en la señal nerviosa puede alterar movimiento, conciencia, percepción y conducta.",
-    links: [
-      { label: "Volver a la fuente médica", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
-      { label: "Abrir video del caso", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 2",
-    title: "Insuficiencia suprarrenal / Addison: presentación del caso",
-    image: "assets/4s_casos_reales/03_addison_caso.png",
-    summary: "Caso endocrinológico. En la insuficiencia suprarrenal las glándulas suprarrenales no producen suficiente cortisol, y eso altera energía, presión arterial y respuesta al estrés.",
-    detail: "Este caso permite leer cansancio extremo, mareo, debilidad y homeostasis fallida como consecuencias hormonales reales.",
-    links: [
-      { label: "Fuente médica: Endocrine Society - Adrenal Insufficiency", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
-      { label: "Historia de paciente: CHOP Addison stories", url: "https://www.chop.edu/conditions-diseases/adrenal-insufficiency-addison-s-disease/patient-stories-by-condition" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 2",
-    title: "Addison: lectura científica del caso",
-    image: "assets/4s_casos_reales/04_addison_tecnica.png",
-    summary: "Aquí se explica el eje hipotálamo-hipófisis-suprarrenal y la producción insuficiente de cortisol.",
-    detail: "El caso permite mostrar que un problema endocrino no es solo 'hormonas bajas': afecta respuesta al estrés, equilibrio interno y funcionamiento cotidiano.",
-    links: [
-      { label: "Volver a la fuente médica", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
-      { label: "Historia personal: Sarah's Story with Addison's", url: "https://www.addisonsdisease.org.uk/blog/sarahs-story-living-with-addisons-and-my-journey-so-far" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 3",
-    title: "Enfermedad de Cushing por adenoma hipofisario: presentación del caso",
-    image: "assets/4s_casos_reales/05_cushing_caso.png",
-    summary: "Caso neuroendocrino. En la enfermedad de Cushing un adenoma en la hipófisis puede aumentar la ACTH y terminar elevando demasiado el cortisol.",
-    detail: "Es uno de los mejores casos integradores porque empieza cerca del cerebro y termina alterando metabolismo, energía, estado emocional y composición corporal.",
-    links: [
-      { label: "Fuente médica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
-      { label: "Video testimonio: Erin Kelley treated for Cushing's Syndrome", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 3",
-    title: "Cushing: lectura científica del caso",
-    image: "assets/4s_casos_reales/06_cushing_tecnica.png",
-    summary: "La lógica del caso es completamente neuroendocrina: hipófisis, ACTH, suprarrenales y exceso de cortisol.",
-    detail: "Aquí se ve con claridad que el sistema nervioso y el endocrino no trabajan separados, sino como una red de control corporal.",
-    links: [
-      { label: "Volver a la fuente médica", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
-      { label: "Abrir video del caso", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 4",
-    title: "Tumor hipofisario / hipopituitarismo: presentación del caso",
-    image: "assets/4s_casos_reales/07_hipofisis_caso.png",
-    summary: "Caso neuroendocrino. Un tumor en la hipófisis o una falla hipofisaria puede alterar múltiples hormonas y producir cefalea, alteraciones visuales, cansancio y cambios sistémicos.",
-    detail: "Este caso muestra que una estructura muy pequeña, en la base del cerebro, puede afectar muchas funciones del organismo.",
-    links: [
-      { label: "Fuente médica: Endocrine Society - Pituitary Tumors", url: "https://www.endocrine.org/patient-engagement/endocrine-library/pituitary-tumors" },
-      { label: "Fuente médica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
-      { label: "Historia real: Olivia's Pituitary Tumor Story", url: "https://www.wolfsonchildrens.com/services/brain/olivia-brain-story" }
-    ]
-  },
-  {
-    kind: "caseimage",
-    section: "Caso real 4",
-    title: "Hipófisis: lectura científica del caso",
-    image: "assets/4s_casos_reales/08_hipofisis_tecnica.png",
-    summary: "La hipófisis actúa como puente entre sistema nervioso y endocrino. Si se lesiona o comprime, pueden fallar varios ejes hormonales a la vez.",
-    detail: "Esta lámina cierra la unidad porque resume el papel del hipotálamo, la hipófisis y las glándulas diana como un sistema integrado.",
-    links: [
-      { label: "Fuente médica: Endocrine Society - Brain Hormones", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hormones-and-endocrine-function/brain-hormones" },
-      { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
-    ]
-  },
-  {
     kind: "caseinfo",
     section: "Contexto del caso 1",
     title: "Epilepsia: contexto y fuentes",
@@ -518,6 +439,24 @@ const slides = [
       { label: "Fuente médica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
       { label: "Video testimonio: Tyler's Patient Story", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
     ]
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 1",
+    title: "Epilepsia en adolescente: presentación del caso",
+    image: "assets/4s_casos_reales/01_epilepsia_caso.png",
+    summary: "Caso neurológico. La epilepsia ocurre cuando grupos de neuronas generan actividad eléctrica anormal que puede provocar desconexiones breves, convulsiones u otras alteraciones del comportamiento.",
+    detail: "En clase sirve para conectar impulso nervioso, sinapsis, circuitos neuronales y coordinación del sistema nervioso.",
+    links: []
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 1",
+    title: "Epilepsia: lectura científica del caso",
+    image: "assets/4s_casos_reales/02_epilepsia_tecnica.png",
+    summary: "Aquí el caso se reinterpreta con los contenidos de la clase: redes neuronales, sinapsis y descargas eléctricas excesivas y sincronizadas.",
+    detail: "La epilepsia es un excelente ejemplo de cómo un problema en la señal nerviosa puede alterar movimiento, conciencia, percepción y conducta.",
+    links: []
   },
   {
     kind: "caseinfo",
@@ -530,6 +469,24 @@ const slides = [
     ]
   },
   {
+    kind: "caseimage",
+    section: "Caso real 2",
+    title: "Insuficiencia suprarrenal / Addison: presentación del caso",
+    image: "assets/4s_casos_reales/03_addison_caso.png",
+    summary: "Caso endocrinológico. En la insuficiencia suprarrenal las glándulas suprarrenales no producen suficiente cortisol, y eso altera energía, presión arterial y respuesta al estrés.",
+    detail: "Este caso permite leer cansancio extremo, mareo, debilidad y homeostasis fallida como consecuencias hormonales reales.",
+    links: []
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 2",
+    title: "Addison: lectura científica del caso",
+    image: "assets/4s_casos_reales/04_addison_tecnica.png",
+    summary: "Aquí se explica el eje hipotálamo-hipófisis-suprarrenal y la producción insuficiente de cortisol.",
+    detail: "El caso permite mostrar que un problema endocrino no es solo 'hormonas bajas': afecta respuesta al estrés, equilibrio interno y funcionamiento cotidiano.",
+    links: []
+  },
+  {
     kind: "caseinfo",
     section: "Contexto del caso 3",
     title: "Cushing: contexto y fuentes",
@@ -538,6 +495,24 @@ const slides = [
       { label: "Fuente médica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
       { label: "Video testimonio: Erin Kelley treated for Cushing's Syndrome", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
     ]
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 3",
+    title: "Enfermedad de Cushing por adenoma hipofisario: presentación del caso",
+    image: "assets/4s_casos_reales/05_cushing_caso.png",
+    summary: "Caso neuroendocrino. En la enfermedad de Cushing un adenoma en la hipófisis puede aumentar la ACTH y terminar elevando demasiado el cortisol.",
+    detail: "Es uno de los mejores casos integradores porque empieza cerca del cerebro y termina alterando metabolismo, energía, estado emocional y composición corporal.",
+    links: []
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 3",
+    title: "Cushing: lectura científica del caso",
+    image: "assets/4s_casos_reales/06_cushing_tecnica.png",
+    summary: "La lógica del caso es completamente neuroendocrina: hipófisis, ACTH, suprarrenales y exceso de cortisol.",
+    detail: "Aquí se ve con claridad que el sistema nervioso y el endocrino no trabajan separados, sino como una red de control corporal.",
+    links: []
   },
   {
     kind: "caseinfo",
@@ -549,6 +524,24 @@ const slides = [
       { label: "Fuente médica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
       { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
     ]
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 4",
+    title: "Tumor hipofisario / hipopituitarismo: presentación del caso",
+    image: "assets/4s_casos_reales/07_hipofisis_caso.png",
+    summary: "Caso neuroendocrino. Un tumor en la hipófisis o una falla hipofisaria puede alterar múltiples hormonas y producir cefalea, alteraciones visuales, cansancio y cambios sistémicos.",
+    detail: "Este caso muestra que una estructura muy pequeña, en la base del cerebro, puede afectar muchas funciones del organismo.",
+    links: []
+  },
+  {
+    kind: "caseimage",
+    section: "Caso real 4",
+    title: "Hipófisis: lectura científica del caso",
+    image: "assets/4s_casos_reales/08_hipofisis_tecnica.png",
+    summary: "La hipófisis actúa como puente entre sistema nervioso y endocrino. Si se lesiona o comprime, pueden fallar varios ejes hormonales a la vez.",
+    detail: "Esta lámina cierra la unidad porque resume el papel del hipotálamo, la hipófisis y las glándulas diana como un sistema integrado.",
+    links: []
   }
 ];
 
@@ -559,17 +552,20 @@ const grid = document.getElementById("thumbGrid");
 function renderTheory(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="slideNum">${i + 1} / ${slides.length}</div>
   </section>`;
 }
 
 function renderCaseImage(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="slideNum">${i + 1} / ${slides.length}</div>
   </section>`;
 }
 
 function renderCaseInfo(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
+    <div class="slideNum">${i + 1} / ${slides.length}</div>
     <div class="textSlide">
       <p class="textEyebrow">${s.section}</p>
       <h1 class="textTitle">${s.title}</h1>
@@ -587,7 +583,7 @@ function makeSlide(s, i) {
 
 function render() {
   host.innerHTML = slides.map(makeSlide).join("");
-  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image}" alt="${s.title}"><div>${i + 1}. ${s.title}</div></div>`).join("");
+  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image || 'assets/4s_neuroendocrino/14_eje_neuroendocrino.png'}" alt="${s.title}"><div>${i + 1}. ${s.title}</div></div>`).join("");
   updateProgress();
 }
 
