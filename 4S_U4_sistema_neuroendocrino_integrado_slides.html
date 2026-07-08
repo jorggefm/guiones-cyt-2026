@@ -62,103 +62,49 @@
     object-fit: contain;
     filter: saturate(1.02) contrast(1.03);
   }
-  .hud {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    right: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 6;
-    pointer-events: none;
-  }
-  .counter {
-    min-width: 88px;
-    text-align: center;
-    padding: 9px 12px;
-    border-radius: 999px;
-    background: rgba(10,7,7,.52);
+  .textSlide {
+    width: min(1080px, calc(100vw - 64px));
+    padding: 34px 38px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(23,12,12,.96), rgba(34,18,18,.92));
     border: 1px solid var(--line);
-    color: var(--muted);
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: .02em;
-    backdrop-filter: blur(8px);
-    pointer-events: auto;
-  }
-  .infoBtn {
-    pointer-events: auto;
-    width: auto;
-    height: auto;
-    padding: 9px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: rgba(10,7,7,.52);
+    box-shadow: 0 20px 70px rgba(0,0,0,.35);
     color: #fff7ef;
+  }
+  .textEyebrow {
+    margin: 0 0 10px;
+    color: var(--accent);
     font-size: 12px;
     font-weight: 900;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-  }
-  .infoBtn:hover { background: rgba(255,255,255,.14); }
-  .infoPanel {
-    position: absolute;
-    top: 62px;
-    left: 14px;
-    max-width: min(540px, calc(100vw - 28px));
-    z-index: 12;
-    display: none;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(12, 8, 10, .84);
-    border: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 14px 50px rgba(0,0,0,.32);
-  }
-  .infoPanel.show { display: block; }
-  .infoSection {
-    margin-bottom: 12px;
-  }
-  .infoSection:last-child {
-    margin-bottom: 0;
-  }
-  .infoLabel {
-    text-transform: uppercase;
     letter-spacing: .13em;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 900;
-    margin-bottom: 8px;
+    text-transform: uppercase;
   }
-  .infoTitle {
-    margin: 0 0 8px;
-    font-size: clamp(18px, 1.6vw, 24px);
-    line-height: 1.15;
+  .textTitle {
+    margin: 0 0 14px;
+    font-size: clamp(28px, 3vw, 46px);
+    line-height: 1.05;
+    letter-spacing: -.03em;
   }
-  .infoText {
-    margin: 0;
-    color: #fff6ee;
-    font-size: 14px;
-    line-height: 1.45;
+  .textBody {
+    max-width: 980px;
+    font-size: clamp(16px, 1.28vw, 22px);
+    line-height: 1.48;
+    color: #fff2ea;
+    margin: 0 0 18px;
   }
-  .infoLinks {
+  .textLinks {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    margin-top: 18px;
   }
-  .infoLinks a {
-    color: #fff8d9;
+  .textLinks a {
+    color: #fff4c8;
     text-decoration: none;
-    font-size: 13px;
+    font-size: clamp(14px, 1.05vw, 18px);
     font-weight: 800;
   }
-  .infoLinks a:hover { text-decoration: underline; }
-  .hiddenMeta {
-    display: none;
-  }
+  .textLinks a:hover { text-decoration: underline; }
   .controls {
     position: absolute;
     right: 16px;
@@ -278,8 +224,7 @@
     transition: width .25s ease;
   }
   @media (max-width: 900px) {
-    .hud { top: 10px; left: 10px; right: 10px; }
-    .infoPanel { top: 56px; left: 10px; max-width: calc(100vw - 20px); }
+    .textSlide { width: calc(100vw - 24px); padding: 24px 18px; border-radius: 20px; }
     .controls { right: 8px; }
     .imageWrap {
       inset: 0;
@@ -468,7 +413,7 @@ const slides = [
     focus: "Nos prepara para leer los casos con más rigor."
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 1",
     title: "Epilepsia en adolescente: presentación del caso",
     image: "assets/4s_casos_reales/01_epilepsia_caso.png",
@@ -480,7 +425,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 1",
     title: "Epilepsia: lectura científica del caso",
     image: "assets/4s_casos_reales/02_epilepsia_tecnica.png",
@@ -492,7 +437,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 2",
     title: "Insuficiencia suprarrenal / Addison: presentación del caso",
     image: "assets/4s_casos_reales/03_addison_caso.png",
@@ -504,7 +449,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 2",
     title: "Addison: lectura científica del caso",
     image: "assets/4s_casos_reales/04_addison_tecnica.png",
@@ -516,7 +461,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 3",
     title: "Enfermedad de Cushing por adenoma hipofisario: presentación del caso",
     image: "assets/4s_casos_reales/05_cushing_caso.png",
@@ -528,7 +473,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 3",
     title: "Cushing: lectura científica del caso",
     image: "assets/4s_casos_reales/06_cushing_tecnica.png",
@@ -540,7 +485,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 4",
     title: "Tumor hipofisario / hipopituitarismo: presentación del caso",
     image: "assets/4s_casos_reales/07_hipofisis_caso.png",
@@ -553,7 +498,7 @@ const slides = [
     ]
   },
   {
-    kind: "case",
+    kind: "caseimage",
     section: "Caso real 4",
     title: "Hipófisis: lectura científica del caso",
     image: "assets/4s_casos_reales/08_hipofisis_tecnica.png",
@@ -561,6 +506,47 @@ const slides = [
     detail: "Esta lámina cierra la unidad porque resume el papel del hipotálamo, la hipófisis y las glándulas diana como un sistema integrado.",
     links: [
       { label: "Fuente médica: Endocrine Society - Brain Hormones", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hormones-and-endocrine-function/brain-hormones" },
+      { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
+    ]
+  },
+  {
+    kind: "caseinfo",
+    section: "Contexto del caso 1",
+    title: "Epilepsia: contexto y fuentes",
+    summary: "La epilepsia es un trastorno neurológico en el que grupos de neuronas generan actividad eléctrica anormal. En clase nos sirve para relacionar impulso nervioso, sinapsis y redes neuronales con un caso real que afecta conciencia, movimiento o conducta.",
+    links: [
+      { label: "Fuente médica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
+      { label: "Video testimonio: Tyler's Patient Story", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
+    ]
+  },
+  {
+    kind: "caseinfo",
+    section: "Contexto del caso 2",
+    title: "Addison: contexto y fuentes",
+    summary: "La insuficiencia suprarrenal ocurre cuando las glándulas suprarrenales no producen suficiente cortisol. Es un caso endocrinológico muy útil para explicar respuesta al estrés, homeostasis y el eje hipotálamo-hipófisis-suprarrenal.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Adrenal Insufficiency", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
+      { label: "Historia clínica: CHOP Addison stories", url: "https://www.chop.edu/conditions-diseases/adrenal-insufficiency-addison-s-disease/patient-stories-by-condition" }
+    ]
+  },
+  {
+    kind: "caseinfo",
+    section: "Contexto del caso 3",
+    title: "Cushing: contexto y fuentes",
+    summary: "La enfermedad de Cushing por adenoma hipofisario es un caso neuroendocrino clave porque empieza en la hipófisis, altera la ACTH y termina produciendo exceso de cortisol. Integra cerebro, hormonas, metabolismo y órganos diana.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
+      { label: "Video testimonio: Erin Kelley treated for Cushing's Syndrome", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
+    ]
+  },
+  {
+    kind: "caseinfo",
+    section: "Contexto del caso 4",
+    title: "Tumor hipofisario / hipopituitarismo: contexto y fuentes",
+    summary: "Este caso muestra por qué la hipófisis es una glándula puente entre sistema nervioso y sistema endocrino. Un tumor o una falla hipofisaria puede alterar varios ejes hormonales y afectar múltiples órganos del cuerpo.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Pituitary Tumors", url: "https://www.endocrine.org/patient-engagement/endocrine-library/pituitary-tumors" },
+      { label: "Fuente médica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
       { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
     ]
   }
@@ -573,51 +559,30 @@ const grid = document.getElementById("thumbGrid");
 function renderTheory(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
-    <div class="hud">
-      <button class="infoBtn" onclick="toggleInfo(${i})">Info</button>
-      <div class="counter">${i + 1} / ${slides.length}</div>
-    </div>
-    <div class="infoPanel" id="info-${i}">
-      <div class="infoSection">
-        <div class="infoLabel">${s.section}</div>
-        <h2 class="infoTitle">${s.title}</h2>
-        <p class="infoText">${s.comment}</p>
-      </div>
-      <div class="infoSection">
-        <div class="infoLabel">Idea fuerza</div>
-        <p class="infoText">${s.focus}</p>
-      </div>
-    </div>
   </section>`;
 }
 
-function renderCase(s, i) {
+function renderCaseImage(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
-    <div class="hud">
-      <button class="infoBtn" onclick="toggleInfo(${i})">Info</button>
-      <div class="counter">${i + 1} / ${slides.length}</div>
-    </div>
-    <div class="infoPanel" id="info-${i}">
-      <div class="infoSection">
-        <div class="infoLabel">${s.section}</div>
-        <h2 class="infoTitle">${s.title}</h2>
-        <p class="infoText">${s.summary}</p>
-      </div>
-      <div class="infoSection">
-        <div class="infoLabel">Lectura</div>
-        <p class="infoText">${s.detail}</p>
-      </div>
-      <div class="infoSection">
-        <div class="infoLabel">Fuentes y enlaces</div>
-        <div class="infoLinks">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
-      </div>
+  </section>`;
+}
+
+function renderCaseInfo(s, i) {
+  return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
+    <div class="textSlide">
+      <p class="textEyebrow">${s.section}</p>
+      <h1 class="textTitle">${s.title}</h1>
+      <p class="textBody">${s.summary}</p>
+      <div class="textLinks">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
     </div>
   </section>`;
 }
 
 function makeSlide(s, i) {
-  return s.kind === "case" ? renderCase(s, i) : renderTheory(s, i);
+  if (s.kind === "caseinfo") return renderCaseInfo(s, i);
+  if (s.kind === "caseimage") return renderCaseImage(s, i);
+  return renderTheory(s, i);
 }
 
 function render() {
@@ -632,7 +597,6 @@ function updateProgress() {
 
 function showSlide(i) {
   const all = document.querySelectorAll(".slide");
-  document.querySelectorAll(".infoPanel.show").forEach(p => p.classList.remove("show"));
   all[current]?.classList.remove("active");
   current = (i + slides.length) % slides.length;
   all[current]?.classList.add("active");
@@ -646,13 +610,6 @@ function goTo(i) { showSlide(i); }
 function toggleOverview(force) {
   const ov = document.getElementById("overview");
   ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
-}
-
-function toggleInfo(i) {
-  const panel = document.getElementById(`info-${i}`);
-  const willShow = !panel.classList.contains("show");
-  document.querySelectorAll(".infoPanel.show").forEach(p => p.classList.remove("show"));
-  if (willShow) panel.classList.add("show");
 }
 
 function toggleHelp() { document.getElementById("help").classList.toggle("show"); }
