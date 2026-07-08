@@ -54,7 +54,7 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    padding: 18px;
+    padding: 0;
   }
   .imageWrap img {
     width: 100%;
@@ -62,88 +62,102 @@
     object-fit: contain;
     filter: saturate(1.02) contrast(1.03);
   }
-  .shade {
+  .hud {
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(to bottom, rgba(0,0,0,.60), rgba(0,0,0,.02) 29%, rgba(0,0,0,.08) 68%, rgba(0,0,0,.74));
-  }
-  .topbar {
-    position: absolute;
-    top: 18px;
-    left: 22px;
-    right: 22px;
+    top: 14px;
+    left: 14px;
+    right: 14px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    z-index: 4;
-  }
-  .titleBox {
-    max-width: min(920px, 78vw);
-    padding: 12px 16px 10px;
-    background: linear-gradient(135deg, rgba(20,10,10,.78), rgba(50,18,18,.52));
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 10px 40px rgba(0,0,0,.22);
-  }
-  .eyebrow {
-    margin: 0 0 5px;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-  }
-  h1 {
-    margin: 0;
-    font-size: clamp(21px, 2.2vw, 38px);
-    line-height: 1.06;
-    letter-spacing: -.02em;
-    text-shadow: 0 2px 12px rgba(0,0,0,.5);
-  }
-  .case-summary {
-    margin: 10px 0 0;
-    max-width: min(980px, 74vw);
-    color: #fff3ea;
-    font-size: clamp(13px, 1.02vw, 16px);
-    line-height: 1.42;
-    font-weight: 650;
+    z-index: 6;
+    pointer-events: none;
   }
   .counter {
-    flex: 0 0 auto;
     min-width: 88px;
     text-align: center;
-    padding: 10px 12px;
+    padding: 9px 12px;
     border-radius: 999px;
-    background: rgba(10,7,7,.65);
+    background: rgba(10,7,7,.52);
     border: 1px solid var(--line);
     color: var(--muted);
     font-weight: 800;
     font-size: 14px;
     letter-spacing: .02em;
     backdrop-filter: blur(8px);
+    pointer-events: auto;
   }
-  .mini-links {
-    margin-top: 10px;
+  .infoBtn {
+    pointer-events: auto;
+    width: auto;
+    height: auto;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(10,7,7,.52);
+    color: #fff7ef;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+  .infoBtn:hover { background: rgba(255,255,255,.14); }
+  .infoPanel {
+    position: absolute;
+    top: 62px;
+    left: 14px;
+    max-width: min(540px, calc(100vw - 28px));
+    z-index: 12;
+    display: none;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(12, 8, 10, .84);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 14px 50px rgba(0,0,0,.32);
+  }
+  .infoPanel.show { display: block; }
+  .infoSection {
+    margin-bottom: 12px;
+  }
+  .infoSection:last-child {
+    margin-bottom: 0;
+  }
+  .infoLabel {
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .infoTitle {
+    margin: 0 0 8px;
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.15;
+  }
+  .infoText {
+    margin: 0;
+    color: #fff6ee;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .infoLinks {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 8px;
   }
-  .mini-links a {
+  .infoLinks a {
     color: #fff8d9;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.18);
-    background: rgba(255,255,255,.08);
   }
-  .mini-links a:hover {
-    text-decoration: underline;
-    background: rgba(255,255,255,.14);
+  .infoLinks a:hover { text-decoration: underline; }
+  .hiddenMeta {
+    display: none;
   }
   .controls {
     position: absolute;
@@ -264,13 +278,12 @@
     transition: width .25s ease;
   }
   @media (max-width: 900px) {
-    .topbar { top: 10px; left: 12px; right: 12px; }
-    .titleBox { max-width: 74vw; padding: 10px 12px; }
-    .case-summary { max-width: 72vw; }
+    .hud { top: 10px; left: 10px; right: 10px; }
+    .infoPanel { top: 56px; left: 10px; max-width: calc(100vw - 20px); }
     .controls { right: 8px; }
     .imageWrap {
       inset: 0;
-      padding: 10px;
+      padding: 0;
     }
   }
 </style>
@@ -560,13 +573,20 @@ const grid = document.getElementById("thumbGrid");
 function renderTheory(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
-    <div class="shade"></div>
-    <div class="topbar">
-      <div class="titleBox">
-        <p class="eyebrow">${s.section}</p>
-        <h1>${s.title}</h1>
-      </div>
+    <div class="hud">
+      <button class="infoBtn" onclick="toggleInfo(${i})">Info</button>
       <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="infoPanel" id="info-${i}">
+      <div class="infoSection">
+        <div class="infoLabel">${s.section}</div>
+        <h2 class="infoTitle">${s.title}</h2>
+        <p class="infoText">${s.comment}</p>
+      </div>
+      <div class="infoSection">
+        <div class="infoLabel">Idea fuerza</div>
+        <p class="infoText">${s.focus}</p>
+      </div>
     </div>
   </section>`;
 }
@@ -574,15 +594,24 @@ function renderTheory(s, i) {
 function renderCase(s, i) {
   return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
     <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
-    <div class="shade"></div>
-    <div class="topbar">
-      <div class="titleBox">
-        <p class="eyebrow">${s.section}</p>
-        <h1>${s.title}</h1>
-        <p class="case-summary">${s.summary}</p>
-        <div class="mini-links">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
-      </div>
+    <div class="hud">
+      <button class="infoBtn" onclick="toggleInfo(${i})">Info</button>
       <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="infoPanel" id="info-${i}">
+      <div class="infoSection">
+        <div class="infoLabel">${s.section}</div>
+        <h2 class="infoTitle">${s.title}</h2>
+        <p class="infoText">${s.summary}</p>
+      </div>
+      <div class="infoSection">
+        <div class="infoLabel">Lectura</div>
+        <p class="infoText">${s.detail}</p>
+      </div>
+      <div class="infoSection">
+        <div class="infoLabel">Fuentes y enlaces</div>
+        <div class="infoLinks">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
+      </div>
     </div>
   </section>`;
 }
@@ -603,6 +632,7 @@ function updateProgress() {
 
 function showSlide(i) {
   const all = document.querySelectorAll(".slide");
+  document.querySelectorAll(".infoPanel.show").forEach(p => p.classList.remove("show"));
   all[current]?.classList.remove("active");
   current = (i + slides.length) % slides.length;
   all[current]?.classList.add("active");
@@ -616,6 +646,13 @@ function goTo(i) { showSlide(i); }
 function toggleOverview(force) {
   const ov = document.getElementById("overview");
   ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
+}
+
+function toggleInfo(i) {
+  const panel = document.getElementById(`info-${i}`);
+  const willShow = !panel.classList.contains("show");
+  document.querySelectorAll(".infoPanel.show").forEach(p => p.classList.remove("show"));
+  if (willShow) panel.classList.add("show");
 }
 
 function toggleHelp() { document.getElementById("help").classList.toggle("show"); }
