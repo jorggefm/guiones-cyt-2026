@@ -103,6 +103,14 @@
     letter-spacing: -.02em;
     text-shadow: 0 2px 12px rgba(0,0,0,.5);
   }
+  .case-summary {
+    margin: 10px 0 0;
+    max-width: min(980px, 74vw);
+    color: #fff3ea;
+    font-size: clamp(13px, 1.02vw, 16px);
+    line-height: 1.42;
+    font-weight: 650;
+  }
   .counter {
     flex: 0 0 auto;
     min-width: 88px;
@@ -118,18 +126,25 @@
     backdrop-filter: blur(8px);
   }
   .mini-links {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
   }
   .mini-links a {
-    color: var(--link);
+    color: #fff8d9;
     text-decoration: none;
     font-size: 12px;
     font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.08);
   }
-  .mini-links a:hover { text-decoration: underline; }
+  .mini-links a:hover {
+    text-decoration: underline;
+    background: rgba(255,255,255,.14);
+  }
   .controls {
     position: absolute;
     right: 16px;
@@ -251,6 +266,7 @@
   @media (max-width: 900px) {
     .topbar { top: 10px; left: 12px; right: 12px; }
     .titleBox { max-width: 74vw; padding: 10px 12px; }
+    .case-summary { max-width: 72vw; }
     .controls { right: 8px; }
     .imageWrap {
       inset: 0;
@@ -563,6 +579,7 @@ function renderCase(s, i) {
       <div class="titleBox">
         <p class="eyebrow">${s.section}</p>
         <h1>${s.title}</h1>
+        <p class="case-summary">${s.summary}</p>
         <div class="mini-links">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
       </div>
       <div class="counter">${i + 1} / ${slides.length}</div>
