@@ -78,8 +78,6 @@ textarea{min-height:74px;resize:vertical}
 .resourceList a.news{background:#8a5300}
 .guideNote{background:#fff7df;border-color:#f0cf8e}
 .caseDetailLayout{display:grid;grid-template-columns:1fr;gap:1vw;align-items:start}
-.videoFrame{background:#f3f8f5;border:2px solid #d7e5dd;border-radius:18px;padding:.65vw}
-.videoFrame iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;background:#000}
 .sourceMeta{font-size:clamp(12px,.95vw,16px);font-weight:800;color:#597068;margin-top:.55em}
 .sourceMeta a{color:#0b6cae;text-decoration:none;font-weight:950}
 .exampleFlow{display:grid;grid-template-columns:.95fr 1.05fr;gap:1vw;align-items:start}
@@ -186,10 +184,7 @@ textarea{min-height:74px;resize:vertical}
         </div>
         <div class="panel">
           <h3 id="caseVideoTitle">Video o recurso principal</h3>
-          <div class="videoFrame hidden" id="caseVideoFrame">
-            <iframe id="caseVideoEmbed" src="" title="Video del caso" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <p id="caseVideoBlurb">Al elegir un caso, aqui aparecera un video o recurso vinculado con ese problema.</p>
+          <p id="caseVideoBlurb">Al elegir un caso, aqui aparecera un enlace directo al recurso mas vinculado con ese problema.</p>
           <div id="caseLinks" class="resourceList"></div>
           <p id="caseSourceMeta" class="sourceMeta"></p>
         </div>
@@ -359,12 +354,11 @@ const caseData={
       'No digas solo “se pierde naturaleza”: explica qué relación se rompe.'
     ],
     focus:'Obsérvese cómo un solo ecosistema sostiene muchas especies y funciones al mismo tiempo.',
-    videoEmbed:'https://www.youtube-nocookie.com/embed/XawPfIUo69k',
-    videoBlurb:'Este video muestra por qué los aguajales son ecosistemas valiosos y qué pasa cuando se degradan.',
+    videoBlurb:'Abre este recurso en YouTube o en tu app para ver un caso real sobre humedales amazónicos y aguajales.',
     sourceMeta:'Texto adaptado a partir de un reportaje sobre aguajales y una nota sobre su importancia ecológica y económica.',
     sources:[
       {label:'Noticia: importancia de los aguajales', url:'https://www.actualidadambiental.pe/los-aguajales-humedales-en-la-amazonia-que-aportan-a-la-economia-local-y-brindan-beneficios-climaticos/', kind:'news'},
-      {label:'Video: Viva el bosque | Aguajales', url:'https://www.youtube.com/watch?v=XawPfIUo69k', kind:'video'}
+      {label:'Video: Amazonía, así preservamos nuestros humedales', url:'https://www.youtube.com/watch?v=2X08qtOU_B8', kind:'video'}
     ]
   },
   cultivos:{
@@ -376,8 +370,7 @@ const caseData={
       'Explica la consecuencia con la idea de “menos opciones para resistir problemas”.'
     ],
     focus:'Aquí la clave no es solo la especie, sino la variedad dentro de la misma especie.',
-    videoEmbed:'https://www.youtube-nocookie.com/embed/VlXhKKBE0nc',
-    videoBlurb:'Este recurso ayuda a conectar la idea de diversidad genética con el cuidado de las papas nativas del Perú.',
+    videoBlurb:'Abre este recurso en YouTube o en tu app para conectar la diversidad genética con el cuidado de las papas nativas.',
     sourceMeta:'Texto adaptado a partir de materiales sobre conservación de papas nativas y su valor frente al cambio climático.',
     sources:[
       {label:'Noticia: papas nativas', url:'https://thinklandscape.globallandscapesforum.org/es/70125/como-peru-esta-protegiendo-sus-papas-nativas-del-cambio-climatico/', kind:'news'},
@@ -394,12 +387,11 @@ const caseData={
       'La consecuencia debe mostrar un efecto en cadena, no solo “es triste”.'
     ],
     focus:'Cuando una especie sale del ecosistema, otras pueden perder alimento, equilibrio o reproducción.',
-    videoEmbed:'https://www.youtube-nocookie.com/embed/-IKA3hlntM4',
-    videoBlurb:'Este reportaje muestra un caso real vinculado al tráfico de fauna amazónica y sus consecuencias.',
+    videoBlurb:'Abre este recurso en YouTube o en tu app para ver un reportaje distinto sobre tráfico ilegal de fauna silvestre en el Perú.',
     sourceMeta:'Texto adaptado a partir de materiales de sensibilización y un reportaje sobre tráfico de fauna silvestre en el Perú.',
     sources:[
       {label:'Noticia: tráfico de fauna', url:'https://www.conservamospornaturaleza.org/inspirate/un-llamado-a-la-empatia-trafico-de-fauna-silvestre-en-el-peru/', kind:'news'},
-      {label:'Video: tráfico en Iquitos', url:'https://www.youtube.com/watch?v=-IKA3hlntM4', kind:'video'}
+      {label:'Video: reportaje RPP sobre tráfico ilegal de fauna', url:'https://www.youtube.com/watch?v=-btrn22E_Cw', kind:'video'}
     ]
   },
   polinizadores:{
@@ -411,8 +403,7 @@ const caseData={
       'La consecuencia puede explicarse con menos flores, frutos o semillas.'
     ],
     focus:'Este caso muestra que una función ecológica puede afectar toda la cadena de vida.',
-    videoEmbed:'https://www.youtube-nocookie.com/embed/mDlRerMlyIQ',
-    videoBlurb:'Este recurso ayuda a ver que proteger polinizadores no es un detalle: sostiene la vida y la producción de alimentos.',
+    videoBlurb:'Abre este recurso en YouTube o en tu app para ver por qué los polinizadores sostienen la vida y la alimentación.',
     sourceMeta:'Texto adaptado a partir de un recurso audiovisual sobre polinizadores y una nota sobre su protección en el Perú.',
     sources:[
       {label:'Noticia: protección de polinizadores', url:'https://inforegion.pe/peru-pone-en-marcha-plan-para-proteger-polinizadores-frente-a-pesticidas-cambio-climatico-y-perdida-de-habitat/', kind:'news'},
@@ -446,8 +437,6 @@ function selectCase(card, name, problem, kind){
     <p><b>Pregunta para el equipo:</b> ¿qué parte de la biodiversidad está siendo afectada y qué pasará si nadie actúa?</p>
   `;
   document.getElementById('caseVideoTitle').textContent='Video o recurso principal del caso';
-  document.getElementById('caseVideoEmbed').src=data.videoEmbed;
-  document.getElementById('caseVideoFrame').classList.remove('hidden');
   document.getElementById('caseVideoBlurb').textContent=data.videoBlurb;
   document.getElementById('caseLinks').innerHTML=data.sources.map(source=>`<a class="${source.kind==='news'?'news':source.kind==='video'?'alt':''}" href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`).join('');
   document.getElementById('caseSourceMeta').innerHTML=data.sourceMeta;
