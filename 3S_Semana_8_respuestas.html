@@ -6,8 +6,8 @@
 <title>3S U4 - Respuestas Semana 8</title>
 <style>
   :root{
-    --bg:#07161f;
-    --bg2:#0d2430;
+    --bg:#0b1720;
+    --bg2:#14303d;
     --panel:#fffaf0;
     --ink:#1a313b;
     --muted:#5b6c74;
@@ -27,9 +27,9 @@
     overflow:hidden;
     font-family:"Segoe UI",system-ui,sans-serif;
     background:
-      radial-gradient(circle at 10% 15%, rgba(86,207,225,.22), transparent 18%),
-      radial-gradient(circle at 88% 82%, rgba(246,189,96,.18), transparent 24%),
-      linear-gradient(135deg, var(--bg), var(--bg2) 58%, #06111a);
+      radial-gradient(circle at 12% 18%, rgba(86,207,225,.18), transparent 18%),
+      radial-gradient(circle at 86% 78%, rgba(246,189,96,.16), transparent 22%),
+      linear-gradient(135deg, var(--bg), var(--bg2) 58%, #09131a);
   }
   .deck{
     width:100vw;
@@ -48,7 +48,7 @@
     width:100vw;
     height:100vh;
     scroll-snap-align:start;
-    padding:3.2vh 4vw 10vh;
+    padding:124px 4vw 94px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -57,8 +57,8 @@
   .blob{
     position:absolute;
     border-radius:999px;
-    opacity:.24;
-    filter:blur(5px);
+    opacity:.22;
+    filter:blur(6px);
     z-index:0;
   }
   .blob.a{width:210px;height:210px;left:-30px;top:-35px;background:#56cfe1}
@@ -68,12 +68,12 @@
     z-index:1;
     width:min(1260px,100%);
     max-height:100%;
+    overflow:auto;
     background:linear-gradient(180deg, rgba(255,255,255,.985), rgba(255,248,236,.985));
     color:var(--ink);
-    border-radius:34px;
+    border-radius:28px;
     padding:26px 28px;
     box-shadow:var(--shadow);
-    overflow:auto;
   }
   .frame.dark{
     background:linear-gradient(180deg, rgba(16,33,46,.96), rgba(11,24,34,.96));
@@ -94,33 +94,79 @@
   }
   h1,h2,h3,p{margin:0}
   h1{
-    font-size:clamp(40px,5.2vw,76px);
-    line-height:.96;
-    letter-spacing:-.05em;
+    font-size:clamp(38px,5vw,72px);
+    line-height:.98;
     font-weight:1000;
+    letter-spacing:0;
   }
   h2{
-    font-size:clamp(30px,3.8vw,56px);
-    line-height:1.03;
-    letter-spacing:-.04em;
+    font-size:clamp(28px,3.6vw,52px);
+    line-height:1.04;
     font-weight:1000;
+    letter-spacing:0;
   }
   h3{
-    font-size:clamp(20px,2vw,30px);
+    font-size:clamp(19px,1.9vw,28px);
     color:#0d6173;
     font-weight:900;
   }
   p{
-    font-size:clamp(17px,1.5vw,24px);
-    line-height:1.24;
+    font-size:clamp(16px,1.45vw,23px);
+    line-height:1.28;
   }
   .muted{color:var(--muted)}
+  .topbar{
+    position:fixed;
+    left:18px;
+    right:18px;
+    top:16px;
+    z-index:20;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    max-width:min(980px, calc(100vw - 170px));
+  }
+  .actions button,.actions a{
+    appearance:none;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    border-radius:999px;
+    padding:10px 14px;
+    font-weight:900;
+    font-size:14px;
+    cursor:pointer;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    backdrop-filter:blur(10px);
+  }
+  .counter{
+    flex:0 0 auto;
+    border-radius:999px;
+    padding:10px 14px;
+    background:rgba(0,0,0,.3);
+    color:#fff;
+    font-weight:1000;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+  }
   .nav{
     position:fixed;
     left:50%;
     bottom:14px;
     transform:translateX(-50%);
-    z-index:10;
+    z-index:20;
     display:flex;
     align-items:center;
     gap:10px;
@@ -138,41 +184,10 @@
     background:var(--gold);
     color:#17313c;
     font-weight:1000;
-    font-size:17px;
+    font-size:15px;
     padding:10px 14px;
     cursor:pointer;
-  }
-  .counter{
-    position:fixed;
-    right:18px;
-    top:16px;
-    z-index:10;
-    border-radius:999px;
-    padding:10px 14px;
-    background:rgba(0,0,0,.3);
-    color:#fff;
-    font-weight:1000;
-  }
-  .actions{
-    position:fixed;
-    left:18px;
-    top:16px;
-    z-index:10;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .actions button,.actions a{
-    appearance:none;
-    text-decoration:none;
-    border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.12);
-    color:#fff;
-    border-radius:999px;
-    padding:10px 14px;
-    font-weight:900;
-    font-size:14px;
-    cursor:pointer;
+    min-height:42px;
   }
   .grid-2{
     display:grid;
@@ -181,7 +196,7 @@
     margin-top:16px;
   }
   .card{
-    border-radius:24px;
+    border-radius:20px;
     padding:18px;
     background:#fff;
     border:1px solid #e6decd;
@@ -223,42 +238,87 @@
   @media (max-width: 900px){
     .grid-2{grid-template-columns:1fr}
     .frame{padding:20px}
+    .topbar{
+      left:14px;
+      right:14px;
+      top:14px;
+      flex-direction:column;
+      align-items:stretch;
+    }
+    .actions{
+      max-width:none;
+    }
+    .counter{
+      align-self:flex-end;
+    }
+    .slide{
+      padding-top:158px;
+    }
   }
   @media (max-width: 640px){
-    .actions{left:12px;right:12px}
-    .actions button,.actions a{font-size:12px;padding:9px 12px}
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .actions button,.actions a{
+      font-size:12px;
+      padding:9px 12px;
+      min-height:42px;
+    }
+    .nav{
+      gap:8px;
+      padding:8px 10px;
+    }
+    .nav button{
+      font-size:13px;
+      padding:9px 11px;
+    }
+    .slide{
+      padding-top:194px;
+    }
+  }
+  @media (max-width: 420px){
+    .actions{
+      grid-template-columns:1fr;
+    }
+    .slide{
+      padding-top:236px;
+    }
   }
 </style>
 </head>
 <body>
-  <div class="actions">
-    <a href="3S_Semana_8_clase_integrada.html" target="_blank">↩ Clase S8</a>
-    <button type="button" onclick="downloadAnswers()">⬇ Descargar respuestas</button>
-    <button type="button" onclick="window.print()">🖨 Imprimir / PDF</button>
-    <button type="button" onclick="resetAnswers()">🧹 Limpiar</button>
+  <div class="topbar">
+    <div class="actions">
+      <a href="3S_Semana_8_clase_integrada.html" target="_blank">Volver a clase</a>
+      <button type="button" onclick="window.print()">Descargar PDF</button>
+      <button type="button" onclick="downloadAnswers()">Descargar respuestas</button>
+      <button type="button" onclick="resetAnswers()">Limpiar</button>
+    </div>
+    <div class="counter"><span id="current">1</span>/<span id="total">1</span></div>
   </div>
-  <div class="counter"><span id="current">1</span>/<span id="total">1</span></div>
   <div class="nav">
-    <button type="button" onclick="moveSlide(-1)">◀</button>
+    <button type="button" onclick="moveSlide(-1)">Anterior</button>
     <span>Responde y desliza</span>
-    <button type="button" onclick="moveSlide(1)">▶</button>
+    <button type="button" onclick="moveSlide(1)">Siguiente</button>
   </div>
 
   <main class="deck" id="deck">
     <section class="slide">
       <div class="blob a"></div><div class="blob b"></div>
       <div class="frame dark">
-        <span class="eyebrow" style="background:rgba(255,255,255,.14);color:#dff8ff">📝 Cuaderno de respuestas · Semana 8</span>
-        <h1 style="margin-top:16px">Responde como si pensaras<br>en tres capas</h1>
-        <p style="margin-top:14px">Este cuaderno acompaña la presentación. Aquí no se trata de copiar frases: se trata de <strong>observar</strong>, <strong>explicar</strong> y <strong>calcular</strong> con lenguaje científico propio.</p>
+        <span class="eyebrow" style="background:rgba(255,255,255,.14);color:#dff8ff">Cuaderno de respuestas · Semana 8</span>
+        <h1 style="margin-top:16px">Responde en tres capas</h1>
+        <p style="margin-top:14px">Este cuaderno acompaña la presentación. La idea es observar, explicar y calcular con lenguaje científico propio.</p>
         <div class="grid-2">
           <article class="card tint-cyan">
-            <h3>💾 Guardado automático</h3>
+            <h3>Guardado automatico</h3>
             <p>Lo que escribas queda guardado en este navegador mientras trabajas.</p>
           </article>
           <article class="card tint-rose">
-            <h3>⬇ Descarga real</h3>
-            <p>Al final podrás bajar todo como archivo de texto con un clic.</p>
+            <h3>Salida en PDF y texto</h3>
+            <p>Puedes imprimir como PDF o descargar tus respuestas en un archivo de texto.</p>
           </article>
         </div>
       </div>
@@ -267,18 +327,18 @@
     <section class="slide">
       <div class="blob a"></div>
       <div class="frame">
-        <span class="eyebrow">💥 Parte 1 · Qué pasó</span>
-        <h2>Reacción química y evidencia</h2>
-        <p class="muted" style="margin-top:10px">Trabaja aquí las ideas del lunes: distinguir mezcla de reacción, identificar evidencias y pensar por qué clasificar importa.</p>
-        <div class="prompt"><p>1. Escribe tres evidencias que sostengan que en una mezcla de bicarbonato y vinagre ocurrió una reacción química real.</p></div>
+        <span class="eyebrow">Parte 1 · Que paso</span>
+        <h2>Reaccion quimica y evidencia</h2>
+        <p class="muted" style="margin-top:10px">Trabaja aqui las ideas del lunes: distinguir mezcla de reaccion, identificar evidencias y pensar por que clasificar importa.</p>
+        <div class="prompt"><p>1. Escribe tres evidencias que sostengan que en una mezcla de bicarbonato y vinagre ocurrio una reaccion quimica real.</p></div>
         <textarea class="short" data-save="p1_evidencias"></textarea>
         <div class="grid-2">
           <div>
-            <div class="prompt"><p>2. Explica por qué clasificar una reacción ayuda a anticipar productos y comportamientos.</p></div>
+            <div class="prompt"><p>2. Explica por que clasificar una reaccion ayuda a anticipar productos y comportamientos.</p></div>
             <textarea class="medium" data-save="p1_clasificar"></textarea>
           </div>
           <div>
-            <div class="prompt"><p>3. Si un gas escapa del recipiente, ¿por qué puede parecer que la masa cambia aunque la ley de conservación siga siendo válida?</p></div>
+            <div class="prompt"><p>3. Si un gas escapa del recipiente, por que puede parecer que la masa cambia aunque la ley de conservacion siga siendo valida?</p></div>
             <textarea class="medium" data-save="p1_masa"></textarea>
           </div>
         </div>
@@ -288,22 +348,22 @@
     <section class="slide">
       <div class="blob b"></div>
       <div class="frame">
-        <span class="eyebrow">🔥 Parte 2 · Cómo pasó</span>
-        <h2>Energía, activación y seguridad</h2>
-        <p class="muted" style="margin-top:10px">Esta parte corresponde a la clase de hoy. No basta decir “calienta” o “enfría”: hay que justificar qué pasa con la energía.</p>
+        <span class="eyebrow">Parte 2 · Como paso</span>
+        <h2>Energia, activacion y seguridad</h2>
+        <p class="muted" style="margin-top:10px">No basta decir que una reaccion calienta o enfria. Hay que justificar que pasa con la energia.</p>
         <div class="grid-2">
           <div class="card tint-rose">
-            <h3>🔥 Exotérmica</h3>
-            <div class="prompt"><p>4. Explica con tus palabras qué significa que una reacción sea exotérmica.</p></div>
+            <h3>Exotermica</h3>
+            <div class="prompt"><p>4. Explica con tus palabras que significa que una reaccion sea exotermica.</p></div>
             <textarea class="medium" data-save="p2_exotermica"></textarea>
           </div>
           <div class="card tint-cyan">
-            <h3>🧊 Endotérmica</h3>
-            <div class="prompt"><p>5. Explica con tus palabras qué significa que una reacción sea endotérmica.</p></div>
+            <h3>Endotermica</h3>
+            <div class="prompt"><p>5. Explica con tus palabras que significa que una reaccion sea endotermica.</p></div>
             <textarea class="medium" data-save="p2_endotermica"></textarea>
           </div>
         </div>
-        <div class="prompt"><p>6. ¿Es correcto decir que una reacción “produce energía”, o es más preciso decir que transforma energía química en otras formas? Defiende tu respuesta.</p></div>
+        <div class="prompt"><p>6. Es correcto decir que una reaccion produce energia, o es mas preciso decir que transforma energia quimica en otras formas? Defiende tu respuesta.</p></div>
         <textarea class="long" data-save="p2_precision"></textarea>
       </div>
     </section>
@@ -311,13 +371,13 @@
     <section class="slide">
       <div class="blob a"></div><div class="blob b"></div>
       <div class="frame">
-        <span class="eyebrow">🚨 Aplicación de hoy</span>
-        <h2>Cuando la energía importa para decidir</h2>
-        <div class="prompt"><p>7. ¿Por qué controlar el calor de una reacción puede ser importante en procesos domésticos o sanitarios?</p></div>
+        <span class="eyebrow">Aplicacion</span>
+        <h2>Cuando la energia importa para decidir</h2>
+        <div class="prompt"><p>7. Por que controlar el calor de una reaccion puede ser importante en procesos domesticos o sanitarios?</p></div>
         <textarea class="medium" data-save="p2_seguridad"></textarea>
-        <div class="prompt"><p>8. ¿Una reacción rápida es siempre más peligrosa que una lenta? Responde con criterio científico.</p></div>
+        <div class="prompt"><p>8. Una reaccion rapida es siempre mas peligrosa que una lenta? Responde con criterio cientifico.</p></div>
         <textarea class="medium" data-save="p2_rapidez"></textarea>
-        <div class="prompt"><p>9. Escribe un ejemplo propio de reacción exotérmica y otro de reacción endotérmica. Justifica ambos.</p></div>
+        <div class="prompt"><p>9. Escribe un ejemplo propio de reaccion exotermica y otro de reaccion endotermica. Justifica ambos.</p></div>
         <textarea class="long" data-save="p2_ejemplos"></textarea>
       </div>
     </section>
@@ -325,18 +385,18 @@
     <section class="slide">
       <div class="blob b"></div>
       <div class="frame">
-        <span class="eyebrow">⚖️ Parte 3 · Cuánto pasó</span>
-        <h2>Estequiometría y reactivo limitante</h2>
-        <p class="muted" style="margin-top:10px">Esta sección acompaña la clase de mañana: pasar del símbolo químico a la cantidad real.</p>
-        <div class="prompt"><p>10. Explica por qué una ecuación balanceada es necesaria antes de calcular cantidades reales.</p></div>
+        <span class="eyebrow">Parte 3 · Cuanto paso</span>
+        <h2>Estequiometria y reactivo limitante</h2>
+        <p class="muted" style="margin-top:10px">Esta seccion acompana la clase del miercoles: pasar del simbolo quimico a la cantidad real.</p>
+        <div class="prompt"><p>10. Explica por que una ecuacion balanceada es necesaria antes de calcular cantidades reales.</p></div>
         <textarea class="medium" data-save="p3_balanceo"></textarea>
         <div class="grid-2">
           <div>
-            <div class="prompt"><p>11. Define reactivo limitante con una explicación clara, no memorizada.</p></div>
+            <div class="prompt"><p>11. Define reactivo limitante con una explicacion clara, no memorizada.</p></div>
             <textarea class="medium" data-save="p3_limitante"></textarea>
           </div>
           <div>
-            <div class="prompt"><p>12. ¿Qué ocurre si duplicas un reactivo que ya estaba en exceso? Explica por qué.</p></div>
+            <div class="prompt"><p>12. Que ocurre si duplicas un reactivo que ya estaba en exceso? Explica por que.</p></div>
             <textarea class="medium" data-save="p3_exceso"></textarea>
           </div>
         </div>
@@ -346,17 +406,17 @@
     <section class="slide">
       <div class="blob a"></div><div class="blob b"></div>
       <div class="frame">
-        <span class="eyebrow">🧠 Integración final</span>
+        <span class="eyebrow">Integracion final</span>
         <h2>Respuesta completa de la semana</h2>
-        <div class="prompt"><p>13. Un equipo mezcla sustancias para preparar una solución de uso sanitario. Observa burbujas, cambio de temperatura y luego necesita decidir cantidades seguras. Explica científicamente esa situación usando reacción química, energía y estequiometría.</p></div>
+        <div class="prompt"><p>13. Un equipo mezcla sustancias para preparar una solucion de uso sanitario. Observa burbujas, cambio de temperatura y luego necesita decidir cantidades seguras. Explica cientificamente esa situacion usando reaccion quimica, energia y estequiometria.</p></div>
         <textarea class="long" data-save="final_integrada"></textarea>
-        <div class="prompt"><p>14. ¿Qué parte de la semana te exigió pensar más y por qué?</p></div>
+        <div class="prompt"><p>14. Que parte de la semana te exigio pensar mas y por que?</p></div>
         <textarea class="medium" data-save="final_metacognicion"></textarea>
       </div>
     </section>
   </main>
 
-  <div class="footer-note">El archivo descargado incluirá todas tus respuestas guardadas.</div>
+  <div class="footer-note">El archivo descargado incluira todas tus respuestas guardadas.</div>
 
 <script>
   const deck = document.getElementById("deck");
@@ -387,7 +447,7 @@
   }
 
   function resetAnswers() {
-    if (!confirm("Se borrarán las respuestas guardadas de este cuaderno. ¿Continuar?")) return;
+    if (!confirm("Se borraran las respuestas guardadas de este cuaderno. Continuar?")) return;
     fields.forEach((field) => {
       const key = "3s_sem8_" + field.dataset.save;
       localStorage.removeItem(key);
@@ -397,27 +457,27 @@
 
   function downloadAnswers() {
     const sections = [
-      ["Parte 1 · Qué pasó", ["p1_evidencias","p1_clasificar","p1_masa"]],
-      ["Parte 2 · Cómo pasó", ["p2_exotermica","p2_endotermica","p2_precision","p2_seguridad","p2_rapidez","p2_ejemplos"]],
-      ["Parte 3 · Cuánto pasó", ["p3_balanceo","p3_limitante","p3_exceso"]],
-      ["Integración final", ["final_integrada","final_metacognicion"]]
+      ["Parte 1 · Que paso", ["p1_evidencias","p1_clasificar","p1_masa"]],
+      ["Parte 2 · Como paso", ["p2_exotermica","p2_endotermica","p2_precision","p2_seguridad","p2_rapidez","p2_ejemplos"]],
+      ["Parte 3 · Cuanto paso", ["p3_balanceo","p3_limitante","p3_exceso"]],
+      ["Integracion final", ["final_integrada","final_metacognicion"]]
     ];
 
     const labels = {
-      p1_evidencias: "1. Evidencias de reacción",
+      p1_evidencias: "1. Evidencias de reaccion",
       p1_clasificar: "2. Utilidad de clasificar reacciones",
-      p1_masa: "3. Conservación de la masa",
-      p2_exotermica: "4. Qué significa exotérmica",
-      p2_endotermica: "5. Qué significa endotérmica",
-      p2_precision: "6. Precisión sobre energía",
-      p2_seguridad: "7. Energía y seguridad",
+      p1_masa: "3. Conservacion de la masa",
+      p2_exotermica: "4. Que significa exotermica",
+      p2_endotermica: "5. Que significa endotermica",
+      p2_precision: "6. Precision sobre energia",
+      p2_seguridad: "7. Energia y seguridad",
       p2_rapidez: "8. Rapidez y peligro",
       p2_ejemplos: "9. Ejemplos propios",
       p3_balanceo: "10. Necesidad del balanceo",
       p3_limitante: "11. Reactivo limitante",
       p3_exceso: "12. Reactivo en exceso",
-      final_integrada: "13. Explicación integrada",
-      final_metacognicion: "14. Metacognición"
+      final_integrada: "13. Explicacion integrada",
+      final_metacognicion: "14. Metacognicion"
     };
 
     let text = "3S U4 - Semana 8 - Respuestas del estudiante\n";
