@@ -24,7 +24,10 @@
   .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
   .imageWrap { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; background: #05090c; }
   .imageWrap img { width: 100%; height: 100%; object-fit: contain; filter: saturate(1.02) contrast(1.03); }
+  .slide.image .imageWrap { inset: 92px 24px 150px; background: transparent; }
+  .slide.image .imageWrap img { width: 100%; height: 100%; object-fit: contain; }
   .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,.58), rgba(0,0,0,.05) 28%, rgba(0,0,0,.08) 64%, rgba(0,0,0,.78)); }
+  .slide.image .shade { background: linear-gradient(to bottom, rgba(0,0,0,.66), rgba(0,0,0,.08) 18%, rgba(0,0,0,.08) 70%, rgba(0,0,0,.78)); }
   .slide.prompt .imageWrap img,
   .slide.intro .imageWrap img { filter: blur(4px) brightness(.48) saturate(.9); transform: scale(1.03); }
   .slide.prompt .shade,
@@ -71,6 +74,7 @@
   .close { width: auto; height: auto; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; border: 1px solid var(--line); background: rgba(255,255,255,.08); color: var(--ink); cursor: pointer; }
   .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; z-index: 10; transition: width .25s ease; }
   @media (max-width: 900px) {
+    .slide.image .imageWrap { inset: 82px 10px 176px; }
     .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
     .topbar { top: 10px; left: 12px; right: 12px; }
     .titleBox { max-width: 74vw; padding: 10px 12px; }
