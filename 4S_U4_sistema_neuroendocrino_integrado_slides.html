@@ -6,70 +6,66 @@
 <title>4S | U4 | Sistema nervioso y endocrino</title>
 <style>
   :root {
-    --bg: #05070b;
-    --panel: rgba(10, 14, 24, .62);
-    --panel-2: rgba(255, 255, 255, .08);
-    --ink: #f5f8ff;
-    --muted: #d7e2ff;
-    --line: rgba(255, 255, 255, .14);
-    --accent: #8cc8ff;
-    --accent-2: #58f0d0;
-    --shadow: 0 20px 60px rgba(0, 0, 0, .35);
+    --bg: #070506;
+    --panel: rgba(12, 8, 10, .70);
+    --panel2: rgba(255, 242, 232, .93);
+    --ink: #fff7ef;
+    --muted: #ead2c7;
+    --accent: #ffbe97;
+    --accent2: #ff7d6d;
+    --line: rgba(255,255,255,.18);
+    --link: #fff2c9;
   }
   * { box-sizing: border-box; }
   html, body {
     margin: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     background: var(--bg);
     color: var(--ink);
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: "Segoe UI", Inter, system-ui, sans-serif;
+    overflow: hidden;
   }
   body { user-select: none; }
   .deck {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background:
-      radial-gradient(circle at 20% 18%, rgba(38, 82, 157, .20), transparent 26%),
-      radial-gradient(circle at 78% 82%, rgba(23, 160, 140, .18), transparent 22%),
-      linear-gradient(180deg, #0a0f19 0%, #05070b 100%);
+    background: radial-gradient(circle at 35% 20%, #241111 0%, #070506 55%, #020202 100%);
   }
   .slide {
     position: absolute;
     inset: 0;
     opacity: 0;
-    transform: scale(1.01);
+    transform: scale(1.015);
     transition: opacity .28s ease, transform .28s ease;
     display: grid;
     place-items: center;
+    padding: 0;
   }
   .slide.active {
     opacity: 1;
     transform: scale(1);
     z-index: 2;
   }
-  .image-wrap {
+  .imageWrap {
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
-    padding: 18px 18px 26px;
+    overflow: hidden;
   }
-  .image-wrap img {
+  .imageWrap img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: saturate(1.02) contrast(1.02);
+    filter: saturate(1.02) contrast(1.03);
   }
   .shade {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background:
-      linear-gradient(to bottom, rgba(0,0,0,.58), rgba(0,0,0,.08) 22%, rgba(0,0,0,0) 44%, rgba(0,0,0,.12) 72%, rgba(0,0,0,.70)),
-      linear-gradient(to right, rgba(0,0,0,.24), rgba(0,0,0,0) 24%, rgba(0,0,0,0) 76%, rgba(0,0,0,.24));
+    background: linear-gradient(to bottom, rgba(0,0,0,.60), rgba(0,0,0,.02) 29%, rgba(0,0,0,.08) 68%, rgba(0,0,0,.74));
   }
   .topbar {
     position: absolute;
@@ -80,77 +76,117 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    z-index: 5;
+    z-index: 4;
   }
-  .title-box {
-    max-width: min(760px, 72vw);
-    padding: 12px 16px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, rgba(7, 12, 23, .74), rgba(24, 38, 68, .44));
+  .titleBox {
+    max-width: min(920px, 78vw);
+    padding: 12px 16px 10px;
+    background: linear-gradient(135deg, rgba(20,10,10,.78), rgba(50,18,18,.52));
     border: 1px solid var(--line);
+    border-radius: 18px;
     backdrop-filter: blur(8px);
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 40px rgba(0,0,0,.22);
   }
-  .kicker {
-    margin: 0 0 6px;
+  .eyebrow {
+    margin: 0 0 5px;
+    color: var(--accent);
     font-size: 11px;
     font-weight: 900;
     letter-spacing: .13em;
     text-transform: uppercase;
-    color: var(--accent);
   }
   h1 {
     margin: 0;
-    font-size: clamp(21px, 2.1vw, 38px);
-    line-height: 1.05;
+    font-size: clamp(21px, 2.2vw, 38px);
+    line-height: 1.06;
     letter-spacing: -.02em;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
+    text-shadow: 0 2px 12px rgba(0,0,0,.5);
   }
   .counter {
-    min-width: 84px;
-    padding: 10px 12px;
+    flex: 0 0 auto;
+    min-width: 88px;
     text-align: center;
+    padding: 10px 12px;
     border-radius: 999px;
-    background: rgba(7, 12, 23, .72);
+    background: rgba(10,7,7,.65);
     border: 1px solid var(--line);
     color: var(--muted);
-    font-weight: 900;
+    font-weight: 800;
     font-size: 14px;
-    letter-spacing: .03em;
+    letter-spacing: .02em;
     backdrop-filter: blur(8px);
-    box-shadow: var(--shadow);
   }
-  .footer {
+  .notes {
     position: absolute;
     left: 22px;
     right: 22px;
     bottom: 18px;
-    z-index: 5;
-    display: flex;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(340px, 1.35fr);
+    gap: 14px;
     align-items: end;
-    justify-content: space-between;
-    gap: 12px;
   }
-  .part-pill, .hint-pill {
-    padding: 10px 14px;
-    border-radius: 999px;
+  .notes.single {
+    grid-template-columns: minmax(280px, 900px);
+    justify-content: start;
+  }
+  .card {
     background: var(--panel);
     border: 1px solid var(--line);
-    backdrop-filter: blur(8px);
-    box-shadow: var(--shadow);
+    border-radius: 20px;
+    padding: 14px 16px;
+    box-shadow: 0 14px 50px rgba(0,0,0,.32);
+    backdrop-filter: blur(9px);
   }
-  .part-pill {
-    color: var(--ink);
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: .05em;
+  .label {
     text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
+    margin-bottom: 8px;
   }
-  .hint-pill {
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,190,151,.13);
+    border: 1px solid rgba(255,190,151,.38);
+    color: #ffe8d9;
+    font-size: clamp(13px, 1.15vw, 16px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .comment {
+    font-size: clamp(15px, 1.34vw, 20px);
+    line-height: 1.34;
+    margin: 0;
+    font-weight: 650;
+    color: #fff7ef;
+  }
+  .focus {
+    margin: 8px 0 0;
     color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: clamp(13px, 1.02vw, 15px);
+    line-height: 1.36;
   }
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .links a {
+    color: var(--link);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .links a:hover { text-decoration: underline; }
   .controls {
     position: absolute;
     right: 16px;
@@ -163,107 +199,38 @@
     opacity: .18;
     transition: opacity .2s ease;
   }
-  .controls:hover { opacity: .92; }
-  .controls button {
-    width: 38px;
-    height: 38px;
+  .controls:hover { opacity: .9; }
+  button {
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.24);
-    background: rgba(0,0,0,.46);
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.45);
     color: white;
-    font-size: 20px;
+    font-size: 19px;
     line-height: 1;
     cursor: pointer;
   }
-  .controls button:hover { background: rgba(140, 200, 255, .22); }
+  button:hover { background: rgba(255,180,141,.22); }
   .hit {
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 6;
+    z-index: 5;
   }
   .hit.left { left: 0; width: 18%; }
   .hit.right { right: 0; width: 18%; }
-  .overview {
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    background: rgba(3, 6, 10, .95);
-    display: none;
-    padding: 24px;
-    overflow: auto;
-  }
-  .overview.show { display: block; }
-  .overview-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-  .overview-head h2 {
-    margin: 0;
-    font-size: 24px;
-  }
-  .close-btn {
-    width: auto;
-    height: auto;
-    padding: 9px 13px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 900;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-  .thumb {
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: rgba(255,255,255,.05);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform .15s ease, border-color .15s ease;
-  }
-  .thumb:hover {
-    transform: translateY(-2px);
-    border-color: rgba(140, 200, 255, .6);
-  }
-  .thumb img {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-    background: #0e1626;
-  }
-  .thumb div {
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--ink);
-    font-weight: 800;
-  }
-  .progress {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    width: 0%;
-    z-index: 10;
-    transition: width .24s ease;
-  }
   .help {
     position: absolute;
-    top: 84px;
+    top: 82px;
     right: 22px;
     z-index: 9;
-    width: 280px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: rgba(7, 12, 23, .82);
+    background: rgba(10,7,7,.78);
+    color: #ffe5d8;
     border: 1px solid var(--line);
-    color: var(--muted);
+    border-radius: 16px;
+    padding: 12px 14px;
+    width: 292px;
     font-size: 13px;
     line-height: 1.45;
     opacity: 0;
@@ -272,18 +239,81 @@
     transition: .2s ease;
     backdrop-filter: blur(8px);
   }
-  .help.show {
-    opacity: 1;
-    transform: translateY(0);
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: rgba(5,4,4,.94);
+    display: none;
+    padding: 26px;
+    overflow: auto;
+  }
+  .overview.show { display: block; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+  }
+  .thumb {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .thumb:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,180,141,.65);
+  }
+  .thumb img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb div {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #ffe6d8;
+    font-weight: 800;
+  }
+  .overviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+  .overviewHeader h2 { margin: 0; font-size: 24px; }
+  .close {
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    z-index: 10;
+    transition: width .25s ease;
   }
   @media (max-width: 900px) {
+    .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
+    .notes.single { grid-template-columns: 1fr; }
     .topbar { top: 10px; left: 12px; right: 12px; }
-    .footer { left: 12px; right: 12px; bottom: 10px; }
-    .image-wrap { padding: 8px 8px 18px; }
-    .title-box { max-width: 74vw; padding: 10px 12px; }
-    .hint-pill { display: none; }
+    .titleBox { max-width: 74vw; padding: 10px 12px; }
+    .card { padding: 10px 12px; border-radius: 16px; }
+    .focus { display: none; }
     .controls { right: 8px; }
-    .kicker { font-size: 10px; }
+    .chip { padding: 6px 8px; }
   }
 </style>
 </head>
@@ -306,10 +336,7 @@
     H: mostrar u ocultar esta ayuda
   </div>
   <div class="overview" id="overview">
-    <div class="overview-head">
-      <h2>Vista general</h2>
-      <button class="close-btn" onclick="toggleOverview()">Cerrar</button>
-    </div>
+    <div class="overviewHeader"><h2>Vista general de imágenes</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
     <div class="grid" id="thumbGrid"></div>
   </div>
   <div class="progress" id="progress"></div>
@@ -317,112 +344,254 @@
 <script>
 const slides = [
   {
+    kind: "theory",
+    section: "Apertura",
     title: "Ruta general de la clase integrada",
-    part: "Inicio",
-    hint: "Sistema nervioso -> puente neuroendocrino -> glandulas -> casos",
-    image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png"
+    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png",
+    keywords: ["Estímulo", "Nervioso", "Hipotálamo", "Hipófisis", "Hormonas", "Homeostasis"],
+    comment: "La clase sigue una sola ruta: un estímulo activa respuestas nerviosas rápidas y, cuando hace falta sostener la regulación, entra el sistema endocrino.",
+    focus: "Idea fuerza: el hipotálamo y la hipófisis traducen señales nerviosas en respuestas hormonales."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "Sistema nervioso: mapa general",
-    part: "Bloque 1",
-    hint: "Ubicacion de estructuras y flujo general",
-    image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png"
+    image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png",
+    keywords: ["Encéfalo", "Médula", "Nervios", "Receptores", "Efectores"],
+    comment: "Primero ubicamos la red completa: detectar, integrar, transmitir y responder.",
+    focus: "Sirve para que el estudiante no vea neuronas sueltas, sino un sistema corporal organizado."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "La neurona como unidad funcional",
-    part: "Bloque 1",
-    hint: "Partes clave de la neurona",
-    image: "assets/4s_neuroendocrino/02_partes_neurona.png"
+    image: "assets/4s_neuroendocrino/02_partes_neurona.png",
+    keywords: ["Dendritas", "Axón", "Mielina", "Sinapsis"],
+    comment: "La arquitectura de la neurona explica por qué el sistema nervioso puede transmitir información con tanta rapidez y precisión.",
+    focus: "Recibe, integra, conduce y transmite."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "Impulso nervioso y velocidad de respuesta",
-    part: "Bloque 1",
-    hint: "Senal electrica, direccion y rapidez",
-    image: "assets/4s_neuroendocrino/03_impulso_nervioso.png"
+    image: "assets/4s_neuroendocrino/03_impulso_nervioso.png",
+    keywords: ["Reposo", "Despolarización", "Propagación", "Dirección"],
+    comment: "Aquí aparece la lógica del sistema nervioso: una señal rápida, por eventos, que se propaga cuando se supera el umbral.",
+    focus: "El modelo que luego compararemos con la regulación hormonal."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "Tipos de neuronas",
-    part: "Bloque 1",
-    hint: "Sensoriales, interneuronas y motoras",
-    image: "assets/4s_neuroendocrino/04_tipos_neuronas.png"
+    image: "assets/4s_neuroendocrino/04_tipos_neuronas.png",
+    keywords: ["Sensitiva", "Interneurona", "Motora"],
+    comment: "No todas las neuronas hacen lo mismo: unas detectan, otras integran y otras ejecutan la respuesta.",
+    focus: "Con esto se entiende mejor el flujo de información."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "Arco reflejo",
-    part: "Bloque 1",
-    hint: "Ruta corta de supervivencia",
-    image: "assets/4s_neuroendocrino/05_arco_reflejo.png"
+    image: "assets/4s_neuroendocrino/05_arco_reflejo.png",
+    keywords: ["Reflejo", "Médula", "Retirada", "Supervivencia"],
+    comment: "El arco reflejo prueba que no toda respuesta necesita pasar primero por una decisión consciente.",
+    focus: "Ruta corta, rápida y muy útil para la supervivencia."
   },
   {
+    kind: "theory",
+    section: "Bloque 1",
     title: "SNC y SNP",
-    part: "Bloque 1",
-    hint: "Centro de integracion y red de conexion",
-    image: "assets/4s_neuroendocrino/06_snc_vs_snp.png"
+    image: "assets/4s_neuroendocrino/06_snc_vs_snp.png",
+    keywords: ["SNC", "SNP", "Integración", "Conexión"],
+    comment: "El sistema nervioso central interpreta e integra; el periférico conecta el cuerpo con ese centro de control.",
+    focus: "Pensar, sentir y responder forman una sola cadena funcional."
   },
   {
-    title: "Sinapsis quimica",
-    part: "Bloque 1",
-    hint: "La neurona le habla a otra neurona",
-    image: "assets/4s_neuroendocrino/07_sinapsis_quimica.png"
+    kind: "theory",
+    section: "Bloque 1",
+    title: "Sinapsis química",
+    image: "assets/4s_neuroendocrino/07_sinapsis_quimica.png",
+    keywords: ["Neurotransmisor", "Receptor", "Espacio sináptico"],
+    comment: "La rapidez nerviosa también depende de mensajeros químicos, pero liberados en puntos muy específicos.",
+    focus: "Es una señal local y precisa, no una regulación masiva por sangre."
   },
   {
-    title: "Plasticidad, poda y reorganizacion",
-    part: "Bloque 1",
-    hint: "Cambios del sistema nervioso a lo largo del desarrollo",
-    image: "assets/4s_neuroendocrino/08_plasticidad_poda.png"
+    kind: "theory",
+    section: "Bloque 1",
+    title: "Plasticidad, poda y reorganización",
+    image: "assets/4s_neuroendocrino/08_plasticidad_poda.png",
+    keywords: ["Plasticidad", "Poda", "Aprendizaje", "Redes"],
+    comment: "El sistema nervioso no es fijo: cambia con el desarrollo, la experiencia y el aprendizaje.",
+    focus: "Sirve para relacionar estructura, función y adaptación."
   },
   {
+    kind: "theory",
+    section: "Bloque 2",
     title: "Sistema endocrino: panorama general",
-    part: "Bloque 2",
-    hint: "Regulacion lenta, sostenida y distribuida",
-    image: "assets/4s_neuroendocrino/09_sistema_endocrino_general.png"
+    image: "assets/4s_neuroendocrino/09_sistema_endocrino_general.png",
+    keywords: ["Glándulas", "Hormonas", "Sangre", "Regulación"],
+    comment: "Ahora cambiamos de lógica: el sistema endocrino regula más lento, pero sostiene cambios durante más tiempo.",
+    focus: "Es la base para entender homeostasis y ejes hormonales."
   },
   {
-    title: "Glandulas y hormonas",
-    part: "Bloque 2",
-    hint: "Quien produce y quien responde",
-    image: "assets/4s_neuroendocrino/10_glandulas_hormonas.png"
+    kind: "theory",
+    section: "Bloque 2",
+    title: "Glándulas y hormonas",
+    image: "assets/4s_neuroendocrino/10_glandulas_hormonas.png",
+    keywords: ["Tiroides", "Páncreas", "Suprarrenales", "Gónadas"],
+    comment: "Cada glándula libera mensajeros químicos que actúan en órganos diana concretos.",
+    focus: "El estudiante necesita ubicar quién produce y quién responde."
   },
   {
-    title: "Hormona, receptor y organo diana",
-    part: "Bloque 2",
-    hint: "La senal hormonal depende del receptor correcto",
-    image: "assets/4s_neuroendocrino/11_hormona_organo_diana.png"
+    kind: "theory",
+    section: "Bloque 2",
+    title: "Hormona, receptor y órgano diana",
+    image: "assets/4s_neuroendocrino/11_hormona_organo_diana.png",
+    keywords: ["Hormona", "Receptor", "Especificidad"],
+    comment: "Una hormona solo actúa donde existe el receptor adecuado. Por eso una misma sangre transporta mensajes distintos sin confundirlos.",
+    focus: "Aquí aparece la idea de especificidad biológica."
   },
   {
+    kind: "theory",
+    section: "Bloque 2",
     title: "Homeostasis de glucosa",
-    part: "Bloque 2",
-    hint: "Retroalimentacion y control corporal",
-    image: "assets/4s_neuroendocrino/12_homeostasis_glucosa.png"
+    image: "assets/4s_neuroendocrino/12_homeostasis_glucosa.png",
+    keywords: ["Insulina", "Glucagón", "Retroalimentación", "Homeostasis"],
+    comment: "La glucosa es un gran ejemplo de control por retroalimentación: cuando sube o baja, el cuerpo corrige.",
+    focus: "El endocrino funciona como un sistema de ajuste continuo."
   },
   {
-    title: "Hipotalamo e hipofisis",
-    part: "Bloque 3",
-    hint: "Puente principal entre sistema nervioso y endocrino",
-    image: "assets/4s_neuroendocrino/13_hipotalamo_hipofisis.png"
+    kind: "theory",
+    section: "Bloque 3",
+    title: "Hipotálamo e hipófisis",
+    image: "assets/4s_neuroendocrino/13_hipotalamo_hipofisis.png",
+    keywords: ["Hipotálamo", "Hipófisis", "Adenohipófisis", "Neurohipófisis"],
+    comment: "Este es el puente central de la clase: el cerebro coordina gran parte del sistema endocrino a través de la hipófisis.",
+    focus: "Sin este punto, no se entiende la integración neuroendocrina."
   },
   {
+    kind: "theory",
+    section: "Bloque 3",
     title: "Eje neuroendocrino",
-    part: "Bloque 3",
-    hint: "Como una senal nerviosa termina activando glandulas",
-    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png"
+    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png",
+    keywords: ["Eje", "ACTH", "TSH", "Feedback"],
+    comment: "Una señal nerviosa puede terminar activando glándulas distantes. Esa es la lógica profunda del eje neuroendocrino.",
+    focus: "De aquí salen los casos reales del cierre."
   },
   {
-    title: "Estres: respuesta integrada",
-    part: "Bloque 4",
-    hint: "Ejemplo real de accion conjunta",
-    image: "assets/4s_neuroendocrino/15_estres_integrado.png"
+    kind: "theory",
+    section: "Bloque 4",
+    title: "Estrés: respuesta integrada",
+    image: "assets/4s_neuroendocrino/15_estres_integrado.png",
+    keywords: ["Estrés", "Cortisol", "Alerta", "Adaptación"],
+    comment: "El estrés muestra cómo se combinan respuesta nerviosa inmediata y regulación hormonal sostenida.",
+    focus: "Es uno de los mejores ejemplos de integración entre ambos sistemas."
   },
   {
+    kind: "theory",
+    section: "Bloque 4",
     title: "Enfermedades endocrinas",
-    part: "Bloque 4",
-    hint: "Hipotiroidismo, hipertiroidismo, diabetes y desregulacion",
-    image: "assets/4s_neuroendocrino/16_enfermedades_endocrinas.png"
+    image: "assets/4s_neuroendocrino/16_enfermedades_endocrinas.png",
+    keywords: ["Diabetes", "Tiroides", "Desequilibrio hormonal"],
+    comment: "Cuando el control hormonal falla, el cuerpo pierde estabilidad y aparecen síntomas sistémicos.",
+    focus: "Nos prepara para leer los casos con más rigor."
   },
   {
-    title: "Cierre: comparar dos algoritmos biologicos",
-    part: "Sintesis",
-    hint: "Nervioso = rapido por eventos | endocrino = bucles de retroalimentacion",
-    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png"
+    kind: "case",
+    section: "Caso real 1",
+    title: "Epilepsia en adolescente: presentación del caso",
+    image: "assets/4s_casos_reales/01_epilepsia_caso.png",
+    summary: "Caso neurológico. La epilepsia ocurre cuando grupos de neuronas generan actividad eléctrica anormal que puede provocar desconexiones breves, convulsiones u otras alteraciones del comportamiento.",
+    detail: "En clase sirve para conectar impulso nervioso, sinapsis, circuitos neuronales y coordinación del sistema nervioso.",
+    links: [
+      { label: "Fuente médica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
+      { label: "Video testimonio: Tyler's Patient Story", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 1",
+    title: "Epilepsia: lectura científica del caso",
+    image: "assets/4s_casos_reales/02_epilepsia_tecnica.png",
+    summary: "Aquí el caso se reinterpreta con los contenidos de la clase: redes neuronales, sinapsis y descargas eléctricas excesivas y sincronizadas.",
+    detail: "La epilepsia es un excelente ejemplo de cómo un problema en la señal nerviosa puede alterar movimiento, conciencia, percepción y conducta.",
+    links: [
+      { label: "Volver a la fuente médica", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
+      { label: "Abrir video del caso", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 2",
+    title: "Insuficiencia suprarrenal / Addison: presentación del caso",
+    image: "assets/4s_casos_reales/03_addison_caso.png",
+    summary: "Caso endocrinológico. En la insuficiencia suprarrenal las glándulas suprarrenales no producen suficiente cortisol, y eso altera energía, presión arterial y respuesta al estrés.",
+    detail: "Este caso permite leer cansancio extremo, mareo, debilidad y homeostasis fallida como consecuencias hormonales reales.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Adrenal Insufficiency", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
+      { label: "Historia de paciente: CHOP Addison stories", url: "https://www.chop.edu/conditions-diseases/adrenal-insufficiency-addison-s-disease/patient-stories-by-condition" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 2",
+    title: "Addison: lectura científica del caso",
+    image: "assets/4s_casos_reales/04_addison_tecnica.png",
+    summary: "Aquí se explica el eje hipotálamo-hipófisis-suprarrenal y la producción insuficiente de cortisol.",
+    detail: "El caso permite mostrar que un problema endocrino no es solo 'hormonas bajas': afecta respuesta al estrés, equilibrio interno y funcionamiento cotidiano.",
+    links: [
+      { label: "Volver a la fuente médica", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
+      { label: "Historia personal: Sarah's Story with Addison's", url: "https://www.addisonsdisease.org.uk/blog/sarahs-story-living-with-addisons-and-my-journey-so-far" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 3",
+    title: "Enfermedad de Cushing por adenoma hipofisario: presentación del caso",
+    image: "assets/4s_casos_reales/05_cushing_caso.png",
+    summary: "Caso neuroendocrino. En la enfermedad de Cushing un adenoma en la hipófisis puede aumentar la ACTH y terminar elevando demasiado el cortisol.",
+    detail: "Es uno de los mejores casos integradores porque empieza cerca del cerebro y termina alterando metabolismo, energía, estado emocional y composición corporal.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
+      { label: "Video testimonio: Erin Kelley treated for Cushing's Syndrome", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 3",
+    title: "Cushing: lectura científica del caso",
+    image: "assets/4s_casos_reales/06_cushing_tecnica.png",
+    summary: "La lógica del caso es completamente neuroendocrina: hipófisis, ACTH, suprarrenales y exceso de cortisol.",
+    detail: "Aquí se ve con claridad que el sistema nervioso y el endocrino no trabajan separados, sino como una red de control corporal.",
+    links: [
+      { label: "Volver a la fuente médica", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
+      { label: "Abrir video del caso", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 4",
+    title: "Tumor hipofisario / hipopituitarismo: presentación del caso",
+    image: "assets/4s_casos_reales/07_hipofisis_caso.png",
+    summary: "Caso neuroendocrino. Un tumor en la hipófisis o una falla hipofisaria puede alterar múltiples hormonas y producir cefalea, alteraciones visuales, cansancio y cambios sistémicos.",
+    detail: "Este caso muestra que una estructura muy pequeña, en la base del cerebro, puede afectar muchas funciones del organismo.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Pituitary Tumors", url: "https://www.endocrine.org/patient-engagement/endocrine-library/pituitary-tumors" },
+      { label: "Fuente médica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
+      { label: "Historia real: Olivia's Pituitary Tumor Story", url: "https://www.wolfsonchildrens.com/services/brain/olivia-brain-story" }
+    ]
+  },
+  {
+    kind: "case",
+    section: "Caso real 4",
+    title: "Hipófisis: lectura científica del caso",
+    image: "assets/4s_casos_reales/08_hipofisis_tecnica.png",
+    summary: "La hipófisis actúa como puente entre sistema nervioso y endocrino. Si se lesiona o comprime, pueden fallar varios ejes hormonales a la vez.",
+    detail: "Esta lámina cierra la unidad porque resume el papel del hipotálamo, la hipófisis y las glándulas diana como un sistema integrado.",
+    links: [
+      { label: "Fuente médica: Endocrine Society - Brain Hormones", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hormones-and-endocrine-function/brain-hormones" },
+      { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
+    ]
   }
 ];
 
@@ -430,32 +599,63 @@ let current = 0;
 const host = document.getElementById("slideHost");
 const grid = document.getElementById("thumbGrid");
 
-function makeSlide(s, i) {
-  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
-    <div class="image-wrap"><img src="${s.image}" alt="${s.title}"></div>
+function renderTheory(s, i) {
+  return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
+    <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
     <div class="shade"></div>
     <div class="topbar">
-      <div class="title-box">
-        <p class="kicker">${s.part}</p>
+      <div class="titleBox">
+        <p class="eyebrow">${s.section}</p>
         <h1>${s.title}</h1>
       </div>
       <div class="counter">${i + 1} / ${slides.length}</div>
     </div>
-    <div class="footer">
-      <div class="part-pill">${s.part}</div>
-      <div class="hint-pill">${s.hint}</div>
+    <div class="notes">
+      <div class="card">
+        <div class="label">Palabras clave</div>
+        <div class="chips">${s.keywords.map(k => `<span class="chip">${k}</span>`).join("")}</div>
+      </div>
+      <div class="card">
+        <div class="label">Clave de lectura</div>
+        <p class="comment">${s.comment}</p>
+        <p class="focus">${s.focus}</p>
+      </div>
     </div>
   </section>`;
 }
 
+function renderCase(s, i) {
+  return `<section class="slide ${i===0 ? "active" : ""}" data-index="${i}">
+    <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="shade"></div>
+    <div class="topbar">
+      <div class="titleBox">
+        <p class="eyebrow">${s.section}</p>
+        <h1>${s.title}</h1>
+      </div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="notes">
+      <div class="card">
+        <div class="label">Bibliografía y enlaces</div>
+        <div class="links">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
+      </div>
+      <div class="card">
+        <div class="label">Qué nos muestra el caso</div>
+        <p class="comment">${s.summary}</p>
+        <p class="focus">${s.detail}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function makeSlide(s, i) {
+  return s.kind === "case" ? renderCase(s, i) : renderTheory(s, i);
+}
+
 function render() {
   host.innerHTML = slides.map(makeSlide).join("");
-  grid.innerHTML = slides.map((s, i) =>
-    `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);">
-      <img src="${s.image}" alt="${s.title}">
-      <div>${i + 1}. ${s.title}</div>
-    </div>`
-  ).join("");
+  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image}" alt="${s.title}"><div>${i + 1}. ${s.title}</div></div>`).join("");
   updateProgress();
 }
 
@@ -480,9 +680,7 @@ function toggleOverview(force) {
   ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
 }
 
-function toggleHelp() {
-  document.getElementById("help").classList.toggle("show");
-}
+function toggleHelp() { document.getElementById("help").classList.toggle("show"); }
 
 function fullscreen() {
   if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
@@ -501,7 +699,7 @@ document.addEventListener("keydown", e => {
 render();
 setTimeout(() => {
   document.getElementById("help").classList.add("show");
-  setTimeout(() => document.getElementById("help").classList.remove("show"), 4500);
+  setTimeout(() => document.getElementById("help").classList.remove("show"), 5000);
 }, 600);
 </script>
 </body>
