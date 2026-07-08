@@ -50,14 +50,11 @@
   }
   .imageWrap {
     position: absolute;
-    top: 108px;
-    left: 24px;
-    right: 24px;
-    bottom: 214px;
+    inset: 0;
     display: grid;
     place-items: center;
     overflow: hidden;
-    border-radius: 24px;
+    padding: 18px;
   }
   .imageWrap img {
     width: 100%;
@@ -120,77 +117,19 @@
     letter-spacing: .02em;
     backdrop-filter: blur(8px);
   }
-  .notes {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 18px;
-    z-index: 4;
-    display: grid;
-    grid-template-columns: minmax(280px, 1fr) minmax(340px, 1.35fr);
-    gap: 14px;
-    align-items: end;
-  }
-  .notes.single {
-    grid-template-columns: minmax(280px, 900px);
-    justify-content: start;
-  }
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 14px 16px;
-    box-shadow: 0 14px 50px rgba(0,0,0,.32);
-    backdrop-filter: blur(9px);
-  }
-  .label {
-    text-transform: uppercase;
-    letter-spacing: .13em;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 900;
-    margin-bottom: 8px;
-  }
-  .chips {
+  .mini-links {
+    margin-top: 8px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
   }
-  .chip {
-    padding: 7px 10px;
-    border-radius: 999px;
-    background: rgba(255,190,151,.13);
-    border: 1px solid rgba(255,190,151,.38);
-    color: #ffe8d9;
-    font-size: clamp(13px, 1.15vw, 16px);
-    font-weight: 800;
-    white-space: nowrap;
-  }
-  .comment {
-    font-size: clamp(15px, 1.34vw, 20px);
-    line-height: 1.34;
-    margin: 0;
-    font-weight: 650;
-    color: #fff7ef;
-  }
-  .focus {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: clamp(13px, 1.02vw, 15px);
-    line-height: 1.36;
-  }
-  .links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .links a {
+  .mini-links a {
     color: var(--link);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 800;
   }
-  .links a:hover { text-decoration: underline; }
+  .mini-links a:hover { text-decoration: underline; }
   .controls {
     position: absolute;
     right: 16px;
@@ -310,20 +249,12 @@
     transition: width .25s ease;
   }
   @media (max-width: 900px) {
-    .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
-    .notes.single { grid-template-columns: 1fr; }
     .topbar { top: 10px; left: 12px; right: 12px; }
     .titleBox { max-width: 74vw; padding: 10px 12px; }
-    .card { padding: 10px 12px; border-radius: 16px; }
-    .focus { display: none; }
     .controls { right: 8px; }
-    .chip { padding: 6px 8px; }
     .imageWrap {
-      top: 90px;
-      left: 10px;
-      right: 10px;
-      bottom: 258px;
-      border-radius: 18px;
+      inset: 0;
+      padding: 10px;
     }
   }
 </style>
@@ -621,17 +552,6 @@ function renderTheory(s, i) {
       </div>
       <div class="counter">${i + 1} / ${slides.length}</div>
     </div>
-    <div class="notes">
-      <div class="card">
-        <div class="label">Palabras clave</div>
-        <div class="chips">${s.keywords.map(k => `<span class="chip">${k}</span>`).join("")}</div>
-      </div>
-      <div class="card">
-        <div class="label">Clave de lectura</div>
-        <p class="comment">${s.comment}</p>
-        <p class="focus">${s.focus}</p>
-      </div>
-    </div>
   </section>`;
 }
 
@@ -643,19 +563,9 @@ function renderCase(s, i) {
       <div class="titleBox">
         <p class="eyebrow">${s.section}</p>
         <h1>${s.title}</h1>
+        <div class="mini-links">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
       </div>
       <div class="counter">${i + 1} / ${slides.length}</div>
-    </div>
-    <div class="notes">
-      <div class="card">
-        <div class="label">Bibliografía y enlaces</div>
-        <div class="links">${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}</div>
-      </div>
-      <div class="card">
-        <div class="label">Qué nos muestra el caso</div>
-        <p class="comment">${s.summary}</p>
-        <p class="focus">${s.detail}</p>
-      </div>
     </div>
   </section>`;
 }
