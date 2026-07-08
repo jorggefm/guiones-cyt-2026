@@ -100,16 +100,24 @@
   .choiceGrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 18px;
   }
   .caseButton {
+    width: 100%;
+    height: auto;
+    min-height: 176px;
+    border-radius: 18px;
     border: 1px solid rgba(255,255,255,.20);
     background: linear-gradient(135deg, rgba(255,179,107,.18), rgba(255,94,86,.12));
     color: #fff7ef;
-    padding: 22px;
-    min-height: 138px;
+    padding: 0;
     cursor: pointer;
     text-align: left;
+    display: grid;
+    grid-template-columns: 44% 1fr;
+    overflow: hidden;
+    font-size: inherit;
+    line-height: normal;
     transition: transform .16s ease, border-color .16s ease, background .16s ease;
   }
   .caseButton:hover {
@@ -119,14 +127,28 @@
   }
   .caseButton strong {
     display: block;
-    font-size: clamp(20px, 2.4vw, 30px);
+    font-size: clamp(21px, 2.25vw, 31px);
+    line-height: 1.02;
     margin-bottom: 8px;
   }
   .caseButton span {
     display: block;
     color: var(--muted);
-    font-size: clamp(14px, 1.25vw, 18px);
+    font-size: clamp(14px, 1.18vw, 18px);
     line-height: 1.32;
+  }
+  .caseThumb {
+    width: 100%;
+    height: 100%;
+    min-height: 176px;
+    object-fit: cover;
+    display: block;
+    border-right: 1px solid rgba(255,255,255,.14);
+  }
+  .caseInfo {
+    padding: 20px 18px;
+    display: grid;
+    align-content: center;
   }
   .pillRow { display: flex; flex-wrap: wrap; gap: 10px; }
   .pill {
@@ -245,7 +267,9 @@
   @media (max-width: 900px) {
     .textSlide { width: calc(100vw - 22px); min-height: calc(100vh - 34px); padding: 22px; }
     .choiceGrid, .options { grid-template-columns: 1fr; }
-    .caseButton { min-height: 96px; padding: 16px; }
+    .caseButton { grid-template-columns: 38% 1fr; min-height: 118px; }
+    .caseThumb { min-height: 118px; }
+    .caseInfo { padding: 14px; }
     .controls { right: 8px; }
   }
 </style>
@@ -291,10 +315,10 @@ const slides = [
     kicker: "Cada mesa entra a una ruta",
     lead: "Selecciona el caso asignado. Las im&aacute;genes se ver&aacute;n solas, sin texto encima.",
     choices: [
-      { label: "Caso 1", desc: "Gemelos unidos y cirug&iacute;a de separaci&oacute;n", target: "case1" },
-      { label: "Caso 2", desc: "Transfusi&oacute;n feto-fetal: un gemelo recibe demasiado", target: "case2" },
-      { label: "Caso 3", desc: "Secuencia TRAP: gemelo bomba y gemelo acardiaco", target: "case3" },
-      { label: "Caso 4", desc: "Espina b&iacute;fida: cierre incompleto del tubo neural", target: "case4" }
+      { label: "Caso 1", desc: "Gemelos unidos y cirug&iacute;a de separaci&oacute;n", target: "case1", image: "assets/2s_u4_junta/02_caso1_siameses.png" },
+      { label: "Caso 2", desc: "Transfusi&oacute;n feto-fetal: un gemelo recibe demasiado", target: "case2", image: "assets/2s_u4_junta/10_caso2_ttts_v2.png" },
+      { label: "Caso 3", desc: "Secuencia TRAP: gemelo bomba y gemelo acardiaco", target: "case3", image: "assets/2s_u4_junta/06_caso3_trap.png" },
+      { label: "Caso 4", desc: "Espina b&iacute;fida: cierre incompleto del tubo neural", target: "case4", image: "assets/2s_u4_junta/08_caso4_espina_bifida.png" }
     ]
   },
   { id: "case1", type: "image", title: "Caso 1 imagen 1", image: "assets/2s_u4_junta/02_caso1_siameses.png" },
@@ -410,7 +434,7 @@ function makeSlide(s, i) {
         <h2>${s.kicker}</h2>
         <h1>${s.title}</h1>
         <p class="lead">${s.lead}</p>
-        <div class="choiceGrid">${s.choices.map(c => `<button class="caseButton" onclick="goToId('${c.target}')"><strong>${c.label}</strong><span>${c.desc}</span></button>`).join("")}</div>
+        <div class="choiceGrid">${s.choices.map(c => `<button class="caseButton" onclick="goToId('${c.target}')"><img class="caseThumb" src="${c.image}" alt="${c.label}"><div class="caseInfo"><strong>${c.label}</strong><span>${c.desc}</span></div></button>`).join("")}</div>
       </div>
       <div class="counter">${i + 1} / ${slides.length}</div>
     </section>`;
