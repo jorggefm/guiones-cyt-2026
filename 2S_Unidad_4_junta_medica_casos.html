@@ -15,7 +15,7 @@
     --line: rgba(255,255,255,.18);
     --case: #ffdfb8;
     --top-space: 100px;
-    --note-space: 238px;
+    --note-space: 360px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -109,12 +109,12 @@
     left: 22px;
     right: 22px;
     bottom: 18px;
-    min-height: calc(var(--note-space) - 36px);
+    height: calc(var(--note-space) - 36px);
     z-index: 4;
     display: grid;
     grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.45fr);
     gap: 14px;
-    align-items: end;
+    align-items: stretch;
   }
   .card {
     background: var(--panel);
@@ -123,6 +123,7 @@
     padding: 14px 16px;
     box-shadow: 0 14px 50px rgba(0,0,0,.34);
     backdrop-filter: blur(9px);
+    overflow: auto;
   }
   .label {
     text-transform: uppercase;
@@ -176,10 +177,10 @@
   .option {
     border: 1px solid rgba(255,255,255,.18);
     border-radius: 12px;
-    padding: 8px 10px;
+    padding: 7px 9px;
     background: rgba(255,255,255,.06);
     color: #fff3ea;
-    font-size: clamp(12px, .96vw, 14px);
+    font-size: clamp(11px, .88vw, 13px);
     line-height: 1.25;
     font-weight: 760;
   }
@@ -246,7 +247,7 @@
   @media (max-width: 900px) {
     :root {
       --top-space: 86px;
-      --note-space: 310px;
+      --note-space: 360px;
     }
     .imageWrap { left: 10px; right: 10px; bottom: calc(var(--note-space) + 10px); }
     .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
