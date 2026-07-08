@@ -2,468 +2,507 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>4S · Sistema nervioso y endocrino · clase integrada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>4S | U4 | Sistema nervioso y endocrino</title>
 <style>
-:root {
-  --bg:#F3F6FB; --surface:#FFFFFF; --ink:#0B1B3F; --ink2:#40516F; --muted:#7B88A2;
-  --line:#DDE7F4; --primary:#2457E6; --primary2:#EAF0FF; --accent:#7C3AED;
-  --orange:#F27A12; --red:#DC2626; --shadow:0 14px 38px rgba(15,35,80,.12),0 2px 6px rgba(15,35,80,.06);
-  --font:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink)}
-.deck{position:fixed;inset:0;overflow:hidden}
-.slides{height:100%;display:flex;transition:transform .46s cubic-bezier(.4,0,.2,1)}
-.slide{flex:0 0 100vw;height:100%;display:flex;align-items:center;justify-content:center;padding:62px 4vw 70px;overflow:auto}
-.inner{width:min(1240px,100%);margin:auto}
-.topbar{position:fixed;top:0;left:0;right:0;height:52px;display:flex;align-items:center;gap:14px;padding:0 18px;background:rgba(243,246,251,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:20}
-.brand{font-size:12px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);white-space:nowrap}
-.track{position:relative;height:18px;flex:1}
-.track::before{content:"";position:absolute;top:50%;left:0;right:0;height:4px;background:#DCE5F3;border-radius:99px;transform:translateY(-50%)}
-.fill{position:absolute;top:50%;left:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;transform:translateY(-50%);transition:width .46s cubic-bezier(.4,0,.2,1)}
-.dot{position:absolute;top:50%;width:15px;height:15px;background:var(--accent);border-radius:50%;border:3px solid white;box-shadow:0 2px 14px rgba(124,58,237,.45);transform:translate(-50%,-50%);transition:left .46s cubic-bezier(.4,0,.2,1)}
-.counter{font-variant-numeric:tabular-nums;font-size:13px;font-weight:850;color:var(--ink2)}
-.nav{position:fixed;bottom:0;left:0;right:0;height:60px;z-index:20;display:flex;align-items:center;justify-content:center;gap:18px;background:rgba(243,246,251,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.navbtn{width:43px;height:43px;border-radius:50%;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);font-size:24px;font-weight:900;color:var(--ink);cursor:pointer}
-.navbtn:hover{background:var(--primary2)} .navbtn:disabled{opacity:.35;cursor:default}
-.navlabel{min-width:380px;text-align:center;font-size:13px;font-weight:850;color:var(--ink2)}
-.slide-head{margin-bottom:14px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--primary2);color:var(--primary);border-radius:999px;padding:7px 14px;font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.11em;margin-bottom:10px}
-h1{font-size:clamp(28px,3.6vw,46px);line-height:1.04;letter-spacing:-.038em;font-weight:950;max-width:1020px}
-.prompt{font-size:clamp(14px,1.35vw,18px);line-height:1.4;color:var(--ink2);max-width:950px;margin-top:8px;font-weight:650}
-.source-pill{align-self:end;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:9px 13px;font-size:11px;font-weight:850;color:var(--muted);white-space:nowrap}
-.content-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start}
-.visual,.note-card,.formula-card{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:24px}
-.visual{padding:14px}
-.visual-empty{display:flex;align-items:center;justify-content:center;min-height:52vh;padding:22px}
-.slide-img{display:block;width:100%;height:auto;max-height:66vh;object-fit:contain;border-radius:20px;background:#fff}
-.note-card{padding:22px}
-.note-k,.formula-k{font-size:10.5px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin-bottom:9px}
-ul{display:flex;flex-direction:column;gap:9px;padding-left:18px}
-li{font-size:clamp(13px,1.16vw,16px);line-height:1.38;color:var(--ink2);font-weight:650}
-li::marker{color:var(--accent);font-size:1.08em}
-.formula-card{padding:26px;max-width:780px}
-.formula-big{font-size:clamp(22px,2.4vw,34px);line-height:1.24;font-weight:900;color:var(--ink)}
-.hint{position:fixed;right:14px;bottom:72px;z-index:30;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;color:var(--muted);box-shadow:var(--shadow)}
-@media (max-width:920px){
-  .slide{padding:62px 16px 70px}
-  .slide-head,.content-grid{grid-template-columns:1fr}
-  .source-pill{justify-self:start}
-  .slide-img{max-height:56vh;border-radius:18px}
-  .navlabel{min-width:150px}
-  .hint{display:none}
-}
+  :root {
+    --bg: #05070b;
+    --panel: rgba(10, 14, 24, .62);
+    --panel-2: rgba(255, 255, 255, .08);
+    --ink: #f5f8ff;
+    --muted: #d7e2ff;
+    --line: rgba(255, 255, 255, .14);
+    --accent: #8cc8ff;
+    --accent-2: #58f0d0;
+    --shadow: 0 20px 60px rgba(0, 0, 0, .35);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+  body { user-select: none; }
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background:
+      radial-gradient(circle at 20% 18%, rgba(38, 82, 157, .20), transparent 26%),
+      radial-gradient(circle at 78% 82%, rgba(23, 160, 140, .18), transparent 22%),
+      linear-gradient(180deg, #0a0f19 0%, #05070b 100%);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.01);
+    transition: opacity .28s ease, transform .28s ease;
+    display: grid;
+    place-items: center;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+  .image-wrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 18px 18px 26px;
+  }
+  .image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: saturate(1.02) contrast(1.02);
+  }
+  .shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,.58), rgba(0,0,0,.08) 22%, rgba(0,0,0,0) 44%, rgba(0,0,0,.12) 72%, rgba(0,0,0,.70)),
+      linear-gradient(to right, rgba(0,0,0,.24), rgba(0,0,0,0) 24%, rgba(0,0,0,0) 76%, rgba(0,0,0,.24));
+  }
+  .topbar {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    right: 22px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    z-index: 5;
+  }
+  .title-box {
+    max-width: min(760px, 72vw);
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(7, 12, 23, .74), rgba(24, 38, 68, .44));
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+  }
+  .kicker {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(21px, 2.1vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
+  }
+  .counter {
+    min-width: 84px;
+    padding: 10px 12px;
+    text-align: center;
+    border-radius: 999px;
+    background: rgba(7, 12, 23, .72);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: .03em;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+  }
+  .footer {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 18px;
+    z-index: 5;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .part-pill, .hint-pill {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+  }
+  .part-pill {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .hint-pill {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .controls {
+    position: absolute;
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 8;
+    opacity: .18;
+    transition: opacity .2s ease;
+  }
+  .controls:hover { opacity: .92; }
+  .controls button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.24);
+    background: rgba(0,0,0,.46);
+    color: white;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .controls button:hover { background: rgba(140, 200, 255, .22); }
+  .hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 6;
+  }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: rgba(3, 6, 10, .95);
+    display: none;
+    padding: 24px;
+    overflow: auto;
+  }
+  .overview.show { display: block; }
+  .overview-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .overview-head h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  .close-btn {
+    width: auto;
+    height: auto;
+    padding: 9px 13px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .thumb {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.05);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .thumb:hover {
+    transform: translateY(-2px);
+    border-color: rgba(140, 200, 255, .6);
+  }
+  .thumb img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: #0e1626;
+  }
+  .thumb div {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 800;
+  }
+  .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: 0%;
+    z-index: 10;
+    transition: width .24s ease;
+  }
+  .help {
+    position: absolute;
+    top: 84px;
+    right: 22px;
+    z-index: 9;
+    width: 280px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(7, 12, 23, .82);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: .2s ease;
+    backdrop-filter: blur(8px);
+  }
+  .help.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (max-width: 900px) {
+    .topbar { top: 10px; left: 12px; right: 12px; }
+    .footer { left: 12px; right: 12px; bottom: 10px; }
+    .image-wrap { padding: 8px 8px 18px; }
+    .title-box { max-width: 74vw; padding: 10px 12px; }
+    .hint-pill { display: none; }
+    .controls { right: 8px; }
+    .kicker { font-size: 10px; }
+  }
 </style>
 </head>
 <body>
-<div class="deck">
-  <div class="topbar">
-    <div class="brand">4S · Clase Integrada Neuroendocrina</div>
-    <div class="track"><div class="fill" id="fill"></div><div class="dot" id="dot"></div></div>
-    <div class="counter" id="counter">1/18</div>
+<div class="deck" id="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls" aria-label="Controles">
+    <button onclick="prevSlide()" title="Anterior">&#8249;</button>
+    <button onclick="nextSlide()" title="Siguiente">&#8250;</button>
+    <button onclick="toggleOverview()" title="Miniaturas">&#9633;</button>
   </div>
-  <main class="slides" id="slides">
-    
-<section class="slide" data-title="Como un estimulo puede terminar cambiando tus hormonas">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Pregunta guia</span>
-        <h1>Como un estimulo puede terminar cambiando tus hormonas</h1>
-        <p class="prompt">Clase integrada U4 para 4. de Secundaria. Aqui el sistema nervioso se presenta como respuesta rapida por eventos; el sistema endocrino, como regulacion lenta y sostenida; y el hipotalamo-hipofisis, como el puente que traduce una senal nerviosa en una respuesta hormonal.</p>
-      </div>
-      <div class="source-pill">Inicio · 1/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual visual-empty"><div class="formula-card"><div class="formula-k">Idea central</div><div class="formula-big">Estimulo -> sistema nervioso -> hipotalamo/hipofisis -> sistema endocrino -> respuesta -> homeostasis</div></div></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Ruta central de la clase: estimulo -&gt; receptor -&gt; integracion -&gt; senal -&gt; efector -&gt; respuesta -&gt; regulacion.</li><li>Comparacion base: el sistema nervioso comunica rapido y localizado; el endocrino regula mas lento y de forma mas distribuida.</li><li>Meta final: explicar casos reales usando ambos sistemas como una sola red de control corporal.</li></ul>
-      </div>
-    </div>
+  <div class="help" id="help">
+    <b>Controles:</b><br>
+    Flecha derecha o espacio: avanzar<br>
+    Flecha izquierda: retroceder<br>
+    O: miniaturas<br>
+    F: pantalla completa<br>
+    H: mostrar u ocultar esta ayuda
   </div>
-</section>
-
-<section class="slide" data-title="Mapa general del sistema nervioso">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Mapa general del sistema nervioso</h1>
-        <p class="prompt">Primero ubicamos el sistema completo para que el estudiante no vea neuronas sueltas, sino una red corporal organizada.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 2/18</div>
+  <div class="overview" id="overview">
+    <div class="overview-head">
+      <h2>Vista general</h2>
+      <button class="close-btn" onclick="toggleOverview()">Cerrar</button>
     </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/01_sistema_nervioso_general.png" alt="Mapa general del sistema nervioso"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Presentar encéfalo, medula espinal, nervios perifericos, receptores y efectores.</li><li>Explicar que el sistema nervioso detecta cambios del medio externo e interno y coordina respuestas casi inmediatas.</li><li>Conectar con ejemplos: dolor, equilibrio, reflejos, vision, reaccion al peligro.</li></ul>
-      </div>
-    </div>
+    <div class="grid" id="thumbGrid"></div>
   </div>
-</section>
-
-<section class="slide" data-title="La neurona como unidad funcional">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>La neurona como unidad funcional</h1>
-        <p class="prompt">Antes de hablar del impulso, el estudiante debe entender la arquitectura celular que hace posible la rapidez del sistema nervioso.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 3/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/02_partes_neurona.png" alt="La neurona como unidad funcional"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Nombrar partes: dendritas, soma, nucleo, cono axonico, axon, mielina, nodulos de Ranvier y terminal sinaptico.</li><li>Explicar el sentido general: recibir, integrar, conducir y transmitir informacion.</li><li>Aclaracion rigurosa: las neuronas del sistema nervioso central tienen regeneracion muy limitada, no nula en sentido absoluto.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Como viaja el impulso nervioso">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Como viaja el impulso nervioso</h1>
-        <p class="prompt">Aqui aparece la idea de respuesta por eventos: una vez superado el umbral, la senal se propaga rapidamente con direccion definida.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 4/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/03_impulso_nervioso.png" alt="Como viaja el impulso nervioso"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Diferenciar reposo, despolarizacion, propagacion y llegada al terminal.</li><li>Relacionar mielina y nodulos con una conduccion mas eficiente.</li><li>Comparar esta senal con una interrupcion rapida del cuerpo ante un cambio del entorno.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Tipos de neuronas y flujo de informacion">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Tipos de neuronas y flujo de informacion</h1>
-        <p class="prompt">La clase debe ver que no todas las neuronas hacen lo mismo: unas detectan, otras integran y otras ejecutan.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 5/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/04_tipos_neuronas.png" alt="Tipos de neuronas y flujo de informacion"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Neurona sensitiva: lleva informacion desde receptores al SNC.</li><li>Interneurona: integra, compara y organiza la respuesta.</li><li>Neurona motora: envia la orden hacia musculos o glandulas efectoras.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Arco reflejo: la ruta corta de supervivencia">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Arco reflejo: la ruta corta de supervivencia</h1>
-        <p class="prompt">Esta es la mejor imagen para demostrar que no toda respuesta necesita pasar primero por una decision consciente.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 6/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/05_arco_reflejo.png" alt="Arco reflejo: la ruta corta de supervivencia"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Secuencia: receptor en piel -&gt; neurona sensitiva -&gt; medula -&gt; interneurona -&gt; neurona motora -&gt; musculo.</li><li>Explicar por que el reflejo es mas rapido que una respuesta plenamente consciente.</li><li>Usar el ejemplo de tocar una superficie caliente para anclar la explicacion.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="SNC y SNP: centro de integracion y red de conexion">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>SNC y SNP: centro de integracion y red de conexion</h1>
-        <p class="prompt">Con esta comparacion queda mas claro donde se procesa la informacion y por donde circulan las ordenes.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 7/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/06_snc_vs_snp.png" alt="SNC y SNP: centro de integracion y red de conexion"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>SNC: encéfalo y medula; interpreta, integra y decide.</li><li>SNP: nervios que conectan el cuerpo con el centro integrador.</li><li>Insistir en que sentir, pensar y responder forman una sola cadena funcional.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Sinapsis quimica: donde una neurona le habla a otra">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Sinapsis quimica: donde una neurona le habla a otra</h1>
-        <p class="prompt">Aqui el estudiante entiende que la rapidez nerviosa tambien depende de mensajeros quimicos, pero liberados en un punto muy preciso.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 8/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/07_sinapsis_quimica.png" alt="Sinapsis quimica: donde una neurona le habla a otra"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Mostrar terminal presinaptico, vesiculas, neurotransmisores, hendidura y receptores postsinapticos.</li><li>Explicar que el impulso electrico dentro de la neurona se convierte en senal quimica entre neuronas.</li><li>Comparar esta precision local con la difusion mucho mas amplia de las hormonas en sangre.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Plasticidad y poda sinaptica">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 1</span>
-        <h1>Plasticidad y poda sinaptica</h1>
-        <p class="prompt">Esta imagen amplia la clase: el sistema nervioso no solo responde, tambien cambia, selecciona y reorganiza conexiones.</p>
-      </div>
-      <div class="source-pill">Sistema nervioso · 9/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/08_plasticidad_poda.png" alt="Plasticidad y poda sinaptica"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Presentar la idea de que en la infancia existen muchisimas conexiones que luego se refinan.</li><li>Relacionar poda sinaptica con aprendizaje, eficiencia y adaptacion.</li><li>Evitar absolutismos: el cerebro cambia con la experiencia durante toda la vida, aunque no del mismo modo en todas las etapas.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Mapa general del sistema endocrino">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 2</span>
-        <h1>Mapa general del sistema endocrino</h1>
-        <p class="prompt">Ahora pasamos al sistema lento y sostenido: una red de glandulas que regula el medio interno mediante hormonas.</p>
-      </div>
-      <div class="source-pill">Sistema endocrino · 10/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/09_sistema_endocrino_general.png" alt="Mapa general del sistema endocrino"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Ubicar hipotalamo, hipofisis, pineal, tiroides, paratiroides, timo, suprarrenales, pancreas y gonadas.</li><li>Enfatizar que no todas las respuestas del cuerpo son inmediatas: muchas requieren regulacion mantenida.</li><li>Conectar con crecimiento, metabolismo, pubertad, estres y control de glucosa.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Glandulas y hormonas principales">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 2</span>
-        <h1>Glandulas y hormonas principales</h1>
-        <p class="prompt">Esta lamina sirve para sintetizar quien produce que y para que, sin perder la vision de sistema.</p>
-      </div>
-      <div class="source-pill">Sistema endocrino · 11/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/10_glandulas_hormonas.png" alt="Glandulas y hormonas principales"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Repasar hormona principal y funcion dominante de hipofisis, tiroides, pancreas, suprarrenales y gonadas.</li><li>Aclarar que la hormona no actua por si sola: necesita organos diana con receptores adecuados.</li><li>Preparar el salto al concepto de homeostasis.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Hormona, sangre y organo diana">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 2</span>
-        <h1>Hormona, sangre y organo diana</h1>
-        <p class="prompt">Aqui se ve por que el sistema endocrino es mas lento pero mas amplio: la senal viaja por sangre hasta celulas con receptores especificos.</p>
-      </div>
-      <div class="source-pill">Sistema endocrino · 12/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/11_hormona_organo_diana.png" alt="Hormona, sangre y organo diana"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Explicar hormona como mensajero quimico y organo diana como receptor especifico.</li><li>Comparar con la sinapsis: en el endocrino la distribucion es mas extensa y la accion mas sostenida.</li><li>Usar ejemplos: insulina, tiroxina, cortisol, hormonas sexuales.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Homeostasis como bucle de control">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 2</span>
-        <h1>Homeostasis como bucle de control</h1>
-        <p class="prompt">Esta es la imagen que mejor traduce la idea de algoritmo biologico: el cuerpo detecta desviaciones y corrige el equilibrio.</p>
-      </div>
-      <div class="source-pill">Sistema endocrino · 13/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/12_homeostasis_glucosa.png" alt="Homeostasis como bucle de control"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Presentar variable, sensor, centro regulador, senal hormonal, organo efector y correccion.</li><li>Tomar la glucosa como ejemplo principal de retroalimentacion negativa.</li><li>Explicar que la homeostasis no significa inmovilidad, sino regulacion dinamica del equilibrio.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Hipotalamo e hipofisis: el centro del puente">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 3</span>
-        <h1>Hipotalamo e hipofisis: el centro del puente</h1>
-        <p class="prompt">Este es el nucleo conceptual de toda la clase: una senal nerviosa puede transformarse en respuesta hormonal.</p>
-      </div>
-      <div class="source-pill">Puente neuroendocrino · 14/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/13_hipotalamo_hipofisis.png" alt="Hipotalamo e hipofisis: el centro del puente"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Hipotalamo: integra informacion del SNC y del medio interno; detecta necesidades y ordena respuestas regulatorias.</li><li>Hipofisis: ejecuta o distribuye la orden hormonal hacia otras glandulas.</li><li>Diferenciar adenohipofisis y neurohipofisis como dos regiones con funciones distintas.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Eje hipotalamo - hipofisis - glandula">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 3</span>
-        <h1>Eje hipotalamo - hipofisis - glandula</h1>
-        <p class="prompt">Aqui ya no se habla de dos sistemas separados, sino de una cadena integrada que conecta cerebro, hormonas y organos.</p>
-      </div>
-      <div class="source-pill">Puente neuroendocrino · 15/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/14_eje_neuroendocrino.png" alt="Eje hipotalamo - hipofisis - glandula"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Secuencia general: estimulo o desequilibrio -&gt; hipotalamo -&gt; hipofisis -&gt; glandula -&gt; hormona -&gt; organo diana -&gt; respuesta.</li><li>Usar el eje tiroideo como ejemplo de control maestro y retroalimentacion.</li><li>Relacionar esta estructura con la idea de un algoritmo biologico por modulos.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Caso integrado: estres agudo y respuesta sostenida">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 4</span>
-        <h1>Caso integrado: estres agudo y respuesta sostenida</h1>
-        <p class="prompt">Esta es la mejor comparacion para distinguir claramente rapidez nerviosa y persistencia endocrina en un mismo evento.</p>
-      </div>
-      <div class="source-pill">Casos aplicados · 16/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/15_estres_integrado.png" alt="Caso integrado: estres agudo y respuesta sostenida"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Ruta rapida: sistema nervioso simpatico cambia pulso, respiracion, sudoracion y alerta.</li><li>Ruta sostenida: eje hipotalamo-hipofisis-suprarrenal eleva cortisol y reorganiza la energia disponible.</li><li>Conclusión didactica: un mismo estimulo puede activar una respuesta inmediata y otra mantenida.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Cuando la regulacion falla: enfermedades endocrinas">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Bloque 4</span>
-        <h1>Cuando la regulacion falla: enfermedades endocrinas</h1>
-        <p class="prompt">La unidad se vuelve clinica aqui: la enfermedad aparece cuando los mecanismos de control se desajustan o se mantienen fuera de rango.</p>
-      </div>
-      <div class="source-pill">Casos aplicados · 17/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual"><img class="slide-img" src="assets/4s_neuroendocrino/16_enfermedades_endocrinas.png" alt="Cuando la regulacion falla: enfermedades endocrinas"></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>Trabajar diabetes mellitus como caso principal de perdida de homeostasis de la glucosa.</li><li>Contrastar hipertiroidismo e hipotiroidismo para mostrar exceso y deficit hormonal.</li><li>Incluir estres cronico como caso neuroendocrino donde una activacion sostenida termina dañando el equilibrio.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-title="Respuesta inmediata mas regulacion sostenida igual a homeostasis">
-  <div class="inner">
-    <div class="slide-head">
-      <div>
-        <span class="eyebrow">Cierre</span>
-        <h1>Respuesta inmediata mas regulacion sostenida igual a homeostasis</h1>
-        <p class="prompt">Si el estudiante comprende esta formula conceptual, ya puede leer los casos de la unidad con una sola logica biologica.</p>
-      </div>
-      <div class="source-pill">Sintesis final · 18/18</div>
-    </div>
-    <div class="content-grid">
-      <div class="visual visual-empty"><div class="formula-card"><div class="formula-k">Idea central</div><div class="formula-big">Estimulo -> sistema nervioso -> hipotalamo/hipofisis -> sistema endocrino -> respuesta -> homeostasis</div></div></div>
-      <div class="note-card">
-        <div class="note-k">Claves de explicacion</div>
-        <ul><li>El sistema nervioso responde rapido.</li><li>El sistema endocrino sostiene y ajusta.</li><li>El hipotalamo y la hipofisis traducen una necesidad del organismo en regulacion hormonal.</li><li>La siguiente sesion puede pasar naturalmente a indagacion sobre sensibilidad corporal.</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-  </main>
-  <div class="nav">
-    <button class="navbtn" id="prev" aria-label="Anterior">‹</button>
-    <div class="navlabel" id="navlabel">Como un estimulo puede terminar cambiando tus hormonas</div>
-    <button class="navbtn" id="next" aria-label="Siguiente">›</button>
-  </div>
-  <div class="hint">← → para navegar</div>
+  <div class="progress" id="progress"></div>
 </div>
 <script>
-const slidesEl=document.getElementById('slides');
-const slides=[...document.querySelectorAll('.slide')];
-const fill=document.getElementById('fill');
-const dot=document.getElementById('dot');
-const counter=document.getElementById('counter');
-const navlabel=document.getElementById('navlabel');
-const prev=document.getElementById('prev');
-const next=document.getElementById('next');
-let i=0;
-function update(){
-  slidesEl.style.transform=`translateX(${-i*100}vw)`;
-  const pct=slides.length===1?100:(i/(slides.length-1))*100;
-  fill.style.width=pct+'%';
-  dot.style.left=pct+'%';
-  counter.textContent=(i+1)+'/'+slides.length;
-  navlabel.textContent=slides[i].dataset.title || '';
-  prev.disabled=i===0;
-  next.disabled=i===slides.length-1;
+const slides = [
+  {
+    title: "Ruta general de la clase integrada",
+    part: "Inicio",
+    hint: "Sistema nervioso -> puente neuroendocrino -> glandulas -> casos",
+    image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png"
+  },
+  {
+    title: "Sistema nervioso: mapa general",
+    part: "Bloque 1",
+    hint: "Ubicacion de estructuras y flujo general",
+    image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png"
+  },
+  {
+    title: "La neurona como unidad funcional",
+    part: "Bloque 1",
+    hint: "Partes clave de la neurona",
+    image: "assets/4s_neuroendocrino/02_partes_neurona.png"
+  },
+  {
+    title: "Impulso nervioso y velocidad de respuesta",
+    part: "Bloque 1",
+    hint: "Senal electrica, direccion y rapidez",
+    image: "assets/4s_neuroendocrino/03_impulso_nervioso.png"
+  },
+  {
+    title: "Tipos de neuronas",
+    part: "Bloque 1",
+    hint: "Sensoriales, interneuronas y motoras",
+    image: "assets/4s_neuroendocrino/04_tipos_neuronas.png"
+  },
+  {
+    title: "Arco reflejo",
+    part: "Bloque 1",
+    hint: "Ruta corta de supervivencia",
+    image: "assets/4s_neuroendocrino/05_arco_reflejo.png"
+  },
+  {
+    title: "SNC y SNP",
+    part: "Bloque 1",
+    hint: "Centro de integracion y red de conexion",
+    image: "assets/4s_neuroendocrino/06_snc_vs_snp.png"
+  },
+  {
+    title: "Sinapsis quimica",
+    part: "Bloque 1",
+    hint: "La neurona le habla a otra neurona",
+    image: "assets/4s_neuroendocrino/07_sinapsis_quimica.png"
+  },
+  {
+    title: "Plasticidad, poda y reorganizacion",
+    part: "Bloque 1",
+    hint: "Cambios del sistema nervioso a lo largo del desarrollo",
+    image: "assets/4s_neuroendocrino/08_plasticidad_poda.png"
+  },
+  {
+    title: "Sistema endocrino: panorama general",
+    part: "Bloque 2",
+    hint: "Regulacion lenta, sostenida y distribuida",
+    image: "assets/4s_neuroendocrino/09_sistema_endocrino_general.png"
+  },
+  {
+    title: "Glandulas y hormonas",
+    part: "Bloque 2",
+    hint: "Quien produce y quien responde",
+    image: "assets/4s_neuroendocrino/10_glandulas_hormonas.png"
+  },
+  {
+    title: "Hormona, receptor y organo diana",
+    part: "Bloque 2",
+    hint: "La senal hormonal depende del receptor correcto",
+    image: "assets/4s_neuroendocrino/11_hormona_organo_diana.png"
+  },
+  {
+    title: "Homeostasis de glucosa",
+    part: "Bloque 2",
+    hint: "Retroalimentacion y control corporal",
+    image: "assets/4s_neuroendocrino/12_homeostasis_glucosa.png"
+  },
+  {
+    title: "Hipotalamo e hipofisis",
+    part: "Bloque 3",
+    hint: "Puente principal entre sistema nervioso y endocrino",
+    image: "assets/4s_neuroendocrino/13_hipotalamo_hipofisis.png"
+  },
+  {
+    title: "Eje neuroendocrino",
+    part: "Bloque 3",
+    hint: "Como una senal nerviosa termina activando glandulas",
+    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png"
+  },
+  {
+    title: "Estres: respuesta integrada",
+    part: "Bloque 4",
+    hint: "Ejemplo real de accion conjunta",
+    image: "assets/4s_neuroendocrino/15_estres_integrado.png"
+  },
+  {
+    title: "Enfermedades endocrinas",
+    part: "Bloque 4",
+    hint: "Hipotiroidismo, hipertiroidismo, diabetes y desregulacion",
+    image: "assets/4s_neuroendocrino/16_enfermedades_endocrinas.png"
+  },
+  {
+    title: "Cierre: comparar dos algoritmos biologicos",
+    part: "Sintesis",
+    hint: "Nervioso = rapido por eventos | endocrino = bucles de retroalimentacion",
+    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png"
+  }
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function makeSlide(s, i) {
+  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+    <div class="image-wrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="shade"></div>
+    <div class="topbar">
+      <div class="title-box">
+        <p class="kicker">${s.part}</p>
+        <h1>${s.title}</h1>
+      </div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="footer">
+      <div class="part-pill">${s.part}</div>
+      <div class="hint-pill">${s.hint}</div>
+    </div>
+  </section>`;
 }
-function go(n){i=Math.max(0,Math.min(slides.length-1,n));update();}
-prev.onclick=()=>go(i-1);
-next.onclick=()=>go(i+1);
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='PageDown')go(i+1);
-  if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s, i) =>
+    `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);">
+      <img src="${s.image}" alt="${s.title}">
+      <div>${i + 1}. ${s.title}</div>
+    </div>`
+  ).join("");
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById("progress").style.width = ((current + 1) / slides.length * 100) + "%";
+}
+
+function showSlide(i) {
+  const all = document.querySelectorAll(".slide");
+  all[current]?.classList.remove("active");
+  current = (i + slides.length) % slides.length;
+  all[current]?.classList.add("active");
+  updateProgress();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+
+function toggleOverview(force) {
+  const ov = document.getElementById("overview");
+  ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
+}
+
+function toggleHelp() {
+  document.getElementById("help").classList.toggle("show");
+}
+
+function fullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+  if (e.key === "ArrowLeft") prevSlide();
+  if (e.key.toLowerCase() === "o") toggleOverview();
+  if (e.key.toLowerCase() === "f") fullscreen();
+  if (e.key.toLowerCase() === "h") toggleHelp();
+  if (e.key === "Escape") toggleOverview(false);
 });
-let sx=0;
-slidesEl.addEventListener('touchstart',e=>sx=e.changedTouches[0].screenX,{passive:true});
-slidesEl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-sx;if(Math.abs(dx)>55){dx<0?go(i+1):go(i-1)}},{passive:true});
-update();
+
+render();
+setTimeout(() => {
+  document.getElementById("help").classList.add("show");
+  setTimeout(() => document.getElementById("help").classList.remove("show"), 4500);
+}, 600);
 </script>
 </body>
 </html>
