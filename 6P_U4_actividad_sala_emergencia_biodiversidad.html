@@ -77,6 +77,16 @@ textarea{min-height:74px;resize:vertical}
 .resourceList a.alt{background:#0b6cae}
 .resourceList a.news{background:#8a5300}
 .guideNote{background:#fff7df;border-color:#f0cf8e}
+.caseDetailLayout{display:grid;grid-template-columns:1fr;gap:1vw;align-items:start}
+.videoFrame{background:#f3f8f5;border:2px solid #d7e5dd;border-radius:18px;padding:.65vw}
+.videoFrame iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;background:#000}
+.sourceMeta{font-size:clamp(12px,.95vw,16px);font-weight:800;color:#597068;margin-top:.55em}
+.sourceMeta a{color:#0b6cae;text-decoration:none;font-weight:950}
+.exampleFlow{display:grid;grid-template-columns:.95fr 1.05fr;gap:1vw;align-items:start}
+.miniCase{background:#eef9ff;border-left:8px solid #0b6cae}
+.exampleSteps{display:grid;grid-template-columns:repeat(3,1fr);gap:.75vw}
+.exampleSteps .panel{background:#fffef7}
+.exampleSteps h3{margin-top:0}
 .step{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#ffd166;font-weight:1000;margin-right:.5em;color:#12251c}
 .imageRow{display:grid;grid-template-columns:repeat(4,1fr);gap:.8vw;margin-top:.75vw}
 .thumb{background:#fff;border-radius:20px;padding:.55vw;box-shadow:0 10px 24px #0002;border:3px solid #153f3020}
@@ -85,9 +95,9 @@ textarea{min-height:74px;resize:vertical}
 .timer{font-size:clamp(28px,3.5vw,58px);font-weight:1000;color:#fff;text-shadow:0 8px 24px #000a;text-align:center}
 .hidden{display:none}
 @media(max-width:900px){
- .hero,.two,.formGrid{grid-template-columns:1fr}
+ .hero,.two,.formGrid,.caseDetailLayout,.exampleFlow{grid-template-columns:1fr}
  .caseGrid,.four,.imageRow{grid-template-columns:1fr 1fr}
- .three,.actionGrid{grid-template-columns:1fr}
+ .three,.actionGrid,.exampleSteps{grid-template-columns:1fr}
  .card,.centerCard{overflow:auto}
  .slide{overflow:auto}
 }
@@ -166,7 +176,31 @@ textarea{min-height:74px;resize:vertical}
   <section class="slide">
     <div class="card">
       <div class="eyebrow dark">Paso 2</div>
-      <h2><span class="step">2</span>Completa el diagnóstico</h2>
+      <h2><span class="step">2</span>Conoce el caso real antes de responder</h2>
+      <p id="caseDetailTitle" class="bigQuote warning">Primero elige un caso en la diapositiva anterior.</p>
+      <div class="caseDetailLayout">
+        <div id="caseDetailText" class="panel">
+          <h3>Texto del caso</h3>
+          <p>Aqui aparecera la historia del caso real explicada con claridad para que el equipo entienda que esta pasando.</p>
+          <p><b>Que mirar con atencion:</b> cuando cargue el caso, veras que especies, funciones o ecosistemas estan comprometidos.</p>
+        </div>
+        <div class="panel">
+          <h3 id="caseVideoTitle">Video o recurso principal</h3>
+          <div class="videoFrame hidden" id="caseVideoFrame">
+            <iframe id="caseVideoEmbed" src="" title="Video del caso" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <p id="caseVideoBlurb">Al elegir un caso, aqui aparecera un video o recurso vinculado con ese problema.</p>
+          <div id="caseLinks" class="resourceList"></div>
+          <p id="caseSourceMeta" class="sourceMeta"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="card">
+      <div class="eyebrow dark">Paso 3</div>
+      <h2><span class="step">3</span>Completa el diagnostico</h2>
       <div class="formGrid">
         <div class="panel">
           <label>Nombre del equipo</label>
@@ -202,8 +236,41 @@ textarea{min-height:74px;resize:vertical}
 
   <section class="slide">
     <div class="card">
-      <div class="eyebrow dark">Paso 3</div>
-      <h2><span class="step">3</span>Propón una solución en 3 niveles</h2>
+      <div class="eyebrow dark">Paso 4</div>
+      <h2><span class="step">4</span>Mira un ejemplo antes de escribir</h2>
+      <div class="exampleFlow">
+        <div class="panel miniCase">
+          <h3>Caso modelo</h3>
+          <p><b>Playa con residuos y aves marinas heridas.</b></p>
+          <p>En una playa cercana se acumulan bolsas, botellas y restos de tecnopor. Algunas aves quedan atrapadas o comen pedazos de plastico al confundirlos con alimento.</p>
+          <p><b>Idea central:</b> el problema afecta especies, su habitat y funciones como la alimentacion segura dentro del ecosistema costero.</p>
+        </div>
+        <div class="panel guideNote">
+          <h3>Como se completa la solucion en 3 niveles</h3>
+          <div class="exampleSteps">
+            <div class="panel">
+              <h3>Accion inmediata</h3>
+              <p>Organizar una limpieza segura y avisar a un adulto o autoridad si hay aves heridas o residuos peligrosos.</p>
+            </div>
+            <div class="panel">
+              <h3>Accion preventiva</h3>
+              <p>Colocar senales, reducir descartables en salidas escolares y explicar por que la basura no debe llegar a la playa.</p>
+            </div>
+            <div class="panel">
+              <h3>Accion de conservacion</h3>
+              <p>Mantener monitoreo del lugar, proteger zonas de descanso de aves y sostener campanas de cuidado del ecosistema costero.</p>
+            </div>
+          </div>
+          <p class="sourceMeta">Fijate en la logica: primero atiendes la urgencia, luego evitas que se repita y finalmente proteges el lugar a largo plazo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="card">
+      <div class="eyebrow dark">Paso 5</div>
+      <h2><span class="step">5</span>Propón una solución en 3 niveles</h2>
       <div class="actionGrid">
         <div class="panel">
           <h3>Acción inmediata</h3>
@@ -221,13 +288,6 @@ textarea{min-height:74px;resize:vertical}
           <textarea id="action3" placeholder="Ejemplo: sembrar nativas, proteger hábitats, conservar variedades..."></textarea>
         </div>
       </div>
-      <div class="panel guideNote" style="margin-top:.8vw">
-        <h3>Ejemplo guía</h3>
-        <p><b>No es para copiar.</b> Si el caso fuera <b>polinizadores en peligro</b>, una propuesta de 3 niveles podría verse así:</p>
-        <p><b>Acción inmediata:</b> suspender la fumigación del jardín escolar por una semana y observar qué insectos llegan.</p>
-        <p><b>Acción preventiva:</b> acordar horarios y zonas donde no se usen químicos durante la floración.</p>
-        <p><b>Acción de conservación:</b> sembrar flores nativas y cuidar espacios donde abejas, mariposas y colibríes puedan alimentarse cada año.</p>
-      </div>
       <div class="panel" style="margin-top:.8vw">
         <label>Frase de campaña</label>
         <input id="slogan" type="text" placeholder="Ejemplo: Si se rompe la red, perdemos todos.">
@@ -237,8 +297,8 @@ textarea{min-height:74px;resize:vertical}
 
   <section class="slide">
     <div class="card">
-      <div class="eyebrow dark">Paso 4</div>
-      <h2><span class="step">4</span>Genera tu Plan de Rescate</h2>
+      <div class="eyebrow dark">Paso 6</div>
+      <h2><span class="step">6</span>Genera tu Plan de Rescate</h2>
       <div class="two">
         <div>
           <p>Cuando termines, presiona el botón. Luego tu equipo puede leer su plan en voz alta.</p>
@@ -267,6 +327,7 @@ textarea{min-height:74px;resize:vertical}
 <script>
 const slides=[...document.querySelectorAll('.slide')];
 let current=0;
+const casePickerIndex=slides.findIndex(slide=>slide.textContent.includes('Elige un caso de emergencia'));
 document.getElementById('total').textContent=slides.length;
 function show(n){
   slides[current].classList.remove('active');
@@ -274,7 +335,13 @@ function show(n){
   slides[current].classList.add('active');
   document.getElementById('num').textContent=current+1;
 }
-function nextSlide(){show(current+1)}
+function nextSlide(){
+  if(current===casePickerIndex && !selectedKind){
+    alert('Primero elige un caso para poder ver su historia y su recurso.');
+    return;
+  }
+  show(current+1)
+}
 function prevSlide(){show(current-1)}
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key===' ') nextSlide();
@@ -285,41 +352,51 @@ let selectedKind='';
 const caseData={
   aguajal:{
     levels:['Especies','Ecosistemas','Funcional'],
-    story:'En varios aguajales de la Amazonía peruana, cuando se talan palmeras de aguaje sin manejo o entra contaminación al humedal, el problema no afecta solo a una planta. Peces, aves, ranas, insectos y personas pierden un lugar que les daba alimento, refugio y agua.',
+    story:'En varios aguajales de la Amazonía peruana, la tala de palmeras de aguaje y la contaminación del humedal están cambiando un ecosistema completo. Cuando el agua baja o el bosque se rompe, peces, aves, insectos y familias de la zona pierden alimento, sombra, refugio y una fuente importante de vida.',
     hints:[
       'Piensa en quiénes viven o se alimentan cerca del agua y de las palmeras.',
       'Marca primero los niveles de biodiversidad que sí puedes justificar con evidencia.',
       'No digas solo “se pierde naturaleza”: explica qué relación se rompe.'
     ],
     focus:'Obsérvese cómo un solo ecosistema sostiene muchas especies y funciones al mismo tiempo.',
+    videoEmbed:'https://www.youtube-nocookie.com/embed/XawPfIUo69k',
+    videoBlurb:'Este video muestra por qué los aguajales son ecosistemas valiosos y qué pasa cuando se degradan.',
+    sourceMeta:'Texto adaptado a partir de un reportaje sobre aguajales y una nota sobre su importancia ecológica y económica.',
     sources:[
       {label:'Noticia: importancia de los aguajales', url:'https://www.actualidadambiental.pe/los-aguajales-humedales-en-la-amazonia-que-aportan-a-la-economia-local-y-brindan-beneficios-climaticos/', kind:'news'},
-      {label:'Video: aguajales', url:'https://www.youtube.com/watch?v=XawPfIUo69k', kind:'video'}
+      {label:'Video: Viva el bosque | Aguajales', url:'https://www.youtube.com/watch?v=XawPfIUo69k', kind:'video'}
     ]
   },
   cultivos:{
     levels:['Genética'],
-    story:'En comunidades andinas, algunas familias están dejando de sembrar tantas variedades nativas de papa o maíz como antes. Si se pierden esas semillas, también se pierden colores, formas, sabores y, sobre todo, resistencias distintas frente a plagas, heladas o sequías.',
+    story:'En comunidades andinas, algunas variedades nativas de papa ya no se siembran tanto como antes. Cuando una familia deja de guardar distintas semillas, no solo pierde colores o sabores: también pierde resistencias frente al frío, las plagas y la sequía. Por eso la diversidad genética de las papas es una forma de protección para el futuro.',
     hints:[
       'No mires solo cuántas plantas hay: piensa si todas son iguales o si hay variedades distintas.',
       'Pregúntate qué ventaja tiene conservar semillas diferentes ante cambios del clima.',
       'Explica la consecuencia con la idea de “menos opciones para resistir problemas”.'
     ],
     focus:'Aquí la clave no es solo la especie, sino la variedad dentro de la misma especie.',
+    videoEmbed:'https://www.youtube-nocookie.com/embed/VlXhKKBE0nc',
+    videoBlurb:'Este recurso ayuda a conectar la idea de diversidad genética con el cuidado de las papas nativas del Perú.',
+    sourceMeta:'Texto adaptado a partir de materiales sobre conservación de papas nativas y su valor frente al cambio climático.',
     sources:[
       {label:'Noticia: papas nativas', url:'https://thinklandscape.globallandscapesforum.org/es/70125/como-peru-esta-protegiendo-sus-papas-nativas-del-cambio-climatico/', kind:'news'},
+      {label:'Video: El Perú se escribe con P de papa', url:'https://www.youtube.com/watch?v=VlXhKKBE0nc', kind:'video'},
       {label:'Noticia: maíces nativos', url:'https://www.gob.pe/institucion/minam/noticias/1386863-dia-nacional-del-maiz-peru-preserva-52-razas-nativas-y-su-diversidad-genetica', kind:'news'}
     ]
   },
   animales:{
     levels:['Especies','Funcional'],
-    story:'En varias zonas amazónicas del Perú se siguen capturando loros, monos, tortugas y otros animales para venderlos. El problema no termina cuando se llevan a un animal: su ecosistema pierde a un dispersor de semillas, un controlador natural o una pieza de la red alimentaria.',
+    story:'En varias zonas amazónicas del Perú se siguen capturando loros, monos, tortugas y otros animales para venderlos. Lo grave no termina cuando se llevan al animal: el bosque pierde a un ser vivo que cumplía funciones reales, como dispersar semillas, controlar poblaciones o formar parte de la cadena alimentaria.',
     hints:[
       'Haz una lista corta de animales directamente afectados y luego de quienes dependen de ellos.',
       'Piensa en una función: transportar semillas, comer insectos o servir de alimento.',
       'La consecuencia debe mostrar un efecto en cadena, no solo “es triste”.'
     ],
     focus:'Cuando una especie sale del ecosistema, otras pueden perder alimento, equilibrio o reproducción.',
+    videoEmbed:'https://www.youtube-nocookie.com/embed/-IKA3hlntM4',
+    videoBlurb:'Este reportaje muestra un caso real vinculado al tráfico de fauna amazónica y sus consecuencias.',
+    sourceMeta:'Texto adaptado a partir de materiales de sensibilización y un reportaje sobre tráfico de fauna silvestre en el Perú.',
     sources:[
       {label:'Noticia: tráfico de fauna', url:'https://www.conservamospornaturaleza.org/inspirate/un-llamado-a-la-empatia-trafico-de-fauna-silvestre-en-el-peru/', kind:'news'},
       {label:'Video: tráfico en Iquitos', url:'https://www.youtube.com/watch?v=-IKA3hlntM4', kind:'video'}
@@ -327,16 +404,19 @@ const caseData={
   },
   polinizadores:{
     levels:['Especies','Funcional'],
-    story:'Cuando se fumiga demasiado o se pierden flores y arbustos nativos, abejas, mariposas y colibríes encuentran menos alimento. Eso parece pequeño al inicio, pero puede afectar la polinización de plantas que luego dan frutos, semillas y alimento para otros seres vivos.',
+    story:'Cuando se fumiga demasiado o desaparecen flores y arbustos nativos, abejas, mariposas y colibríes encuentran menos alimento. Al principio parece un cambio pequeño, pero luego baja la polinización y muchas plantas producen menos frutos, menos semillas y menos alimento para otros seres vivos.',
     hints:[
       'Nombra al menos dos polinizadores y una planta que dependa de ellos.',
       'La función clave aquí es mover polen para que la planta se reproduzca.',
       'La consecuencia puede explicarse con menos flores, frutos o semillas.'
     ],
     focus:'Este caso muestra que una función ecológica puede afectar toda la cadena de vida.',
+    videoEmbed:'https://www.youtube-nocookie.com/embed/mDlRerMlyIQ',
+    videoBlurb:'Este recurso ayuda a ver que proteger polinizadores no es un detalle: sostiene la vida y la producción de alimentos.',
+    sourceMeta:'Texto adaptado a partir de un recurso audiovisual sobre polinizadores y una nota sobre su protección en el Perú.',
     sources:[
       {label:'Noticia: protección de polinizadores', url:'https://inforegion.pe/peru-pone-en-marcha-plan-para-proteger-polinizadores-frente-a-pesticidas-cambio-climatico-y-perdida-de-habitat/', kind:'news'},
-      {label:'Video: polinizadores clave', url:'https://www.youtube.com/watch?v=TPzsKjwnTbQ', kind:'video'}
+      {label:'Video: ¡Sin polinizadores no hay vida!', url:'https://www.youtube.com/watch?v=mDlRerMlyIQ', kind:'video'}
     ]
   }
 };
@@ -353,10 +433,24 @@ function selectCase(card, name, problem, kind){
     <h3>Historia breve del caso</h3>
     <p>${data.story}</p>
     <p><b>Qué mirar con atención:</b> ${data.focus}</p>
+    <p><b>Siguiente paso:</b> pasa a la siguiente diapositiva para ver el recurso del caso y analizarlo antes de responder.</p>
     <div class="resourceList">
       ${data.sources.map(source=>`<a class="${source.kind==='news'?'news':source.kind==='video'?'alt':''}" href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`).join('')}
     </div>
   `;
+  document.getElementById('caseDetailTitle').innerHTML='<b>Caso real elegido:</b> '+name+'<br><small>'+problem+'</small>';
+  document.getElementById('caseDetailText').innerHTML=`
+    <h3>Texto del caso</h3>
+    <p>${data.story}</p>
+    <p><b>Qué mirar con atención:</b> ${data.focus}</p>
+    <p><b>Pregunta para el equipo:</b> ¿qué parte de la biodiversidad está siendo afectada y qué pasará si nadie actúa?</p>
+  `;
+  document.getElementById('caseVideoTitle').textContent='Video o recurso principal del caso';
+  document.getElementById('caseVideoEmbed').src=data.videoEmbed;
+  document.getElementById('caseVideoFrame').classList.remove('hidden');
+  document.getElementById('caseVideoBlurb').textContent=data.videoBlurb;
+  document.getElementById('caseLinks').innerHTML=data.sources.map(source=>`<a class="${source.kind==='news'?'news':source.kind==='video'?'alt':''}" href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`).join('');
+  document.getElementById('caseSourceMeta').innerHTML=data.sourceMeta;
   document.getElementById('caseName').value=name;
   document.getElementById('problem').value=problem;
   document.querySelectorAll('input[name="levels"]').forEach(ch=>ch.checked=false);
