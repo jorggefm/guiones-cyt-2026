@@ -14,6 +14,8 @@
     --accent2: #ff5e56;
     --line: rgba(255,255,255,.18);
     --case: #ffdfb8;
+    --top-space: 100px;
+    --note-space: 238px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -44,14 +46,23 @@
     place-items: center;
   }
   .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
-  .imageWrap { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+  .imageWrap {
+    position: absolute;
+    top: var(--top-space);
+    right: 18px;
+    bottom: calc(var(--note-space) + 18px);
+    left: 18px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
   .imageWrap img { width: 100%; height: 100%; object-fit: contain; filter: saturate(1.03) contrast(1.04); }
   .shade {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-      linear-gradient(to bottom, rgba(0,0,0,.62), rgba(0,0,0,.04) 33%, rgba(0,0,0,.10) 66%, rgba(0,0,0,.76)),
+      linear-gradient(to bottom, rgba(0,0,0,.62), rgba(0,0,0,.04) 28%, rgba(0,0,0,.08) 60%, rgba(0,0,0,.82)),
       radial-gradient(circle at 78% 24%, rgba(255,120,80,.10), transparent 35%);
   }
   .topbar {
@@ -98,6 +109,7 @@
     left: 22px;
     right: 22px;
     bottom: 18px;
+    min-height: calc(var(--note-space) - 36px);
     z-index: 4;
     display: grid;
     grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.45fr);
@@ -232,6 +244,11 @@
   .close { width: auto; height: auto; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; }
   .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; z-index: 10; transition: width .25s ease; }
   @media (max-width: 900px) {
+    :root {
+      --top-space: 86px;
+      --note-space: 310px;
+    }
+    .imageWrap { left: 10px; right: 10px; bottom: calc(var(--note-space) + 10px); }
     .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
     .topbar { top: 10px; left: 12px; right: 12px; }
     .titleBox { max-width: 74vw; padding: 10px 12px; }
