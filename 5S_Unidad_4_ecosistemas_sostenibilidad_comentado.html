@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>5.° Secundaria | Unidad 4 — Ecosistemas, clima y sostenibilidad</title>
+<style>
+  :root {
+    --bg: #081015;
+    --panel: rgba(8, 16, 22, .74);
+    --panel-strong: rgba(7, 12, 16, .86);
+    --ink: #f4fbff;
+    --muted: #d1e2ee;
+    --accent: #9fe870;
+    --accent2: #43c6ac;
+    --line: rgba(255,255,255,.18);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; overflow: hidden; }
+  body { user-select: none; }
+  .deck { position: relative; width: 100vw; height: 100vh; background: radial-gradient(circle at 30% 20%, #163846 0%, #09151c 52%, #04080b 100%); }
+  .slide { position: absolute; inset: 0; opacity: 0; transform: scale(1.012); transition: opacity .28s ease, transform .28s ease; display: grid; place-items: center; }
+  .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+  .imageWrap { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; background: #05090c; }
+  .imageWrap img { width: 100%; height: 100%; object-fit: contain; filter: saturate(1.02) contrast(1.03); }
+  .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,.58), rgba(0,0,0,.05) 28%, rgba(0,0,0,.08) 64%, rgba(0,0,0,.78)); }
+  .slide.prompt .imageWrap img,
+  .slide.intro .imageWrap img { filter: blur(4px) brightness(.48) saturate(.9); transform: scale(1.03); }
+  .slide.prompt .shade,
+  .slide.intro .shade { background: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,.55)); }
+  .topbar { position: absolute; top: 18px; left: 22px; right: 22px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; z-index: 5; }
+  .titleBox { max-width: min(920px, 78vw); padding: 12px 16px 10px; background: linear-gradient(135deg, rgba(14,26,32,.80), rgba(16,54,59,.45)); border: 1px solid var(--line); border-radius: 18px; backdrop-filter: blur(8px); box-shadow: 0 10px 40px rgba(0,0,0,.22); }
+  h1 { margin: 0; font-size: clamp(21px, 2.15vw, 38px); line-height: 1.06; letter-spacing: -.02em; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+  .counter { flex: 0 0 auto; min-width: 78px; text-align: center; padding: 10px 12px; border-radius: 999px; background: rgba(9,13,16,.68); border: 1px solid var(--line); color: var(--muted); font-weight: 800; font-size: 14px; letter-spacing: .02em; backdrop-filter: blur(8px); }
+  .notes { position: absolute; left: 22px; right: 22px; bottom: 18px; z-index: 5; display: grid; grid-template-columns: minmax(240px, 1fr) minmax(360px, 1.45fr); gap: 14px; align-items: end; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 14px 16px; box-shadow: 0 14px 50px rgba(0,0,0,.32); backdrop-filter: blur(9px); }
+  .label { text-transform: uppercase; letter-spacing: .13em; color: var(--accent); font-size: 11px; font-weight: 900; margin-bottom: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 7px 10px; border-radius: 999px; background: rgba(159,232,112,.10); border: 1px solid rgba(159,232,112,.35); color: #ecffd7; font-size: clamp(13px, 1.1vw, 16px); font-weight: 800; white-space: nowrap; }
+  .comment { font-size: clamp(15px, 1.4vw, 21px); line-height: 1.34; margin: 0; font-weight: 650; color: #f3fbff; }
+  .focus { margin: 9px 0 0; color: var(--muted); font-size: clamp(13px, 1.05vw, 16px); line-height: 1.35; }
+  .centerPanel { position: relative; z-index: 5; width: min(940px, 90vw); background: var(--panel-strong); border: 1px solid var(--line); border-radius: 28px; padding: 28px 30px; box-shadow: 0 18px 64px rgba(0,0,0,.36); backdrop-filter: blur(10px); }
+  .introTag, .promptTag { text-transform: uppercase; letter-spacing: .18em; font-size: 11px; font-weight: 900; color: var(--accent); margin-bottom: 10px; }
+  .introTitle, .promptTitle { margin: 0 0 14px; font-size: clamp(30px, 3vw, 52px); line-height: 1.02; letter-spacing: -.03em; }
+  .introSub { margin: 0 0 14px; font-size: clamp(15px, 1.35vw, 22px); color: #e6f7ff; font-weight: 700; }
+  .introComment { margin: 0; font-size: clamp(16px, 1.4vw, 23px); line-height: 1.42; color: #f1fbff; }
+  .questionList { margin: 16px 0 0; padding-left: 24px; display: grid; gap: 12px; }
+  .questionList li { font-size: clamp(17px, 1.55vw, 24px); line-height: 1.35; color: #f3fbff; font-weight: 640; }
+  .revealWrap { margin-top: 20px; display: flex; justify-content: flex-start; }
+  .revealBtn { appearance: none; border: none; border-radius: 999px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #062113; padding: 12px 18px; font-size: 15px; font-weight: 900; letter-spacing: .01em; cursor: pointer; box-shadow: 0 12px 30px rgba(67,198,172,.24); }
+  .revealBtn:hover { transform: translateY(-1px); }
+  .controls { position: absolute; right: 16px; bottom: 50%; transform: translateY(50%); display: flex; flex-direction: column; gap: 10px; z-index: 8; opacity: .18; transition: opacity .2s ease; }
+  .controls:hover { opacity: .95; }
+  button.ctrl { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.45); color: white; font-size: 19px; line-height: 1; cursor: pointer; }
+  button.ctrl:hover { background: rgba(159,232,112,.20); }
+  .hit { position: absolute; top: 0; bottom: 0; z-index: 5; }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .help { position: absolute; top: 82px; right: 22px; z-index: 9; background: rgba(10,12,14,.80); color: #eafaff; border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; width: 290px; font-size: 13px; line-height: 1.45; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .2s ease; backdrop-filter: blur(8px); }
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview { position: absolute; inset: 0; z-index: 20; background: rgba(5,7,9,.95); display: none; padding: 26px; overflow: auto; }
+  .overview.show { display: block; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .thumb { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.04); overflow: hidden; cursor: pointer; transition: transform .15s ease, border-color .15s ease; }
+  .thumb:hover { transform: translateY(-2px); border-color: rgba(159,232,112,.60); }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #091116; }
+  .thumb div { padding: 10px 12px; font-size: 13px; color: #effcff; font-weight: 800; line-height: 1.28; }
+  .overviewHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
+  .overviewHeader h2 { margin: 0; font-size: 24px; }
+  .close { width: auto; height: auto; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; border: 1px solid var(--line); background: rgba(255,255,255,.08); color: var(--ink); cursor: pointer; }
+  .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; z-index: 10; transition: width .25s ease; }
+  @media (max-width: 900px) {
+    .notes { grid-template-columns: 1fr; gap: 8px; left: 12px; right: 12px; bottom: 10px; }
+    .topbar { top: 10px; left: 12px; right: 12px; }
+    .titleBox { max-width: 74vw; padding: 10px 12px; }
+    .card, .centerPanel { padding: 12px 14px; border-radius: 18px; }
+    .focus { display: none; }
+    .controls { right: 8px; }
+    .chip { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls" aria-label="Controles">
+    <button class="ctrl" onclick="prevSlide()" title="Anterior">‹</button>
+    <button class="ctrl" onclick="nextSlide()" title="Siguiente">›</button>
+    <button class="ctrl" onclick="toggleOverview()" title="Miniaturas">□</button>
+  </div>
+  <div class="help" id="help">
+    <b>Controles:</b><br>
+    → / Espacio: avanzar<br>
+    ←: retroceder<br>
+    O: miniaturas<br>
+    F: pantalla completa<br>
+    H: mostrar/ocultar esta ayuda
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader"><h2>Vista general del deck</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const slides = [{"type": "intro", "title": "5.° Secundaria | Unidad 4 — Ecosistemas, clima y sostenibilidad", "subtitle": "Clase integradora visual · del organismo al sistema ecológico", "comment": "Hoy no veremos temas sueltos. Vamos a reconstruir una sola historia científica: cómo funciona un ecosistema, cómo se desequilibra y qué decisiones humanas permiten sostenerlo.", "image": "assets/5s_u4_deck/18_cierre_integrador.png"}, {"type": "prompt", "title": "Antes de revelar: ¿qué hace que un ecosistema sea un sistema?", "questions": ["¿Basta con juntar animales y plantas para tener un ecosistema?", "¿Qué papel tienen el agua, el suelo, la luz y el relieve?", "¿Qué cambia cuando entendemos el ecosistema como red de interacciones?"], "button": "Revelar ecosistema", "image": "assets/5s_u4_deck/03_ecosistema.png"}, {"type": "image", "title": "Ecosistema: componentes bióticos y abióticos en interacción", "keywords": ["Biota", "Biotopo", "Interacciones", "Sistema"], "comment": "Un ecosistema no es una lista de elementos, sino una organización dinámica entre seres vivos y medio físico.", "focus": "Clave oral: identificar qué relaciones sostienen el sistema y cuáles variables físicas lo condicionan.", "image": "assets/5s_u4_deck/03_ecosistema.png"}, {"type": "prompt", "title": "Pregunta guía: ¿hábitat y nicho ecológico significan lo mismo?", "questions": ["¿El lugar donde vive un organismo equivale a su función ecológica?", "¿Qué información falta cuando solo decimos dónde habita?", "¿Cómo cambia la explicación si añadimos dieta, competencia y depredación?"], "button": "Revelar hábitat y nicho", "image": "assets/5s_u4_deck/04_habitat_nicho.png"}, {"type": "image", "title": "Hábitat y nicho ecológico: espacio físico vs rol funcional", "keywords": ["Hábitat", "Nicho", "Recursos", "Rol"], "comment": "El hábitat ubica al organismo; el nicho explica cómo vive, de qué depende y qué lugar ocupa dentro de la red ecológica.", "focus": "Aplicación directa: usar el animal elegido como caso de estudio para distinguir ambos conceptos.", "image": "assets/5s_u4_deck/04_habitat_nicho.png"}, {"type": "prompt", "title": "Antes de la imagen: ¿quién depende de quién dentro del sistema?", "questions": ["¿Por qué una cadena lineal suele quedarse corta para explicar un ecosistema real?", "¿Qué sucede si una especie participa en varias relaciones al mismo tiempo?", "¿Cómo se representa mejor la complejidad alimentaria?"], "button": "Revelar red trófica", "image": "assets/5s_u4_deck/05_red_trofica.png"}, {"type": "image", "title": "Red trófica: la alimentación como red de dependencias", "keywords": ["Productores", "Consumidores", "Descomponedores", "Conexiones"], "comment": "La red trófica muestra que la estabilidad ecológica depende de múltiples conexiones, no de una sola ruta alimentaria.", "focus": "Preguntar: ¿qué organismos cumplen más de una función y por eso vuelven más compleja la red?", "image": "assets/5s_u4_deck/05_red_trofica.png"}, {"type": "image", "title": "Flujo de energía: por qué la energía disponible disminuye", "keywords": ["kcal", "Transferencia", "Pérdidas", "Pirámide"], "comment": "La energía no circula intacta: en cada transferencia trófica disminuye drásticamente la energía disponible para el siguiente nivel.", "focus": "Punto de explicación: la estructura de la pirámide no es decorativa, es una consecuencia termodinámica.", "image": "assets/5s_u4_deck/06_flujo_energia.png"}, {"type": "prompt", "title": "Pregunta crítica: ¿por qué un depredador puede sostener un ecosistema?", "questions": ["¿Un depredador solo reduce poblaciones o también regula equilibrios?", "¿Qué ocurre con herbívoros y productores si desaparece el control superior?", "¿Cómo se traduce eso en estabilidad o desequilibrio?"], "button": "Revelar regulación ecológica", "image": "assets/5s_u4_deck/07_depredador_presa.png"}, {"type": "image", "title": "Depredador y presa: regulación poblacional", "keywords": ["Depredador", "Presa", "Control", "Equilibrio"], "comment": "La depredación no solo elimina individuos: organiza densidades, limita herbivoría y mantiene la estructura del sistema.", "focus": "Transición conceptual: el equilibrio ecológico depende de relaciones de control, no de armonía pasiva.", "image": "assets/5s_u4_deck/07_depredador_presa.png"}, {"type": "image", "title": "Cascada trófica: el desequilibrio tras perder un depredador", "keywords": ["Ausencia", "Herbívoros", "Vegetación", "Cascada"], "comment": "Cuando desaparece un regulador superior, la alteración se propaga: aumentan consumidores intermedios y cae la base productiva.", "focus": "Pedir a los estudiantes que describan la secuencia causal completa, no solo el resultado final.", "image": "assets/5s_u4_deck/08_desequilibrio.png"}, {"type": "prompt", "title": "Antes de los ciclos: ¿qué mantiene circulando la materia?", "questions": ["¿Cómo vuelve el agua al sistema después de usarse?", "¿Cómo pasa el carbono entre atmósfera, seres vivos y suelo?", "¿Qué papel cumplen bacterias, plantas y descomponedores en el nitrógeno y el oxígeno?"], "button": "Revelar ciclos", "image": "assets/5s_u4_deck/09_ciclo_agua.png"}, {"type": "image", "title": "Ciclo del agua: circulación y disponibilidad", "keywords": ["Evaporación", "Precipitación", "Infiltración", "Transpiración"], "comment": "El agua no desaparece: cambia de estado, se desplaza y vuelve a integrarse al sistema por rutas múltiples.", "focus": "Conectar con ecosistemas peruanos: costa árida, Andes glaciares y cuencas amazónicas.", "image": "assets/5s_u4_deck/09_ciclo_agua.png"}, {"type": "image", "title": "Ciclo del carbono: respiración, fotosíntesis y emisiones", "keywords": ["Atmósfera", "Fotosíntesis", "Respiración", "Emisiones"], "comment": "El carbono enlaza biosfera, atmósfera y actividad humana; por eso es central para entender clima y productividad biológica.", "focus": "Punto clave: la intervención humana acelera entradas y salidas del sistema más allá del ritmo natural.", "image": "assets/5s_u4_deck/10_ciclo_carbono.png"}, {"type": "image", "title": "Ciclo del nitrógeno: suelo, bacterias y fertilidad", "keywords": ["Fijación", "Suelo", "Plantas", "Desnitrificación"], "comment": "El nitrógeno exige mediadores biológicos: sin microorganismos, gran parte del nitrógeno atmosférico seguiría inaccesible para los seres vivos.", "focus": "Subrayar que la fertilidad del ecosistema no depende solo del suelo visible, sino de procesos microbianos invisibles.", "image": "assets/5s_u4_deck/11_ciclo_nitrogeno.png"}, {"type": "image", "title": "Ciclo del oxígeno: fotosíntesis y respiración en red", "keywords": ["Fotosíntesis", "Respiración", "Descomposición", "Atmósfera"], "comment": "El oxígeno tampoco es estático: se produce, se consume y se redistribuye entre plantas, animales, agua y atmósfera.", "focus": "Conectar el oxígeno con metabolismo, ecosistemas acuáticos y procesos de combustión.", "image": "assets/5s_u4_deck/12_ciclo_oxigeno.png"}, {"type": "prompt", "title": "Puente al clima: ¿por qué el equilibrio atmosférico puede alterarse?", "questions": ["¿Qué diferencia hay entre el efecto invernadero natural y su intensificación humana?", "¿Por qué CO₂, CH₄ y N₂O son estratégicos?", "¿Qué consecuencias sistémicas produce esa retención adicional de calor?"], "button": "Revelar efecto invernadero", "image": "assets/5s_u4_deck/13_efecto_invernadero.png"}, {"type": "image", "title": "Gases de efecto invernadero: el problema no es su existencia, sino su intensificación", "keywords": ["CO₂", "CH₄", "N₂O", "Retención"], "comment": "El efecto invernadero sostiene la vida; la perturbación ocurre cuando las emisiones humanas incrementan la retención de calor más allá del equilibrio natural.", "focus": "Explicar la diferencia entre mecanismo físico natural y cambio climático antrópico.", "image": "assets/5s_u4_deck/13_efecto_invernadero.png"}, {"type": "image", "title": "Glaciares del Perú: agua, ecosistema y vulnerabilidad climática", "keywords": ["Glaciar", "Menos agua", "Cuenca", "Calentamiento"], "comment": "El retroceso glaciar no es solo pérdida de hielo: modifica caudales, presión hídrica, vegetación, biodiversidad y vida humana aguas abajo.", "focus": "Punto oral: glaciares andinos como reguladores ecológicos e hídricos de gran escala.", "image": "assets/5s_u4_deck/14_glaciares_peru.png"}, {"type": "prompt", "title": "Pregunta de síntesis: ¿qué significa realmente conservar biodiversidad?", "questions": ["¿Basta con contar especies?", "¿Por qué importa la variación genética dentro de una misma especie?", "¿Qué se pierde cuando disminuyen ecosistemas o funciones ecológicas?"], "button": "Revelar biodiversidad", "image": "assets/5s_u4_deck/15_biodiversidad.png"}, {"type": "image", "title": "Biodiversidad en cuatro dimensiones", "keywords": ["Genética", "Especies", "Ecosistemas", "Funcional"], "comment": "La biodiversidad no es un solo indicador: integra variación interna, variedad de especies, multiplicidad de ecosistemas y funciones dentro de la red ecológica.", "focus": "Pedir que relacionen estas cuatro dimensiones con el animal investigado.", "image": "assets/5s_u4_deck/15_biodiversidad.png"}, {"type": "prompt", "title": "Antes de la respuesta humana: ¿cómo se sostiene un sistema sin destruirlo?", "questions": ["¿Se puede producir, vivir y desarrollarse sin degradar el entorno?", "¿Qué papel tienen la tecnología y la política en ese equilibrio?", "¿Qué criterio vuelve sostenible una decisión?"], "button": "Revelar sostenibilidad", "image": "assets/5s_u4_deck/16_desarrollo_sostenible.png"}, {"type": "image", "title": "Desarrollo sostenible: equilibrio entre ambiente, sociedad y economía", "keywords": ["Ambiente", "Sociedad", "Economía", "Equilibrio"], "comment": "La sostenibilidad no elimina el desarrollo: lo obliga a operar dentro de límites ecológicos y con responsabilidad social.", "focus": "Conectar con tecnologías limpias, agua, energía y decisiones productivas.", "image": "assets/5s_u4_deck/16_desarrollo_sostenible.png"}, {"type": "image", "title": "Políticas ambientales y EIA: decisiones basadas en evidencia", "keywords": ["EIA", "Riesgo", "Mitigación", "Protección"], "comment": "La política ambiental seria no es trámite: es gestión científica del riesgo y de la conservación frente a proyectos humanos.", "focus": "Pregunta oral útil: ¿qué ocurre cuando un proyecto se aprueba sin evidencia ecológica suficiente?", "image": "assets/5s_u4_deck/17_politicas_eia.png"}, {"type": "image", "title": "Síntesis de la unidad: proteger una especie es proteger un sistema", "keywords": ["Hábitat", "Red trófica", "Ciclos", "Sostenibilidad"], "comment": "Un organismo no se conserva aisladamente: se conserva manteniendo las condiciones sistémicas que hacen viable su existencia.", "focus": "Usar esta diapositiva para volver al animal elegido y cerrar el arco conceptual completo.", "image": "assets/5s_u4_deck/18_cierre_integrador.png"}, {"type": "prompt", "title": "Caso integrador: cuando el daño ecológico se vuelve visible", "questions": ["¿Cómo se altera una red trófica marina tras un derrame?", "¿Qué significa bioacumulación en un caso real?", "¿Qué tecnologías y políticas deberían activarse frente al desastre?"], "button": "Revelar caso del derrame", "image": "assets/5s_u4_deck/19_derrame_petroleo.png"}, {"type": "image", "title": "Derrame de petróleo en el mar peruano: caso para evidencia C2", "keywords": ["Derrame", "Red trófica", "Bioacumulación", "Impacto"], "comment": "Este caso obliga a integrar cadena trófica, contaminación, ciclo del carbono, respuesta tecnológica y responsabilidad política.", "focus": "Ideal para hacer preguntas evaluativas antes de pasar a la producción escrita.", "image": "assets/5s_u4_deck/19_derrame_petroleo.png"}, {"type": "image", "title": "Gestión ambiental escolar: del diagnóstico a la mejora", "keywords": ["Agua", "Residuos", "Energía", "Mejora"], "comment": "La aplicación final no es abstracta: el colegio puede analizar sus impactos y convertir la sostenibilidad en criterio de gestión cotidiana.", "focus": "Cierre aplicado: vincular ciencia ecológica con decisiones reales del entorno inmediato.", "image": "assets/5s_u4_deck/20_gestion_escolar.png"}];
+
+let current = 0;
+const host = document.getElementById('slideHost');
+const grid = document.getElementById('thumbGrid');
+
+function makeSlide(s, i) {
+  const image = s.image || '';
+  const topbar = `
+    <div class="topbar">
+      <div class="titleBox"><h1>${s.title}</h1></div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>`;
+
+  if (s.type === 'intro') {
+    return `<section class="slide intro ${i===0?'active':''}" data-index="${i}">
+      <div class="imageWrap"><img src="${image}" alt="${s.title}"></div>
+      <div class="shade"></div>
+      ${topbar}
+      <div class="centerPanel">
+        <div class="introTag">Apertura</div>
+        <h2 class="introTitle">${s.title}</h2>
+        <p class="introSub">${s.subtitle || ''}</p>
+        <p class="introComment">${s.comment || ''}</p>
+      </div>
+    </section>`;
+  }
+
+  if (s.type === 'prompt') {
+    return `<section class="slide prompt ${i===0?'active':''}" data-index="${i}">
+      <div class="imageWrap"><img src="${image}" alt="${s.title}"></div>
+      <div class="shade"></div>
+      ${topbar}
+      <div class="centerPanel">
+        <div class="promptTag">Pregunta antes de revelar</div>
+        <h2 class="promptTitle">${s.title}</h2>
+        <ol class="questionList">${(s.questions || []).map(q => `<li>${q}</li>`).join('')}</ol>
+        <div class="revealWrap"><button class="revealBtn" onclick="nextSlide()">${s.button || 'Revelar'}</button></div>
+      </div>
+    </section>`;
+  }
+
+  return `<section class="slide image ${i===0?'active':''}" data-index="${i}">
+    <div class="imageWrap"><img src="${image}" alt="${s.title}"></div>
+    <div class="shade"></div>
+    ${topbar}
+    <div class="notes">
+      <div class="card">
+        <div class="label">Palabras clave</div>
+        <div class="chips">${(s.keywords || []).map(k => `<span class="chip">${k}</span>`).join('')}</div>
+      </div>
+      <div class="card">
+        <div class="label">Comentario para explicar</div>
+        <p class="comment">${s.comment || ''}</p>
+        <p class="focus">${s.focus || ''}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join('');
+  grid.innerHTML = slides.map((s, i) => `
+    <div class="thumb" onclick="goTo(${i}); toggleOverview(false);">
+      <img src="${s.image || ''}" alt="${s.title}">
+      <div>${i + 1}. ${s.title}</div>
+    </div>`).join('');
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById('progress').style.width = ((current + 1) / slides.length * 100) + '%';
+}
+
+function showSlide(i) {
+  current = (i + slides.length) % slides.length;
+  document.querySelectorAll('.slide').forEach((el, idx) => el.classList.toggle('active', idx === current));
+  updateProgress();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+
+function toggleOverview(force) {
+  const ov = document.getElementById('overview');
+  const shouldShow = typeof force === 'boolean' ? force : !ov.classList.contains('show');
+  ov.classList.toggle('show', shouldShow);
+}
+
+function toggleHelp() {
+  document.getElementById('help').classList.toggle('show');
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key.toLowerCase() === 'o') toggleOverview();
+  if (e.key.toLowerCase() === 'h') toggleHelp();
+  if (e.key.toLowerCase() === 'f') toggleFullscreen();
+  if (e.key === 'Escape') toggleOverview(false);
+});
+
+render();
+showSlide(0);
+</script>
+</body>
+</html>
