@@ -241,6 +241,67 @@ button,a.linkBtn{
   font-weight:800;
   color:#114489;
 }
+.patternBox{
+  margin-top:16px;
+  padding:16px;
+  border-radius:18px;
+  background:#f3f8ff;
+  border:1px solid var(--line);
+}
+.patternHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.patternHeader h3{
+  margin:0;
+  color:#0f4ca6;
+  font-size:1.1rem;
+}
+.patternBtn{
+  background:#0f4ca6;
+  color:#fff;
+  border:0;
+  border-radius:999px;
+  padding:10px 14px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+.patternBtn[disabled]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.patternName{
+  margin:12px 0 8px;
+  font-size:1.2rem;
+  font-weight:900;
+  color:#163f7b;
+}
+.patternHint{
+  margin:0 0 12px;
+  color:#43658f;
+  font-size:.94rem;
+}
+.patternGrid{
+  width:min(100%,240px);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+}
+.patternCell{
+  aspect-ratio:1 / 1;
+  border-radius:10px;
+  background:#dce8fb;
+  border:1px solid #bfd2f2;
+}
+.patternCell.active{
+  background:linear-gradient(135deg,#ffd66f 0%, #f5a623 100%);
+  border-color:#efb84b;
+  box-shadow:0 8px 18px rgba(245,166,35,.25);
+}
 .history{
   display:flex;
   flex-wrap:wrap;
@@ -315,6 +376,7 @@ button,a.linkBtn{
     <p>Esta cajita tiene 100 bolitas tematicas para que la partida dure bastante mas. Cada vez que saques una, el sistema mostrara la misma ficha visual que pueden tener las cartillas de las y los estudiantes.</p>
     <div class="controls">
       <button class="primary" id="drawBtn" type="button">Sacar bolita</button>
+      <button class="secondary" id="patternBtn" type="button">Elegir patron</button>
       <button class="secondary" id="hintBtn" type="button" disabled>Mostrar pista</button>
       <button class="secondary" id="resetBtn" type="button">Reiniciar</button>
       <a class="linkBtn" href="6P_U4_bingo_biodiversidad_cartillas.html" target="_blank">Abrir cartilla</a>
@@ -347,6 +409,15 @@ button,a.linkBtn{
         <div class="drawText" id="drawText">Agitando bolitas...</div>
       </div>
       <div class="hint" id="hintBox"></div>
+      <div class="patternBox">
+        <div class="patternHeader">
+          <h3>Patron del bingo</h3>
+          <button class="patternBtn" id="patternPickBtn" type="button">Patron aleatorio</button>
+        </div>
+        <div class="patternName" id="patternName">Patron libre</div>
+        <p class="patternHint" id="patternHint">Presiona el boton y la urna elegira una figura para esta ronda.</p>
+        <div class="patternGrid" id="patternGrid"></div>
+      </div>
     </article>
   </section>
 
@@ -487,9 +558,14 @@ const currentBallEl = document.getElementById('currentBall');
 const drawStageEl = document.getElementById('drawStage');
 const countBubbleEl = document.getElementById('countBubble');
 const drawTextEl = document.getElementById('drawText');
+const patternNameEl = document.getElementById('patternName');
+const patternHintEl = document.getElementById('patternHint');
+const patternGridEl = document.getElementById('patternGrid');
 const hintBoxEl = document.getElementById('hintBox');
 const historyEl = document.getElementById('history');
 const drawBtn = document.getElementById('drawBtn');
+const patternBtn = document.getElementById('patternBtn');
+const patternPickBtn = document.getElementById('patternPickBtn');
 const hintBtn = document.getElementById('hintBtn');
 const resetBtn = document.getElementById('resetBtn');
 const urnEl = document.querySelector('.urn');
@@ -500,6 +576,20 @@ let current = null;
 let hintVisible = false;
 let isDrawing = false;
 let previewTimer = null;
+let currentPattern = null;
+
+const PATTERNS = [
+  { name:'X', hint:'Deben marcar ambas diagonales completas.', cells:[0,4,6,8,12,16,18,20,24] },
+  { name:'U', hint:'Marca las dos columnas laterales y toda la fila inferior.', cells:[0,4,5,9,10,14,15,19,20,21,22,23,24] },
+  { name:'T', hint:'Marca toda la fila superior y la columna central.', cells:[0,1,2,3,4,7,12,17,22] },
+  { name:'L', hint:'Marca la primera columna y la fila inferior.', cells:[0,5,10,15,20,21,22,23,24] },
+  { name:'Marco', hint:'Gana quien complete todo el borde externo.', cells:[0,1,2,3,4,5,9,10,14,15,19,20,21,22,23,24] },
+  { name:'4 esquinas', hint:'Solo cuentan las cuatro esquinas de la cartilla.', cells:[0,4,20,24] },
+  { name:'Diagonal principal', hint:'Marca de arriba izquierda hasta abajo derecha.', cells:[0,6,12,18,24] },
+  { name:'Diagonal secundaria', hint:'Marca de arriba derecha hasta abajo izquierda.', cells:[4,8,12,16,20] },
+  { name:'Flecha', hint:'Completa la columna central y la punta superior.', cells:[2,6,7,8,12,17,22] },
+  { name:'Cruz', hint:'Completa la fila central y la columna central.', cells:[2,7,10,11,12,13,14,17,22] }
+];
 
 function shuffle(list){
   const clone = [...list];
@@ -585,8 +675,28 @@ function sleep(ms){
 
 function setControlsDisabled(disabled){
   drawBtn.disabled = disabled;
+  patternBtn.disabled = disabled;
+  patternPickBtn.disabled = disabled;
   resetBtn.disabled = disabled;
   hintBtn.disabled = disabled || !current;
+}
+
+function renderPattern(pattern){
+  patternGridEl.innerHTML = '';
+  const activeSet = new Set(pattern.cells);
+  for(let i = 0; i < 25; i++){
+    const cell = document.createElement('div');
+    cell.className = `patternCell${activeSet.has(i) ? ' active' : ''}`;
+    patternGridEl.appendChild(cell);
+  }
+  patternNameEl.textContent = pattern.name;
+  patternHintEl.textContent = pattern.hint;
+}
+
+function pickPattern(){
+  const pool = PATTERNS.filter((pattern) => !currentPattern || pattern.name !== currentPattern.name);
+  currentPattern = pool[Math.floor(Math.random() * pool.length)];
+  renderPattern(currentPattern);
 }
 
 function renderPreview(item, message){
@@ -607,15 +717,15 @@ async function runDrawAnimation(){
     renderPreview(sample, 'Mezclando...');
   }, 120);
 
-  for(const step of ['3','2','1']){
+  for(const step of ['5','4','3','2','1']){
     countBubbleEl.textContent = step;
-    drawTextEl.textContent = step === '1' ? 'Sale una bolita...' : 'Agitando bolitas...';
-    await sleep(520);
+    drawTextEl.textContent = step === '1' ? 'Sale una bolita...' : 'Agitando bolitas con suspenso...';
+    await sleep(620);
   }
 
   countBubbleEl.textContent = '!';
   drawTextEl.textContent = 'Revelando concepto...';
-  await sleep(280);
+  await sleep(520);
 
   clearInterval(previewTimer);
   previewTimer = null;
@@ -668,6 +778,7 @@ function resetGame(){
   current = null;
   hintVisible = false;
   isDrawing = false;
+  currentPattern = null;
   drawBtn.textContent = 'Sacar bolita';
   drawStageEl.classList.remove('show');
   urnEl.classList.remove('shaking');
@@ -675,9 +786,12 @@ function resetGame(){
   renderBalls();
   renderCurrent();
   renderHistory();
+  pickPattern();
 }
 
 drawBtn.addEventListener('click', drawBall);
+patternBtn.addEventListener('click', pickPattern);
+patternPickBtn.addEventListener('click', pickPattern);
 hintBtn.addEventListener('click', () => {
   if(!current){
     return;
