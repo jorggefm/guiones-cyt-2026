@@ -20,7 +20,15 @@ html,body{
   background:linear-gradient(180deg,var(--blue) 0%, var(--blueDeep) 100%);
   color:#fff;
 }
-body{min-height:100vh}
+html{
+  -webkit-text-size-adjust:100%;
+}
+body{
+  min-height:100vh;
+  overflow:auto;
+  touch-action:pan-x pan-y pinch-zoom;
+  -webkit-overflow-scrolling:touch;
+}
 .page{
   max-width:980px;
   margin:0 auto;
@@ -239,7 +247,7 @@ button:active,a.btn:active{transform:translateY(2px)}
     font-size:.88rem;
   }
 }
-@media (max-height:780px) and (orientation:landscape){
+@media (max-height:860px) and (orientation:landscape){
   .page{padding:8px 10px 10px}
   .toolbar{margin-bottom:6px}
   .titleBox h1{font-size:1.9rem}
@@ -252,7 +260,7 @@ button:active,a.btn:active{transform:translateY(2px)}
     font-size:.82rem;
   }
   .ticket{
-    width:min(100%,540px);
+    width:min(100%, 620px, calc(100dvh - 170px));
     padding:6px 6px 5px;
   }
   .bingoHead{gap:5px;margin-bottom:6px}
@@ -261,6 +269,8 @@ button:active,a.btn:active{transform:translateY(2px)}
   .footer{margin-top:6px}
   .ticketNo{font-size:1.85rem}
   .legend{font-size:.64rem}
+  .cell{padding:4px}
+  .cell img{width:82%}
   .cell.marked::after{
     width:22px;
     height:22px;
