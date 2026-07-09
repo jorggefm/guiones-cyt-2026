@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -270,7 +270,7 @@
     H: mostrar u ocultar esta ayuda
   </div>
   <div class="overview" id="overview">
-    <div class="overviewHeader"><h2>Vista general de imágenes</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
+    <div class="overviewHeader"><h2>Vista general de imÃ¡genes</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
     <div class="grid" id="thumbGrid"></div>
   </div>
   <div class="progress" id="progress"></div>
@@ -279,19 +279,10 @@
 const slides = [
   {
     kind: "theory",
-    section: "Apertura",
-    title: "Ruta general de la clase integrada",
-    image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png",
-    keywords: ["Estímulo", "Nervioso", "Hipotálamo", "Hipófisis", "Hormonas", "Homeostasis"],
-    comment: "La clase sigue una sola ruta: un estímulo activa respuestas nerviosas rápidas y, cuando hace falta sostener la regulación, entra el sistema endocrino.",
-    focus: "Idea fuerza: el hipotálamo y la hipófisis traducen señales nerviosas en respuestas hormonales."
-  },
-  {
-    kind: "theory",
     section: "Bloque 1",
     title: "Sistema nervioso: mapa general",
     image: "assets/4s_neuroendocrino/01_sistema_nervioso_general.png",
-    keywords: ["Encéfalo", "Médula", "Nervios", "Receptores", "Efectores"],
+    keywords: ["EncÃ©falo", "MÃ©dula", "Nervios", "Receptores", "Efectores"],
     comment: "Primero ubicamos la red completa: detectar, integrar, transmitir y responder.",
     focus: "Sirve para que el estudiante no vea neuronas sueltas, sino un sistema corporal organizado."
   },
@@ -300,8 +291,8 @@ const slides = [
     section: "Bloque 1",
     title: "La neurona como unidad funcional",
     image: "assets/4s_neuroendocrino/02_partes_neurona.png",
-    keywords: ["Dendritas", "Axón", "Mielina", "Sinapsis"],
-    comment: "La arquitectura de la neurona explica por qué el sistema nervioso puede transmitir información con tanta rapidez y precisión.",
+    keywords: ["Dendritas", "AxÃ³n", "Mielina", "Sinapsis"],
+    comment: "La arquitectura de la neurona explica por quÃ© el sistema nervioso puede transmitir informaciÃ³n con tanta rapidez y precisiÃ³n.",
     focus: "Recibe, integra, conduce y transmite."
   },
   {
@@ -309,9 +300,9 @@ const slides = [
     section: "Bloque 1",
     title: "Impulso nervioso y velocidad de respuesta",
     image: "assets/4s_neuroendocrino/03_impulso_nervioso.png",
-    keywords: ["Reposo", "Despolarización", "Propagación", "Dirección"],
-    comment: "Aquí aparece la lógica del sistema nervioso: una señal rápida, por eventos, que se propaga cuando se supera el umbral.",
-    focus: "El modelo que luego compararemos con la regulación hormonal."
+    keywords: ["Reposo", "DespolarizaciÃ³n", "PropagaciÃ³n", "DirecciÃ³n"],
+    comment: "AquÃ­ aparece la lÃ³gica del sistema nervioso: una seÃ±al rÃ¡pida, por eventos, que se propaga cuando se supera el umbral.",
+    focus: "El modelo que luego compararemos con la regulaciÃ³n hormonal."
   },
   {
     kind: "theory",
@@ -320,88 +311,88 @@ const slides = [
     image: "assets/4s_neuroendocrino/04_tipos_neuronas.png",
     keywords: ["Sensitiva", "Interneurona", "Motora"],
     comment: "No todas las neuronas hacen lo mismo: unas detectan, otras integran y otras ejecutan la respuesta.",
-    focus: "Con esto se entiende mejor el flujo de información."
+    focus: "Con esto se entiende mejor el flujo de informaciÃ³n."
   },
   {
     kind: "theory",
     section: "Bloque 1",
     title: "Arco reflejo",
     image: "assets/4s_neuroendocrino/05_arco_reflejo.png",
-    keywords: ["Reflejo", "Médula", "Retirada", "Supervivencia"],
-    comment: "El arco reflejo prueba que no toda respuesta necesita pasar primero por una decisión consciente.",
-    focus: "Ruta corta, rápida y muy útil para la supervivencia."
+    keywords: ["Reflejo", "MÃ©dula", "Retirada", "Supervivencia"],
+    comment: "El arco reflejo prueba que no toda respuesta necesita pasar primero por una decisiÃ³n consciente.",
+    focus: "Ruta corta, rÃ¡pida y muy Ãºtil para la supervivencia."
   },
   {
     kind: "theory",
     section: "Bloque 1",
     title: "SNC y SNP",
     image: "assets/4s_neuroendocrino/06_snc_vs_snp.png",
-    keywords: ["SNC", "SNP", "Integración", "Conexión"],
-    comment: "El sistema nervioso central interpreta e integra; el periférico conecta el cuerpo con ese centro de control.",
+    keywords: ["SNC", "SNP", "IntegraciÃ³n", "ConexiÃ³n"],
+    comment: "El sistema nervioso central interpreta e integra; el perifÃ©rico conecta el cuerpo con ese centro de control.",
     focus: "Pensar, sentir y responder forman una sola cadena funcional."
   },
   {
     kind: "theory",
     section: "Bloque 1",
-    title: "Sinapsis química",
+    title: "Sinapsis quÃ­mica",
     image: "assets/4s_neuroendocrino/07_sinapsis_quimica.png",
-    keywords: ["Neurotransmisor", "Receptor", "Espacio sináptico"],
-    comment: "La rapidez nerviosa también depende de mensajeros químicos, pero liberados en puntos muy específicos.",
-    focus: "Es una señal local y precisa, no una regulación masiva por sangre."
+    keywords: ["Neurotransmisor", "Receptor", "Espacio sinÃ¡ptico"],
+    comment: "La rapidez nerviosa tambiÃ©n depende de mensajeros quÃ­micos, pero liberados en puntos muy especÃ­ficos.",
+    focus: "Es una seÃ±al local y precisa, no una regulaciÃ³n masiva por sangre."
   },
   {
     kind: "theory",
     section: "Bloque 1",
-    title: "Plasticidad, poda y reorganización",
+    title: "Plasticidad, poda y reorganizaciÃ³n",
     image: "assets/4s_neuroendocrino/08_plasticidad_poda.png",
     keywords: ["Plasticidad", "Poda", "Aprendizaje", "Redes"],
     comment: "El sistema nervioso no es fijo: cambia con el desarrollo, la experiencia y el aprendizaje.",
-    focus: "Sirve para relacionar estructura, función y adaptación."
+    focus: "Sirve para relacionar estructura, funciÃ³n y adaptaciÃ³n."
   },
   {
     kind: "theory",
     section: "Bloque 2",
     title: "Sistema endocrino: panorama general",
     image: "assets/4s_neuroendocrino/09_sistema_endocrino_general.png",
-    keywords: ["Glándulas", "Hormonas", "Sangre", "Regulación"],
-    comment: "Ahora cambiamos de lógica: el sistema endocrino regula más lento, pero sostiene cambios durante más tiempo.",
+    keywords: ["GlÃ¡ndulas", "Hormonas", "Sangre", "RegulaciÃ³n"],
+    comment: "Ahora cambiamos de lÃ³gica: el sistema endocrino regula mÃ¡s lento, pero sostiene cambios durante mÃ¡s tiempo.",
     focus: "Es la base para entender homeostasis y ejes hormonales."
   },
   {
     kind: "theory",
     section: "Bloque 2",
-    title: "Glándulas y hormonas",
+    title: "GlÃ¡ndulas y hormonas",
     image: "assets/4s_neuroendocrino/10_glandulas_hormonas.png",
-    keywords: ["Tiroides", "Páncreas", "Suprarrenales", "Gónadas"],
-    comment: "Cada glándula libera mensajeros químicos que actúan en órganos diana concretos.",
-    focus: "El estudiante necesita ubicar quién produce y quién responde."
+    keywords: ["Tiroides", "PÃ¡ncreas", "Suprarrenales", "GÃ³nadas"],
+    comment: "Cada glÃ¡ndula libera mensajeros quÃ­micos que actÃºan en Ã³rganos diana concretos.",
+    focus: "El estudiante necesita ubicar quiÃ©n produce y quiÃ©n responde."
   },
   {
     kind: "theory",
     section: "Bloque 2",
-    title: "Hormona, receptor y órgano diana",
+    title: "Hormona, receptor y Ã³rgano diana",
     image: "assets/4s_neuroendocrino/11_hormona_organo_diana.png",
     keywords: ["Hormona", "Receptor", "Especificidad"],
-    comment: "Una hormona solo actúa donde existe el receptor adecuado. Por eso una misma sangre transporta mensajes distintos sin confundirlos.",
-    focus: "Aquí aparece la idea de especificidad biológica."
+    comment: "Una hormona solo actÃºa donde existe el receptor adecuado. Por eso una misma sangre transporta mensajes distintos sin confundirlos.",
+    focus: "AquÃ­ aparece la idea de especificidad biolÃ³gica."
   },
   {
     kind: "theory",
     section: "Bloque 2",
     title: "Homeostasis de glucosa",
     image: "assets/4s_neuroendocrino/12_homeostasis_glucosa.png",
-    keywords: ["Insulina", "Glucagón", "Retroalimentación", "Homeostasis"],
-    comment: "La glucosa es un gran ejemplo de control por retroalimentación: cuando sube o baja, el cuerpo corrige.",
+    keywords: ["Insulina", "GlucagÃ³n", "RetroalimentaciÃ³n", "Homeostasis"],
+    comment: "La glucosa es un gran ejemplo de control por retroalimentaciÃ³n: cuando sube o baja, el cuerpo corrige.",
     focus: "El endocrino funciona como un sistema de ajuste continuo."
   },
   {
     kind: "theory",
     section: "Bloque 3",
-    title: "Hipotálamo e hipófisis",
+    title: "HipotÃ¡lamo e hipÃ³fisis",
     image: "assets/4s_neuroendocrino/13_hipotalamo_hipofisis.png",
-    keywords: ["Hipotálamo", "Hipófisis", "Adenohipófisis", "Neurohipófisis"],
-    comment: "Este es el puente central de la clase: el cerebro coordina gran parte del sistema endocrino a través de la hipófisis.",
-    focus: "Sin este punto, no se entiende la integración neuroendocrina."
+    keywords: ["HipotÃ¡lamo", "HipÃ³fisis", "AdenohipÃ³fisis", "NeurohipÃ³fisis"],
+    comment: "Este es el puente central de la clase: el cerebro coordina gran parte del sistema endocrino a travÃ©s de la hipÃ³fisis.",
+    focus: "Sin este punto, no se entiende la integraciÃ³n neuroendocrina."
   },
   {
     kind: "theory",
@@ -409,17 +400,17 @@ const slides = [
     title: "Eje neuroendocrino",
     image: "assets/4s_neuroendocrino/14_eje_neuroendocrino.png",
     keywords: ["Eje", "ACTH", "TSH", "Feedback"],
-    comment: "Una señal nerviosa puede terminar activando glándulas distantes. Esa es la lógica profunda del eje neuroendocrino.",
-    focus: "De aquí salen los casos reales del cierre."
+    comment: "Una seÃ±al nerviosa puede terminar activando glÃ¡ndulas distantes. Esa es la lÃ³gica profunda del eje neuroendocrino.",
+    focus: "De aquÃ­ salen los casos reales del cierre."
   },
   {
     kind: "theory",
     section: "Bloque 4",
-    title: "Estrés: respuesta integrada",
+    title: "EstrÃ©s: respuesta integrada",
     image: "assets/4s_neuroendocrino/15_estres_integrado.png",
-    keywords: ["Estrés", "Cortisol", "Alerta", "Adaptación"],
-    comment: "El estrés muestra cómo se combinan respuesta nerviosa inmediata y regulación hormonal sostenida.",
-    focus: "Es uno de los mejores ejemplos de integración entre ambos sistemas."
+    keywords: ["EstrÃ©s", "Cortisol", "Alerta", "AdaptaciÃ³n"],
+    comment: "El estrÃ©s muestra cÃ³mo se combinan respuesta nerviosa inmediata y regulaciÃ³n hormonal sostenida.",
+    focus: "Es uno de los mejores ejemplos de integraciÃ³n entre ambos sistemas."
   },
   {
     kind: "theory",
@@ -427,120 +418,120 @@ const slides = [
     title: "Enfermedades endocrinas",
     image: "assets/4s_neuroendocrino/16_enfermedades_endocrinas.png",
     keywords: ["Diabetes", "Tiroides", "Desequilibrio hormonal"],
-    comment: "Cuando el control hormonal falla, el cuerpo pierde estabilidad y aparecen síntomas sistémicos.",
-    focus: "Nos prepara para leer los casos con más rigor."
+    comment: "Cuando el control hormonal falla, el cuerpo pierde estabilidad y aparecen sÃ­ntomas sistÃ©micos.",
+    focus: "Nos prepara para leer los casos con mÃ¡s rigor."
   },
   {
     kind: "caseinfo",
     section: "Contexto del caso 1",
     title: "Epilepsia: contexto y fuentes",
-    summary: "La epilepsia es un trastorno neurológico en el que grupos de neuronas generan actividad eléctrica anormal. En clase nos sirve para relacionar impulso nervioso, sinapsis y redes neuronales con un caso real que afecta conciencia, movimiento o conducta.",
+    summary: "La epilepsia es un trastorno neurolÃ³gico en el que grupos de neuronas generan actividad elÃ©ctrica anormal. En clase nos sirve para relacionar impulso nervioso, sinapsis y redes neuronales con un caso real que afecta conciencia, movimiento o conducta.",
     links: [
-      { label: "Fuente médica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
+      { label: "Fuente mÃ©dica: NINDS - Epilepsy and Seizures", url: "https://www.ninds.nih.gov/health-information/disorders/epilepsy-and-seizures" },
       { label: "Video testimonio: Tyler's Patient Story", url: "https://www.youtube.com/watch?v=BIIOB_k4z14" }
     ]
   },
   {
     kind: "caseimage",
     section: "Caso real 1",
-    title: "Epilepsia en adolescente: presentación del caso",
+    title: "Epilepsia en adolescente: presentaciÃ³n del caso",
     image: "assets/4s_casos_reales/01_epilepsia_caso.png",
-    summary: "Caso neurológico. La epilepsia ocurre cuando grupos de neuronas generan actividad eléctrica anormal que puede provocar desconexiones breves, convulsiones u otras alteraciones del comportamiento.",
-    detail: "En clase sirve para conectar impulso nervioso, sinapsis, circuitos neuronales y coordinación del sistema nervioso.",
+    summary: "Caso neurolÃ³gico. La epilepsia ocurre cuando grupos de neuronas generan actividad elÃ©ctrica anormal que puede provocar desconexiones breves, convulsiones u otras alteraciones del comportamiento.",
+    detail: "En clase sirve para conectar impulso nervioso, sinapsis, circuitos neuronales y coordinaciÃ³n del sistema nervioso.",
     links: []
   },
   {
     kind: "caseimage",
     section: "Caso real 1",
-    title: "Epilepsia: lectura científica del caso",
+    title: "Epilepsia: lectura cientÃ­fica del caso",
     image: "assets/4s_casos_reales/02_epilepsia_tecnica.png",
-    summary: "Aquí el caso se reinterpreta con los contenidos de la clase: redes neuronales, sinapsis y descargas eléctricas excesivas y sincronizadas.",
-    detail: "La epilepsia es un excelente ejemplo de cómo un problema en la señal nerviosa puede alterar movimiento, conciencia, percepción y conducta.",
+    summary: "AquÃ­ el caso se reinterpreta con los contenidos de la clase: redes neuronales, sinapsis y descargas elÃ©ctricas excesivas y sincronizadas.",
+    detail: "La epilepsia es un excelente ejemplo de cÃ³mo un problema en la seÃ±al nerviosa puede alterar movimiento, conciencia, percepciÃ³n y conducta.",
     links: []
   },
   {
     kind: "caseinfo",
     section: "Contexto del caso 2",
     title: "Addison: contexto y fuentes",
-    summary: "La insuficiencia suprarrenal ocurre cuando las glándulas suprarrenales no producen suficiente cortisol. Es un caso endocrinológico muy útil para explicar respuesta al estrés, homeostasis y el eje hipotálamo-hipófisis-suprarrenal.",
+    summary: "La insuficiencia suprarrenal ocurre cuando las glÃ¡ndulas suprarrenales no producen suficiente cortisol. Es un caso endocrinolÃ³gico muy Ãºtil para explicar respuesta al estrÃ©s, homeostasis y el eje hipotÃ¡lamo-hipÃ³fisis-suprarrenal.",
     links: [
-      { label: "Fuente médica: Endocrine Society - Adrenal Insufficiency", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
-      { label: "Historia clínica: CHOP Addison stories", url: "https://www.chop.edu/conditions-diseases/adrenal-insufficiency-addison-s-disease/patient-stories-by-condition" }
+      { label: "Fuente mÃ©dica: Endocrine Society - Adrenal Insufficiency", url: "https://www.endocrine.org/patient-engagement/endocrine-library/adrenal-insufficiency" },
+      { label: "Historia clÃ­nica: CHOP Addison stories", url: "https://www.chop.edu/conditions-diseases/adrenal-insufficiency-addison-s-disease/patient-stories-by-condition" }
     ]
   },
   {
     kind: "caseimage",
     section: "Caso real 2",
-    title: "Insuficiencia suprarrenal / Addison: presentación del caso",
+    title: "Insuficiencia suprarrenal / Addison: presentaciÃ³n del caso",
     image: "assets/4s_casos_reales/03_addison_caso.png",
-    summary: "Caso endocrinológico. En la insuficiencia suprarrenal las glándulas suprarrenales no producen suficiente cortisol, y eso altera energía, presión arterial y respuesta al estrés.",
+    summary: "Caso endocrinolÃ³gico. En la insuficiencia suprarrenal las glÃ¡ndulas suprarrenales no producen suficiente cortisol, y eso altera energÃ­a, presiÃ³n arterial y respuesta al estrÃ©s.",
     detail: "Este caso permite leer cansancio extremo, mareo, debilidad y homeostasis fallida como consecuencias hormonales reales.",
     links: []
   },
   {
     kind: "caseimage",
     section: "Caso real 2",
-    title: "Addison: lectura científica del caso",
+    title: "Addison: lectura cientÃ­fica del caso",
     image: "assets/4s_casos_reales/04_addison_tecnica.png",
-    summary: "Aquí se explica el eje hipotálamo-hipófisis-suprarrenal y la producción insuficiente de cortisol.",
-    detail: "El caso permite mostrar que un problema endocrino no es solo 'hormonas bajas': afecta respuesta al estrés, equilibrio interno y funcionamiento cotidiano.",
+    summary: "AquÃ­ se explica el eje hipotÃ¡lamo-hipÃ³fisis-suprarrenal y la producciÃ³n insuficiente de cortisol.",
+    detail: "El caso permite mostrar que un problema endocrino no es solo 'hormonas bajas': afecta respuesta al estrÃ©s, equilibrio interno y funcionamiento cotidiano.",
     links: []
   },
   {
     kind: "caseinfo",
     section: "Contexto del caso 3",
     title: "Cushing: contexto y fuentes",
-    summary: "La enfermedad de Cushing por adenoma hipofisario es un caso neuroendocrino clave porque empieza en la hipófisis, altera la ACTH y termina produciendo exceso de cortisol. Integra cerebro, hormonas, metabolismo y órganos diana.",
+    summary: "La enfermedad de Cushing por adenoma hipofisario es un caso neuroendocrino clave porque empieza en la hipÃ³fisis, altera la ACTH y termina produciendo exceso de cortisol. Integra cerebro, hormonas, metabolismo y Ã³rganos diana.",
     links: [
-      { label: "Fuente médica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
+      { label: "Fuente mÃ©dica: Endocrine Society - Cushing's Syndrome and Cushing Disease", url: "https://www.endocrine.org/patient-engagement/endocrine-library/cushings-syndrome-and-cushing-disease" },
       { label: "Video testimonio: Erin Kelley treated for Cushing's Syndrome", url: "https://www.youtube.com/watch?v=1LirEAn1CjA" }
     ]
   },
   {
     kind: "caseimage",
     section: "Caso real 3",
-    title: "Enfermedad de Cushing por adenoma hipofisario: presentación del caso",
+    title: "Enfermedad de Cushing por adenoma hipofisario: presentaciÃ³n del caso",
     image: "assets/4s_casos_reales/05_cushing_caso.png",
-    summary: "Caso neuroendocrino. En la enfermedad de Cushing un adenoma en la hipófisis puede aumentar la ACTH y terminar elevando demasiado el cortisol.",
-    detail: "Es uno de los mejores casos integradores porque empieza cerca del cerebro y termina alterando metabolismo, energía, estado emocional y composición corporal.",
+    summary: "Caso neuroendocrino. En la enfermedad de Cushing un adenoma en la hipÃ³fisis puede aumentar la ACTH y terminar elevando demasiado el cortisol.",
+    detail: "Es uno de los mejores casos integradores porque empieza cerca del cerebro y termina alterando metabolismo, energÃ­a, estado emocional y composiciÃ³n corporal.",
     links: []
   },
   {
     kind: "caseimage",
     section: "Caso real 3",
-    title: "Cushing: lectura científica del caso",
+    title: "Cushing: lectura cientÃ­fica del caso",
     image: "assets/4s_casos_reales/06_cushing_tecnica.png",
-    summary: "La lógica del caso es completamente neuroendocrina: hipófisis, ACTH, suprarrenales y exceso de cortisol.",
-    detail: "Aquí se ve con claridad que el sistema nervioso y el endocrino no trabajan separados, sino como una red de control corporal.",
+    summary: "La lÃ³gica del caso es completamente neuroendocrina: hipÃ³fisis, ACTH, suprarrenales y exceso de cortisol.",
+    detail: "AquÃ­ se ve con claridad que el sistema nervioso y el endocrino no trabajan separados, sino como una red de control corporal.",
     links: []
   },
   {
     kind: "caseinfo",
     section: "Contexto del caso 4",
     title: "Tumor hipofisario / hipopituitarismo: contexto y fuentes",
-    summary: "Este caso muestra por qué la hipófisis es una glándula puente entre sistema nervioso y sistema endocrino. Un tumor o una falla hipofisaria puede alterar varios ejes hormonales y afectar múltiples órganos del cuerpo.",
+    summary: "Este caso muestra por quÃ© la hipÃ³fisis es una glÃ¡ndula puente entre sistema nervioso y sistema endocrino. Un tumor o una falla hipofisaria puede alterar varios ejes hormonales y afectar mÃºltiples Ã³rganos del cuerpo.",
     links: [
-      { label: "Fuente médica: Endocrine Society - Pituitary Tumors", url: "https://www.endocrine.org/patient-engagement/endocrine-library/pituitary-tumors" },
-      { label: "Fuente médica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
+      { label: "Fuente mÃ©dica: Endocrine Society - Pituitary Tumors", url: "https://www.endocrine.org/patient-engagement/endocrine-library/pituitary-tumors" },
+      { label: "Fuente mÃ©dica: Endocrine Society - Hypopituitarism", url: "https://www.endocrine.org/patient-engagement/endocrine-library/hypopituitarism" },
       { label: "Video testimonio: Pituitary Tumor | Yanir's Story", url: "https://www.youtube.com/watch?v=gKMw8Vgv1Ao" }
     ]
   },
   {
     kind: "caseimage",
     section: "Caso real 4",
-    title: "Tumor hipofisario / hipopituitarismo: presentación del caso",
+    title: "Tumor hipofisario / hipopituitarismo: presentaciÃ³n del caso",
     image: "assets/4s_casos_reales/07_hipofisis_caso.png",
-    summary: "Caso neuroendocrino. Un tumor en la hipófisis o una falla hipofisaria puede alterar múltiples hormonas y producir cefalea, alteraciones visuales, cansancio y cambios sistémicos.",
-    detail: "Este caso muestra que una estructura muy pequeña, en la base del cerebro, puede afectar muchas funciones del organismo.",
+    summary: "Caso neuroendocrino. Un tumor en la hipÃ³fisis o una falla hipofisaria puede alterar mÃºltiples hormonas y producir cefalea, alteraciones visuales, cansancio y cambios sistÃ©micos.",
+    detail: "Este caso muestra que una estructura muy pequeÃ±a, en la base del cerebro, puede afectar muchas funciones del organismo.",
     links: []
   },
   {
     kind: "caseimage",
     section: "Caso real 4",
-    title: "Hipófisis: lectura científica del caso",
+    title: "HipÃ³fisis: lectura cientÃ­fica del caso",
     image: "assets/4s_casos_reales/08_hipofisis_tecnica.png",
-    summary: "La hipófisis actúa como puente entre sistema nervioso y endocrino. Si se lesiona o comprime, pueden fallar varios ejes hormonales a la vez.",
-    detail: "Esta lámina cierra la unidad porque resume el papel del hipotálamo, la hipófisis y las glándulas diana como un sistema integrado.",
+    summary: "La hipÃ³fisis actÃºa como puente entre sistema nervioso y endocrino. Si se lesiona o comprime, pueden fallar varios ejes hormonales a la vez.",
+    detail: "Esta lÃ¡mina cierra la unidad porque resume el papel del hipotÃ¡lamo, la hipÃ³fisis y las glÃ¡ndulas diana como un sistema integrado.",
     links: []
   }
 ];
@@ -632,3 +623,4 @@ setTimeout(() => {
 </script>
 </body>
 </html>
+
