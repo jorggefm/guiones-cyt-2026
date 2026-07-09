@@ -291,6 +291,9 @@ button,a.linkBtn{
   grid-template-columns:repeat(5,1fr);
   gap:6px;
 }
+.patternBox.spinning{
+  box-shadow:0 0 0 3px rgba(19,99,223,.08), 0 14px 28px rgba(19,99,223,.12);
+}
 .patternCell{
   aspect-ratio:1 / 1;
   border-radius:10px;
@@ -301,6 +304,26 @@ button,a.linkBtn{
   background:linear-gradient(135deg,#ffd66f 0%, #f5a623 100%);
   border-color:#efb84b;
   box-shadow:0 8px 18px rgba(245,166,35,.25);
+}
+.patternBox.spinning .patternCell.active{
+  animation:patternFlash .32s ease-in-out infinite alternate;
+}
+.patternStage{
+  display:none;
+  margin:10px 0 14px;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:#e7f1ff;
+  border:1px solid #bfd2f2;
+}
+.patternStage.show{
+  display:flex;
+}
+.patternStageText{
+  font-weight:800;
+  color:#18498d;
 }
 .history{
   display:flex;
@@ -355,6 +378,10 @@ button,a.linkBtn{
 @keyframes shineSweep{
   from{transform:translateX(-28%)}
   to{transform:translateX(28%)}
+}
+@keyframes patternFlash{
+  from{transform:scale(1);filter:saturate(1)}
+  to{transform:scale(1.05);filter:saturate(1.15)}
 }
 @media (max-width:1020px){
   .layout{grid-template-columns:1fr}
@@ -413,6 +440,10 @@ button,a.linkBtn{
         <div class="patternHeader">
           <h3>Patron del bingo</h3>
           <button class="patternBtn" id="patternPickBtn" type="button">Patron aleatorio</button>
+        </div>
+        <div class="patternStage" id="patternStage" aria-live="polite">
+          <div class="countBubble" id="patternCountBubble">4</div>
+          <div class="patternStageText" id="patternStageText">Mezclando patrones...</div>
         </div>
         <div class="patternName" id="patternName">Patron libre</div>
         <p class="patternHint" id="patternHint">Presiona el boton y la urna elegira una figura para esta ronda.</p>
@@ -558,6 +589,9 @@ const currentBallEl = document.getElementById('currentBall');
 const drawStageEl = document.getElementById('drawStage');
 const countBubbleEl = document.getElementById('countBubble');
 const drawTextEl = document.getElementById('drawText');
+const patternStageEl = document.getElementById('patternStage');
+const patternCountBubbleEl = document.getElementById('patternCountBubble');
+const patternStageTextEl = document.getElementById('patternStageText');
 const patternNameEl = document.getElementById('patternName');
 const patternHintEl = document.getElementById('patternHint');
 const patternGridEl = document.getElementById('patternGrid');
@@ -569,6 +603,7 @@ const patternPickBtn = document.getElementById('patternPickBtn');
 const hintBtn = document.getElementById('hintBtn');
 const resetBtn = document.getElementById('resetBtn');
 const urnEl = document.querySelector('.urn');
+const patternBoxEl = document.querySelector('.patternBox');
 
 let remaining = [];
 let history = [];
@@ -577,6 +612,8 @@ let hintVisible = false;
 let isDrawing = false;
 let previewTimer = null;
 let currentPattern = null;
+let isPickingPattern = false;
+let patternPreviewTimer = null;
 
 const PATTERNS = [
   { name:'X', hint:'Deben marcar ambas diagonales completas.', cells:[0,4,6,8,12,16,18,20,24] },
@@ -693,10 +730,49 @@ function renderPattern(pattern){
   patternHintEl.textContent = pattern.hint;
 }
 
-function pickPattern(){
+function chooseNextPattern(){
   const pool = PATTERNS.filter((pattern) => !currentPattern || pattern.name !== currentPattern.name);
-  currentPattern = pool[Math.floor(Math.random() * pool.length)];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function applyPattern(pattern){
+  currentPattern = pattern;
   renderPattern(currentPattern);
+}
+
+async function pickPattern(){
+  if(isDrawing || isPickingPattern){
+    return;
+  }
+  isPickingPattern = true;
+  patternBtn.textContent = 'Eligiendo...';
+  patternPickBtn.textContent = 'Eligiendo...';
+  setControlsDisabled(true);
+  patternStageEl.classList.add('show');
+  patternBoxEl.classList.add('spinning');
+  patternPreviewTimer = setInterval(() => {
+    renderPattern(PATTERNS[Math.floor(Math.random() * PATTERNS.length)]);
+  }, 140);
+
+  for(const step of ['4','3','2','1']){
+    patternCountBubbleEl.textContent = step;
+    patternStageTextEl.textContent = step === '1' ? 'Sale el patron...' : 'Mezclando patrones con suspenso...';
+    await sleep(540);
+  }
+
+  patternCountBubbleEl.textContent = '!';
+  patternStageTextEl.textContent = 'Revelando patron...';
+  await sleep(500);
+
+  clearInterval(patternPreviewTimer);
+  patternPreviewTimer = null;
+  applyPattern(chooseNextPattern());
+  patternStageEl.classList.remove('show');
+  patternBoxEl.classList.remove('spinning');
+  patternBtn.textContent = 'Elegir patron';
+  patternPickBtn.textContent = 'Patron aleatorio';
+  isPickingPattern = false;
+  setControlsDisabled(false);
 }
 
 function renderPreview(item, message){
@@ -773,20 +849,29 @@ function resetGame(){
     clearInterval(previewTimer);
     previewTimer = null;
   }
+  if(patternPreviewTimer){
+    clearInterval(patternPreviewTimer);
+    patternPreviewTimer = null;
+  }
   remaining = shuffle(TERMS);
   history = [];
   current = null;
   hintVisible = false;
   isDrawing = false;
   currentPattern = null;
+  isPickingPattern = false;
   drawBtn.textContent = 'Sacar bolita';
+  patternBtn.textContent = 'Elegir patron';
+  patternPickBtn.textContent = 'Patron aleatorio';
   drawStageEl.classList.remove('show');
   urnEl.classList.remove('shaking');
   currentBallEl.classList.remove('revealing');
+  patternStageEl.classList.remove('show');
+  patternBoxEl.classList.remove('spinning');
   renderBalls();
   renderCurrent();
   renderHistory();
-  pickPattern();
+  applyPattern(chooseNextPattern());
 }
 
 drawBtn.addEventListener('click', drawBall);
