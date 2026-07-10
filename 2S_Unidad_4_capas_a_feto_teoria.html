@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2.&deg; Secundaria | Unidad 4 &mdash; De las capas embrionarias al feto temprano</title>
+<style>
+  :root {
+    --bg: #060405;
+    --panel: rgba(16, 9, 11, 0.76);
+    --ink: #fff6ef;
+    --muted: #f3d9cf;
+    --accent: #ffb898;
+    --accent2: #d94d73;
+    --line: rgba(255,255,255,.18);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  }
+  body {
+    user-select: none;
+  }
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 38% 20%, #241014 0%, #080506 50%, #020202 100%);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.012);
+    transition: opacity .28s ease, transform .28s ease;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+    pointer-events: auto;
+  }
+  .imageWrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .imageWrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: saturate(1.03) contrast(1.03);
+  }
+  .shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0,0,0,.54), rgba(0,0,0,.04) 30%, rgba(0,0,0,.1) 68%, rgba(0,0,0,.76));
+  }
+  .topbar {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    right: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    z-index: 8;
+    transition: opacity .2s ease;
+  }
+  .titleBox {
+    max-width: min(880px, 76vw);
+    padding: 12px 16px 10px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(19,11,12,.82), rgba(63,22,34,.54));
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 40px rgba(0,0,0,.28);
+    backdrop-filter: blur(8px);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(20px, 2.16vw, 38px);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    text-shadow: 0 2px 10px rgba(0,0,0,.45);
+  }
+  .counter {
+    min-width: 84px;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(12,8,9,.7);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+  }
+  .notes {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 18px;
+    z-index: 8;
+    display: grid;
+    grid-template-columns: minmax(280px, 1.08fr) minmax(360px, 1.45fr);
+    gap: 14px;
+    align-items: end;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 14px 16px;
+    box-shadow: 0 14px 50px rgba(0,0,0,.34);
+    backdrop-filter: blur(9px);
+  }
+  .label {
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,184,152,.13);
+    border: 1px solid rgba(255,184,152,.34);
+    color: #ffe8dc;
+    font-size: clamp(13px, 1.12vw, 16px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .comment {
+    margin: 0;
+    color: #fff4eb;
+    font-size: clamp(15px, 1.42vw, 21px);
+    line-height: 1.35;
+    font-weight: 650;
+  }
+  .focus {
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: clamp(13px, 1.08vw, 16px);
+    line-height: 1.35;
+  }
+  .controls {
+    position: absolute;
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+    opacity: .18;
+    transition: opacity .2s ease;
+  }
+  .controls:hover { opacity: .92; }
+  button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  button:hover {
+    background: rgba(255,184,152,.24);
+  }
+  .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 10;
+    transition: width .25s ease;
+  }
+  .help {
+    position: absolute;
+    top: 84px;
+    right: 22px;
+    z-index: 12;
+    width: 300px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(11,8,9,.82);
+    border: 1px solid var(--line);
+    color: #ffe7da;
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: .2s ease;
+    backdrop-filter: blur(8px);
+  }
+  .help.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: rgba(6,4,5,.94);
+    display: none;
+    padding: 26px;
+    overflow: auto;
+  }
+  .overview.show {
+    display: block;
+  }
+  .overviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .overviewHeader h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  .close {
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .thumb {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .thumb:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,184,152,.65);
+  }
+  .thumb img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb div {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #ffe6d8;
+    font-weight: 800;
+  }
+  .deck.clean .topbar,
+  .deck.clean .notes,
+  .deck.clean .controls,
+  .deck.clean .help {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .deck.clean .notes {
+    transform: translateY(12px);
+  }
+  @media (max-width: 920px) {
+    .notes {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+    }
+    .topbar {
+      top: 10px;
+      left: 12px;
+      right: 12px;
+    }
+    .titleBox {
+      max-width: 74vw;
+      padding: 10px 12px;
+    }
+    .focus {
+      display: none;
+    }
+    .controls {
+      right: 8px;
+    }
+    .help {
+      right: 12px;
+      top: 72px;
+      width: min(300px, calc(100vw - 24px));
+    }
+  }
+  @media print {
+    html, body {
+      overflow: visible;
+      background: white;
+      height: auto;
+    }
+    .deck, .slide {
+      position: static;
+      display: block !important;
+      width: 100%;
+      height: auto;
+      page-break-after: always;
+      background: white;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .imageWrap, .shade {
+      position: static;
+    }
+    .imageWrap img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .topbar, .controls, .progress, .overview, .help {
+      display: none !important;
+    }
+    .notes {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr;
+      margin: 16px;
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div id="slideHost"></div>
+  <div class="controls" aria-label="Controles">
+    <button onclick="prevSlide()" title="Anterior">&#8249;</button>
+    <button onclick="nextSlide()" title="Siguiente">&#8250;</button>
+    <button onclick="toggleOverview()" title="Miniaturas">&#9633;</button>
+  </div>
+  <div class="help" id="help">
+    <b>Controles:</b><br>
+    Flecha derecha / espacio: avanzar<br>
+    Flecha izquierda: retroceder<br>
+    O: vista de miniaturas<br>
+    F: pantalla completa<br>
+    H: ocultar o mostrar ayudas
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader">
+      <h2>Vista general: de las capas al feto</h2>
+      <button class="close" onclick="toggleOverview(false)">Cerrar</button>
+    </div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const slides = [
+  {
+    title: "1. Disco trilaminar: las tres capas embrionarias",
+    keywords: ["Ectodermo", "Mesodermo", "Endodermo", "Disco trilaminar"],
+    comment: "Aqu&iacute; empieza este tercer bloque. Ya no hablamos solo de implantaci&oacute;n: ahora el embri&oacute;n est&aacute; organizado en tres capas embrionarias, y de ellas saldr&aacute;n todos los tejidos y &oacute;rganos.",
+    focus: "Idea clave: ectodermo, mesodermo y endodermo son el punto de partida del cuerpo humano.",
+    image: "assets/2s_u4_capas_a_feto/01_trilaminar.png"
+  },
+  {
+    title: "2. Inicio de la neurulaci&oacute;n",
+    keywords: ["Neurulaci&oacute;n", "Placa neural", "Ectodermo", "Capas embrionarias"],
+    comment: "El ectodermo empieza a engrosarse y formar la placa neural. Esa es la primera se&ntilde;al de que el sistema nervioso comenzar&aacute; a organizarse.",
+    focus: "Todav&iacute;a vemos las capas embrionarias, pero una de ellas ya est&aacute; especializ&aacute;ndose.",
+    image: "assets/2s_u4_capas_a_feto/02_neurulacion_inicial.png"
+  },
+  {
+    title: "3. Formaci&oacute;n del tubo neural",
+    keywords: ["Tubo neural", "Pliegues neurales", "Mesodermo segmentado", "Neurulaci&oacute;n"],
+    comment: "Los pliegues neurales se elevan y el tubo neural se forma. Esta estructura dar&aacute; origen al sistema nervioso central.",
+    focus: "Cuando el tubo neural no cierra bien, pueden aparecer alteraciones como la espina b&iacute;fida.",
+    image: "assets/2s_u4_capas_a_feto/03_tubo_neural.png"
+  },
+  {
+    title: "4. Plegamiento embrionario inicial",
+    keywords: ["Plegamiento", "Inicio del cuerpo", "Tubo neural", "Saco vitelino"],
+    comment: "Despu&eacute;s de la neurulaci&oacute;n, el embri&oacute;n deja de verse tan plano y empieza a plegarse. El cuerpo comienza a pasar de una l&aacute;mina a una forma tridimensional.",
+    focus: "Este es un cambio de forma, no un salto brusco a un feto.",
+    image: "assets/2s_u4_capas_a_feto/04_plegamiento_inicial.png"
+  },
+  {
+    title: "5. Plegamiento m&aacute;s avanzado",
+    keywords: ["Somitas", "Coraz&oacute;n primitivo", "Plegamiento", "Embri&oacute;n temprano"],
+    comment: "El embri&oacute;n se curva un poco m&aacute;s. Ya aparecen somitas iniciales y un coraz&oacute;n primitivo, pero sigue siendo una etapa muy temprana.",
+    focus: "Todav&iacute;a no hablamos de feto: seguimos viendo un embri&oacute;n peque&ntilde;o y en organizaci&oacute;n.",
+    image: "assets/2s_u4_capas_a_feto/05_plegamiento_avanzado.png"
+  },
+  {
+    title: "6. Organog&eacute;nesis inicial",
+    keywords: ["Organog&eacute;nesis", "Cabeza en desarrollo", "Brotes de extremidades", "Embri&oacute;n"],
+    comment: "Comienza la organog&eacute;nesis: se forman las primeras bases de los &oacute;rganos y se observan brotes peque&ntilde;os de las futuras extremidades.",
+    focus: "Aqu&iacute; empieza la construcci&oacute;n del cuerpo visible, pero a&uacute;n en etapa embrionaria.",
+    image: "assets/2s_u4_capas_a_feto/06_organogenesis_inicial.png"
+  },
+  {
+    title: "7. Embri&oacute;n m&aacute;s definido",
+    keywords: ["Embri&oacute;n", "Regi&oacute;n ocular", "Saco vitelino", "Cord&oacute;n umbilical", "Placenta"],
+    comment: "El embri&oacute;n ya muestra una forma corporal mucho m&aacute;s reconocible. Aqu&iacute; conviene diferenciar dos estructuras: el saco vitelino, que es un apoyo temporal muy temprano, y el cord&oacute;n umbilical, que ya conecta al embri&oacute;n con la placenta.",
+    focus: "El saco vitelino no es un segundo cord&oacute;n: es una estructura temporal distinta del verdadero cord&oacute;n umbilical.",
+    image: "assets/2s_u4_capas_a_feto/07_embrion_definido.png"
+  },
+  {
+    title: "8. Transici&oacute;n de embri&oacute;n a feto",
+    keywords: ["Transici&oacute;n a feto", "Rasgos humanos iniciales", "Dedos en formaci&oacute;n", "L&iacute;quido amni&oacute;tico"],
+    comment: "En esta etapa el cuerpo ya est&aacute; m&aacute;s proporcionado y los rasgos humanos comienzan a hacerse evidentes. Es el umbral entre embri&oacute;n y feto.",
+    focus: "El cambio importante aqu&iacute; es que la estructura general del cuerpo ya est&aacute; definida.",
+    image: "assets/2s_u4_capas_a_feto/08_transicion_feto.png"
+  },
+  {
+    title: "9. Feto temprano",
+    keywords: ["Feto temprano", "Dedos definidos", "Extremidades flexionadas", "Cord&oacute;n umbilical"],
+    comment: "Ahora ya hablamos de feto. Su forma es claramente humana, con extremidades flexionadas, dedos definidos y una relaci&oacute;n funcional con la placenta a trav&eacute;s del cord&oacute;n umbilical.",
+    focus: "Pasamos de formar el cuerpo a iniciar una etapa de crecimiento y maduraci&oacute;n.",
+    image: "assets/2s_u4_capas_a_feto/09_feto_temprano.png"
+  },
+  {
+    title: "10. S&iacute;ntesis: de las capas embrionarias al feto temprano",
+    keywords: ["Capas embrionarias", "Neurulaci&oacute;n", "Organog&eacute;nesis", "Embri&oacute;n", "Feto temprano"],
+    comment: "La secuencia completa queda as&iacute;: capas embrionarias, neurulaci&oacute;n, plegamiento, organog&eacute;nesis, embri&oacute;n definido y finalmente feto temprano.",
+    focus: "Pregunta final: &iquest;en qu&eacute; momento deja de organizarse y empieza a crecer como feto?",
+    image: "assets/2s_u4_capas_a_feto/10_sintesis.png"
+  }
+];
+
+let current = 0;
+const deck = document.getElementById("deck");
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+const help = document.getElementById("help");
+
+function makeSlide(s, i) {
+  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+    <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="shade"></div>
+    <div class="topbar">
+      <div class="titleBox"><h1>${s.title}</h1></div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="notes">
+      <div class="card">
+        <div class="label">Palabras clave</div>
+        <div class="chips">${s.keywords.map(k => `<span class="chip">${k}</span>`).join("")}</div>
+      </div>
+      <div class="card">
+        <div class="label">Comentario para explicar</div>
+        <p class="comment">${s.comment}</p>
+        <p class="focus">${s.focus}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s, i) =>
+    `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);">
+      <img src="${s.image}" alt="${s.title}">
+      <div>${i + 1}. ${s.title.replace(/^\d+\.\s*/, "")}</div>
+    </div>`
+  ).join("");
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById("progress").style.width = ((current + 1) / slides.length * 100) + "%";
+}
+
+function showSlide(i) {
+  const all = document.querySelectorAll(".slide");
+  all[current]?.classList.remove("active");
+  current = (i + slides.length) % slides.length;
+  all[current]?.classList.add("active");
+  updateProgress();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+
+function toggleOverview(force) {
+  const ov = document.getElementById("overview");
+  ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
+}
+
+function toggleCleanMode() {
+  deck.classList.toggle("clean");
+}
+
+function fullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+  if (e.key === "ArrowLeft") prevSlide();
+  if (e.key.toLowerCase() === "o") toggleOverview();
+  if (e.key.toLowerCase() === "f") fullscreen();
+  if (e.key.toLowerCase() === "h") toggleCleanMode();
+  if (e.key === "Escape") toggleOverview(false);
+});
+
+render();
+help.classList.add("show");
+setTimeout(() => help.classList.remove("show"), 5200);
+</script>
+</body>
+</html>
