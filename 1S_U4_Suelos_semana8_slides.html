@@ -6,171 +6,311 @@
 <title>1S U4 - Suelos - Semana 8</title>
 <style>
   :root{
-    --bg:#101d15;
-    --panel:rgba(255,255,255,.88);
-    --ink:#16311f;
-    --accent:#2d6a3a;
-    --accent-2:#0f4e73;
+    --bg:#08110d;
+    --ui:rgba(7,22,14,.72);
+    --ui-border:rgba(255,255,255,.12);
+    --text:#f5f7f3;
+    --accent:#7fe08f;
+    --note-bg:rgba(255,255,255,.1);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;width:100%;height:100%;background:linear-gradient(180deg,#d7ead9 0%,#f5efe3 100%);font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);overflow:hidden}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:var(--bg);
+    font-family:"Segoe UI",system-ui,sans-serif;
+    color:var(--text);
+  }
+  body.hide-ui .topbar,
+  body.hide-ui .nav-btn,
+  body.hide-ui .counter,
+  body.hide-ui .thumbs,
+  body.hide-ui .hint{
+    opacity:0;
+    pointer-events:none;
+  }
+  body.hide-notes .note{
+    opacity:0;
+    transform:translateY(12px);
+    pointer-events:none;
+  }
   .topbar{
-    position:fixed;top:0;left:0;right:0;z-index:20;
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:12px 16px;background:linear-gradient(180deg,rgba(8,26,18,.88),rgba(8,26,18,.58));
-    color:#fff;backdrop-filter:blur(8px)
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:10px 14px;
+    background:linear-gradient(180deg,var(--ui),rgba(7,22,14,.16));
+    backdrop-filter:blur(8px);
+    transition:opacity .18s ease;
   }
-  .title-wrap h1{margin:0;font-size:18px;font-weight:800}
-  .title-wrap p{margin:2px 0 0;font-size:12px;opacity:.9}
-  .controls{display:flex;align-items:center;gap:10px}
+  .title-wrap h1{
+    margin:0;
+    font-size:16px;
+    font-weight:800;
+  }
+  .title-wrap p{
+    margin:2px 0 0;
+    font-size:11px;
+    opacity:.86;
+  }
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .chip{
+    border:1px solid var(--ui-border);
+    border-radius:999px;
+    padding:8px 12px;
+    font-size:12px;
+    font-weight:700;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+  }
   .btn{
-    border:0;border-radius:999px;padding:10px 14px;font-size:14px;font-weight:700;cursor:pointer;
-    background:#fff;color:#15331e;box-shadow:0 8px 24px rgba(0,0,0,.18)
+    text-decoration:none;
+    background:#fff;
+    color:#10301c;
   }
-  .btn.secondary{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.2)}
-  .counter{min-width:72px;text-align:center;font-size:13px;font-weight:700}
   .deck{
-    width:100vw;height:100vh;display:flex;overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none
+    width:100vw;
+    height:100vh;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
   }
   .deck::-webkit-scrollbar{display:none}
   .slide{
-    position:relative;flex:0 0 100vw;width:100vw;height:100vh;scroll-snap-align:start;
-    display:flex;align-items:center;justify-content:center;padding:72px 20px 28px
+    position:relative;
+    flex:0 0 100vw;
+    width:100vw;
+    height:100vh;
+    scroll-snap-align:start;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg);
   }
   .frame{
-    position:relative;width:min(96vw,1600px);height:calc(100vh - 116px);
-    border-radius:24px;overflow:hidden;background:#0e1a12;box-shadow:0 20px 60px rgba(21,51,30,.22)
+    position:relative;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
   }
   .frame img{
-    width:100%;height:100%;object-fit:contain;background:#edf4eb;display:block;user-select:none;-webkit-user-drag:none
+    width:100vw;
+    height:100vh;
+    object-fit:contain;
+    display:block;
+    background:#0a120d;
+    user-select:none;
+    -webkit-user-drag:none;
   }
   .note{
-    position:absolute;right:18px;bottom:18px;max-width:320px;
-    background:var(--panel);border:1px solid rgba(45,106,58,.14);border-radius:18px;
-    padding:14px 16px;box-shadow:0 16px 40px rgba(22,49,31,.16)
+    position:absolute;
+    left:18px;
+    bottom:18px;
+    max-width:min(42vw,520px);
+    border:1px solid var(--ui-border);
+    background:var(--note-bg);
+    backdrop-filter:blur(10px);
+    border-radius:18px;
+    padding:12px 14px;
+    box-shadow:0 14px 38px rgba(0,0,0,.22);
+    transition:opacity .18s ease, transform .18s ease;
   }
   .note .eyebrow{
-    display:inline-block;margin-bottom:8px;padding:4px 10px;border-radius:999px;
-    background:#eaf4ec;color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase
+    display:inline-block;
+    margin-bottom:6px;
+    padding:3px 9px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:#0d301c;
+    background:var(--accent);
   }
-  .note p{margin:0;font-size:14px;line-height:1.4}
-  .note strong{color:var(--accent-2)}
+  .note p{
+    margin:0;
+    font-size:15px;
+    line-height:1.45;
+    color:#fff;
+  }
+  .nav-btn{
+    position:fixed;
+    top:50%;
+    z-index:25;
+    width:52px;
+    height:52px;
+    margin-top:-26px;
+    border:1px solid var(--ui-border);
+    border-radius:50%;
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    font-size:22px;
+    cursor:pointer;
+    backdrop-filter:blur(8px);
+    transition:opacity .18s ease, background .18s ease;
+  }
+  .nav-btn:hover{background:rgba(255,255,255,.24)}
+  .nav-prev{left:16px}
+  .nav-next{right:16px}
+  .counter{
+    position:fixed;
+    top:18px;
+    right:150px;
+    z-index:25;
+    min-width:58px;
+    text-align:center;
+    font-size:12px;
+    font-weight:800;
+    color:#fff;
+    transition:opacity .18s ease;
+  }
   .thumbs{
-    position:fixed;left:16px;right:16px;bottom:12px;z-index:20;
-    display:flex;gap:8px;justify-content:center;flex-wrap:wrap
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:10px;
+    z-index:25;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    transition:opacity .18s ease;
   }
   .dot{
-    width:11px;height:11px;border-radius:50%;background:rgba(21,51,30,.24);border:0;cursor:pointer
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    border:0;
+    background:rgba(255,255,255,.26);
+    cursor:pointer;
   }
-  .dot.active{background:var(--accent);transform:scale(1.15)}
-  @media (max-width: 900px){
-    .title-wrap h1{font-size:15px}
+  .dot.active{
+    background:var(--accent);
+    transform:scale(1.15);
+  }
+  .hint{
+    position:fixed;
+    right:14px;
+    bottom:14px;
+    z-index:25;
+    font-size:11px;
+    color:rgba(255,255,255,.82);
+    background:rgba(0,0,0,.26);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:999px;
+    padding:6px 10px;
+    backdrop-filter:blur(6px);
+    transition:opacity .18s ease;
+  }
+  @media (max-width:900px){
     .title-wrap p{display:none}
-    .btn{padding:8px 11px;font-size:13px}
-    .frame{width:100vw;height:calc(100vh - 102px);border-radius:0}
-    .slide{padding:58px 0 30px}
-    .note{left:12px;right:12px;bottom:12px;max-width:none;padding:12px 14px}
+    .title-wrap h1{font-size:14px}
+    .chip{padding:7px 10px;font-size:11px}
+    .counter{right:124px}
+    .note{
+      left:12px;
+      right:12px;
+      bottom:12px;
+      max-width:none;
+      padding:10px 12px;
+    }
+    .note p{font-size:13px}
+    .nav-btn{
+      width:46px;
+      height:46px;
+      margin-top:-23px;
+    }
   }
 </style>
 </head>
 <body>
   <header class="topbar">
     <div class="title-wrap">
-      <h1>1.° Secundaria - U4 - Semana 8</h1>
-      <p>Secuencia visual: suelo, horizontes, erosión, conservación y permeabilidad</p>
+      <h1>1.° Secundaria · U4 · Semana 8</h1>
+      <p>Imágenes proyectables. `T` oculta textos · `I` oculta interfaz</p>
     </div>
     <div class="controls">
-      <button class="btn secondary" type="button" onclick="go(-1)">←</button>
-      <div class="counter" id="counter">1 / 8</div>
-      <button class="btn secondary" type="button" onclick="go(1)">→</button>
-      <a class="btn" href="Guion_1S.html">Volver a 1S</a>
+      <div class="chip">T textos</div>
+      <div class="chip">I interfaz</div>
+      <a class="chip btn" href="Guion_1S.html">Volver a 1S</a>
     </div>
   </header>
+
+  <button class="nav-btn nav-prev" type="button" onclick="go(-1)" aria-label="Anterior">←</button>
+  <div class="counter" id="counter">1 / 8</div>
+  <button class="nav-btn nav-next" type="button" onclick="go(1)" aria-label="Siguiente">→</button>
 
   <main class="deck" id="deck">
     <section class="slide">
       <div class="frame">
         <img src="assets/1s-suelos/01_portada.png" alt="La Tierra y los suelos">
-        <aside class="note">
-          <span class="eyebrow">Apertura</span>
-          <p><strong>Pregunta guía:</strong> ¿por qué en un mismo terreno una parte infiltra agua y otra la pierde por escorrentía?</p>
-        </aside>
+        <aside class="note"><span class="eyebrow">Apertura</span><p>¿Por qué un mismo terreno no responde igual a la lluvia?</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
         <img src="assets/1s-suelos/02_perfil.png" alt="Perfil del suelo">
-        <aside class="note">
-          <span class="eyebrow">Explica</span>
-          <p><strong>Enfatiza:</strong> el horizonte A es la capa más fértil. Pide que identifiquen qué cambia entre A, B y C.</p>
-        </aside>
+        <aside class="note"><span class="eyebrow">Horizontes</span><p>El horizonte A es la capa más fértil y la primera que puede perderse.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
-        <img src="assets/1s-suelos/03_formacion.png" alt="Formacion del suelo">
-        <aside class="note">
-          <span class="eyebrow">Secuencia</span>
-          <p><strong>Hazlos narrar:</strong> roca madre, meteorización, fragmentación, materia orgánica y suelo fértil.</p>
-        </aside>
+        <img src="assets/1s-suelos/03_formacion.png" alt="Formación del suelo">
+        <aside class="note"><span class="eyebrow">Tiempo</span><p>Formar suelo toma mucho tiempo; perderlo por erosión puede pasar rápido.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
         <img src="assets/1s-suelos/04_componentes.png" alt="Componentes del suelo">
-        <aside class="note">
-          <span class="eyebrow">Concepto clave</span>
-          <p><strong>Pregunta:</strong> si faltara aire o materia orgánica, ¿qué pasaría con las raíces y los cultivos?</p>
-        </aside>
+        <aside class="note"><span class="eyebrow">Sistema vivo</span><p>Minerales, materia orgánica, agua y aire trabajan juntos.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
-        <img src="assets/1s-suelos/05_fertil_degradado.png" alt="Suelo fertil y degradado">
-        <aside class="note">
-          <span class="eyebrow">Compara</span>
-          <p><strong>Reto:</strong> que nombren tres diferencias visibles entre un suelo fértil y uno degradado.</p>
-        </aside>
+        <img src="assets/1s-suelos/05_fertil_degradado.png" alt="Suelo fértil y degradado">
+        <aside class="note"><span class="eyebrow">Comparación</span><p>Un suelo sano retiene mejor agua, vida y raíces que uno degradado.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
-        <img src="assets/1s-suelos/06_erosion.png" alt="Erosion del suelo">
-        <aside class="note">
-          <span class="eyebrow">Problema</span>
-          <p><strong>Conecta con Yauyos:</strong> la lluvia intensa arrastra primero la capa superficial y reduce la fertilidad.</p>
-        </aside>
+        <img src="assets/1s-suelos/06_erosion.png" alt="Erosión del suelo">
+        <aside class="note"><span class="eyebrow">Problema</span><p>La lluvia puede llevarse la capa superficial y reducir la fertilidad.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
-        <img src="assets/1s-suelos/07_conservacion.png" alt="Conservacion del suelo">
-        <aside class="note">
-          <span class="eyebrow">Soluciones</span>
-          <p><strong>Pídeles proponer:</strong> ¿qué práctica sería más útil en una ladera con fuerte pendiente y por qué?</p>
-        </aside>
+        <img src="assets/1s-suelos/07_conservacion.png" alt="Conservación del suelo">
+        <aside class="note"><span class="eyebrow">Soluciones</span><p>Terrazas, cobertura vegetal y compost ayudan a proteger el suelo.</p></aside>
       </div>
     </section>
-
     <section class="slide">
       <div class="frame">
         <img src="assets/1s-suelos/08_permeabilidad.png" alt="Permeabilidad del suelo">
-        <aside class="note">
-          <span class="eyebrow">Cierre</span>
-          <p><strong>Puente al viernes:</strong> esta comparación sirve para plantear la indagación C1 sobre permeabilidad.</p>
-        </aside>
+        <aside class="note"><span class="eyebrow">Cierre</span><p>No todos los suelos dejan pasar el agua a la misma velocidad.</p></aside>
       </div>
     </section>
   </main>
 
-  <nav class="thumbs" id="thumbs" aria-label="Navegacion"></nav>
+  <nav class="thumbs" id="thumbs" aria-label="Navegación"></nav>
+  <div class="hint">T: textos · I: interfaz</div>
 
 <script>
   const deck = document.getElementById("deck");
@@ -226,6 +366,14 @@
     if (e.key === "End") {
       e.preventDefault();
       jump(total - 1);
+    }
+    if (e.key.toLowerCase() === "t") {
+      e.preventDefault();
+      document.body.classList.toggle("hide-notes");
+    }
+    if (e.key.toLowerCase() === "i") {
+      e.preventDefault();
+      document.body.classList.toggle("hide-ui");
     }
   });
 
