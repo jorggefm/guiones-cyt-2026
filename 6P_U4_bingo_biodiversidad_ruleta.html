@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6P U4 · Bingo biodiversidad · Urna</title>
+<style>
+:root{
+  --blue:#0d63df;
+  --blueDeep:#0a4599;
+  --sky:#eaf4ff;
+  --paper:#ffffff;
+  --ink:#14315f;
+  --line:#b8cff1;
+  --shadow:0 18px 40px rgba(13,62,138,.18);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:radial-gradient(circle at top,#d9ebff 0%,#f7fbff 38%,#edf5ff 100%);
+}
+.page{
+  max-width:1300px;
+  margin:0 auto;
+  padding:24px 20px 36px;
+}
+.hero{
+  background:linear-gradient(135deg,var(--blue) 0%, var(--blueDeep) 100%);
+  color:#fff;
+  border-radius:28px;
+  padding:26px;
+  box-shadow:var(--shadow);
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:clamp(2rem,3.6vw,3rem);
+}
+.hero p{
+  margin:0;
+  max-width:920px;
+  line-height:1.5;
+}
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:18px;
+}
+button,a.linkBtn{
+  border:0;
+  border-radius:999px;
+  padding:12px 18px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+}
+.primary{
+  background:#ffd15f;
+  color:#362100;
+}
+.secondary,.linkBtn{
+  background:rgba(255,255,255,.16);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.28);
+}
+.secondary[disabled]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.layout{
+  display:grid;
+  grid-template-columns:1.2fr .9fr;
+  gap:22px;
+  margin-top:24px;
+}
+.panel{
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(184,207,241,.9);
+  border-radius:26px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.panel h2{
+  margin:0 0 6px;
+  color:#0f4ca6;
+}
+.panel p{
+  margin:0 0 14px;
+  line-height:1.45;
+}
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:18px;
+}
+.stat{
+  min-width:140px;
+  padding:10px 14px;
+  border-radius:18px;
+  background:var(--sky);
+  border:1px solid var(--line);
+}
+.stat b{
+  display:block;
+  color:#0f4ca6;
+  font-size:1.35rem;
+}
+.urn{
+  min-height:420px;
+  max-height:560px;
+  padding:18px 14px 14px;
+  border-radius:28px 28px 36px 36px;
+  background:linear-gradient(180deg,#ffffff 0%, #eef6ff 100%);
+  border:3px solid #8db6f3;
+  position:relative;
+  overflow:auto;
+}
+.urn.shaking{
+  animation:urnShake .68s ease-in-out infinite;
+}
+.urn::before{
+  content:"";
+  position:absolute;
+  top:8px;
+  left:12%;
+  right:12%;
+  height:24px;
+  border-radius:999px;
+  background:rgba(13,99,223,.12);
+}
+.balls{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(58px,1fr));
+  gap:10px;
+  padding-top:20px;
+}
+.ball{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ballBubble{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  border:3px solid #8cb7f4;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 18px rgba(14,71,157,.12);
+  overflow:hidden;
+}
+.urn.shaking .ballBubble{
+  animation:ballBounce .42s ease-in-out infinite alternate;
+}
+.ball img{
+  width:48px;
+  height:48px;
+  display:block;
+}
+.current{
+  min-height:290px;
+  border-radius:26px;
+  border:2px dashed #8db6f3;
+  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
+  padding:20px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.current.revealing{
+  overflow:hidden;
+}
+.current.revealing::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:linear-gradient(120deg, transparent 40%, rgba(255,255,255,.72) 50%, transparent 60%);
+  animation:shineSweep .85s linear infinite;
+}
+.current img{
+  width:min(240px,58%);
+  display:block;
+}
+.current h3{
+  margin:14px 0 8px;
+  font-size:2rem;
+  color:#0f4ca6;
+}
+.current p{
+  margin:0;
+  max-width:340px;
+}
+.hint{
+  display:none;
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:#fff7d6;
+  border:1px solid #efd974;
+  color:#6a4f00;
+  line-height:1.45;
+}
+.hint.show{display:block}
+.drawStage{
+  display:none;
+  margin-top:14px;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:#edf5ff;
+  border:1px solid var(--line);
+}
+.drawStage.show{
+  display:flex;
+}
+.countBubble{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ffd66f 0%,#f5a623 100%);
+  color:#4b2d00;
+  display:grid;
+  place-items:center;
+  font-size:1.7rem;
+  font-weight:1000;
+  box-shadow:0 10px 18px rgba(245,166,35,.28);
+}
+.drawText{
+  font-weight:800;
+  color:#114489;
+}
+.patternBox{
+  margin-top:16px;
+  padding:16px;
+  border-radius:18px;
+  background:#f3f8ff;
+  border:1px solid var(--line);
+}
+.patternHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.patternHeader h3{
+  margin:0;
+  color:#0f4ca6;
+  font-size:1.1rem;
+}
+.patternBtn{
+  background:#0f4ca6;
+  color:#fff;
+  border:0;
+  border-radius:999px;
+  padding:10px 14px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+.patternBtn[disabled]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.patternName{
+  margin:12px 0 8px;
+  font-size:1.2rem;
+  font-weight:900;
+  color:#163f7b;
+}
+.patternHint{
+  margin:0 0 12px;
+  color:#43658f;
+  font-size:.94rem;
+}
+.patternGrid{
+  width:min(100%,240px);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+}
+.patternBox.spinning{
+  box-shadow:0 0 0 3px rgba(19,99,223,.08), 0 14px 28px rgba(19,99,223,.12);
+}
+.patternCell{
+  aspect-ratio:1 / 1;
+  border-radius:10px;
+  background:#dce8fb;
+  border:1px solid #bfd2f2;
+}
+.patternCell.active{
+  background:linear-gradient(135deg,#ffd66f 0%, #f5a623 100%);
+  border-color:#efb84b;
+  box-shadow:0 8px 18px rgba(245,166,35,.25);
+}
+.patternBox.spinning .patternCell.active{
+  animation:patternFlash .32s ease-in-out infinite alternate;
+}
+.patternStage{
+  display:none;
+  margin:10px 0 14px;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:#e7f1ff;
+  border:1px solid #bfd2f2;
+}
+.patternStage.show{
+  display:flex;
+}
+.patternStageText{
+  font-weight:800;
+  color:#18498d;
+}
+.history{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  max-height:260px;
+  overflow:auto;
+  padding-right:4px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  background:#edf5ff;
+  border:1px solid var(--line);
+  font-weight:800;
+}
+.chip img{
+  width:32px;
+  height:32px;
+  display:block;
+}
+.empty{
+  color:#58739e;
+  font-style:italic;
+}
+.teacher{
+  margin-top:22px;
+  background:#dff7e4;
+  border:1px solid #b8e3c1;
+  border-radius:22px;
+  padding:18px 20px;
+  line-height:1.55;
+}
+.teacher h3{
+  margin:0 0 8px;
+  color:#1a6d2b;
+}
+@keyframes urnShake{
+  0%,100%{transform:translateX(0) rotate(0deg)}
+  20%{transform:translateX(-4px) rotate(-1deg)}
+  40%{transform:translateX(4px) rotate(1deg)}
+  60%{transform:translateX(-3px) rotate(-.8deg)}
+  80%{transform:translateX(3px) rotate(.8deg)}
+}
+@keyframes ballBounce{
+  from{transform:translateY(0) scale(1)}
+  to{transform:translateY(-4px) scale(1.03)}
+}
+@keyframes shineSweep{
+  from{transform:translateX(-28%)}
+  to{transform:translateX(28%)}
+}
+@keyframes patternFlash{
+  from{transform:scale(1);filter:saturate(1)}
+  to{transform:scale(1.05);filter:saturate(1.15)}
+}
+@media (max-width:1020px){
+  .layout{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .page{padding:18px 14px 24px}
+  .hero,.panel{
+    border-radius:22px;
+    padding:18px;
+  }
+  .current h3{font-size:1.65rem}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <h1>Urna del bingo biodiverso</h1>
+    <p>Esta cajita tiene 100 bolitas tematicas para que la partida dure bastante mas. Cada vez que saques una, el sistema mostrara la misma ficha visual que pueden tener las cartillas de las y los estudiantes.</p>
+    <div class="controls">
+      <button class="primary" id="drawBtn" type="button">Sacar bolita</button>
+      <button class="secondary" id="patternBtn" type="button">Elegir patron</button>
+      <button class="secondary" id="hintBtn" type="button" disabled>Mostrar pista</button>
+      <button class="secondary" id="resetBtn" type="button">Reiniciar</button>
+      <a class="linkBtn" href="6P_U4_bingo_biodiversidad_cartillas.html" target="_blank">Abrir cartilla</a>
+    </div>
+  </section>
+
+  <section class="layout">
+    <article class="panel">
+      <h2>Bolitas dentro de la cajita</h2>
+      <p>Al inicio hay 100 bolitas distintas. Van saliendo al azar y desaparecen de la cajita cuando ya fueron llamadas.</p>
+      <div class="stats">
+        <div class="stat"><span>Quedan</span><b id="remainingCount">100</b></div>
+        <div class="stat"><span>Ya salieron</span><b id="drawnCount">0</b></div>
+      </div>
+      <div class="urn">
+        <div class="balls" id="balls"></div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <h2>Ultima bolita</h2>
+      <p>La pista es opcional y esta pensada para orientar un poco, no para resolver todo.</p>
+      <div class="current" id="currentBall">
+        <img alt="Bolita lista" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%238ec9ff'/%3E%3Cstop offset='100%25' stop-color='%232f7ef5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='108' height='108' rx='24' fill='url(%23g)'/%3E%3Ccircle cx='60' cy='50' r='31' fill='rgba(255,255,255,.88)'/%3E%3Ctext x='60' y='62' text-anchor='middle' font-size='32'%3E🎱%3C/text%3E%3Crect x='14' y='85' width='92' height='20' rx='10' fill='rgba(255,255,255,.92)'/%3E%3Ctext x='60' y='98' text-anchor='middle' font-size='11' font-family='Arial' font-weight='700' fill='%23214169'%3ELISTA%3C/text%3E%3C/svg%3E">
+        <h3>Lista para comenzar</h3>
+        <p>Presiona "Sacar bolita" para obtener la primera ficha visual del bingo.</p>
+      </div>
+      <div class="drawStage" id="drawStage" aria-live="polite">
+        <div class="countBubble" id="countBubble">3</div>
+        <div class="drawText" id="drawText">Agitando bolitas...</div>
+      </div>
+      <div class="hint" id="hintBox"></div>
+      <div class="patternBox">
+        <div class="patternHeader">
+          <h3>Patron del bingo</h3>
+          <button class="patternBtn" id="patternPickBtn" type="button">Patron aleatorio</button>
+        </div>
+        <div class="patternStage" id="patternStage" aria-live="polite">
+          <div class="countBubble" id="patternCountBubble">4</div>
+          <div class="patternStageText" id="patternStageText">Mezclando patrones...</div>
+        </div>
+        <div class="patternName" id="patternName">Patron libre</div>
+        <p class="patternHint" id="patternHint">Presiona el boton y la urna elegira una figura para esta ronda.</p>
+        <div class="patternGrid" id="patternGrid"></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="panel" style="margin-top:22px;">
+    <h2>Historial de bolitas</h2>
+    <p>Asi puedes revisar con rapidez que imagenes y conceptos ya aparecieron durante la partida.</p>
+    <div class="history" id="history">
+      <span class="empty">Aun no ha salido ninguna bolita.</span>
+    </div>
+  </section>
+
+  <section class="teacher">
+    <h3>Sugerencia de uso</h3>
+    <div>Como la cajita tiene 100 bolitas, la partida puede durar bastante mas. Cuando alguien cante bingo, puedes pedirle que explique una o dos fichas de su fila ganadora para conectar el juego con el aprendizaje.</div>
+  </section>
+</div>
+
+<script>
+const RAW_ITEMS = [
+  ['🌎','ecosistema','Ecosistema','Incluye seres vivos, espacio, agua, suelo, aire y relaciones.'],
+  ['💧','biotopo','Biotopo','Es la parte no viva del lugar: agua, suelo, luz y clima.'],
+  ['🐦','biocenosis','Biocenosis','Es el conjunto de seres vivos que comparten un espacio.'],
+  ['👤','individuo','Individuo','Habla de un solo ser vivo.'],
+  ['🧫','especie','Especie','Agrupa individuos capaces de reproducirse entre si.'],
+  ['🐟🐟','poblacion','Poblacion','Conjunto de individuos de la misma especie en un lugar.'],
+  ['🦋🌿🐸','comunidad','Comunidad','Varias poblaciones que conviven e interactuan.'],
+  ['🏠','habitat','Habitat','Es el lugar donde vive una especie.'],
+  ['🎯','nicho','Nicho','Es el papel o funcion que cumple una especie.'],
+  ['⚖️','equilibrio','Equilibrio','Mantiene estable el funcionamiento del ecosistema.'],
+  ['🌿','productor','Productor','Hace su propio alimento, como las plantas.'],
+  ['🐾','consumidor','Consumidor','Obtiene energia comiendo a otros seres vivos.'],
+  ['🍄','descomp','Descomponedor','Transforma restos y devuelve nutrientes al suelo.'],
+  ['🦅','depredador','Depredador','Caza a otros animales para alimentarse.'],
+  ['🐇','presa','Presa','Es cazada por otro ser vivo.'],
+  ['🐛🐸🦅','cadena','Cadena trofica','Secuencia de quien se come a quien.'],
+  ['🕸️','red trof','Red trofica','Varias cadenas alimentarias conectadas.'],
+  ['🐝','poliniz','Polinizacion','Ayuda a formar frutos y semillas.'],
+  ['🌬️','dispersion','Dispersion','Mueve semillas o frutos a nuevos lugares.'],
+  ['🦎','adaptac','Adaptacion','Cambio que ayuda a sobrevivir mejor.'],
+  ['🌱','germina','Germinacion','Inicio del crecimiento de una nueva planta.'],
+  ['🌸','flor','Flor','Parte de la planta que atrae polinizadores.'],
+  ['🍎','fruto','Fruto','Protege y transporta semillas.'],
+  ['🌰','semilla','Semilla','Puede originar una nueva planta.'],
+  ['🫚','raiz','Raiz','Fija la planta y absorbe agua.'],
+  ['🍃','hoja','Hoja','Capta luz para la fotosintesis.'],
+  ['🌿','tallo','Tallo','Sostiene la planta y transporta sustancias.'],
+  ['🐝','poliniza','Polinizador','Animal que ayuda a transportar polen.'],
+  ['🍂','compost','Descomponer','Proceso que transforma restos en nutrientes.'],
+  ['🟫','suelo fert','Suelo fertil','Tierra rica en nutrientes y vida.'],
+  ['💦','agua','Agua','Recurso vital para todos los seres vivos.'],
+  ['🟤','suelo','Suelo','Capa donde crecen muchas plantas.'],
+  ['💨','aire','Aire','Mezcla de gases indispensable para la vida.'],
+  ['☀️','luz','Luz solar','Fuente principal de energia de los ecosistemas.'],
+  ['🌡️','temp','Temperatura','Puede favorecer o limitar la vida.'],
+  ['🌧️','lluvia','Lluvia','Lleva agua a plantas, rios y suelos.'],
+  ['🪨','roca','Roca','Elemento mineral del paisaje.'],
+  ['🏞️','rio','Rio','Corriente de agua dulce.'],
+  ['🏕️','lago','Lago','Acumula agua rodeada de tierra.'],
+  ['🌊','mar','Mar','Gran masa de agua salada.'],
+  ['🌲','bosque','Bosque','Ecosistema con muchos arboles.'],
+  ['🌴','selva','Selva','Bosque tropical muy diverso.'],
+  ['⛰️','sierra','Sierra','Region alta con clima y especies propias.'],
+  ['🏖️','costa','Costa','Zona donde se unen tierra y mar.'],
+  ['🪷','humedal','Humedal','Lugar con mucha agua en el suelo.'],
+  ['🌴','aguajal','Aguajal','Humedal amazonico dominado por palmeras.'],
+  ['🌱','manglar','Manglar','Bosque costero con agua salobre.'],
+  ['🪸','coral','Coral','Ecosistema marino muy sensible y diverso.'],
+  ['🏜️','desierto','Desierto','Lugar muy seco con poca lluvia.'],
+  ['🏔️','montana','Montana','Elevacion natural del terreno.'],
+  ['🦅','migra','Migracion','Viaje estacional de algunos animales.'],
+  ['🐞','insecto','Insecto','Animal de seis patas y gran diversidad.'],
+  ['🐦','ave','Ave','Vertebrado con plumas.'],
+  ['🦊','mamifero','Mamifero','Animal que alimenta a sus crias con leche.'],
+  ['🦎','reptil','Reptil','Vertebrado de piel seca con escamas.'],
+  ['🐸','anfibio','Anfibio','Vertebrado que vive entre agua y tierra.'],
+  ['🐟','pez','Pez','Animal acuatico que respira por branquias.'],
+  ['🍄','hongo','Hongo','Ser vivo descomponedor que no es planta ni animal.'],
+  ['🦠','microbio','Microbio','Ser vivo muy pequeno, muchas veces invisible.'],
+  ['🪱','lombriz','Lombriz','Animal del suelo que lo airea y enriquece.'],
+  ['🧬','genetica','Biodiv. genetica','Variedad dentro de una misma especie.'],
+  ['🦋','especies','Biodiv. especies','Diversidad de especies en un lugar.'],
+  ['🌿','ecosist','Biodiv. ecosistemas','Diversidad de ambientes o ecosistemas.'],
+  ['⚙️','funcional','Biodiv. funcional','Diversidad de funciones dentro del ecosistema.'],
+  ['🌱','nativa','Especie nativa','Pertenece naturalmente a un lugar.'],
+  ['📍','endemica','Especie endemica','Solo vive en una region.'],
+  ['🐀','invasora','Especie invasora','Fue introducida y altera el ecosistema.'],
+  ['☠️','extincion','Extincion','Desaparicion total de una especie.'],
+  ['⚠️','amenaza','Amenaza','Factor que pone en riesgo la biodiversidad.'],
+  ['🛡️','conserva','Conservacion','Accion para cuidar y mantener la biodiversidad.'],
+  ['🛡️','anp','ANP','Area Natural Protegida.'],
+  ['🗺️','reserva','Reserva','Espacio destinado a proteger naturaleza.'],
+  ['🏞️','parque','Parque nacional','Categoria de ANP de gran extension.'],
+  ['👒','guardaparq','Guardaparque','Persona que cuida un area protegida.'],
+  ['🪴','vivero','Vivero','Lugar donde se crian plantas para restaurar.'],
+  ['🌳','reforesta','Reforestacion','Siembra de arboles para recuperar espacios.'],
+  ['🥬','biohuerto','Biohuerto','Huerto que aprovecha procesos naturales.'],
+  ['♻️','recicla','Reciclaje','Proceso de separar y reaprovechar residuos.'],
+  ['🔁','reutiliza','Reutilizar','Volver a usar un objeto.'],
+  ['➖','reduce','Reducir','Consumir menos para generar menos impacto.'],
+  ['🚿','ahorro','Ahorro de agua','Usar el agua con cuidado.'],
+  ['🔆','solar','Energia solar','Energia que viene del sol.'],
+  ['👥','ciencia','Ciencia ciudadana','Personas que ayudan a observar y compartir datos.'],
+  ['👀','observa','Observacion','Mirar con atencion para aprender del entorno.'],
+  ['📝','registro','Registro','Anotar datos de lo que ocurre.'],
+  ['📊','evidencia','Evidencia','Prueba que respalda una idea o conclusion.'],
+  ['🛒','consumo','Consumo responsable','Elegir opciones que dañen menos el ambiente.'],
+  ['👣','huella','Huella ecologica','Medida del impacto de nuestras acciones.'],
+  ['🫁','oxigeno','Oxigeno','Gas necesario para la respiracion.'],
+  ['⚫','carbono','Carbono','Elemento importante en los ciclos de la naturaleza.'],
+  ['🪓','deforest','Deforestacion','Perdida de bosques por accion humana.'],
+  ['🔥','incendio','Incendio','Fuego que daña bosques y habitats.'],
+  ['☀️','sequia','Sequia','Falta prolongada de lluvia.'],
+  ['🌊','inundac','Inundacion','Exceso de agua que altera habitats.'],
+  ['🧴','contamina','Contaminacion','Ingreso de residuos o sustancias dañinas.'],
+  ['🦜','trafico','Trafico de fauna','Captura y venta ilegal de animales silvestres.'],
+  ['🏹','caza','Caza ilegal','Caza prohibida de animales.'],
+  ['🎣','sobrepesc','Sobrepesca','Extraccion excesiva de especies marinas.'],
+  ['🗑️','basura mar','Basura marina','Residuos que llegan y dañan el mar.'],
+  ['🟠','erosion','Erosion','Desgaste del suelo por agua, viento o mal manejo.']
+];
+
+const TERMS = RAW_ITEMS.map(([emoji, short, name, clue], index) => {
+  const hue = (index * 31) % 360;
+  return {
+    emoji,
+    short,
+    name,
+    clue,
+    accent:`hsl(${hue} 90% 72%)`,
+    shade:`hsl(${hue} 70% 46%)`
+  };
+});
+
+const ballsEl = document.getElementById('balls');
+const remainingCountEl = document.getElementById('remainingCount');
+const drawnCountEl = document.getElementById('drawnCount');
+const currentBallEl = document.getElementById('currentBall');
+const drawStageEl = document.getElementById('drawStage');
+const countBubbleEl = document.getElementById('countBubble');
+const drawTextEl = document.getElementById('drawText');
+const patternStageEl = document.getElementById('patternStage');
+const patternCountBubbleEl = document.getElementById('patternCountBubble');
+const patternStageTextEl = document.getElementById('patternStageText');
+const patternNameEl = document.getElementById('patternName');
+const patternHintEl = document.getElementById('patternHint');
+const patternGridEl = document.getElementById('patternGrid');
+const hintBoxEl = document.getElementById('hintBox');
+const historyEl = document.getElementById('history');
+const drawBtn = document.getElementById('drawBtn');
+const patternBtn = document.getElementById('patternBtn');
+const patternPickBtn = document.getElementById('patternPickBtn');
+const hintBtn = document.getElementById('hintBtn');
+const resetBtn = document.getElementById('resetBtn');
+const urnEl = document.querySelector('.urn');
+const patternBoxEl = document.querySelector('.patternBox');
+
+let remaining = [];
+let history = [];
+let current = null;
+let hintVisible = false;
+let isDrawing = false;
+let previewTimer = null;
+let currentPattern = null;
+let isPickingPattern = false;
+let patternPreviewTimer = null;
+
+const PATTERNS = [
+  { name:'X', hint:'Deben marcar ambas diagonales completas.', cells:[0,4,6,8,12,16,18,20,24] },
+  { name:'U', hint:'Marca las dos columnas laterales y toda la fila inferior.', cells:[0,4,5,9,10,14,15,19,20,21,22,23,24] },
+  { name:'T', hint:'Marca toda la fila superior y la columna central.', cells:[0,1,2,3,4,7,12,17,22] },
+  { name:'L', hint:'Marca la primera columna y la fila inferior.', cells:[0,5,10,15,20,21,22,23,24] },
+  { name:'Marco', hint:'Gana quien complete todo el borde externo.', cells:[0,1,2,3,4,5,9,10,14,15,19,20,21,22,23,24] },
+  { name:'4 esquinas', hint:'Solo cuentan las cuatro esquinas de la cartilla.', cells:[0,4,20,24] },
+  { name:'Diagonal principal', hint:'Marca de arriba izquierda hasta abajo derecha.', cells:[0,6,12,18,24] },
+  { name:'Diagonal secundaria', hint:'Marca de arriba derecha hasta abajo izquierda.', cells:[4,8,12,16,20] },
+  { name:'Flecha', hint:'Completa la columna central y la punta superior.', cells:[2,6,7,8,12,17,22] },
+  { name:'Cruz', hint:'Completa la fila central y la columna central.', cells:[2,7,10,11,12,13,14,17,22] }
+];
+
+function shuffle(list){
+  const clone = [...list];
+  for(let i = clone.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [clone[i], clone[j]] = [clone[j], clone[i]];
+  }
+  return clone;
+}
+
+function makeIcon(item){
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="${item.name}">
+      <defs>
+        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${item.accent}"/>
+          <stop offset="100%" stop-color="${item.shade}"/>
+        </linearGradient>
+      </defs>
+      <rect x="6" y="6" width="108" height="108" rx="24" fill="url(#g)"/>
+      <circle cx="60" cy="50" r="31" fill="rgba(255,255,255,.9)"/>
+      <text x="60" y="61" text-anchor="middle" font-size="31">${item.emoji}</text>
+      <rect x="14" y="85" width="92" height="20" rx="10" fill="rgba(255,255,255,.94)"/>
+      <text x="60" y="98" text-anchor="middle" font-size="11" font-family="Arial" font-weight="700" fill="#214169">${item.short.toUpperCase()}</text>
+    </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function renderBalls(){
+  ballsEl.innerHTML = '';
+  shuffle(remaining).forEach((item) => {
+    const ball = document.createElement('div');
+    ball.className = 'ball';
+    ball.title = item.name;
+    ball.innerHTML = `<div class="ballBubble"><img src="${makeIcon(item)}" alt="${item.name}"></div>`;
+    ballsEl.appendChild(ball);
+  });
+  remainingCountEl.textContent = String(remaining.length);
+  drawnCountEl.textContent = String(history.length);
+}
+
+function renderCurrent(){
+  if(!current){
+    currentBallEl.innerHTML = `
+      <img alt="Bolita lista" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%238ec9ff'/%3E%3Cstop offset='100%25' stop-color='%232f7ef5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='108' height='108' rx='24' fill='url(%23g)'/%3E%3Ccircle cx='60' cy='50' r='31' fill='rgba(255,255,255,.88)'/%3E%3Ctext x='60' y='62' text-anchor='middle' font-size='32'%3E🎱%3C/text%3E%3Crect x='14' y='85' width='92' height='20' rx='10' fill='rgba(255,255,255,.92)'/%3E%3Ctext x='60' y='98' text-anchor='middle' font-size='11' font-family='Arial' font-weight='700' fill='%23214169'%3ELISTA%3C/text%3E%3C/svg%3E">
+      <h3>Lista para comenzar</h3>
+      <p>Presiona "Sacar bolita" para obtener la primera ficha visual del bingo.</p>
+    `;
+    hintBtn.disabled = true;
+    hintBtn.textContent = 'Mostrar pista';
+    hintBoxEl.classList.remove('show');
+    hintBoxEl.textContent = '';
+    return;
+  }
+  currentBallEl.innerHTML = `
+    <img src="${makeIcon(current)}" alt="${current.name}">
+    <h3>${current.name}</h3>
+    <p>Busca esta misma ficha visual en la cartilla y marcalo si aparece.</p>
+  `;
+  hintBtn.disabled = false;
+  hintBtn.textContent = hintVisible ? 'Ocultar pista' : 'Mostrar pista';
+  hintBoxEl.textContent = `Pista: ${current.clue}`;
+  hintBoxEl.classList.toggle('show', hintVisible);
+}
+
+function renderHistory(){
+  if(history.length === 0){
+    historyEl.innerHTML = '<span class="empty">Aun no ha salido ninguna bolita.</span>';
+    return;
+  }
+  historyEl.innerHTML = '';
+  history.forEach((item) => {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `<img src="${makeIcon(item)}" alt="${item.name}"><span>${item.name}</span>`;
+    historyEl.appendChild(chip);
+  });
+}
+
+function sleep(ms){
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function setControlsDisabled(disabled){
+  drawBtn.disabled = disabled;
+  patternBtn.disabled = disabled;
+  patternPickBtn.disabled = disabled;
+  resetBtn.disabled = disabled;
+  hintBtn.disabled = disabled || !current;
+}
+
+function renderPattern(pattern){
+  patternGridEl.innerHTML = '';
+  const activeSet = new Set(pattern.cells);
+  for(let i = 0; i < 25; i++){
+    const cell = document.createElement('div');
+    cell.className = `patternCell${activeSet.has(i) ? ' active' : ''}`;
+    patternGridEl.appendChild(cell);
+  }
+  patternNameEl.textContent = pattern.name;
+  patternHintEl.textContent = pattern.hint;
+}
+
+function chooseNextPattern(){
+  const pool = PATTERNS.filter((pattern) => !currentPattern || pattern.name !== currentPattern.name);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function applyPattern(pattern){
+  currentPattern = pattern;
+  renderPattern(currentPattern);
+}
+
+async function pickPattern(){
+  if(isDrawing || isPickingPattern){
+    return;
+  }
+  isPickingPattern = true;
+  patternBtn.textContent = 'Eligiendo...';
+  patternPickBtn.textContent = 'Eligiendo...';
+  setControlsDisabled(true);
+  patternStageEl.classList.add('show');
+  patternBoxEl.classList.add('spinning');
+  patternPreviewTimer = setInterval(() => {
+    renderPattern(PATTERNS[Math.floor(Math.random() * PATTERNS.length)]);
+  }, 140);
+
+  for(const step of ['4','3','2','1']){
+    patternCountBubbleEl.textContent = step;
+    patternStageTextEl.textContent = step === '1' ? 'Sale el patron...' : 'Mezclando patrones con suspenso...';
+    await sleep(540);
+  }
+
+  patternCountBubbleEl.textContent = '!';
+  patternStageTextEl.textContent = 'Revelando patron...';
+  await sleep(500);
+
+  clearInterval(patternPreviewTimer);
+  patternPreviewTimer = null;
+  applyPattern(chooseNextPattern());
+  patternStageEl.classList.remove('show');
+  patternBoxEl.classList.remove('spinning');
+  patternBtn.textContent = 'Elegir patron';
+  patternPickBtn.textContent = 'Patron aleatorio';
+  isPickingPattern = false;
+  setControlsDisabled(false);
+}
+
+function renderPreview(item, message){
+  currentBallEl.innerHTML = `
+    <img src="${makeIcon(item)}" alt="${item.name}">
+    <h3>${message}</h3>
+    <p>La cajita esta mezclando las bolitas para elegir una al azar.</p>
+  `;
+}
+
+async function runDrawAnimation(){
+  const pool = remaining.length ? remaining : TERMS;
+  drawStageEl.classList.add('show');
+  urnEl.classList.add('shaking');
+  currentBallEl.classList.add('revealing');
+  previewTimer = setInterval(() => {
+    const sample = pool[Math.floor(Math.random() * pool.length)];
+    renderPreview(sample, 'Mezclando...');
+  }, 120);
+
+  for(const step of ['5','4','3','2','1']){
+    countBubbleEl.textContent = step;
+    drawTextEl.textContent = step === '1' ? 'Sale una bolita...' : 'Agitando bolitas con suspenso...';
+    await sleep(620);
+  }
+
+  countBubbleEl.textContent = '!';
+  drawTextEl.textContent = 'Revelando concepto...';
+  await sleep(520);
+
+  clearInterval(previewTimer);
+  previewTimer = null;
+  drawStageEl.classList.remove('show');
+  urnEl.classList.remove('shaking');
+  currentBallEl.classList.remove('revealing');
+}
+
+async function drawBall(){
+  if(isDrawing){
+    return;
+  }
+  if(remaining.length === 0){
+    current = null;
+    hintVisible = false;
+    currentBallEl.innerHTML = `
+      <img alt="Juego completo" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffd66f'/%3E%3Cstop offset='100%25' stop-color='%23f29d19'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='108' height='108' rx='24' fill='url(%23g)'/%3E%3Ccircle cx='60' cy='50' r='31' fill='rgba(255,255,255,.88)'/%3E%3Ctext x='60' y='62' text-anchor='middle' font-size='32'%3E🏁%3C/text%3E%3Crect x='14' y='85' width='92' height='20' rx='10' fill='rgba(255,255,255,.92)'/%3E%3Ctext x='60' y='98' text-anchor='middle' font-size='11' font-family='Arial' font-weight='700' fill='%23214169'%3EFIN%3C/text%3E%3C/svg%3E">
+      <h3>Se acabaron las bolitas</h3>
+      <p>Ya salieron los 100 conceptos. Puedes reiniciar la cajita para jugar otra vez.</p>
+    `;
+    hintBtn.disabled = true;
+    hintBtn.textContent = 'Mostrar pista';
+    hintBoxEl.classList.remove('show');
+    hintBoxEl.textContent = '';
+    return;
+  }
+  isDrawing = true;
+  hintVisible = false;
+  drawBtn.textContent = 'Agitando...';
+  setControlsDisabled(true);
+  await runDrawAnimation();
+  const index = Math.floor(Math.random() * remaining.length);
+  current = remaining.splice(index, 1)[0];
+  history.unshift(current);
+  renderBalls();
+  renderCurrent();
+  renderHistory();
+  drawBtn.textContent = 'Sacar bolita';
+  setControlsDisabled(false);
+  isDrawing = false;
+}
+
+function resetGame(){
+  if(previewTimer){
+    clearInterval(previewTimer);
+    previewTimer = null;
+  }
+  if(patternPreviewTimer){
+    clearInterval(patternPreviewTimer);
+    patternPreviewTimer = null;
+  }
+  remaining = shuffle(TERMS);
+  history = [];
+  current = null;
+  hintVisible = false;
+  isDrawing = false;
+  currentPattern = null;
+  isPickingPattern = false;
+  drawBtn.textContent = 'Sacar bolita';
+  patternBtn.textContent = 'Elegir patron';
+  patternPickBtn.textContent = 'Patron aleatorio';
+  drawStageEl.classList.remove('show');
+  urnEl.classList.remove('shaking');
+  currentBallEl.classList.remove('revealing');
+  patternStageEl.classList.remove('show');
+  patternBoxEl.classList.remove('spinning');
+  renderBalls();
+  renderCurrent();
+  renderHistory();
+  applyPattern(chooseNextPattern());
+}
+
+drawBtn.addEventListener('click', drawBall);
+patternBtn.addEventListener('click', pickPattern);
+patternPickBtn.addEventListener('click', pickPattern);
+hintBtn.addEventListener('click', () => {
+  if(!current){
+    return;
+  }
+  hintVisible = !hintVisible;
+  renderCurrent();
+});
+resetBtn.addEventListener('click', resetGame);
+
+resetGame();
+</script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2.&deg; Secundaria | Unidad 4 &mdash; Implantaci&oacute;n y capas embrionarias</title>
+<style>
+  :root {
+    --bg: #070506;
+    --panel: rgba(12, 8, 10, .74);
+    --ink: #fff6ee;
+    --muted: #e7c8bd;
+    --accent: #ffb48d;
+    --accent2: #ff6f61;
+    --line: rgba(255,255,255,.18);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+  }
+  body { user-select: none; }
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 35% 20%, #241111 0%, #070506 55%, #020202 100%);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.015);
+    transition: opacity .28s ease, transform .28s ease;
+    display: grid;
+    place-items: center;
+  }
+  .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+  .imageWrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .imageWrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: saturate(1.02) contrast(1.03);
+  }
+  .shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0,0,0,.58), rgba(0,0,0,.03) 30%, rgba(0,0,0,.08) 67%, rgba(0,0,0,.74));
+  }
+  .topbar {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    right: 22px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    z-index: 4;
+  }
+  .titleBox {
+    max-width: min(860px, 76vw);
+    padding: 12px 16px 10px;
+    background: linear-gradient(135deg, rgba(20,10,10,.78), rgba(50,18,18,.52));
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 40px rgba(0,0,0,.22);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(20px, 2.15vw, 37px);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    text-shadow: 0 2px 12px rgba(0,0,0,.5);
+  }
+  .counter {
+    min-width: 80px;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(10,7,7,.66);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 14px;
+    backdrop-filter: blur(8px);
+  }
+  .notes {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 18px;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: minmax(260px, 1.1fr) minmax(320px, 1.4fr);
+    gap: 14px;
+    align-items: end;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 14px 16px;
+    box-shadow: 0 14px 50px rgba(0,0,0,.32);
+    backdrop-filter: blur(9px);
+  }
+  .label {
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,180,141,.13);
+    border: 1px solid rgba(255,180,141,.36);
+    color: #ffe3d1;
+    font-size: clamp(13px, 1.15vw, 16px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .comment {
+    font-size: clamp(15px, 1.45vw, 21px);
+    line-height: 1.35;
+    margin: 0;
+    font-weight: 650;
+    color: #fff5ed;
+  }
+  .focus {
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: clamp(13px, 1.1vw, 16px);
+    line-height: 1.35;
+  }
+  .controls {
+    position: absolute;
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 8;
+    opacity: .2;
+    transition: opacity .2s ease;
+  }
+  .controls:hover { opacity: .92; }
+  button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.45);
+    color: white;
+    font-size: 19px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  button:hover { background: rgba(255,180,141,.22); }
+  .hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+  }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .help {
+    position: absolute;
+    top: 82px;
+    right: 22px;
+    z-index: 9;
+    background: rgba(10,7,7,.8);
+    color: #ffe5d8;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px 14px;
+    width: 280px;
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: .2s ease;
+    backdrop-filter: blur(8px);
+  }
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: rgba(5,4,4,.94);
+    display: none;
+    padding: 26px;
+    overflow: auto;
+  }
+  .overview.show { display: block; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+  }
+  .thumb {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .thumb:hover { transform: translateY(-2px); border-color: rgba(255,180,141,.65); }
+  .thumb img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb div {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #ffe6d8;
+    font-weight: 800;
+  }
+  .overviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+  .overviewHeader h2 { margin: 0; font-size: 24px; }
+  .close {
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    z-index: 10;
+    transition: width .25s ease;
+  }
+  @media (max-width: 900px) {
+    .notes {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+    }
+    .topbar { top: 10px; left: 12px; right: 12px; }
+    .titleBox { max-width: 74vw; padding: 10px 12px; }
+    .card { padding: 10px 12px; border-radius: 16px; }
+    .focus { display: none; }
+    .controls { right: 8px; }
+    .chip { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls" aria-label="Controles">
+    <button onclick="prevSlide()" title="Anterior">&#8249;</button>
+    <button onclick="nextSlide()" title="Siguiente">&#8250;</button>
+    <button onclick="toggleOverview()" title="Miniaturas">&#9633;</button>
+  </div>
+  <div class="help" id="help">
+    <b>Controles:</b><br>
+    Flecha derecha / espacio: avanzar<br>
+    Flecha izquierda: retroceder<br>
+    O: miniaturas<br>
+    F: pantalla completa<br>
+    H: mostrar u ocultar esta ayuda
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader">
+      <h2>Vista general de la semana</h2>
+      <button class="close" onclick="toggleOverview()">Cerrar</button>
+    </div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const slides = [
+  {
+    title: "1. Repaso: de la fecundaci&oacute;n al blastocisto",
+    keywords: ["Fecundaci&oacute;n", "Segmentaci&oacute;n", "M&oacute;rula", "Blastocisto", "Implantaci&oacute;n"],
+    comment: "Empezamos con un repaso breve. Ya vimos c&oacute;mo el cigoto se divide, forma la m&oacute;rula, luego el blastocisto y finalmente llega al &uacute;tero para iniciar la implantaci&oacute;n.",
+    focus: "Idea clave: el tema de esta semana comienza justo despu&eacute;s del blastocisto, no desde cero.",
+    image: "assets/2s_u4_implantacion/01_repaso_timeline.png"
+  },
+  {
+    title: "2. Implantaci&oacute;n inicial",
+    keywords: ["Blastocisto", "Endometrio", "Adhesi&oacute;n", "Anclaje"],
+    comment: "El blastocisto ya lleg&oacute; al &uacute;tero y empieza a adherirse al endometrio. Este es el primer contacto firme con la pared uterina.",
+    focus: "Sin implantaci&oacute;n, el desarrollo embrionario no puede continuar dentro del &uacute;tero.",
+    image: "assets/2s_u4_implantacion/02_blastocisto_llega.png"
+  },
+  {
+    title: "3. Implantaci&oacute;n parcial",
+    keywords: ["Implantaci&oacute;n parcial", "Trofoblasto", "Tejido uterino", "Protecci&oacute;n"],
+    comment: "El blastocisto empieza a hundirse en el endometrio. Sus c&eacute;lulas externas interact&uacute;an con el tejido materno para asegurar el anclaje.",
+    focus: "La implantaci&oacute;n es progresiva: primero se adhiere y luego se integra poco a poco al tejido uterino.",
+    image: "assets/2s_u4_implantacion/03_implantacion_parcial.png"
+  },
+  {
+    title: "4. Implantaci&oacute;n completa",
+    keywords: ["Endometrio", "Blastocisto implantado", "Protecci&oacute;n", "Desarrollo inicial"],
+    comment: "Ahora el blastocisto ya est&aacute; incorporado en el endometrio. El tejido uterino lo rodea y crea un ambiente m&aacute;s estable para el desarrollo temprano.",
+    focus: "Implantarse significa quedar fijado, protegido y mejor conectado con la madre.",
+    image: "assets/2s_u4_implantacion/04_implantacion_completa.png"
+  },
+  {
+    title: "5. Relaci&oacute;n con vasos maternos",
+    keywords: ["Vasos maternos", "Intercambio", "Nutrientes", "Tejido materno"],
+    comment: "El embri&oacute;n temprano comienza a relacionarse con vasos y tejidos maternos. Esto prepara el intercambio de ox&iacute;geno, nutrientes y desechos.",
+    focus: "Todav&iacute;a no hay una placenta madura, pero ya empieza una conexi&oacute;n funcional con el cuerpo de la madre.",
+    image: "assets/2s_u4_implantacion/05_vasos_maternos.png"
+  },
+  {
+    title: "6. Vellosidades cori&oacute;nicas tempranas",
+    keywords: ["Vellosidades cori&oacute;nicas", "Placenta temprana", "Intercambio", "Contacto materno"],
+    comment: "Aparecen prolongaciones que aumentan el contacto con el tejido uterino. Estas vellosidades cori&oacute;nicas son parte del inicio de la futura placenta.",
+    focus: "Aqu&iacute; seguimos en etapa temprana: soporte e intercambio inicial, no un embri&oacute;n ya formado.",
+    image: "assets/2s_u4_implantacion/06_vellosidades_corionicas.png"
+  },
+  {
+    title: "7. Disco embrionario temprano",
+    keywords: ["Disco embrionario", "Organizaci&oacute;n inicial", "Amnios", "Etapa temprana"],
+    comment: "El embri&oacute;n empieza a organizarse como un disco. Esta es una etapa todav&iacute;a temprana: no vemos un embri&oacute;n completo, sino una estructura que prepara la formaci&oacute;n del cuerpo.",
+    focus: "Esta diapositiva reemplaza las im&aacute;genes adelantadas: aqu&iacute; seguimos antes de ver un embri&oacute;n ya desarrollado.",
+    image: "assets/2s_u4_implantacion/07_disco_embrionario.png"
+  },
+  {
+    title: "8. Organizaci&oacute;n interna temprana",
+    keywords: ["Disco bilaminar", "Cavidades", "Organizaci&oacute;n", "Etapa previa"],
+    comment: "El disco embrionario se vuelve m&aacute;s organizado y aparecen estructuras internas que preparan la diferenciaci&oacute;n posterior.",
+    focus: "Antes de las tres capas embrionarias, el embri&oacute;n pasa por una organizaci&oacute;n interna progresiva.",
+    image: "assets/2s_u4_implantacion/08_disco_bilaminar.png"
+  },
+  {
+    title: "9. Capas embrionarias en formaci&oacute;n",
+    keywords: ["Ectodermo", "Mesodermo", "Endodermo", "Capas embrionarias"],
+    comment: "Aqu&iacute; ya se distinguen las tres capas embrionarias: ectodermo, mesodermo y endodermo. De ellas se originar&aacute;n todos los tejidos y &oacute;rganos del cuerpo.",
+    focus: "No son capas neurales: son capas embrionarias o capas germinales.",
+    image: "assets/2s_u4_implantacion/09_capas_germinales.png"
+  },
+  {
+    title: "10. Cierre: de la implantaci&oacute;n a las capas germinales",
+    keywords: ["Secuencia", "Implantaci&oacute;n", "Disco embrionario", "Capas germinales"],
+    comment: "La secuencia de esta semana queda as&iacute;: blastocisto, implantaci&oacute;n, contacto con tejidos maternos, soporte temprano y formaci&oacute;n de las capas embrionarias.",
+    focus: "Pregunta final: &iquest;c&oacute;mo pasa un blastocisto implantado a iniciar la organizaci&oacute;n del futuro cuerpo humano?",
+    image: "assets/2s_u4_implantacion/01_repaso_timeline.png"
+  }
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function makeSlide(s, i) {
+  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+    <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    <div class="shade"></div>
+    <div class="topbar">
+      <div class="titleBox"><h1>${s.title}</h1></div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="label">Palabras clave</div><div class="chips">${s.keywords.map(k => `<span class="chip">${k}</span>`).join("")}</div></div>
+      <div class="card"><div class="label">Comentario para explicar</div><p class="comment">${s.comment}</p><p class="focus">${s.focus}</p></div>
+    </div>
+  </section>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image}" alt="${s.title}"><div>${i + 1}. ${s.title.replace(/^\d+\.\s*/, "")}</div></div>`).join("");
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById("progress").style.width = ((current + 1) / slides.length * 100) + "%";
+}
+
+function showSlide(i) {
+  const all = document.querySelectorAll(".slide");
+  all[current]?.classList.remove("active");
+  current = (i + slides.length) % slides.length;
+  all[current]?.classList.add("active");
+  updateProgress();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+
+function toggleOverview(force) {
+  const ov = document.getElementById("overview");
+  ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
+}
+
+function toggleHelp() {
+  document.getElementById("help").classList.toggle("show");
+}
+
+function fullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+  if (e.key === "ArrowLeft") prevSlide();
+  if (e.key.toLowerCase() === "o") toggleOverview();
+  if (e.key.toLowerCase() === "f") fullscreen();
+  if (e.key.toLowerCase() === "h") toggleHelp();
+  if (e.key === "Escape") toggleOverview(false);
+});
+
+render();
+setTimeout(() => {
+  document.getElementById("help").classList.add("show");
+  setTimeout(() => document.getElementById("help").classList.remove("show"), 5000);
+}, 600);
+</script>
+</body>
+</html>

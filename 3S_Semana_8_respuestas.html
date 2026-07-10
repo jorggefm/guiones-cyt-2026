@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3S U4 - Respuestas Semana 8</title>
+<style>
+  :root{
+    --bg:#0b1720;
+    --bg2:#14303d;
+    --panel:#fffaf0;
+    --ink:#1a313b;
+    --muted:#5b6c74;
+    --teal:#0f7c7b;
+    --cyan:#56cfe1;
+    --gold:#f6bd60;
+    --mint:#dff3ea;
+    --rose:#fff0e9;
+    --violet:#eeebff;
+    --shadow:0 24px 70px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI",system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(86,207,225,.18), transparent 18%),
+      radial-gradient(circle at 86% 78%, rgba(246,189,96,.16), transparent 22%),
+      linear-gradient(135deg, var(--bg), var(--bg2) 58%, #09131a);
+  }
+  .deck{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    touch-action:pan-x;
+  }
+  .deck::-webkit-scrollbar{display:none}
+  .slide{
+    flex:0 0 100vw;
+    width:100vw;
+    height:100vh;
+    scroll-snap-align:start;
+    padding:124px 4vw 94px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .blob{
+    position:absolute;
+    border-radius:999px;
+    opacity:.22;
+    filter:blur(6px);
+    z-index:0;
+  }
+  .blob.a{width:210px;height:210px;left:-30px;top:-35px;background:#56cfe1}
+  .blob.b{width:190px;height:190px;right:-24px;bottom:-24px;background:#f6bd60}
+  .frame{
+    position:relative;
+    z-index:1;
+    width:min(1260px,100%);
+    max-height:100%;
+    overflow:auto;
+    background:linear-gradient(180deg, rgba(255,255,255,.985), rgba(255,248,236,.985));
+    color:var(--ink);
+    border-radius:28px;
+    padding:26px 28px;
+    box-shadow:var(--shadow);
+  }
+  .frame.dark{
+    background:linear-gradient(180deg, rgba(16,33,46,.96), rgba(11,24,34,.96));
+    color:#fff;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    background:#e7f7fb;
+    color:#0d6173;
+  }
+  h1,h2,h3,p{margin:0}
+  h1{
+    font-size:clamp(38px,5vw,72px);
+    line-height:.98;
+    font-weight:1000;
+    letter-spacing:0;
+  }
+  h2{
+    font-size:clamp(28px,3.6vw,52px);
+    line-height:1.04;
+    font-weight:1000;
+    letter-spacing:0;
+  }
+  h3{
+    font-size:clamp(19px,1.9vw,28px);
+    color:#0d6173;
+    font-weight:900;
+  }
+  p{
+    font-size:clamp(16px,1.45vw,23px);
+    line-height:1.28;
+  }
+  .muted{color:var(--muted)}
+  .topbar{
+    position:fixed;
+    left:18px;
+    right:18px;
+    top:16px;
+    z-index:20;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    max-width:min(980px, calc(100vw - 170px));
+  }
+  .actions button,.actions a{
+    appearance:none;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    border-radius:999px;
+    padding:10px 14px;
+    font-weight:900;
+    font-size:14px;
+    cursor:pointer;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    backdrop-filter:blur(10px);
+  }
+  .counter{
+    flex:0 0 auto;
+    border-radius:999px;
+    padding:10px 14px;
+    background:rgba(0,0,0,.3);
+    color:#fff;
+    font-weight:1000;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+  }
+  .nav{
+    position:fixed;
+    left:50%;
+    bottom:14px;
+    transform:translateX(-50%);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    backdrop-filter:blur(10px);
+    font-weight:900;
+  }
+  .nav button{
+    border:0;
+    border-radius:999px;
+    background:var(--gold);
+    color:#17313c;
+    font-weight:1000;
+    font-size:15px;
+    padding:10px 14px;
+    cursor:pointer;
+    min-height:42px;
+  }
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:16px;
+  }
+  .card{
+    border-radius:20px;
+    padding:18px;
+    background:#fff;
+    border:1px solid #e6decd;
+  }
+  .card.tint-cyan{background:#effafd}
+  .card.tint-mint{background:var(--mint)}
+  .card.tint-rose{background:var(--rose)}
+  .card.tint-violet{background:var(--violet)}
+  .prompt{
+    margin-top:14px;
+    border-left:8px solid #f77f00;
+    border-radius:18px;
+    background:#fff5e4;
+    padding:14px 16px;
+  }
+  .prompt p{font-weight:800}
+  textarea{
+    width:100%;
+    margin-top:12px;
+    border:1px solid #c8d4d8;
+    border-radius:18px;
+    padding:14px 16px;
+    background:#fff;
+    color:var(--ink);
+    font:inherit;
+    line-height:1.45;
+    resize:none;
+  }
+  textarea.short{height:120px}
+  textarea.medium{height:165px}
+  textarea.long{height:230px}
+  .footer-note{
+    margin-top:16px;
+    font-size:14px;
+    text-align:center;
+    color:#dceef5;
+    font-weight:700;
+  }
+  @media (max-width: 900px){
+    .grid-2{grid-template-columns:1fr}
+    .frame{padding:20px}
+    .topbar{
+      left:14px;
+      right:14px;
+      top:14px;
+      flex-direction:column;
+      align-items:stretch;
+    }
+    .actions{
+      max-width:none;
+    }
+    .counter{
+      align-self:flex-end;
+    }
+    .slide{
+      padding-top:158px;
+    }
+  }
+  @media (max-width: 640px){
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .actions button,.actions a{
+      font-size:12px;
+      padding:9px 12px;
+      min-height:42px;
+    }
+    .nav{
+      gap:8px;
+      padding:8px 10px;
+    }
+    .nav button{
+      font-size:13px;
+      padding:9px 11px;
+    }
+    .slide{
+      padding-top:194px;
+    }
+  }
+  @media (max-width: 420px){
+    .actions{
+      grid-template-columns:1fr;
+    }
+    .slide{
+      padding-top:236px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="actions">
+      <a href="3S_Semana_8_clase_integrada.html" target="_blank">Volver a clase</a>
+      <button type="button" onclick="window.print()">Descargar PDF</button>
+      <button type="button" onclick="downloadAnswers()">Descargar respuestas</button>
+      <button type="button" onclick="resetAnswers()">Limpiar</button>
+    </div>
+    <div class="counter"><span id="current">1</span>/<span id="total">1</span></div>
+  </div>
+  <div class="nav">
+    <button type="button" onclick="moveSlide(-1)">Anterior</button>
+    <span>Responde y desliza</span>
+    <button type="button" onclick="moveSlide(1)">Siguiente</button>
+  </div>
+
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="blob a"></div><div class="blob b"></div>
+      <div class="frame dark">
+        <span class="eyebrow" style="background:rgba(255,255,255,.14);color:#dff8ff">Cuaderno de respuestas · Semana 8</span>
+        <h1 style="margin-top:16px">Responde en tres capas</h1>
+        <p style="margin-top:14px">Este cuaderno acompaña la presentación. La idea es observar, explicar y calcular con lenguaje científico propio.</p>
+        <div class="grid-2">
+          <article class="card tint-cyan">
+            <h3>Guardado automatico</h3>
+            <p>Lo que escribas queda guardado en este navegador mientras trabajas.</p>
+          </article>
+          <article class="card tint-rose">
+            <h3>Salida en PDF y texto</h3>
+            <p>Puedes imprimir como PDF o descargar tus respuestas en un archivo de texto.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="blob a"></div>
+      <div class="frame">
+        <span class="eyebrow">Parte 1 · Que paso</span>
+        <h2>Reaccion quimica y evidencia</h2>
+        <p class="muted" style="margin-top:10px">Trabaja aqui las ideas del lunes: distinguir mezcla de reaccion, identificar evidencias y pensar por que clasificar importa.</p>
+        <div class="prompt"><p>1. Escribe tres evidencias que sostengan que en una mezcla de bicarbonato y vinagre ocurrio una reaccion quimica real.</p></div>
+        <textarea class="short" data-save="p1_evidencias"></textarea>
+        <div class="grid-2">
+          <div>
+            <div class="prompt"><p>2. Explica por que clasificar una reaccion ayuda a anticipar productos y comportamientos.</p></div>
+            <textarea class="medium" data-save="p1_clasificar"></textarea>
+          </div>
+          <div>
+            <div class="prompt"><p>3. Si un gas escapa del recipiente, por que puede parecer que la masa cambia aunque la ley de conservacion siga siendo valida?</p></div>
+            <textarea class="medium" data-save="p1_masa"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="blob b"></div>
+      <div class="frame">
+        <span class="eyebrow">Parte 2 · Como paso</span>
+        <h2>Energia, activacion y seguridad</h2>
+        <p class="muted" style="margin-top:10px">No basta decir que una reaccion calienta o enfria. Hay que justificar que pasa con la energia.</p>
+        <div class="grid-2">
+          <div class="card tint-rose">
+            <h3>Exotermica</h3>
+            <div class="prompt"><p>4. Explica con tus palabras que significa que una reaccion sea exotermica.</p></div>
+            <textarea class="medium" data-save="p2_exotermica"></textarea>
+          </div>
+          <div class="card tint-cyan">
+            <h3>Endotermica</h3>
+            <div class="prompt"><p>5. Explica con tus palabras que significa que una reaccion sea endotermica.</p></div>
+            <textarea class="medium" data-save="p2_endotermica"></textarea>
+          </div>
+        </div>
+        <div class="prompt"><p>6. Es correcto decir que una reaccion produce energia, o es mas preciso decir que transforma energia quimica en otras formas? Defiende tu respuesta.</p></div>
+        <textarea class="long" data-save="p2_precision"></textarea>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="blob a"></div><div class="blob b"></div>
+      <div class="frame">
+        <span class="eyebrow">Aplicacion</span>
+        <h2>Cuando la energia importa para decidir</h2>
+        <div class="prompt"><p>7. Por que controlar el calor de una reaccion puede ser importante en procesos domesticos o sanitarios?</p></div>
+        <textarea class="medium" data-save="p2_seguridad"></textarea>
+        <div class="prompt"><p>8. Una reaccion rapida es siempre mas peligrosa que una lenta? Responde con criterio cientifico.</p></div>
+        <textarea class="medium" data-save="p2_rapidez"></textarea>
+        <div class="prompt"><p>9. Escribe un ejemplo propio de reaccion exotermica y otro de reaccion endotermica. Justifica ambos.</p></div>
+        <textarea class="long" data-save="p2_ejemplos"></textarea>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="blob b"></div>
+      <div class="frame">
+        <span class="eyebrow">Parte 3 · Cuanto paso</span>
+        <h2>Estequiometria y reactivo limitante</h2>
+        <p class="muted" style="margin-top:10px">Esta seccion acompana la clase del miercoles: pasar del simbolo quimico a la cantidad real.</p>
+        <div class="prompt"><p>10. Explica por que una ecuacion balanceada es necesaria antes de calcular cantidades reales.</p></div>
+        <textarea class="medium" data-save="p3_balanceo"></textarea>
+        <div class="grid-2">
+          <div>
+            <div class="prompt"><p>11. Define reactivo limitante con una explicacion clara, no memorizada.</p></div>
+            <textarea class="medium" data-save="p3_limitante"></textarea>
+          </div>
+          <div>
+            <div class="prompt"><p>12. Que ocurre si duplicas un reactivo que ya estaba en exceso? Explica por que.</p></div>
+            <textarea class="medium" data-save="p3_exceso"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="blob a"></div><div class="blob b"></div>
+      <div class="frame">
+        <span class="eyebrow">Integracion final</span>
+        <h2>Respuesta completa de la semana</h2>
+        <div class="prompt"><p>13. Un equipo mezcla sustancias para preparar una solucion de uso sanitario. Observa burbujas, cambio de temperatura y luego necesita decidir cantidades seguras. Explica cientificamente esa situacion usando reaccion quimica, energia y estequiometria.</p></div>
+        <textarea class="long" data-save="final_integrada"></textarea>
+        <div class="prompt"><p>14. Que parte de la semana te exigio pensar mas y por que?</p></div>
+        <textarea class="medium" data-save="final_metacognicion"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">El archivo descargado incluira todas tus respuestas guardadas.</div>
+
+<script>
+  const deck = document.getElementById("deck");
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const currentEl = document.getElementById("current");
+  const totalEl = document.getElementById("total");
+  totalEl.textContent = String(slides.length);
+
+  function updateCounter() {
+    const index = Math.round(deck.scrollLeft / window.innerWidth);
+    currentEl.textContent = String(index + 1);
+  }
+
+  function moveSlide(step) {
+    const index = Math.round(deck.scrollLeft / window.innerWidth);
+    const next = Math.max(0, Math.min(slides.length - 1, index + step));
+    deck.scrollTo({ left: next * window.innerWidth, behavior: "smooth" });
+  }
+
+  const fields = document.querySelectorAll("[data-save]");
+  function loadAnswers() {
+    fields.forEach((field) => {
+      const key = "3s_sem8_" + field.dataset.save;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) field.value = saved;
+      field.addEventListener("input", () => localStorage.setItem(key, field.value));
+    });
+  }
+
+  function resetAnswers() {
+    if (!confirm("Se borraran las respuestas guardadas de este cuaderno. Continuar?")) return;
+    fields.forEach((field) => {
+      const key = "3s_sem8_" + field.dataset.save;
+      localStorage.removeItem(key);
+      field.value = "";
+    });
+  }
+
+  function downloadAnswers() {
+    const sections = [
+      ["Parte 1 · Que paso", ["p1_evidencias","p1_clasificar","p1_masa"]],
+      ["Parte 2 · Como paso", ["p2_exotermica","p2_endotermica","p2_precision","p2_seguridad","p2_rapidez","p2_ejemplos"]],
+      ["Parte 3 · Cuanto paso", ["p3_balanceo","p3_limitante","p3_exceso"]],
+      ["Integracion final", ["final_integrada","final_metacognicion"]]
+    ];
+
+    const labels = {
+      p1_evidencias: "1. Evidencias de reaccion",
+      p1_clasificar: "2. Utilidad de clasificar reacciones",
+      p1_masa: "3. Conservacion de la masa",
+      p2_exotermica: "4. Que significa exotermica",
+      p2_endotermica: "5. Que significa endotermica",
+      p2_precision: "6. Precision sobre energia",
+      p2_seguridad: "7. Energia y seguridad",
+      p2_rapidez: "8. Rapidez y peligro",
+      p2_ejemplos: "9. Ejemplos propios",
+      p3_balanceo: "10. Necesidad del balanceo",
+      p3_limitante: "11. Reactivo limitante",
+      p3_exceso: "12. Reactivo en exceso",
+      final_integrada: "13. Explicacion integrada",
+      final_metacognicion: "14. Metacognicion"
+    };
+
+    let text = "3S U4 - Semana 8 - Respuestas del estudiante\n";
+    text += "Fecha de descarga: " + new Date().toLocaleString("es-PE") + "\n\n";
+
+    sections.forEach(([title, keys]) => {
+      text += title + "\n";
+      text += "-".repeat(title.length) + "\n";
+      keys.forEach((key) => {
+        const field = document.querySelector(`[data-save="${key}"]`);
+        const value = field ? field.value.trim() : "";
+        text += labels[key] + "\n";
+        text += (value || "[Sin respuesta]") + "\n\n";
+      });
+    });
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "3S_Semana_8_respuestas.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  deck.addEventListener("scroll", () => window.requestAnimationFrame(updateCounter));
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") moveSlide(1);
+    if (event.key === "ArrowLeft") moveSlide(-1);
+  });
+  window.addEventListener("resize", updateCounter);
+  loadAnswers();
+  updateCounter();
+</script>
+</body>
+</html>

@@ -1,73 +1,697 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>5.° Secundaria — Secuencias Didácticas · Semanas 22 jun – 17 jul 2026</title><style>:root{--ac1:#4527a0;--ac2:#311b92}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>5.° Secundaria - Secuencias Didácticas - Semanas 22 jun - 20 jul 2026</title>
+<style>
+  :root{--ac1:#4527a0;--ac2:#311b92}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#212121;background:#F5F7FA}
   .top-bar{background:linear-gradient(135deg,var(--ac1) 0%,var(--ac2) 100%);color:white;padding:18px 24px 12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
   .top-bar h1{font-size:20px;font-weight:700;margin-bottom:2px}
-  .top-bar .subtitle{font-size:12px;opacity:.85;margin-bottom:10px}
+  .top-bar .subtitle{font-size:12px;opacity:.88;margin-bottom:10px}
   .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .btn-pdf{background:#FF6F00;color:white;border:none;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s}
   .btn-pdf:hover{background:#E65100}
   .btn-x{background:rgba(255,255,255,.2);color:white;border:1px solid rgba(255,255,255,.4);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:background .2s}
-  .btn-x:hover{background:rgba(255,255,255,.35)}
-  .nav-tabs{display:flex;overflow-x:auto;background:#ECEFF1;border-bottom:2px solid #CFD8DC;padding:0 8px;gap:2px;scrollbar-width:thin;align-items:stretch}
+  .btn-x:hover{background:rgba(255,255,255,.3)}
+  .nav-tabs{display:flex;gap:4px;overflow-x:auto;padding:8px 10px;background:#ECEFF1;border-bottom:2px solid #B0BEC5}
   .wsep{display:flex;align-items:center;padding:0 8px;font-size:10px;font-weight:700;color:#455A64;white-space:nowrap;background:#CFD8DC;border-radius:4px;margin:6px 4px;letter-spacing:.5px;text-transform:uppercase}
   .tab-btn{background:transparent;border:none;padding:10px 14px;font-size:11px;font-weight:600;color:#546E7A;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;text-align:center;line-height:1.3}
   .tab-btn:hover{background:#CFD8DC}
   .tab-btn.active{color:#263238;border-bottom-color:var(--ac1);background:#CFD8DC}
-  .main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
-  .class-section{animation:fadeIn .25s ease}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-  .class-banner{background:linear-gradient(135deg,var(--ac1),var(--ac2));color:white;border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;box-shadow:0 3px 10px rgba(0,0,0,.2)}
-  .class-num{font-size:26px;font-weight:900;opacity:.6;min-width:40px}
-  .class-day{font-size:17px;font-weight:700}
-  .class-time{font-size:13px;opacity:.8;margin-top:2px;display:flex;align-items:center;gap:8px}
-  .wbadge{background:rgba(255,255,255,.25);border-radius:10px;padding:2px 8px;font-size:11px;font-weight:600}
-  .idea-fuerza{background:#FFF8E1;border-left:5px solid #FF6F00;border-radius:0 8px 8px 0;padding:12px 16px;font-weight:600;color:#E65100;margin-bottom:16px;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-  .nota{background:#E3F2FD;border-left:4px solid #1976D2;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#0D47A1}
-  .step-card{border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);background:white}
-  .step-header{display:flex;align-items:center;padding:12px 16px;cursor:pointer;user-select:none;gap:10px;transition:filter .15s}
-  .step-header:hover{filter:brightness(.96)}
-  .step-icon{font-size:18px}
-  .step-toggle{font-size:12px;opacity:.6;transition:transform .2s}
-  .step-toggle.open{transform:rotate(180deg)}
-  .step-hd-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
-  .step-hd-wrap .step-label{flex:unset}
-  .step-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.3px}
-  .fmt-tag{font-size:10.5px;font-weight:500;color:#555;letter-spacing:0;text-transform:none;margin-top:1px;line-height:1.4}
-  .fp1{color:#C0392B;background:#FDECEA;padding:1px 6px;border-radius:6px;font-size:9.5px;font-weight:700;display:inline-block}
-  .fp2{color:#8E44AD;background:#F5EEF8;padding:1px 6px;border-radius:6px;font-size:9.5px;font-weight:700;display:inline-block}
-  .fp3{color:#16A085;background:#E8F8F5;padding:1px 6px;border-radius:6px;font-size:9.5px;font-weight:700;display:inline-block}
-  .fmt-link{color:inherit;text-decoration:none;border-bottom:1px dotted #aaa;cursor:pointer}
-  .fmt-link:hover{border-bottom-color:#333;color:#222}
-  .step-body{padding:14px 18px;border-top:1px solid rgba(0,0,0,.07);display:none}
-  .step-body.open{display:block}
-  .step-body p{margin:5px 0;line-height:1.55}
-  .step-body ul{margin:6px 0 6px 20px}
-  .step-body ol{margin:6px 0 6px 20px}
-  .step-body li{margin:3px 0}
-  .step-gancho{background:linear-gradient(135deg,#E8F5E9,#F1F8E9)}
-  .step-explica{background:linear-gradient(135deg,#E3F2FD,#E8EAF6)}
-  .step-hace{background:linear-gradient(135deg,#F3E5F5,#EDE7F6)}
-  .step-aplica{background:linear-gradient(135deg,#E0F2F1,#E8F5E9)}
-  .step-cierra{background:linear-gradient(135deg,#FBE9E7,#FFF3E0)}
-  .eval-card{background:linear-gradient(135deg,#B71C1C,#C62828);color:white;border-radius:10px;padding:20px;margin-bottom:16px}
-  .eval-card h2{font-size:18px;font-weight:800;margin-bottom:8px}
-  .eval-card ul{margin-left:20px}
-  .eval-card li{margin:4px 0;font-size:14px}
+  .main{max-width:980px;margin:0 auto;padding:28px 16px 40px}
+  .class-section{display:none}
+  .class-banner{background:linear-gradient(135deg,var(--ac1) 0%,#5E35B1 100%);color:white;border-radius:16px;padding:18px 22px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 24px rgba(69,39,160,.22);margin-bottom:18px}
+  .class-num{font-size:48px;font-weight:800;line-height:1;opacity:.32}
+  .class-day{font-size:18px;font-weight:700}
+  .class-time{font-size:13px;opacity:.88;margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .wbadge{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px;font-size:12px}
+  .idea-fuerza,.nota,.eval-card{background:#FFF8E1;border-left:5px solid #FF6F00;border-radius:0 14px 14px 0;padding:16px 18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+  .nota{background:#EDE7F6;border-left-color:#673AB7}
+  .eval-card{background:#E3F2FD;border-left-color:#1565C0}
+  .eval-card h2{font-size:18px;margin-bottom:8px;color:#0D47A1}
+  .step-card{border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.06);background:white}
+  .step-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.06);cursor:pointer}
+  .step-hd-wrap{display:flex;flex-direction:column;gap:4px;flex:1}
+  .step-label{font-size:15px;font-weight:800;letter-spacing:.3px;text-transform:uppercase}
+  .fmt-tag{font-size:12px;color:#616161}
+  .fmt-link{color:#5E35B1;text-decoration:none;border-bottom:1px dotted rgba(94,53,177,.55)}
+  .fpI{margin-left:6px}
+  .step-toggle{font-size:14px;color:#616161}
+  .step-body{padding:18px 22px 18px 24px;display:block;line-height:1.55}
+  .step-body p{margin-bottom:10px}
+  .step-body ul{margin:0 0 10px 22px}
+  .step-body li{margin:6px 0}
+  .step-gancho .step-header{background:#E8F5E9}
+  .step-explica .step-header{background:#E3F2FD}
+  .step-hace .step-header{background:#F3E5F5}
+  .step-aplica .step-header{background:#E0F2F1}
+  .step-cierra .step-header{background:#FBE9E7}
   @media print{.top-bar,.nav-tabs,.btn-pdf,.btn-x{display:none}.step-body{display:block!important}.main{padding:0}}
-</style></head><body><div class="top-bar"><h1>&#9881;&#65039; 5.° Secundaria — U4 — Ambiente y sostenibilidad</h1><div class="subtitle">Semanas 22 jun – 17 jul 2026 · MDD</div><div class="top-actions"><button class="btn-pdf" onclick="window.print()">&#128424; Imprimir PDF</button><button class="btn-x" onclick="expandAll()">&#9660; Expandir todo</button><button class="btn-x" onclick="collapseAll()">&#9650; Colapsar</button><a href="index.html" style="color:rgba(255,255,255,.8);font-size:12px;text-decoration:none">← Índice</a></div></div><div class="nav-tabs"><div class="wsep">S6 — 22-26 jun</div><button class="tab-btn" id="tab-1" onclick="showClass(1)">Lun 22/6<br><small>Evidencia U3</small></button><button class="tab-btn" id="tab-2" onclick="showClass(2)">Mié 24/6<br><small>PP Apertura</small></button><button class="tab-btn" id="tab-3" onclick="showClass(3)">Vie 26/6<br><small>L1 Cadenas</small></button><div class="wsep">S7 — 29 jun-3 jul</div><button class="tab-btn" id="tab-4" onclick="showClass(4)">Lun 29/6<br><small>L2 GEI</small></button><button class="tab-btn" id="tab-5" onclick="showClass(5)">Mié 1/7<br><small>L2 Glaciares</small></button><button class="tab-btn" id="tab-6" onclick="showClass(6)">Vie 3/7<br><small>L3 Sostenib.</small></button><div class="wsep">S8 — 6-10 jul</div><button class="tab-btn" id="tab-7" onclick="showClass(7)">Lun 6/7<br><small>C3 Diseña</small></button><button class="tab-btn" id="tab-8" onclick="showClass(8)">Mié 8/7<br><small>C3 Construye</small></button><button class="tab-btn" id="tab-9" onclick="showClass(9)">Vie 10/7<br><small>C3 Comunica</small></button><div class="wsep">S9 — 13-17 jul</div><button class="tab-btn" id="tab-10" onclick="showClass(10)">Lun 13/7<br><small>Repaso U4</small></button><button class="tab-btn" id="tab-11" onclick="showClass(11)">Mié 15/7<br><small>Ev. C2 U4</small></button><button class="tab-btn" id="tab-12" onclick="showClass(12)">Vie 17/7<br><small>Gestión</small></button></div><div class="main"><div class="class-section" id="class-1" style="display:none"><div class="class-banner"><div class="class-num">C1</div><div><div class="class-day">Lunes 22 jun</div><div class="class-time">EVIDENCIA C2 U3 — Prueba escrita <span class="wbadge">Semana 6</span></div></div></div><div class="eval-card"><h2>&#128221; EVIDENCIA C2 U3 — Prueba escrita</h2><p style="margin:8px 0;font-size:14px"><strong>Lunes 22 junio — Semana 6</strong></p><ul><li>Caso integrador: trabajo, potencia, energía, conservación</li><li>Competencia C2: Explica el mundo físico</li><li>Cierra la Unidad 3</li></ul><p style="margin-top:10px;font-size:13px;opacity:.9">Entregar prueba | revisar instrucciones | regresar al finalizar.</p></div></div><div class="class-section" id="class-2" style="display:none"><div class="class-banner"><div class="class-num">C2</div><div><div class="class-day">Miércoles 24 jun</div><div class="class-time">PP Apertura U4 — Ambiente y sostenibilidad <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">&#128161; Los glaciares del Perú se derriten, el mar sube, el aire se contamina — la biosfera como sistema está en desequilibrio.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128065; Observación directa</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Proyectar imagen comparativa: glaciar Pastoruri 1980 vs 2024 (drásticamente reducido).</p><p>&#10067; "¿Qué ven? ¿Cuánto hielo hay en 2024 comparado con 1980? ¿Qué lo está causando?"</p><ul><li>Saberes previos: ¿Qué es el efecto invernadero? ¿Qué gases son responsables? ¿Qué relación tiene con la biosfera?</li></ul></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (15 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127912; Visual + Esquema en pizarra</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Leer la situación significativa:</strong> <em>"Los glaciares del Perú se derriten, el mar sube..."</em></p><p>En grupos:</p><ul><li>¿Cuáles son las causas del derretimiento?</li><li>¿Cómo afecta a las comunidades que dependen del agua glaciar?</li></ul><p><strong>PREGUNTA MOTORA:</strong> <em>"¿Cómo funcionan los sistemas ecológicos, qué los desequilibra y cómo podemos actuar de forma sostenible?"</em></p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (12 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128203; Metacognición aplicada</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Hoja de ruta U4:</strong></p><ul><li>L1: Organismos y el ambiente — cadenas tróficas, ciclos biogeoquimicos</li><li>L2: Desequilibrio — efecto invernadero, glaciares, deforestación</li><li>L3: Sostenibilidad — tecnologías limpias, políticas ambientales</li><li>C3 Filtro de aguas: Lun 6 + Mié 8 + Vie 10 Jul</li></ul><p>Cuaderno: 2 preguntas propias. Ej: "¿Por qué el CH₄ es peor que el CO₂ como GEI?"</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (3 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128203; Metacognición aplicada</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>&#10067; "Si el Pastoruri desaparece, ¿qué impacto concreto tienen las comunidades de Áncash que dependen de ese glaciar?"</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127995; Ticket de salida</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Ticket: "Una causa del cambio climático y un impacto concreto en el Perú."</p><p><strong>Fechas clave:</strong> C3 Filtro: Lun 6+Mié 8+Vie 10 Jul | Evidencia C2: Vie 17 Jul</p></div></div></div><div class="class-section" id="class-3" style="display:none"><div class="class-banner"><div class="class-num">C3</div><div><div class="class-day">Viernes 26 jun</div><div class="class-time">L1 S1 — Ecosistemas, cadenas tróficas y pirámides ecológicas <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">&#128161; Cada vez que la energía pasa de un nivel trófico al siguiente, se pierde el 90% — por eso los leónes son más escasos que las cebras.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128065; Observación directa</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Imagen del Amazonas peruano.</p><p>&#10067; "¿Cuántos seres vivos dependen de ese ecosistema? ¿Quién come a quién? ¿Qué pasaría si los árboles desaparecieran?"</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (20 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127912; Visual + Esquema en pizarra</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Ecosistema:</strong> biota (productores, consumidores 1/2/3°, descomponedores) + biotopo (agua, suelo, temperatura, luz).</p><p><strong>Cadenas tróficas</strong> → redes alimenticias: relaciones entre quienes se comen.</p><p><strong>Pirámides ecológicas:</strong></p><ul><li>Energía: cada nivel tiene MENOS que el anterior (10% de eficiencia)</li><li>Biomasa: productores > consumidores 1° > consumidores 2°...</li></ul><p><strong>Regulación de poblaciones:</strong> depredación (lobo y ciervo — ciclo de Lotka-Volterra), competencia, enfermedad.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128196; Cuestionario guiado</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>PROD 1:</strong> "Construir una red alimenticia del ecosistema marino peruano con al menos 8 organismos. Señalar productores, consumidores y descomponedores."</p><p><strong>PROD 2:</strong> "Dibujar la pirámide de energía con los 4 niveles. ¿Por qué cada nivel es más pequeño?"</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128203; Metacognición aplicada</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>&#10067; "¿Por qué es más eficiente energéticamente ser vegetariano que cornívoro? Justifiquen con la pirámide."</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (3 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127995; Ticket de salida</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cuaderno: red trófica del Perú + pirámide de energía con eficiencia del 10%.</p></div></div></div><div class="class-section" id="class-4" style="display:none"><div class="class-banner"><div class="class-num">C4</div><div><div class="class-day">Lunes 29 jun</div><div class="class-time">L2 S1 — Efecto invernadero y cambio climático <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">&#128161; El efecto invernadero NATURAL es necesario para la vida — el ANTRÓPICO lo ha amplificado hasta desestabilizar el clima.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128065; Observación directa</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Gráfica: temperatura promedio global 1850-2024.</p><p>&#10067; "¿Qué patrón ven? ¿Cuándo empieza la curva a subir más rápido? ¿Qué event histórico coincide con ese cambio?"</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (20 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127912; Visual + Esquema en pizarra</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Efecto invernadero natural (necesario):</strong> la atmósfera retiene calor solar → temperatura media 15°C sin él sería -18°C.</p><p><strong>GEI por impacto humano:</strong></p><ul><li>CO₂: combustibles fósiles, deforestación (potencial calentamiento = 1)</li><li>CH₄: ganadería, residuos (21× más potente que CO₂)</li><li>N₂O: fertilizantes nitrogenados (296× más potente)</li></ul><p><strong>Consecuencias del cambio climático:</strong></p><ul><li>Aumento del nivel del mar (expansión térmica + derretimiento glaciar)</li><li>Eventos extremos (sequías, ciclones más intensos)</li><li>Retroceso glaciar en el Perú (70% de los glaciares tropicales del mundo)</li></ul><p>Análisis de gráficas: tendencias de temperatura → extrapolación 2050/2100.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128196; Cuestionario guiado</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>PROD 1:</strong> "Esquema causal: Combustibles fósiles → CO₂↑ → Efecto invernadero → Temperatura↑ → Glaciares se derriten → Pastoruri pierde el X% cada década."</p><p><strong>PROD 2:</strong> "Tabla: 4 GEI → fuente principal → potencial de calentamiento → una acción concreta para reducirlo."</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127807; Reflexión contextual</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>&#10067; "¿Por qué el Perú siendo responsable de <1% de las emisiones globales es uno de los países más afectados por el cambio climático?"</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (3 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#9989; Reflexión + Cuaderno</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cuaderno: tabla 4 GEI + esquema causal completo con datos del Pastoruri.</p></div></div></div><div class="class-section" id="class-5" style="display:none"><div class="class-banner"><div class="class-num">C5</div><div><div class="class-day">Miércoles 1 jul</div><div class="class-time">L2 S2 — Glaciares del Perú y deforestación amazónica <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">&#128161; El Perú tiene el 70% de los glaciares tropicales del mundo y pierde ~150.000 ha de bosque amazónico al año — dos crisis que se amplifican mutuamente.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128065; Observación directa</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Fotos comparativas: Pastoruri 1980 vs 2020.</p><p>&#10067; "¿Qué ven? ¿Cuánto hielo se ha perdido? ¿Qué impacto tiene eso en las comunidades de Áncash?"</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (20 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127912; Visual + Esquema en pizarra</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Retroceso glaciar en el Perú:</strong></p><ul><li>El Perú tiene el 70% de glaciares tropicales del mundo (INAIGEM)</li><li>Quelccaya: perdió el 20% desde 1980</li><li>Impactos: menos agua para riego, consumo humano, generación hidráulica</li></ul><p><strong>Deforestación amazónica:</strong></p><ul><li>Perú pierde ~150.000 ha/año de bosque amazónico</li><li>Causas: minería ilegal, tala, expansión agrícola</li><li>Efecto: menos absorción de CO₂, menos ciclo del agua local</li></ul><p><strong>Alternativas productivas sostenibles:</strong> agroforestería (cacao, café), ecoturismo, pagos por servicios ambientales.</p><p>La minería ilegal contamina ríos con mercurio → bioacumulación en la cadena trófica.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128202; Análisis de datos + gráfico</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>PROD 3:</strong> "Infografía glaciares + deforestación: para cada problema → magnitud (dato) → causa principal → consecuencia → alternativa."</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127807; Reflexión contextual</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Debate: <em>"¿Es posible el desarrollo económico sin destruir la Amazonía? ¿Qué países han logrado desacoplar crecimiento y deforestación?"</em></p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (3 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#9989; Reflexión + Cuaderno</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cuaderno: 3 impactos del retroceso glaciar en el Perú con datos numéricos.</p></div></div></div><div class="class-section" id="class-6" style="display:none"><div class="class-banner"><div class="class-num">C6</div><div><div class="class-day">Viernes 3 jul</div><div class="class-time">L3 S1 — Desarrollo sostenible y tecnologías limpias <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">&#128161; Sostenibilidad no es "no crecer" — es crecer de forma que las generaciones futuras tengan los mismos recursos que nosotros.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128279; Conectar→Extender→Cuestionar</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>&#10067; "¿El Perú puede ser desarrollado Y sostenible al mismo tiempo? ¿O son objetivos incompatibles?"</p><p>Debate rápido: 2 equipos — un lado arg. que SÍ es posible, otro que NO. 90 segundos cada uno.</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (20 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127912; Visual + Esquema en pizarra</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Desarrollo sostenible (Brundtland 1987):</strong> "Desarrollo que satisface las necesidades del presente sin comprometer la capacidad de las generaciones futuras."</p><p><strong>3 pilares:</strong> económico (prosperidad) + social (equidad) + ambiental (conservación).</p><p><strong>Tecnologías limpias:</strong></p><ul><li>Energía solar fotovoltaica: sin combustión, costo cayendo 90% en 10 años</li><li>Energía eólica: Parque Wayra (Ica) — 30.000 hogares</li><li>Electromovilidad: reducción de emisiones urbanas</li><li>Agroecología: producción sin agroquímicos sintéticos</li></ul><p><strong>ODS relevantes:</strong> ODS 7 (energía limpia), ODS 13 (acción climática), ODS 15 (vida de ecosistemas terrestres).</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#128196; Cuestionario guiado</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>PROD 1:</strong> "Para el Perú: elegir 2 tecnologías limpias relevantes y justificar por qué son viables dadas las características geográficas del país."</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#127807; Reflexión contextual</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Transición al C3: <em>"El proyecto de filtro de aguas es una tecnología limpia de bajo costo que puede aplicarse en comunidades sin acceso a agua potable."</em></p><p>&#10067; "¿Qué principios de sostenibilidad aplica? ¿Cómo lo evalúan en los 3 pilares?"</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (3 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=28" class="fmt-link" target="_blank" onclick="event.stopPropagation()">&#9989; Reflexión + Cuaderno</a> <span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cuaderno: definición de desarrollo sostenible + 3 pilares + 2 tecnologías limpias para el Perú.</p></div></div></div><div class="class-section" id="class-7" style="display:none"><div class="class-banner"><div class="class-num">C7</div><div><div class="class-day">Lunes 6 jul</div><div class="class-time">L4 C3 — Tratamiento de aguas grises: determinar y diseñar <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">&#128161; Una solución sostenible empieza por elegir una alternativa técnicamente viable y socialmente accesible.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Dato de acceso desigual al agua segura y gran volumen de aguas grises en el hogar.</p><p>&#10067; "Si esa agua ya existe, ¿cómo podríamos reutilizarla sin convertirla en un riesgo?"</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (16 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Comparar alternativas: filtración en capas, destilación solar y radiación UV.</p><ul><li>Costo, facilidad de construcción, materiales y eficacia esperada.</li><li>Ficha de diseño con diagrama de flujo y presupuesto.</li></ul></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (22 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Ficha C3:</strong> problema, alternativa elegida, materiales, capas del filtro, criterios de eficacia y boceto del prototipo.</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Relacionar el proyecto con ODS 6 y con el consumo responsable de agua en casa o colegio.</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cada equipo deja claro qué material cumple la función de filtrar partículas y cuál de reducir olor.</p></div></div></div><div class="class-section" id="class-8" style="display:none"><div class="class-banner"><div class="class-num">C8</div><div><div class="class-day">Miércoles 8 jul</div><div class="class-time">L4 C3 — Tratamiento de aguas grises: construir <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">&#128161; Construir un prototipo funcional permite pasar del discurso ambiental a una intervención concreta del entorno.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Revisar bocetos, materiales y roles de montaje del filtro.</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Orden de capas, lavado inicial del filtro y preparación del agua gris de prueba.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (30 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=9" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🧪 Experimento / Análisis guiado</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>ESPACIO MAKER:</strong> montar el prototipo, filtrar la muestra y registrar color, olor, partículas y tiempo de paso.</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Comparar el comportamiento del filtro con lo previsto en la ficha de diseño.</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Registrar si hará falta una segunda pasada o un ajuste de capas para mejorar resultados.</p></div></div></div><div class="class-section" id="class-9" style="display:none"><div class="class-banner"><div class="class-num">C9</div><div><div class="class-day">Viernes 10 jul</div><div class="class-time">L4 C3 — Tratamiento de aguas grises: comprobar y comunicar <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">&#128161; Una solución ambiental no se evalúa por intuición: necesita criterios, datos y una lectura honesta de sus límites.</div><div class="nota">EVIDENCIA C3: se consideran diseño, construcción, prueba de eficacia y comunicación del proyecto.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Comparar agua original y agua filtrada por cada equipo.</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Criterios de comprobación: claridad, olor, presencia de partículas y porcentaje de recuperación.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (24 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Análisis de datos + gráfico</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Producto:</strong> tabla de eficacia del prototipo y exposición tipo videoblog o campaña corta.</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Discutir límites del prototipo: por qué puede servir para reúso doméstico, pero no para consumo directo.</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Autoevaluar el prototipo con una mejora prioritaria para una segunda versión.</p></div></div></div><div class="class-section" id="class-10" style="display:none"><div class="class-banner"><div class="class-num">C10</div><div><div class="class-day">Lunes 13 jul</div><div class="class-time">Repaso integrador U4 <span class="wbadge">Semana 9</span></div></div></div><div class="idea-fuerza">&#128161; La sostenibilidad se comprende mejor cuando se conectan ecosistemas, desequilibrio, políticas y soluciones en una sola mirada.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (6 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔗 Conectar→Extender→Cuestionar</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Recuperar la ruta de la unidad: ecosistemas → cambio climático → sostenibilidad → solución tecnológica.</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (12 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Ordenar ideas clave: cadena trófica, efecto invernadero, glaciares, políticas ambientales, tecnologías limpias.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (22 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Producto:</strong> caso breve de ecosistema perturbado con análisis causal y propuesta de manejo sostenible.</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Mejorar una respuesta usando evidencia, concepto y propuesta, no solo opinión.</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (4 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Anotar el concepto más difícil que todavía necesita ajuste antes de la evidencia C2.</p></div></div></div><div class="class-section" id="class-11" style="display:none"><div class="class-banner"><div class="class-num">C11</div><div><div class="class-day">Miércoles 15 jul</div><div class="class-time">Punto de llegada — EVIDENCIA C2 U4 <span class="wbadge">Semana 9</span></div></div></div><div class="eval-card"><h2>&#128221; EVIDENCIA C2 U4 — Caso integrador sobre derrame de petróleo</h2><p style="margin:8px 0;font-size:14px"><strong>Miércoles 15 jul — Semana 9</strong></p><ul><li>Análisis de cadena trófica, bioacumulación, ciclo del carbono, GEI y biorremediación.</li><li>Competencia C2: explica implicancias ecológicas y evalúa alternativas de solución.</li><li>Práctica escrita formal de cierre de la unidad.</li></ul><p style="margin-top:10px;font-size:13px;opacity:.9">Resolver individualmente | justificar con datos y conceptos | argumentar propuestas con criterio ambiental.</p></div></div><div class="class-section" id="class-12" style="display:none"><div class="class-banner"><div class="class-num">C12</div><div><div class="class-day">Viernes 17 jul</div><div class="class-time">Punto de llegada — Gestión ambiental escolar y cierre <span class="wbadge">Semana 9</span></div></div></div><div class="idea-fuerza">&#128161; La sostenibilidad deja de ser teoría cuando se vuelve criterio para mirar críticamente el propio colegio.</div><div class="step-card step-gancho"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127919;</span><div class="step-hd-wrap"><span class="step-label" style="color:#1B5E20">Gancho (8 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Plantear: "Nuestro colegio también consume agua, energía y produce residuos. ¿Qué dice eso de su huella ambiental?"</p></div></div><div class="step-card step-explica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#128214;</span><div class="step-hd-wrap"><span class="step-label" style="color:#0D47A1">Explica (15 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Construir matriz simple de impacto ambiental escolar y revisar propuestas de mejora viables.</p></div></div><div class="step-card step-hace"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#9999;</span><div class="step-hd-wrap"><span class="step-label" style="color:#4A148C">Hace (20 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p><strong>Producto:</strong> matriz de impacto ambiental del colegio + propuesta priorizada de mejora sostenible.</p></div></div><div class="step-card step-aplica"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127807;</span><div class="step-hd-wrap"><span class="step-label" style="color:#004D40">Aplica (10 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Autoevaluación del bimestre: qué idea sobre ambiente y sostenibilidad ya aplican en su vida cotidiana.</p></div></div><div class="step-card step-cierra"><div class="step-header" onclick="toggleStep(this)"><span class="step-icon">&#127995;</span><div class="step-hd-wrap"><span class="step-label" style="color:#3E2723">Cierra (5 min)</span><span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span></div><span class="step-toggle">&#9660;</span></div><div class="step-body"><p>Cierre del bimestre con una meta concreta de mejora personal o grupal.</p></div></div></div></div></div><script>
+  @media (max-width:720px){.class-banner{padding:16px;gap:12px}.class-num{font-size:34px}.main{padding:18px 12px 30px}}
+</style>
+</head>
+<body><div class="top-bar"><h1>⚙️ 5.° Secundaria — U4 — Ambiente y sostenibilidad</h1><div class="subtitle">Semanas 22 jun – 20 jul 2026 · MDD</div><div class="top-actions"><button class="btn-pdf" onclick="window.print()">🖨 Imprimir PDF</button><button class="btn-x" onclick="expandAll()">▼ Expandir todo</button><button class="btn-x" onclick="collapseAll()">▲ Colapsar</button><a href="5S_Unidad_4_ecosistemas_sostenibilidad_comentado.html" style="color:#fff;font-size:12px;text-decoration:none;font-weight:700;margin-left:6px;display:inline-block" target="_blank">Slides U4</a> <a href="5S_Unidad_4_aguas_bioelectroquimica_slides.html" style="color:#fff;font-size:12px;text-decoration:none;font-weight:700;margin-left:6px;display:inline-block" target="_blank">Aguas + MFC</a> <a href="index.html" style="color:rgba(255,255,255,.8);font-size:12px;text-decoration:none">← Índice</a></div></div><div class="nav-tabs"><div class="wsep">S6 — 22-26 jun</div><button class="tab-btn" id="tab-1" onclick="showClass(1)">Lun 22/6<br><small>L1 Ecosist.</small></button><button class="tab-btn" id="tab-2" onclick="showClass(2)">Mié 24/6<br><small>PP Apertura</small></button><button class="tab-btn" id="tab-3" onclick="showClass(3)">Vie 26/6<br><small>L1 Ciclos</small></button><div class="wsep">S7 — 29 jun-3 jul</div><button class="tab-btn" id="tab-4" onclick="showClass(4)">Lun 29/6<br><small>L2 GEI</small></button><button class="tab-btn" id="tab-5" onclick="showClass(5)">Mié 1/7<br><small>L2 Glaciares</small></button><button class="tab-btn" id="tab-6" onclick="showClass(6)">Vie 3/7<br><small>L3 Sostenib.</small></button><button class="tab-btn" id="tab-7" onclick="showClass(7)">Lun 6/7<br><small>L3 Políticas</small></button><div class="wsep">S8 — 6-10 jul</div><button class="tab-btn" id="tab-8" onclick="showClass(8)">Mié 8/7<br><small>C3 Diseña</small></button><button class="tab-btn" id="tab-9" onclick="showClass(9)">Vie 10/7<br><small>C3 Construye</small></button><button class="tab-btn" id="tab-10" onclick="showClass(10)">Lun 13/7<br><small>C3 Evidencia</small></button><div class="wsep">S9 — 13-17 jul</div><button class="tab-btn" id="tab-11" onclick="showClass(11)">Mié 15/7<br><small>Repaso U4</small></button><button class="tab-btn" id="tab-12" onclick="showClass(12)">Vie 17/7<br><small>Ev. C2 U4</small></button><div class="wsep">S10 — 20 jul</div><button class="tab-btn" id="tab-13" onclick="showClass(13)">Lun 20/7<br><small>Gestión</small></button></div><div class="main"><div class="class-section" id="class-1" style="display:none"><div class="class-banner"><div class="class-num">C1</div><div><div class="class-day">Lunes 22 jun</div><div class="class-time">L1 S1 — Ecosistemas y flujo de energía <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">💡 Un ecosistema se sostiene porque la materia se recicla y la energía fluye desde los productores hacia los demás niveles tróficos.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Mostrar un ecosistema marino peruano y preguntar: <strong>¿quién depende de quién para sobrevivir?</strong></p><ul><li>Identificar productores, consumidores y descomponedores.</li><li>Conectar con la idea de hábitat del animal que investigarán.</li></ul></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (18 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Ecosistema = biota + biotopo.</strong> Explicar cadenas tróficas, redes alimenticias y pirámides de energía/biomasa.</p><p>Subrayar la regla del 10% y por qué los niveles superiores tienen menos energía disponible.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (22 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> red trófica de un ecosistema peruano con al menos 8 organismos y una pirámide de energía rotulada.</p><ul><li>Marcar productores, consumidores y descomponedores.</li><li>Justificar por qué cada nivel recibe menos energía.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Responder: <strong>¿qué pasaría si desaparece un depredador tope o un productor clave?</strong></p><p>Relacionar el cambio con equilibrio ecológico.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (7 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Ticket: <em>"Una idea nueva sobre flujo de energía y una duda sobre ecosistemas"</em>.</p></div>
+</div></div><div class="class-section" id="class-2" style="display:none"><div class="class-banner"><div class="class-num">C2</div><div><div class="class-day">Miércoles 24 jun</div><div class="class-time">Punto de partida — Apertura U4 <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">💡 Los glaciares del Perú se derriten, el clima cambia y la biosfera pierde equilibrio: esta unidad busca entender por qué y cómo actuar de forma sostenible.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Comparar dos imágenes del glaciar Pastoruri y responder: <strong>¿qué cambió y por qué importa?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Leer la situación significativa y construir la pregunta motora:</p><p><em>¿Cómo funcionan los sistemas ecológicos, qué los desequilibra y cómo podemos actuar de forma sostenible?</em></p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Hoja de ruta U4:</strong></p><ul><li>L1: organismos y ambiente</li><li>L2: desequilibrio en la biosfera</li><li>L3: sostenibilidad</li><li>L4: tratamiento de aguas grises</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Conectar el deshielo con agua, agricultura, energía y salud en el Perú.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Registrar una causa del cambio climático y un impacto concreto en el Perú.</p></div>
+</div></div><div class="class-section" id="class-3" style="display:none"><div class="class-banner"><div class="class-num">C3</div><div><div class="class-day">Viernes 26 jun</div><div class="class-time">L1 S2 — Ciclos biogeoquímicos y biodiversidad <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">💡 La biodiversidad se sostiene porque el carbono, el nitrógeno y el agua circulan constantemente entre seres vivos y ambiente.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Preguntar: <strong>¿a dónde va el carbono de una hoja cuando se descompone? ¿y el nitrógeno del suelo?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (18 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar los ciclos del agua, carbono y nitrógeno, y cómo regulan poblaciones, productividad y equilibrio.</p><p>Vincular biodiversidad del Perú con servicios ecosistémicos y sostenibilidad.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (24 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto central:</strong> ficha del animal investigado.</p><ul><li>Completar: ecosistema, hábitat, nicho ecológico, alimentación y relaciones tróficas.</li><li>Ubicar dónde intervienen agua, carbono y nitrógeno en su ecosistema.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Responder: <strong>¿por qué perder una sola especie puede afectar a muchas otras?</strong></p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Entregar o dejar avanzada la ficha del animal para retomarla en las siguientes sesiones.</p></div>
+</div></div><div class="class-section" id="class-4" style="display:none"><div class="class-banner"><div class="class-num">C4</div><div><div class="class-day">Lunes 29 jun</div><div class="class-time">L2 S1 — Efecto invernadero y cambio climático <span class="wbadge">Semana 6</span></div></div></div><div class="idea-fuerza">💡 El efecto invernadero natural hace posible la vida; el problema es su intensificación por actividades humanas.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Leer una gráfica de temperatura global y preguntar: <strong>¿cuándo se acelera la subida y con qué procesos humanos coincide?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (20 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar GEI: CO₂, CH₄, N₂O y vapor de agua; diferencia entre efecto invernadero natural y calentamiento global.</p><p>Relacionar con lluvias, huracanes y nivel del mar.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (22 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Análisis de datos + gráfico</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> tabla comparativa de GEI con fuente, potencia relativa e impacto ambiental.</p></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar por qué reducir deforestación y combustibles fósiles ayuda a frenar el cambio climático.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Escribir una afirmación correcta sobre el efecto invernadero y otra sobre el calentamiento global.</p></div>
+</div></div><div class="class-section" id="class-5" style="display:none"><div class="class-banner"><div class="class-num">C5</div><div><div class="class-day">Miércoles 1 jul</div><div class="class-time">L2 S2 — Glaciares del Perú y deforestación <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">💡 El retroceso glaciar y la deforestación muestran que el desequilibrio ambiental afecta agua, energía, clima y biodiversidad al mismo tiempo.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Presentar el caso de Pastoruri o Quelccaya y preguntar: <strong>¿qué pierde una comunidad cuando pierde su glaciar?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (18 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar retroceso glaciar, disponibilidad de agua, energía hidroeléctrica y efectos de la deforestación amazónica sobre CO₂ y ciclo del agua.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (24 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> cadena causal del problema.</p><ul><li>Glaciar o bosque afectado → proceso ambiental → impacto social/económico.</li><li>Incluir al menos una alternativa productiva sostenible.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Comparar el impacto del retroceso glaciar en la sierra con el de la deforestación en la Amazonía.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Anotar una consecuencia ambiental y una social del cambio climático en el Perú.</p></div>
+</div></div><div class="class-section" id="class-6" style="display:none"><div class="class-banner"><div class="class-num">C6</div><div><div class="class-day">Viernes 3 jul</div><div class="class-time">L3 S1 — Desarrollo sostenible y tecnologías limpias <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">💡 La sostenibilidad no significa frenar el desarrollo, sino equilibrar bienestar social, economía y conservación ecológica.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔗 Conectar→Extender→Cuestionar</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Pregunta inicial: <strong>¿se puede crecer económicamente sin destruir el ambiente?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (18 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Desarrollo sostenible como triple balance. Explicar biocombustibles, captura de carbono, bioplásticos y biorremediación.</p><p>Conectar con ODS 6, 7, 13, 14 y 15.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (24 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=15" class="fmt-link" target="_blank" onclick="event.stopPropagation()">💬 Debate científico estructurado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> mini análisis de una tecnología limpia.</p><ul><li>¿Qué problema resuelve?</li><li>¿Qué limitaciones tiene?</li><li>¿Es viable en Perú?</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar por qué el futuro proyecto de tratamiento de aguas grises sí puede entenderse como tecnología limpia.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Elegir la tecnología limpia que consideran más urgente para el Perú y justificar en dos líneas.</p></div>
+</div></div><div class="class-section" id="class-7" style="display:none"><div class="class-banner"><div class="class-num">C7</div><div><div class="class-day">Lunes 6 jul</div><div class="class-time">L3 S2 — Políticas ambientales y modelos climáticos <span class="wbadge">Semana 7</span></div></div></div><div class="idea-fuerza">💡 Las soluciones ambientales no dependen solo de buenas ideas: necesitan políticas, evidencia y capacidad de proyectar escenarios futuros.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Leer una gráfica de temperatura global y preguntar: <strong>si la tendencia sigue así, qué podríamos esperar para 2100?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (18 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar Acuerdo de París, Protocolo de Kyoto, SINANPE, áreas protegidas, EIA y NDC.</p><p>Diferenciar política ambiental, regulación y acción ciudadana.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (24 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Análisis de datos + gráfico</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> lectura de una gráfica de temperatura o emisiones con extrapolación sencilla.</p><ul><li>Describir tendencia.</li><li>Proyectar un escenario.</li><li>Proponer una acción de mitigación.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Responder: <strong>¿por qué una EIA seria es clave antes de autorizar un proyecto grande?</strong></p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Escribir una política ambiental que conocen y una razón por la que necesita datos científicos para funcionar.</p></div>
+</div></div><div class="class-section" id="class-8" style="display:none"><div class="class-banner"><div class="class-num">C8</div><div><div class="class-day">Miércoles 8 jul</div><div class="class-time">L4 C3 — Tratamiento de aguas grises: determinar y diseñar <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">💡 Una solución tecnológica útil empieza por entender bien el problema, comparar alternativas y justificar un diseño viable con criterios claros.</div><div class="nota">Si la sesión del lunes 6 de julio no se realizó, recuperar al inicio una síntesis breve sobre sostenibilidad, EIA y lectura de gráficas antes de entrar al diseño del sistema.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Dato de inicio: una gran parte del agua residual doméstica es <strong>agua gris</strong> y puede reutilizarse si se trata bien.</p><p>Preguntar: <strong>¿cómo diseñamos un sistema barato y seguro para reúso?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (15 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Explicar el problema de aguas grises y comparar alternativas: filtración, destilación solar y radiación UV.</p><p>Definir criterios: costo, facilidad de construcción, disponibilidad y eficacia.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🛠</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (28 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Ficha de diseño</a><span class="fpI">DUA · P.III</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> ficha de diseño del prototipo.</p><ul><li>Elegir sistema.</li><li>Hacer boceto y diagrama de flujo.</li><li>Listar materiales y presupuesto aproximado.</li><li>Definir cómo se comprobará la eficacia.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Justificar por qué una familia o escuela podría empezar con filtración en capas y no con un sistema más costoso.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (4 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Salir con boceto aprobado y una mejora concreta antes de construir.</p></div>
+</div></div><div class="class-section" id="class-9" style="display:none"><div class="class-banner"><div class="class-num">C9</div><div><div class="class-day">Viernes 10 jul</div><div class="class-time">L4 C3 — Tratamiento de aguas grises: construir el prototipo <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">💡 Construir implica pasar del papel a un sistema real, registrar ajustes y tomar decisiones técnicas frente a lo que sí ocurre con los materiales.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Revisar diseños y anticipar: <strong>¿qué parte del prototipo podría fallar primero y cómo lo sabremos?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Orden de capas, seguridad básica, preparación del agua gris de prueba y criterios de registro en bitácora.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🛠</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (34 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=9" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🧪 Experimento / análisis guiado</a><span class="fpI">DUA · P.III</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>ESPACIO MAKER:</strong> armar el filtro o sistema elegido y registrar:</p><ul><li>materiales usados</li><li>pasos reales</li><li>ajustes al diseño</li><li>tiempo de armado</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Comparar el prototipo real con la ficha de diseño: <strong>¿qué cambió y por qué?</strong></p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Anotar qué ajuste debe hacerse antes de la prueba final de eficacia.</p></div>
+</div></div><div class="class-section" id="class-10" style="display:none"><div class="class-banner"><div class="class-num">C10</div><div><div class="class-day">Lunes 13 jul</div><div class="class-time">L4 C3 — Comprobar y comunicar — EVIDENCIA C3 <span class="wbadge">Semana 8</span></div></div></div><div class="idea-fuerza">💡 Una solución ambiental no se acepta por intuición: debe probarse con datos, reconocer límites y comunicarse con honestidad técnica.</div><div class="nota">EVIDENCIA C3: se valora determinar la alternativa, diseñar, construir, validar y comunicar el sistema de tratamiento de aguas grises.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=1" class="fmt-link" target="_blank" onclick="event.stopPropagation()">👀 Observación directa</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Comparar agua original y agua tratada por cada equipo.</p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (10 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Recordar criterios de eficacia: claridad, olor, partículas, velocidad de filtrado y posibilidad de reúso no potable.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🛠</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (30 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=10" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📊 Análisis de datos + gráfico</a><span class="fpI">DUA · P.III</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> tabla de resultados + conclusión.</p><ul><li>Registrar antes/después.</li><li>Calcular porcentaje visual de mejora.</li><li>Preparar una mini exposición o videoblog.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=27" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🌱 Reflexión contextual</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Responder: <strong>¿para qué sí sirve este sistema y para qué no?</strong> Discutir sus límites en salud y consumo.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Entregar portafolio o evidencia con mejora prioritaria para una segunda versión.</p></div>
+</div></div><div class="class-section" id="class-11" style="display:none"><div class="class-banner"><div class="class-num">C11</div><div><div class="class-day">Miércoles 15 jul</div><div class="class-time">Repaso integrador U4 <span class="wbadge">Semana 9</span></div></div></div><div class="idea-fuerza">💡 La unidad se domina cuando el estudiante conecta ecosistemas, desequilibrio, sostenibilidad y soluciones tecnológicas en una sola explicación.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=5" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔗 Conectar→Extender→Cuestionar</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Recuperar la ruta de la unidad: <strong>ecosistemas → desequilibrio → sostenibilidad → solución tecnológica</strong>.</p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Ordenar conceptos clave: cadena trófica, biodiversidad, GEI, glaciares, ODS, EIA, tecnologías limpias y tratamiento de aguas.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (28 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> caso breve de ecosistema perturbado con explicación causal y propuesta sostenible.</p><ul><li>Incluir cadena trófica.</li><li>Señalar un impacto climático.</li><li>Elegir una medida de gestión.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=11" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📝 Metacognición aplicada</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Corregir una respuesta débil y convertirla en respuesta científica con evidencia, concepto y propuesta.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Anotar el concepto que aún necesita ajuste antes de la evidencia C2.</p></div>
+</div></div><div class="class-section" id="class-12" style="display:none">
+  <div class="class-banner">
+    <div class="class-num">C12</div>
+    <div>
+      <div class="class-day">Viernes 17 jul</div>
+      <div class="class-time">Punto de llegada — EVIDENCIA C2 U4 <span class="wbadge">Semana 9</span></div>
+    </div>
+  </div>
+  <div class="eval-card">
+    <h2>📝 EVIDENCIA C2 U4 — Caso integrador sobre derrame de petróleo</h2>
+    <p style="margin:8px 0;font-size:14px"><strong>Viernes 17 julio de 2026 — Semana 9</strong></p>
+    <ul><li>Cadena trófica marina, bioacumulación y efecto del petróleo en cada nivel.</li><li>Papel del fitoplancton y relación con el ciclo del carbono.</li><li>Cálculo e interpretación de equivalencia entre CH₄ y CO₂.</li><li>Propuesta de biorremediación y justificación de una EIA.</li></ul></ul>
+    <p style="margin-top:10px;font-size:13px;opacity:.9">Resolver individualmente | justificar con datos y conceptos | evaluar alternativas con criterio ambiental.</p>
+  </div>
+</div><div class="class-section" id="class-13" style="display:none"><div class="class-banner"><div class="class-num">C13</div><div><div class="class-day">Lunes 20 jul</div><div class="class-time">Punto de llegada — Gestión ambiental y cierre de bimestre <span class="wbadge">Semana 10</span></div></div></div><div class="idea-fuerza">💡 La sostenibilidad se vuelve real cuando el estudiante la aplica para leer críticamente su propio colegio y proponer mejoras viables.</div><div class="step-card step-gancho">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🎯</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#1B5E20">Gancho (8 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=8" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🔬 Pregunta de entrada + dato</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Plantear: <strong>¿qué huella ambiental deja nuestro colegio cada día?</strong></p></div>
+</div><div class="step-card step-explica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">📘</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#0D47A1">Explica (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=16" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🎨 Visual + Esquema en pizarra</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Construir una matriz simple de impacto ambiental escolar: agua, energía, residuos, transporte y papel.</p></div>
+</div><div class="step-card step-hace">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">✍</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#4A148C">Hace (28 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=19" class="fmt-link" target="_blank" onclick="event.stopPropagation()">📄 Cuestionario guiado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p><strong>Producto:</strong> matriz de impacto + propuesta priorizada.</p><ul><li>Identificar impactos positivos y negativos.</li><li>Cuantificar cuando sea posible.</li><li>Elegir una mejora sostenible viable.</li></ul></div>
+</div><div class="step-card step-aplica">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🌿</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#004D40">Aplica (12 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=15" class="fmt-link" target="_blank" onclick="event.stopPropagation()">💬 Debate científico estructurado</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Comparar propuestas: paneles solares, compostaje, segregación, agua de lluvia o jardines verticales. Elegir la más viable para el colegio.</p></div>
+</div><div class="step-card step-cierra">
+  <div class="step-header" onclick="toggleStep(this)">
+    <span class="step-icon">🏽</span>
+    <div class="step-hd-wrap">
+      <span class="step-label" style="color:#3E2723">Cierra (5 min)</span>
+      <span class="fmt-tag"><a href="menu_formatos.html?id=20" class="fmt-link" target="_blank" onclick="event.stopPropagation()">🏁 Ticket de salida</a><span class="fpI">DUA · P.I</span></span>
+    </div>
+    <span class="step-toggle">▼</span>
+  </div>
+  <div class="step-body"><p>Cierre del bimestre: una idea científica que ya pueden aplicar en su vida cotidiana y una meta concreta de mejora.</p></div>
+</div></div>
+</div>
+<script>
 function showClass(n){
   document.querySelectorAll('.class-section').forEach(s=>s.style.display='none');
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  var s=document.getElementById('class-'+n);if(s)s.style.display='block';
-  var b=document.getElementById('tab-'+n);if(b)b.classList.add('active');
+  document.getElementById('class-'+n).style.display='block';
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function toggleStep(h){
-  var b=h.nextElementSibling,t=h.querySelector('.step-toggle');
-  if(b.classList.contains('open')){b.classList.remove('open');if(t)t.classList.remove('open');}
-  else{b.classList.add('open');if(t)t.classList.add('open');}
+function toggleStep(el){
+  const body=el.nextElementSibling;
+  const icon=el.querySelector('.step-toggle');
+  const isOpen=body.style.display!== 'none';
+  body.style.display=isOpen?'none':'block';
+  icon.textContent=isOpen?'▶':'▼';
 }
-function expandAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.add('open'));}
-function collapseAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.remove('open'));}
-document.addEventListener('DOMContentLoaded',function(){showClass(1);});
-</script></body></html>
+function expandAll(){
+  document.querySelectorAll('.step-body').forEach(b=>b.style.display='block');
+  document.querySelectorAll('.step-toggle').forEach(i=>i.textContent='▼');
+}
+function collapseAll(){
+  document.querySelectorAll('.step-body').forEach(b=>b.style.display='none');
+  document.querySelectorAll('.step-toggle').forEach(i=>i.textContent='▶');
+}
+window.addEventListener('DOMContentLoaded',()=>showClass(8));
+</script>
+</body></html>

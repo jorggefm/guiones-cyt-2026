@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3S U4 - Semana 8 integrada</title>
+<style>
+  :root{
+    --paper:#f7f8f4;
+    --surface:#ffffff;
+    --ink:#14212b;
+    --muted:#5a6670;
+    --line:#d9ded7;
+    --teal:#0f7c7b;
+    --green:#477a38;
+    --amber:#d88c1d;
+    --red:#b94b4b;
+    --slate:#293846;
+    --shadow:0 14px 42px rgba(20,33,43,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI", Verdana, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg, rgba(15,124,123,.06) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(15,124,123,.05) 1px, transparent 1px);
+    background-size:44px 44px;
+  }
+  .deck{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+  }
+  .deck::-webkit-scrollbar{display:none}
+  .slide{
+    flex:0 0 100vw;
+    width:100vw;
+    height:100vh;
+    padding:72px 32px 84px;
+    scroll-snap-align:start;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .board{
+    width:min(1360px,100%);
+    height:min(760px,100%);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:20px;
+    align-items:stretch;
+  }
+  .image-panel,
+  .note-panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+  }
+  .image-panel{
+    position:relative;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:0;
+  }
+  .image-panel img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:6px;
+    display:block;
+    background:#fff;
+  }
+  .note-panel{
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .kicker{
+    margin:0 0 10px;
+    color:var(--teal);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1,h2,p{margin:0}
+  h1,h2{
+    font-weight:800;
+    letter-spacing:0;
+    line-height:1.04;
+  }
+  h1{font-size:34px}
+  h2{font-size:30px}
+  .lesson{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.42;
+  }
+  .focus-card{
+    border-left:5px solid var(--amber);
+    background:#fff8ec;
+    padding:14px;
+    border-radius:6px;
+  }
+  .focus-card strong,
+  .steps strong{
+    display:block;
+    margin-bottom:8px;
+    color:var(--slate);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .focus-card p{
+    font-size:18px;
+    line-height:1.35;
+    font-weight:700;
+  }
+  .steps{
+    display:grid;
+    gap:10px;
+  }
+  .steps p{
+    font-size:15px;
+    line-height:1.38;
+    color:var(--muted);
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:7px 10px;
+    color:var(--slate);
+    background:#f8faf7;
+    font-size:12px;
+    font-weight:800;
+  }
+  .nav{
+    position:fixed;
+    left:50%;
+    bottom:16px;
+    transform:translateX(-50%);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border:1px solid rgba(20,33,43,.16);
+    border-radius:999px;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 26px rgba(20,33,43,.16);
+  }
+  .nav button,
+  .top-links a{
+    border:0;
+    border-radius:999px;
+    background:var(--slate);
+    color:#fff;
+    font-weight:800;
+    font-size:14px;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .nav button{padding:10px 14px}
+  .nav span{
+    min-width:92px;
+    text-align:center;
+    color:var(--slate);
+    font-weight:800;
+    font-size:14px;
+  }
+  .top-links{
+    position:fixed;
+    left:18px;
+    top:16px;
+    z-index:20;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .top-links a{
+    padding:10px 13px;
+    background:var(--teal);
+  }
+  .top-links a.secondary{background:var(--green)}
+  .counter{
+    position:fixed;
+    right:18px;
+    top:16px;
+    z-index:20;
+    border:1px solid rgba(20,33,43,.16);
+    border-radius:999px;
+    padding:10px 14px;
+    background:rgba(255,255,255,.86);
+    color:var(--slate);
+    font-weight:900;
+    box-shadow:0 8px 26px rgba(20,33,43,.12);
+  }
+  .progress{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:6px;
+    background:#dfe5dc;
+    z-index:22;
+  }
+  .progress span{
+    display:block;
+    width:0;
+    height:100%;
+    background:linear-gradient(90deg,var(--teal),var(--amber),var(--green));
+    transition:width .2s ease;
+  }
+  @media (max-width: 980px){
+    .slide{padding:66px 16px 84px}
+    .board{
+      height:calc(100vh - 150px);
+      grid-template-columns:1fr;
+      grid-template-rows:minmax(0,1fr) auto;
+    }
+    .note-panel{padding:16px}
+    h1{font-size:28px}
+    h2{font-size:24px}
+    .lesson,.focus-card p{font-size:15px}
+    .steps p{font-size:14px}
+  }
+  @media print{
+    html,body{height:auto;overflow:visible}
+    body::before,.nav,.top-links,.counter,.progress{display:none}
+    .deck{display:block;height:auto;overflow:visible}
+    .slide{break-after:page;height:100vh;padding:18mm}
+    .board{height:100%;grid-template-columns:1fr 300px}
+  }
+</style>
+</head>
+<body>
+  <div class="top-links">
+    <a href="Guion_3S.html" target="_blank">Guion 3S</a>
+    <a class="secondary" href="3S_Semana_8_respuestas.html" target="_blank">Respuestas S8</a>
+  </div>
+  <div class="counter"><span id="current">1</span>/<span id="total">15</span></div>
+  <div class="nav">
+    <button type="button" onclick="moveSlide(-1)" aria-label="Slide anterior">Anterior</button>
+    <span id="navLabel">1 / 15</span>
+    <button type="button" onclick="moveSlide(1)" aria-label="Slide siguiente">Siguiente</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/01_mapa_semana.png" alt="Mapa de la semana: evidencia, energía y proporción"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Apertura</p>
+            <h1>De observar a calcular</h1>
+            <p class="lesson">La semana se organiza como una sola ruta: primero reconocemos una reacción, luego explicamos su energía y finalmente calculamos proporciones.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué necesito saber para afirmar que entiendo una reacción química?</p></div>
+          <div class="tag-row"><span class="tag">DUA: ruta visual</span><span class="tag">Activación</span><span class="tag">Mapa conceptual</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/02_mezcla_vs_reaccion.png" alt="Comparación entre mezcla física y reacción química"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Parte 1: evidencia</p>
+            <h2>Mezcla no es lo mismo que reacción</h2>
+            <p class="lesson">La clave está en la identidad de las partículas: si solo se juntan, es mezcla; si se reorganizan y aparece una sustancia nueva, hay reacción.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué cambiaría en las partículas para dejar de hablar de mezcla?</p></div>
+          <div class="steps"><strong>Uso en clase</strong><p>Primero pedir descripciones visibles. Después llevarlos al nivel microscópico: partículas iguales o partículas nuevas.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/03_evidencias_reaccion.png" alt="Evidencias de una reacción química"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Observación científica</p>
+            <h2>Evidencias de reacción</h2>
+            <p class="lesson">Las señales visibles son pistas: gas, color, precipitado, temperatura o luz. Pero una señal aislada debe interpretarse con control.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Cuál evidencia indica mejor que se formó una sustancia nueva?</p></div>
+          <div class="tag-row"><span class="tag">Observar</span><span class="tag">Comparar</span><span class="tag">Justificar</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/04_reordenamiento_atomos.png" alt="Reordenamiento de átomos antes y después de una reacción"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Nivel microscópico</p>
+            <h2>Los átomos se reordenan</h2>
+            <p class="lesson">La reacción no destruye átomos. Cambian los enlaces y la organización, pero se conserva la cantidad de cada tipo de átomo.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué se mantiene igual antes y después de reaccionar?</p></div>
+          <div class="steps"><strong>Actividad breve</strong><p>Que cuenten los colores antes y después. Luego pedir una frase usando: átomo, enlace, sustancia nueva.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/05_tipos_reacciones.png" alt="Tipos de reacciones químicas mediante modelos de partículas"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Clasificación</p>
+            <h2>Tipos de reacciones químicas</h2>
+            <p class="lesson">Clasificar no es memorizar nombres: es reconocer patrones de cambio para anticipar qué productos podrían formarse.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué patrón de movimiento o intercambio observas en cada caso?</p></div>
+          <div class="tag-row"><span class="tag">Síntesis</span><span class="tag">Descomposición</span><span class="tag">Desplazamientos</span><span class="tag">Combustión</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/06_balanceo_masa.png" alt="Balanceo de ecuaciones y conservación de la masa"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Balanceo</p>
+            <h2>Conservar la masa es contar bien</h2>
+            <p class="lesson">Balancear significa ajustar coeficientes para que cada tipo de átomo aparezca en la misma cantidad en reactivos y productos.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Por qué se cambian coeficientes y no fórmulas?</p></div>
+          <div class="steps"><strong>Puente al cálculo</strong><p>Esta idea prepara la estequiometría: si la ecuación está mal balanceada, cualquier cálculo nace mal.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/07_sistema_abierto_cerrado.png" alt="Sistema abierto y sistema cerrado en una reacción química"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Medición</p>
+            <h2>Sistema abierto y cerrado</h2>
+            <p class="lesson">Si un gas se escapa, la balanza puede cambiar aunque la materia no desaparezca. Por eso importa definir el sistema.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué entra o sale del sistema cuando medimos una reacción?</p></div>
+          <div class="tag-row"><span class="tag">Control de variables</span><span class="tag">Masa</span><span class="tag">Sistema</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/08_exotermica_endotermica.png" alt="Comparación entre reacción exotérmica y endotérmica"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Parte 2: energía</p>
+            <h2>Exotérmica vs endotérmica</h2>
+            <p class="lesson">La diferencia central es la dirección del flujo de energía: hacia el entorno o desde el entorno hacia el sistema.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿La energía entra al sistema o sale hacia el entorno?</p></div>
+          <div class="steps"><strong>Ejemplos</strong><p>Relacionar con combustión, bolsas frías, disoluciones que calientan o enfrían y seguridad en laboratorio.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/09_perfil_energia.png" alt="Perfil de energía de una reacción y energía de activación"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Energía de activación</p>
+            <h2>La reacción necesita superar una barrera</h2>
+            <p class="lesson">Aunque una reacción pueda ocurrir, las partículas necesitan suficiente energía inicial para alcanzar el estado activado.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Por qué algunas sustancias no reaccionan hasta recibir una chispa, calor o agitación?</p></div>
+          <div class="tag-row"><span class="tag">Reactivos</span><span class="tag">Barrera</span><span class="tag">Productos</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/10_choques_efectivos.png" alt="Choques efectivos y no efectivos entre partículas"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Teoría de colisiones</p>
+            <h2>No todo choque produce reacción</h2>
+            <p class="lesson">Para que haya reacción, las partículas deben chocar con energía suficiente y orientación adecuada.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué diferencia al choque que sí forma enlaces del que no reacciona?</p></div>
+          <div class="steps"><strong>Conexión</strong><p>Usar esta imagen para explicar por qué temperatura, concentración y agitación pueden cambiar la rapidez de reacción.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/11_seguridad_energia.png" alt="Seguridad química y control de energía"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Seguridad</p>
+            <h2>Observar, medir y controlar</h2>
+            <p class="lesson">La energía de una reacción no es solo teoría: ayuda a tomar decisiones seguras sobre temperatura, dosis, ventilación y protección.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué riesgo aparece si una reacción libera energía más rápido de lo previsto?</p></div>
+          <div class="tag-row"><span class="tag">Temperatura</span><span class="tag">Dosificación</span><span class="tag">Ventilación</span><span class="tag">Protección</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/12_estequiometria_proporcion.png" alt="Estequiometría como proporción entre partículas"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Parte 3: proporción</p>
+            <h2>Estequiometría como receta</h2>
+            <p class="lesson">La ecuación balanceada funciona como una receta de partículas: indica proporciones, no cantidades elegidas al azar.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué nos dicen los coeficientes de una ecuación balanceada?</p></div>
+          <div class="steps"><strong>Aplicación</strong><p>Pasar de contar partículas a calcular moles y masas medibles en laboratorio.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/13_mol_cantidad.png" alt="El mol como puente entre partículas y masa"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Mol</p>
+            <h2>Del mundo invisible al laboratorio</h2>
+            <p class="lesson">El mol permite conectar partículas microscópicas con cantidades que sí podemos medir: masa, volumen o concentración.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Por qué no calculamos una reacción contando moléculas una por una?</p></div>
+          <div class="tag-row"><span class="tag">Partículas</span><span class="tag">Mol</span><span class="tag">Gramos</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/14_reactivo_limitante.png" alt="Reactivo limitante y reactivo en exceso"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Reactivo limitante</p>
+            <h2>La reacción se detiene cuando falta uno</h2>
+            <p class="lesson">Aunque sobre un reactivo, la cantidad de producto depende del reactivo que se agota primero.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué pasa si duplicas un reactivo que ya estaba en exceso?</p></div>
+          <div class="steps"><strong>Ejercicio oral</strong><p>Que identifiquen limitante, exceso y producto máximo usando solo el diagrama antes de pasar a números.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-u4-s8/15_caso_integrador.png" alt="Caso integrador para explicar una reacción química"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Cierre integrador</p>
+            <h2>Explicar una reacción completa</h2>
+            <p class="lesson">La respuesta final debe unir evidencia, energía y proporción. Esa es la diferencia entre describir lo que se ve y explicar científicamente.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Cómo demostrarías que tu conclusión está apoyada por observación, medición y cálculo?</p></div>
+          <div class="tag-row"><span class="tag">Evidencia</span><span class="tag">Energía</span><span class="tag">Proporción</span><span class="tag">Justificación</span></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+<script>
+  const deck = document.getElementById("deck");
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const currentEl = document.getElementById("current");
+  const totalEl = document.getElementById("total");
+  const navLabel = document.getElementById("navLabel");
+  const progress = document.getElementById("progress");
+  totalEl.textContent = String(slides.length);
+
+  function currentIndex() {
+    return Math.round(deck.scrollLeft / window.innerWidth);
+  }
+
+  function updateCounter() {
+    const index = currentIndex();
+    const label = `${index + 1} / ${slides.length}`;
+    currentEl.textContent = String(index + 1);
+    navLabel.textContent = label;
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function moveSlide(step) {
+    const next = Math.max(0, Math.min(slides.length - 1, currentIndex() + step));
+    deck.scrollTo({ left: next * window.innerWidth, behavior: "smooth" });
+  }
+
+  deck.addEventListener("scroll", () => window.requestAnimationFrame(updateCounter));
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") moveSlide(1);
+    if (event.key === "ArrowLeft") moveSlide(-1);
+  });
+  window.addEventListener("resize", updateCounter);
+  updateCounter();
+</script>
+</body>
+</html>

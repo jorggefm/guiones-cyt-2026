@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2.&deg; Secundaria | U4 &mdash; Junta m&eacute;dica embrionaria</title>
+<style>
+  :root {
+    --bg: #080608;
+    --panel: rgba(18, 12, 14, .92);
+    --ink: #fff7ef;
+    --muted: #e8cfc5;
+    --accent: #ffb36b;
+    --accent2: #ff5e56;
+    --line: rgba(255,255,255,.18);
+    --case: #ffdfb8;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+  }
+  body { user-select: none; }
+  a { color: #ffe0b8; text-decoration: none; border-bottom: 1px dotted rgba(255,224,184,.7); }
+  a:hover { color: #fff; border-bottom-color: #fff; }
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 30% 18%, #2a1210 0%, #080608 57%, #020202 100%);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.012);
+    transition: opacity .28s ease, transform .28s ease;
+    display: grid;
+    place-items: center;
+  }
+  .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+  .imageWrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .imageWrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: saturate(1.03) contrast(1.04);
+  }
+  .textSlide {
+    width: min(1120px, calc(100vw - 44px));
+    min-height: min(760px, calc(100vh - 70px));
+    display: grid;
+    align-content: center;
+    gap: 20px;
+    padding: clamp(24px, 5vw, 58px);
+    background:
+      linear-gradient(135deg, rgba(30,14,13,.94), rgba(9,7,8,.96)),
+      radial-gradient(circle at 80% 20%, rgba(255,179,107,.18), transparent 35%);
+    border: 1px solid var(--line);
+    box-shadow: 0 22px 80px rgba(0,0,0,.45);
+  }
+  .textSlide h1 {
+    margin: 0;
+    font-size: clamp(34px, 6vw, 76px);
+    line-height: 1.02;
+    letter-spacing: 0;
+  }
+  .textSlide h2 {
+    margin: 0;
+    color: var(--accent);
+    font-size: clamp(18px, 2.3vw, 28px);
+    line-height: 1.2;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .lead {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(20px, 2.6vw, 34px);
+    line-height: 1.22;
+    font-weight: 750;
+  }
+  .bodyText {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(16px, 1.55vw, 22px);
+    line-height: 1.45;
+  }
+  .choiceGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .caseButton {
+    width: 100%;
+    height: auto;
+    min-height: 176px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.20);
+    background: linear-gradient(135deg, rgba(255,179,107,.18), rgba(255,94,86,.12));
+    color: #fff7ef;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 44% 1fr;
+    overflow: hidden;
+    font-size: inherit;
+    line-height: normal;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+  .caseButton:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,179,107,.8);
+    background: linear-gradient(135deg, rgba(255,179,107,.28), rgba(255,94,86,.18));
+  }
+  .caseButton strong {
+    display: block;
+    font-size: clamp(21px, 2.25vw, 31px);
+    line-height: 1.02;
+    margin-bottom: 8px;
+  }
+  .caseButton span {
+    display: block;
+    color: var(--muted);
+    font-size: clamp(14px, 1.18vw, 18px);
+    line-height: 1.32;
+  }
+  .caseThumb {
+    width: 100%;
+    height: 100%;
+    min-height: 176px;
+    object-fit: cover;
+    display: block;
+    border-right: 1px solid rgba(255,255,255,.14);
+  }
+  .caseInfo {
+    padding: 20px 18px;
+    display: grid;
+    align-content: center;
+  }
+  .pillRow { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    padding: 8px 11px;
+    border-radius: 999px;
+    color: #ffe6cf;
+    border: 1px solid rgba(255,179,107,.36);
+    background: rgba(255,179,107,.13);
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+  .option {
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255,255,255,.055);
+    padding: 12px 13px;
+    color: #fff3ea;
+    font-size: clamp(14px, 1.18vw, 18px);
+    line-height: 1.28;
+    font-weight: 700;
+  }
+  .sourceRow { display: flex; flex-wrap: wrap; gap: 14px; font-size: 15px; }
+  .miniNav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .jump {
+    width: auto;
+    height: auto;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 850;
+    background: rgba(255,255,255,.09);
+  }
+  .counter {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    z-index: 8;
+    text-align: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(10,7,7,.55);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .controls {
+    position: absolute;
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 8;
+    opacity: .18;
+    transition: opacity .2s ease;
+  }
+  .controls:hover { opacity: .94; }
+  button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.45);
+    color: white;
+    font-size: 19px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  button:hover { background: rgba(255,179,107,.22); }
+  .hit { position: absolute; top: 0; bottom: 0; z-index: 5; }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .help {
+    position: absolute;
+    top: 82px;
+    right: 22px;
+    z-index: 9;
+    background: rgba(10,7,7,.82);
+    color: #ffe5d8;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px 14px;
+    width: 282px;
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: .2s ease;
+    backdrop-filter: blur(8px);
+  }
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview { position: absolute; inset: 0; z-index: 20; background: rgba(5,4,4,.94); display: none; padding: 26px; overflow: auto; }
+  .overview.show { display: block; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .thumb { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.04); overflow: hidden; cursor: pointer; transition: transform .15s ease, border-color .15s ease; }
+  .thumb:hover { transform: translateY(-2px); border-color: rgba(255,179,107,.65); }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .thumb div { padding: 10px 12px; font-size: 13px; color: #ffe6d8; font-weight: 800; }
+  .overviewHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
+  .overviewHeader h2 { margin: 0; font-size: 24px; }
+  .close { width: auto; height: auto; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; }
+  .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; z-index: 10; transition: width .25s ease; }
+  @media (max-width: 900px) {
+    .textSlide { width: calc(100vw - 22px); min-height: calc(100vh - 34px); padding: 22px; }
+    .choiceGrid, .options { grid-template-columns: 1fr; }
+    .caseButton { grid-template-columns: 38% 1fr; min-height: 118px; }
+    .caseThumb { min-height: 118px; }
+    .caseInfo { padding: 14px; }
+    .controls { right: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls" aria-label="Controles">
+    <button onclick="prevSlide()" title="Anterior">&#8249;</button>
+    <button onclick="nextSlide()" title="Siguiente">&#8250;</button>
+    <button onclick="toggleOverview()" title="Miniaturas">&#9633;</button>
+  </div>
+  <div class="help" id="help">
+    <b>Controles:</b><br>
+    &rarr; / Espacio: avanzar<br>
+    &larr;: retroceder<br>
+    O: miniaturas<br>
+    F: pantalla completa<br>
+    H: mostrar/ocultar esta ayuda
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader"><h2>Vista general</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const slides = [
+  { type: "image", title: "Portada", image: "assets/2s_u4_junta/01_portada.png" },
+  {
+    type: "text",
+    title: "Junta m&eacute;dica escolar",
+    kicker: "Actividad pr&aacute;ctica U4",
+    lead: "Hoy no miramos casos para asustarnos: los miramos para diagnosticar, decidir y justificar como una junta m&eacute;dica.",
+    body: "Cada mesa trabajar&aacute; un caso. Primero observar&aacute;n dos im&aacute;genes limpias, luego recibir&aacute;n la ficha cl&iacute;nica con preguntas y opciones de decisi&oacute;n. El viernes confrontaremos esas decisiones con desenlaces posibles.",
+    pills: ["diagn&oacute;stico", "etapa embrionaria", "riesgo", "decisi&oacute;n"]
+  },
+  {
+    type: "menu",
+    title: "Elige tu caso",
+    kicker: "Cada mesa entra a una ruta",
+    lead: "Selecciona el caso asignado. Las im&aacute;genes se ver&aacute;n solas, sin texto encima.",
+    choices: [
+      { label: "Caso 1", desc: "Gemelos unidos y cirug&iacute;a de separaci&oacute;n", target: "case1", image: "assets/2s_u4_junta/02_caso1_siameses.png" },
+      { label: "Caso 2", desc: "Transfusi&oacute;n feto-fetal: un gemelo recibe demasiado", target: "case2", image: "assets/2s_u4_junta/10_caso2_ttts_v2.png" },
+      { label: "Caso 3", desc: "Secuencia TRAP: gemelo bomba y gemelo acardiaco", target: "case3", image: "assets/2s_u4_junta/06_caso3_trap.png" },
+      { label: "Caso 4", desc: "Espina b&iacute;fida: cierre incompleto del tubo neural", target: "case4", image: "assets/2s_u4_junta/08_caso4_espina_bifida.png" }
+    ]
+  },
+  { id: "case1", type: "image", title: "Caso 1 imagen 1", image: "assets/2s_u4_junta/02_caso1_siameses.png" },
+  { type: "image", title: "Caso 1 imagen 2", image: "assets/2s_u4_junta/03_caso1_anatomia.png" },
+  {
+    type: "case",
+    title: "Caso 1: gemelos unidos",
+    kicker: "Mesa 1",
+    lead: "Una ecograf&iacute;a avanzada muestra dos fetos unidos por una regi&oacute;n del cuerpo. La familia pregunta si podr&aacute;n vivir separados despu&eacute;s del nacimiento.",
+    body: "Sospecha: gemelos monocig&oacute;ticos con separaci&oacute;n embrionaria incompleta. La decisi&oacute;n depende de qu&eacute; &oacute;rganos comparten y del riesgo de separar demasiado pronto.",
+    pills: ["monocig&oacute;ticos", "separaci&oacute;n tard&iacute;a", "anatom&iacute;a compartida"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/conjoined-twins"]],
+    options: [
+      "A. Operar apenas nazcan, sin esperar m&aacute;s estudios.",
+      "B. Hacer ecograf&iacute;a, ecocardiograma y RM fetal antes de decidir.",
+      "C. Esperar a que crezcan y operar solo si los &oacute;rganos compartidos lo permiten.",
+      "D. No separar nunca, aunque la anatom&iacute;a sea separable.",
+      "E. Separar solo al gemelo con mejor pron&oacute;stico.",
+      "F. Priorizar cuidados paliativos si comparten un coraz&oacute;n funcionalmente inseparable."
+    ]
+  },
+  { id: "case2", type: "image", title: "Caso 2 imagen 1", image: "assets/2s_u4_junta/10_caso2_ttts_v2.png" },
+  { type: "image", title: "Caso 2 imagen 2", image: "assets/2s_u4_junta/05_caso2_ttts_placenta.png" },
+  {
+    type: "case",
+    title: "Caso 2: transfusi&oacute;n feto-fetal",
+    kicker: "Mesa 2",
+    lead: "En un embarazo de gemelos id&eacute;nticos con una sola placenta, uno crece con exceso de l&iacute;quido y esfuerzo cardiaco; el otro queda peque&ntilde;o y con poco l&iacute;quido.",
+    body: "Sospecha: TTTS. El problema no est&aacute; en que un gemelo sea m&aacute;s fuerte, sino en conexiones placentarias desiguales que alteran el flujo de sangre.",
+    pills: ["TTTS", "placenta compartida", "donante", "receptor"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-twin-transfusion-syndrome-ttts"]],
+    options: [
+      "A. Solo reposo e hidrataci&oacute;n; no hacer seguimiento especializado.",
+      "B. Monitoreo frecuente con ecograf&iacute;as si el caso es leve.",
+      "C. Cirug&iacute;a l&aacute;ser fetal para cerrar conexiones placentarias anormales si el caso es severo.",
+      "D. Extraer l&iacute;quido amni&oacute;tico repetidamente como &uacute;nica estrategia.",
+      "E. Parto inmediato aunque la edad gestacional sea muy temprana.",
+      "F. Separar quir&uacute;rgicamente a los fetos dentro del &uacute;tero."
+    ]
+  },
+  { id: "case3", type: "image", title: "Caso 3 imagen 1", image: "assets/2s_u4_junta/06_caso3_trap.png" },
+  { type: "image", title: "Caso 3 imagen 2", image: "assets/2s_u4_junta/07_caso3_trap_explica.png" },
+  {
+    type: "case",
+    title: "Caso 3: secuencia TRAP",
+    kicker: "Mesa 3",
+    lead: "En una gestaci&oacute;n monocorial, un feto parece desarrollarse sin un coraz&oacute;n funcional. El otro feto bombea sangre para ambos y empieza a mostrar sobrecarga.",
+    body: "Sospecha: secuencia TRAP. El dilema es fuerte: el feto acardiaco no es viable, pero puede poner en riesgo al gemelo bomba que s&iacute; podr&iacute;a sobrevivir.",
+    pills: ["TRAP", "acardiaco", "gemelo bomba", "flujo invertido"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/twin-reversed-arterial-perfusion-sequence-and-bipolar-cord-coagulation-for-acardiac-acephalic-twins"]],
+    options: [
+      "A. No intervenir nunca, aunque el gemelo bomba muestre falla cardiaca.",
+      "B. Monitoreo estricto si el acardiaco es peque&ntilde;o y no sobrecarga al gemelo bomba.",
+      "C. Bloquear el flujo hacia el gemelo acardiaco si el riesgo para el gemelo bomba aumenta.",
+      "D. Inducir parto inmediato en una semana muy temprana.",
+      "E. Dar medicamentos al gemelo acardiaco para formar un coraz&oacute;n.",
+      "F. Operar al gemelo bomba para que bombee con m&aacute;s fuerza."
+    ]
+  },
+  { id: "case4", type: "image", title: "Caso 4 imagen 1", image: "assets/2s_u4_junta/08_caso4_espina_bifida.png" },
+  { type: "image", title: "Caso 4 imagen 2", image: "assets/2s_u4_junta/11_caso4_espina_bifida_explica_v2.png" },
+  {
+    type: "case",
+    title: "Caso 4: espina b&iacute;fida",
+    kicker: "Mesa 4",
+    lead: "Una ecograf&iacute;a detecta un defecto en la columna del feto. El equipo sospecha espina b&iacute;fida abierta: parte del sistema nervioso queda expuesto durante el desarrollo.",
+    body: "Sospecha: cierre incompleto del tubo neural. Este caso se relaciona con neurulaci&oacute;n y exige equilibrar beneficio fetal con riesgo materno.",
+    pills: ["tubo neural", "neurulaci&oacute;n", "m&eacute;dula", "riesgo materno"],
+    sources: [["Fuente cl&iacute;nica CHOP", "https://www.chop.edu/conditions-diseases/spina-bifida"]],
+    options: [
+      "A. Ignorar el diagn&oacute;stico hasta el nacimiento.",
+      "B. Derivar a centro fetal para evaluar cirug&iacute;a prenatal si cumple criterios.",
+      "C. Planificar cirug&iacute;a neonatal y seguimiento neurol&oacute;gico si no procede cirug&iacute;a fetal.",
+      "D. Indicar vitaminas despu&eacute;s del diagn&oacute;stico como &uacute;nico tratamiento.",
+      "E. Hacer parto inmediato sin valorar madurez fetal.",
+      "F. Decidir solo por la imagen, sin evaluar riesgos maternos."
+    ]
+  },
+  {
+    type: "text",
+    title: "Dictamen de la junta",
+    kicker: "Producto evaluable",
+    lead: "Entreguen una decisi&oacute;n, pero sobre todo entreguen el razonamiento.",
+    body: "El reporte debe incluir: diagn&oacute;stico probable, etapa o proceso embrionario afectado, riesgos principales, opci&oacute;n elegida y argumento cient&iacute;fico. El viernes veremos el desenlace de cada opci&oacute;n.",
+    pills: ["diagn&oacute;stico", "evidencia", "opci&oacute;n A-F", "sustento"]
+  }
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function renderLinks(s) {
+  if (!s.sources) return "";
+  return `<div class="sourceRow">${s.sources.map(([label, url]) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`).join("")}</div>`;
+}
+
+function renderOptions(s) {
+  if (!s.options) return "";
+  return `<div class="options">${s.options.map(o => `<div class="option">${o}</div>`).join("")}</div>`;
+}
+
+function makeSlide(s, i) {
+  if (s.type === "image") {
+    return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}" id="${s.id || ""}">
+      <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </section>`;
+  }
+  if (s.type === "menu") {
+    return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+      <div class="textSlide">
+        <h2>${s.kicker}</h2>
+        <h1>${s.title}</h1>
+        <p class="lead">${s.lead}</p>
+        <div class="choiceGrid">${s.choices.map(c => `<button class="caseButton" onclick="goToId('${c.target}')"><img class="caseThumb" src="${c.image}" alt="${c.label}"><div class="caseInfo"><strong>${c.label}</strong><span>${c.desc}</span></div></button>`).join("")}</div>
+      </div>
+      <div class="counter">${i + 1} / ${slides.length}</div>
+    </section>`;
+  }
+  return `<section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+    <div class="textSlide">
+      <h2>${s.kicker || ""}</h2>
+      <h1>${s.title}</h1>
+      <p class="lead">${s.lead}</p>
+      <p class="bodyText">${s.body}</p>
+      ${s.pills ? `<div class="pillRow">${s.pills.map(p => `<span class="pill">${p}</span>`).join("")}</div>` : ""}
+      ${renderLinks(s)}
+      ${renderOptions(s)}
+      <div class="miniNav"><button class="jump" onclick="goTo(2)">Elegir otro caso</button><button class="jump" onclick="nextSlide()">Continuar</button></div>
+    </div>
+    <div class="counter">${i + 1} / ${slides.length}</div>
+  </section>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image}" alt="${s.title}"><div>${i + 1}. ${s.title.replace(/<[^>]*>/g, "")}</div></div>`).join("");
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById("progress").style.width = ((current + 1) / slides.length * 100) + "%";
+}
+
+function showSlide(i) {
+  const all = document.querySelectorAll(".slide");
+  all[current]?.classList.remove("active");
+  current = (i + slides.length) % slides.length;
+  all[current]?.classList.add("active");
+  updateProgress();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+function goToId(id) {
+  const i = slides.findIndex(s => s.id === id);
+  if (i >= 0) showSlide(i);
+}
+
+function toggleOverview(force) {
+  const ov = document.getElementById("overview");
+  ov.classList.toggle("show", typeof force === "boolean" ? force : !ov.classList.contains("show"));
+}
+
+function toggleHelp() {
+  document.getElementById("help").classList.toggle("show");
+}
+
+function fullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+  if (e.key === "ArrowLeft") prevSlide();
+  if (e.key.toLowerCase() === "o") toggleOverview();
+  if (e.key.toLowerCase() === "f") fullscreen();
+  if (e.key.toLowerCase() === "h") toggleHelp();
+  if (e.key === "Escape") toggleOverview(false);
+});
+
+render();
+setTimeout(() => {
+  document.getElementById("help").classList.add("show");
+  setTimeout(() => document.getElementById("help").classList.remove("show"), 5000);
+}, 600);
+</script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>5.° Secundaria | U4 — Aguas residuales y celdas microbianas</title>
+<style>
+  :root {
+    --bg: #071013;
+    --ink: #f7fbf7;
+    --muted: #d8e4dd;
+    --panel: rgba(7, 13, 14, .58);
+    --panel-strong: rgba(7, 13, 14, .84);
+    --line: rgba(255,255,255,.16);
+    --accent: #9ccf7d;
+    --accent2: #d7a86e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: "Aptos", "Segoe UI", sans-serif; }
+  body.hideText .textLayer, body.hideText .progress { opacity: 0; pointer-events: none; }
+  .deck { position: relative; width: 100vw; height: 100vh; background: radial-gradient(circle at 25% 20%, #183032 0%, #071013 52%, #030607 100%); }
+  .slide { position: absolute; inset: 0; opacity: 0; transform: scale(1.01); transition: opacity .25s ease, transform .25s ease; display: grid; place-items: center; }
+  .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+  .imageWrap { position: absolute; inset: 0; display: grid; place-items: center; background: #050707; overflow: hidden; }
+  .imageWrap img { width: 100%; height: 100%; object-fit: contain; filter: saturate(1.02) contrast(1.02); }
+  .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,.30), transparent 24%, transparent 72%, rgba(0,0,0,.32)); }
+  .textLayer { position: absolute; z-index: 5; transition: opacity .18s ease; }
+  .topbar { top: 14px; left: 16px; right: 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+  .titleBox { max-width: min(760px, 54vw); padding: 9px 12px; border-radius: 12px; background: rgba(5, 9, 10, .56); border: 1px solid rgba(255,255,255,.13); backdrop-filter: blur(5px); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
+  h1 { margin: 0; font-size: clamp(17px, 1.45vw, 28px); line-height: 1.1; letter-spacing: -.01em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+  .counter { min-width: 56px; text-align: center; padding: 7px 8px; border-radius: 999px; background: rgba(5,9,10,.48); border: 1px solid rgba(255,255,255,.12); color: var(--muted); font-size: 11px; font-weight: 800; }
+  .notes { left: 14px; bottom: 12px; max-width: min(640px, 52vw); display: grid; gap: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { padding: 4px 7px; border-radius: 999px; background: rgba(156,207,125,.12); border: 1px solid rgba(156,207,125,.28); color: #f2ffe9; font-size: 12px; font-weight: 850; }
+  .comment { width: fit-content; max-width: min(640px, 52vw); margin: 0; padding: 8px 10px; border-radius: 12px; background: rgba(5, 9, 10, .50); border: 1px solid rgba(255,255,255,.12); color: #f8fff8; font-size: clamp(13px, 1.08vw, 17px); line-height: 1.28; font-weight: 650; backdrop-filter: blur(5px); }
+  .centerPanel { position: relative; z-index: 5; width: min(1000px, 88vw); padding: 30px 32px; border-radius: 26px; background: var(--panel-strong); border: 1px solid var(--line); box-shadow: 0 18px 64px rgba(0,0,0,.36); backdrop-filter: blur(10px); }
+  .intro .imageWrap img, .prompt .imageWrap img { filter: blur(4px) brightness(.45) saturate(.9); transform: scale(1.03); }
+  .tag { margin-bottom: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 900; }
+  .bigTitle { margin: 0 0 14px; font-size: clamp(34px, 3.4vw, 60px); line-height: 1.02; letter-spacing: -.035em; }
+  .sub { margin: 0 0 14px; color: #e7f1e9; font-size: clamp(17px, 1.5vw, 24px); font-weight: 750; line-height: 1.25; }
+  .bodyText { margin: 0; font-size: clamp(17px, 1.45vw, 24px); line-height: 1.42; color: #f5fff6; font-weight: 620; }
+  .questions { margin: 18px 0 0; padding-left: 24px; display: grid; gap: 12px; }
+  .questions li { font-size: clamp(18px, 1.55vw, 26px); line-height: 1.32; font-weight: 700; }
+  .revealBtn { margin-top: 22px; border: 0; border-radius: 999px; padding: 12px 18px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #162012; font-weight: 950; cursor: pointer; box-shadow: 0 12px 28px rgba(0,0,0,.24); }
+  .controls { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); z-index: 8; display: flex; flex-direction: column; gap: 9px; opacity: .16; transition: opacity .18s ease; }
+  .controls:hover { opacity: .94; }
+  .ctrl { width: 34px; height: 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: rgba(0,0,0,.44); color: #fff; font-size: 18px; cursor: pointer; }
+  .hit { position: absolute; top: 0; bottom: 0; z-index: 4; }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .help { position: absolute; top: 76px; right: 18px; z-index: 12; width: 310px; padding: 13px 15px; border-radius: 15px; background: rgba(5,8,9,.86); border: 1px solid var(--line); font-size: 13px; line-height: 1.5; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .18s ease; backdrop-filter: blur(8px); }
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview { position: absolute; inset: 0; z-index: 20; display: none; padding: 26px; overflow: auto; background: rgba(3,5,6,.96); }
+  .overview.show { display: block; }
+  .overviewHeader { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+  .overviewHeader h2 { margin: 0; }
+  .close { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; background: rgba(255,255,255,.08); color: var(--ink); font-weight: 800; cursor: pointer; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .thumb { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.045); overflow: hidden; cursor: pointer; }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .thumb div { padding: 10px 12px; font-size: 13px; line-height: 1.25; font-weight: 850; }
+  .progress { position: absolute; left: 0; bottom: 0; z-index: 10; height: 4px; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .2s ease, opacity .18s ease; }
+  @media (max-width: 900px) {
+    .topbar { top: 9px; left: 9px; right: 9px; }
+    .titleBox { max-width: 70vw; padding: 7px 9px; }
+    h1 { font-size: 15px; }
+    .counter { min-width: 46px; padding: 6px 7px; font-size: 10px; }
+    .notes { left: 8px; bottom: 8px; max-width: 64vw; }
+    .comment { max-width: 64vw; font-size: 12px; padding: 6px 8px; }
+    .chip { font-size: 10px; padding: 2px 5px; }
+    .centerPanel { padding: 18px 20px; border-radius: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls">
+    <button class="ctrl" onclick="prevSlide()" title="Anterior">‹</button>
+    <button class="ctrl" onclick="nextSlide()" title="Siguiente">›</button>
+    <button class="ctrl" onclick="toggleText()" title="Ocultar textos">H</button>
+    <button class="ctrl" onclick="toggleOverview()" title="Miniaturas">□</button>
+  </div>
+  <div class="help" id="help">
+    <b>Controles</b><br>
+    → / Espacio: avanzar<br>
+    ←: retroceder<br>
+    <b>H: ocultar/mostrar textos</b><br>
+    O: miniaturas<br>
+    F: pantalla completa<br>
+    ?: mostrar/ocultar ayuda
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader"><h2>Vista general</h2><button class="close" onclick="toggleOverview()">Cerrar</button></div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const A = "assets/5s_u4_aguas_bioelectroquimica/";
+const slides = [
+  {
+    type: "intro",
+    title: "Aguas residuales y celdas microbianas",
+    subtitle: "De filtrar agua gris a entender oxidación, voltaje y bioelectricidad",
+    comment: "La clase no trata solo de limpiar agua: trata de convertir materia orgánica contaminante en una oportunidad tecnológica, con límites sanitarios claros.",
+    image: A + "14_mfc_completa.png"
+  },
+  {
+    type: "prompt",
+    title: "Antes de empezar: ¿verse limpia significa ser segura?",
+    questions: [
+      "¿Qué puede seguir presente aunque el agua ya no se vea turbia?",
+      "¿Filtrar equivale a potabilizar?",
+      "¿Qué uso sí sería razonable para un agua tratada de forma casera?"
+    ],
+    button: "Revelar el problema",
+    image: A + "01_agua_limpia_no_segura.png"
+  },
+  {
+    type: "image",
+    title: "Verse limpia no significa ser segura",
+    keywords: ["Contaminantes invisibles", "Riesgo", "No potable"],
+    comment: "La transparencia solo informa sobre partículas visibles; no garantiza ausencia de detergentes, microorganismos o compuestos disueltos.",
+    image: A + "01_agua_limpia_no_segura.png"
+  },
+  {
+    type: "image",
+    title: "Agua potable, agua gris y agua negra",
+    keywords: ["Agua gris", "Reúso", "Riesgo sanitario"],
+    comment: "El proyecto se centra en agua gris: menos riesgosa que el agua negra, pero nunca reutilizable sin tratamiento y sin definir el uso final.",
+    image: A + "02_tipos_agua.png"
+  },
+  {
+    type: "image",
+    title: "Qué contiene el agua gris",
+    keywords: ["Grasas", "Detergentes", "Materia orgánica", "Microorganismos"],
+    comment: "El agua gris es una mezcla físico-química y biológica; por eso ningún tratamiento único resuelve todo.",
+    image: A + "03_contaminantes_agua_gris.png"
+  },
+  {
+    type: "prompt",
+    title: "Pregunta de diseño: ¿qué etapa elimina qué contaminante?",
+    questions: [
+      "¿Qué separa una malla que no puede separar el carbón activado?",
+      "¿Qué mejora la apariencia pero no asegura desinfección?",
+      "¿Dónde aparece la diferencia entre tratar y potabilizar?"
+    ],
+    button: "Ver el tren de tratamiento",
+    image: A + "04_tren_tratamiento.png"
+  },
+  {
+    type: "image",
+    title: "Tren de tratamiento: procesos encadenados",
+    keywords: ["Separar", "Sedimentar", "Filtrar", "Adsorber", "Desinfectar"],
+    comment: "Una tecnología ambiental seria combina etapas; cada etapa reduce un tipo distinto de riesgo.",
+    image: A + "04_tren_tratamiento.png"
+  },
+  {
+    type: "image",
+    title: "Filtro por capas: solución maker inicial",
+    keywords: ["Grava", "Arena", "Carbón", "Flujo"],
+    comment: "El filtro por capas retiene sólidos y reduce turbidez, pero por sí solo no convierte el agua en potable.",
+    image: A + "05_filtro_capas.png"
+  },
+  {
+    type: "image",
+    title: "Adsorción: moléculas retenidas en carbón activado",
+    keywords: ["Superficie", "Poros", "Moléculas", "Adsorción"],
+    comment: "El carbón activado no 'destruye' contaminantes: los retiene en una enorme superficie interna.",
+    image: A + "06_adsorcion_carbon_activado.png"
+  },
+  {
+    type: "prompt",
+    title: "Puente conceptual: ¿puede una bacteria ser parte de un circuito?",
+    questions: [
+      "Si una bacteria oxida materia orgánica, ¿a dónde van los electrones?",
+      "¿Qué pasaría si esos electrones llegan a un electrodo?",
+      "¿Puede el contaminante funcionar como combustible?"
+    ],
+    button: "Entrar a bioelectroquímica",
+    image: A + "12_oxidacion_bacteriana.png"
+  },
+  {
+    type: "image",
+    title: "Bacterias y biofilm: degradación de materia orgánica",
+    keywords: ["Biofilm", "Degradación", "Metabolismo"],
+    comment: "El biofilm no es solo 'suciedad': es una comunidad microbiana que transforma materia orgánica mediante metabolismo.",
+    image: A + "07_bacterias_biofilm.png"
+  },
+  {
+    type: "image",
+    title: "Celda galvánica vs celda microbiana",
+    keywords: ["Ánodo", "Cátodo", "Oxidación", "Reducción", "Voltaje"],
+    comment: "La celda microbiana conserva la lógica galvánica: oxidación en el ánodo, reducción en el cátodo y electrones por el circuito externo.",
+    image: A + "11_galvanica_vs_microbiana.png"
+  },
+  {
+    type: "image",
+    title: "Oxidación microbiana: el contaminante como donador de electrones",
+    keywords: ["Materia orgánica", "CO2", "H+", "e-"],
+    comment: "La bacteria oxida materia orgánica: obtiene energía para vivir y transfiere electrones hacia el ánodo de grafito.",
+    image: A + "12_oxidacion_bacteriana.png"
+  },
+  {
+    type: "image",
+    title: "Transferencia extracelular de electrones",
+    keywords: ["Citocromos", "Mediadores", "Nanocables"],
+    comment: "Algunas bacterias electroactivas exportan electrones por contacto directo, moléculas mediadoras o nanocables dentro del biofilm.",
+    image: A + "13_transferencia_extracelular.png"
+  },
+  {
+    type: "image",
+    title: "Celda de combustible microbiana completa",
+    keywords: ["MFC", "Ánodo anaerobio", "Cátodo aerobio", "Membrana"],
+    comment: "En una MFC, el ánodo captura electrones de la oxidación microbiana y el cátodo consume electrones reduciendo oxígeno.",
+    image: A + "14_mfc_completa.png"
+  },
+  {
+    type: "image",
+    title: "Voltaje: diferencia de potencial electroquímico",
+    keywords: ["Energía libre", "Donador", "Aceptor", "Flujo e-"],
+    comment: "El voltaje mide una diferencia energética: electrones pasan de un donador de mayor energía a un aceptor de menor energía.",
+    image: A + "15_voltaje_potencial.png"
+  },
+  {
+    type: "image",
+    title: "Tratamiento + recuperación pequeña de energía",
+    keywords: ["Menor carga orgánica", "Corriente pequeña", "Tecnología limpia"],
+    comment: "La promesa no es producir mucha electricidad, sino acoplar tratamiento ambiental con recuperación parcial de energía química.",
+    image: A + "16_tratamiento_energia.png"
+  },
+  {
+    type: "image",
+    title: "Medir antes y después: evidencia de eficacia",
+    keywords: ["Turbidez", "Olor", "pH", "Tiempo", "No potable"],
+    comment: "Un prototipo no se defiende con entusiasmo: se defiende con indicadores, límites y honestidad técnica.",
+    image: A + "09_evidencia_antes_despues.png"
+  },
+  {
+    type: "image",
+    title: "Reúso seguro: útil, pero no potable",
+    keywords: ["Riego", "Limpieza", "Descarga", "No beber"],
+    comment: "El cierre sanitario es clave: el agua tratada puede servir para reúso no potable, no para consumo humano.",
+    image: A + "10_reuso_no_potable.png"
+  },
+  {
+    type: "prompt",
+    title: "Cierre: ¿qué aprendimos realmente?",
+    questions: [
+      "¿Por qué filtrar no equivale a potabilizar?",
+      "¿Qué se oxida en una celda microbiana?",
+      "¿Qué representa el voltaje en términos de energía?"
+    ],
+    button: "Volver al inicio",
+    image: A + "15_voltaje_potencial.png"
+  }
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function makeTopbar(s, i) {
+  return `<div class="topbar textLayer"><div class="titleBox"><h1>${s.title}</h1></div><div class="counter">${i + 1} / ${slides.length}</div></div>`;
+}
+
+function makeSlide(s, i) {
+  const active = i === 0 ? "active" : "";
+  const image = s.image || "";
+  const topbar = makeTopbar(s, i);
+  if (s.type === "intro") {
+    return `<section class="slide intro ${active}">
+      <div class="imageWrap"><img src="${image}" alt="${s.title}"></div><div class="shade"></div>${topbar}
+      <div class="centerPanel textLayer"><div class="tag">Clase visual</div><h2 class="bigTitle">${s.title}</h2><p class="sub">${s.subtitle}</p><p class="bodyText">${s.comment}</p></div>
+    </section>`;
+  }
+  if (s.type === "prompt") {
+    return `<section class="slide prompt ${active}">
+      <div class="imageWrap"><img src="${image}" alt="${s.title}"></div><div class="shade"></div>${topbar}
+      <div class="centerPanel textLayer"><div class="tag">Pregunta antes de revelar</div><h2 class="bigTitle">${s.title}</h2><ol class="questions">${s.questions.map(q => `<li>${q}</li>`).join("")}</ol><button class="revealBtn" onclick="nextSlide()">${s.button || "Revelar"}</button></div>
+    </section>`;
+  }
+  return `<section class="slide image ${active}">
+    <div class="imageWrap"><img src="${image}" alt="${s.title}"></div><div class="shade"></div>${topbar}
+    <div class="notes textLayer"><div class="chips">${(s.keywords || []).map(k => `<span class="chip">${k}</span>`).join("")}</div><p class="comment">${s.comment || ""}</p></div>
+  </section>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s, i) => `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${s.image}" alt="${s.title}"><div>${i + 1}. ${s.title}</div></div>`).join("");
+  showSlide(0);
+}
+
+function showSlide(i) {
+  current = (i + slides.length) % slides.length;
+  document.querySelectorAll(".slide").forEach((el, idx) => el.classList.toggle("active", idx === current));
+  document.getElementById("progress").style.width = ((current + 1) / slides.length * 100) + "%";
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+function goTo(i) { showSlide(i); }
+function toggleText() { document.body.classList.toggle("hideText"); }
+function toggleHelp() { document.getElementById("help").classList.toggle("show"); }
+function toggleOverview(force) {
+  const ov = document.getElementById("overview");
+  const show = typeof force === "boolean" ? force : !ov.classList.contains("show");
+  ov.classList.toggle("show", show);
+}
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+document.addEventListener("keydown", (e) => {
+  const k = e.key.toLowerCase();
+  if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); nextSlide(); }
+  if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+  if (k === "h") toggleText();
+  if (k === "o") toggleOverview();
+  if (k === "f") toggleFullscreen();
+  if (e.key === "?") toggleHelp();
+  if (e.key === "Escape") toggleOverview(false);
+});
+render();
+</script>
+</body>
+</html>
