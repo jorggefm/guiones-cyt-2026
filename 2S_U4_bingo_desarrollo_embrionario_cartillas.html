@@ -1,0 +1,537 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2S U4 · Bingo desarrollo embrionario · Cartilla</title>
+<style>
+:root{
+  --blue:#d85a7a;
+  --blueDeep:#8f2f55;
+  --blueLine:#ef9ab1;
+  --paper:#fffaf8;
+  --ink:#4a1830;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255,220,228,.34) 0%, transparent 34%),
+    linear-gradient(180deg,var(--blue) 0%, var(--blueDeep) 100%);
+  color:#fff;
+}
+html{
+  -webkit-text-size-adjust:100%;
+}
+body{
+  min-height:100vh;
+  overflow:auto;
+  touch-action:pan-x pan-y pinch-zoom;
+  -webkit-overflow-scrolling:touch;
+}
+.page{
+  max-width:980px;
+  margin:0 auto;
+  padding:16px 16px 24px;
+}
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.titleBox h1{
+  margin:0;
+  font-size:clamp(2rem,4.8vw,3.35rem);
+  line-height:.95;
+  letter-spacing:.04em;
+  font-weight:1000;
+}
+.titleBox p{
+  margin:6px 0 0;
+  color:#ffe7ef;
+  font-size:clamp(.88rem,1.7vw,1rem);
+  font-weight:700;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+button,a.btn{
+  border:0;
+  border-radius:999px;
+  padding:11px 16px;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  transition:transform .12s ease, opacity .12s ease;
+}
+button:active,a.btn:active{transform:translateY(2px)}
+.primary{
+  background:linear-gradient(135deg,#f4c66a 0%, #e39b4b 100%);
+  color:#512700;
+}
+.secondary,.btn{
+  background:rgba(255,248,245,.96);
+  color:#8f2f55;
+}
+.ticketWrap{
+  display:flex;
+  justify-content:center;
+}
+.ticket{
+  width:min(100%,760px);
+  background:linear-gradient(180deg,#e56f8d 0%, #bf4e71 100%);
+  border-radius:24px;
+  padding:16px 16px 14px;
+  box-shadow:0 24px 54px rgba(96,22,48,.32);
+}
+.bingoHead{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:10px;
+}
+.bingoHead div{
+  text-align:center;
+  font-size:clamp(2.4rem,8vw,4.9rem);
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.24em;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:3px;
+  background:var(--blueLine);
+  padding:3px;
+  border-radius:4px;
+}
+.cell{
+  aspect-ratio:1 / 1;
+  background:var(--paper);
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.cell:hover{
+  transform:translateY(-1px);
+}
+.cell img{
+  width:84%;
+  max-width:98px;
+  display:block;
+  user-select:none;
+  pointer-events:none;
+  transition:transform .18s ease, opacity .18s ease, filter .18s ease;
+}
+.cell.marked{
+  background:linear-gradient(180deg,#fff4ef 0%, #ffd9de 100%);
+  box-shadow:inset 0 0 0 3px rgba(191,78,113,.14);
+}
+.cell.marked::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(135deg, rgba(191,78,113,.08) 0 10px, rgba(191,78,113,.18) 10px 20px);
+}
+.cell.marked::after{
+  content:"✓";
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#3c9a72;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:1rem;
+  font-weight:1000;
+  box-shadow:0 6px 14px rgba(35,181,110,.35);
+}
+.cell.marked img{
+  opacity:.48;
+  transform:scale(.93) rotate(-4deg);
+  filter:saturate(.68);
+}
+.free{
+  background:linear-gradient(180deg,#fff6f2 0%, #ffe2db 100%);
+}
+.freeBadge{
+  width:80%;
+  aspect-ratio:1 / 1;
+  border-radius:22px;
+  background:linear-gradient(135deg,#ffb59f 0%, #d85a7a 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:clamp(1.8rem,4vw,2.5rem);
+  font-weight:1000;
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.2);
+}
+.freeText{
+  position:absolute;
+  bottom:8px;
+  left:0;
+  right:0;
+  font-size:clamp(.48rem,1vw,.68rem);
+  color:#a14563;
+  font-weight:1000;
+  letter-spacing:.05em;
+}
+.footer{
+  margin-top:14px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+}
+.ticketNo{
+  font-size:clamp(1.8rem,4vw,3.1rem);
+  line-height:1;
+  font-weight:1000;
+}
+.legend{
+  text-align:right;
+  color:#ffe7ef;
+  font-size:clamp(.78rem,1.3vw,.95rem);
+  line-height:1.2;
+  font-weight:800;
+}
+.legend b{color:#fff}
+@media (max-width:860px){
+  .page{padding:12px 10px 18px}
+  .ticket{
+    width:min(100%,720px);
+    border-radius:20px;
+    padding:12px 12px 10px;
+  }
+  .bingoHead{gap:6px;margin-bottom:8px}
+  .grid{gap:2px;padding:2px}
+  .footer{margin-top:10px}
+}
+@media (orientation:portrait){
+  .toolbar{align-items:flex-start}
+  .actions{width:100%}
+  .actions button,.actions a{
+    flex:1 1 150px;
+    text-align:center;
+  }
+}
+@media (max-width:540px){
+  .page{padding:10px 8px 14px}
+  .actions{gap:8px}
+  button,a.btn{
+    padding:10px 12px;
+    font-size:.9rem;
+  }
+  .ticket{padding:10px 10px 8px}
+  .legend{font-size:.68rem}
+  .cell.marked::after{
+    width:24px;
+    height:24px;
+    font-size:.88rem;
+  }
+}
+@media (max-height:860px) and (orientation:landscape){
+  .page{padding:8px 10px 10px}
+  .toolbar{margin-bottom:6px}
+  .titleBox h1{font-size:1.9rem}
+  .titleBox p{
+    margin-top:2px;
+    font-size:.8rem;
+  }
+  button,a.btn{
+    padding:7px 10px;
+    font-size:.82rem;
+  }
+  .ticket{
+    width:min(100%, 620px, calc(100dvh - 170px));
+    padding:6px 6px 5px;
+  }
+  .bingoHead{gap:5px;margin-bottom:6px}
+  .bingoHead div{font-size:2.9rem}
+  .grid{gap:2px;padding:2px}
+  .footer{margin-top:6px}
+  .ticketNo{font-size:1.85rem}
+  .legend{font-size:.64rem}
+  .cell{padding:4px}
+  .cell img{width:82%}
+  .cell.marked::after{
+    width:22px;
+    height:22px;
+    font-size:.82rem;
+  }
+}
+@media print{
+  body{background:#fff}
+  .toolbar{display:none}
+  .page{max-width:none;padding:0}
+  .ticket{
+    width:100%;
+    box-shadow:none;
+    border-radius:0;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="toolbar">
+    <div class="titleBox">
+      <h1>B I N G O</h1>
+      <p>2.° Secundaria · U4 · Cartilla visual interactiva para tablet.</p>
+    </div>
+    <div class="actions">
+      <button class="primary" id="shuffleBtn" type="button">Generar otra cartilla</button>
+      <button class="secondary" id="clearBtn" type="button">Quitar marcas</button>
+      <button class="secondary" id="printBtn" type="button">Imprimir / PDF</button>
+      <a class="btn" href="2S_U4_bingo_desarrollo_embrionario_ruleta.html" target="_blank">Abrir urna</a>
+    </div>
+  </header>
+
+  <div class="ticketWrap">
+    <article class="ticket">
+      <div class="bingoHead">
+        <div>B</div>
+        <div>I</div>
+        <div>N</div>
+        <div>G</div>
+        <div>O</div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="footer">
+        <div class="ticketNo" id="ticketNo">N.° 001</div>
+        <div class="legend">
+          <b>Centro libre</b><br>
+          Toca una imagen para marcarla o desmarcarla.
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script>
+const RAW_ITEMS = [
+  ['🧬','gen','Gen','Unidad de información hereditaria presente en el ADN.'],
+  ['🧬','adn','ADN','Molécula que guarda la información genética.'],
+  ['🧫','cromos','Cromosoma','Estructura que organiza el ADN dentro de la célula.'],
+  ['2️⃣n','diploid','Diploide','Célula con dos juegos de cromosomas.'],
+  ['n️⃣','haploid','Haploide','Célula con un solo juego de cromosomas.'],
+  ['➗','mitosis','Mitosis','División celular que produce células iguales.'],
+  ['🔀','meiosis','Meiosis','División celular que forma gametos haploides.'],
+  ['👶','reprod','Reproducción sexual','Requiere gametos y mezcla información genética.'],
+  ['🧪','asexual','Reproducción asexual','Ocurre sin unión de gametos.'],
+  ['♀️','ovario','Ovario','Órgano que produce óvulos.'],
+  ['♂️','testicul','Testículo','Órgano que produce espermatozoides.'],
+  ['🥚','ovulo','Óvulo','Gameto femenino.'],
+  ['🏊','esperm','Espermatozoide','Gameto masculino móvil.'],
+  ['🧫','gameto','Gameto','Célula sexual haploide.'],
+  ['🔬','gametog','Gametogénesis','Proceso general de formación de gametos.'],
+  ['🏭','espermat','Espermatogénesis','Formación de espermatozoides.'],
+  ['🌙','oogenes','Ovogénesis','Formación de óvulos.'],
+  ['🟡','polar','Cuerpo polar','Célula pequeña producida durante la ovogénesis.'],
+  ['🧠','hormona','Hormona','Sustancia que regula procesos del cuerpo.'],
+  ['📍','pubertad','Pubertad','Etapa en la que madura el sistema reproductor.'],
+  ['🌡️','ciclo','Ciclo menstrual','Cambios periódicos del sistema reproductor femenino.'],
+  ['🏠','utero','Útero','Órgano donde se desarrolla el embrión.'],
+  ['🧵','endometr','Endometrio','Capa interna del útero donde implanta el blastocisto.'],
+  ['🛤️','trompa','Trompa de Falopio','Lugar habitual donde ocurre la fecundación.'],
+  ['🚪','vagina','Vagina','Canal que comunica el útero con el exterior.'],
+  ['🧴','semen','Semen','Líquido que transporta espermatozoides.'],
+  ['🪖','acrosoma','Acrosoma','Estructura del espermatozoide que ayuda a penetrar el óvulo.'],
+  ['🫧','zona','Zona pelúcida','Cubierta que rodea al óvulo.'],
+  ['🤝','fecunda','Fecundación','Unión del óvulo y el espermatozoide.'],
+  ['⭐','cigoto','Cigoto','Primera célula del nuevo ser vivo.'],
+  ['🧩','segmen','Segmentación','Divisiones iniciales del cigoto sin crecer de tamaño.'],
+  ['2️⃣','blast2','Blastómera','Cada célula resultante de las primeras divisiones.'],
+  ['🍇','morula','Mórula','Masa compacta de células anterior al blastocisto.'],
+  ['⭕','blasto','Blastocisto','Etapa con cavidad y masa celular interna.'],
+  ['🫙','blastoce','Blastocele','Cavidad interna del blastocisto.'],
+  ['🧱','trofobl','Trofoblasto','Capa externa del blastocisto que participa en la implantación.'],
+  ['🌱','embriob','Embrioblasto','Masa celular interna que originará el embrión.'],
+  ['🚚','viaje','Migración al útero','Desplazamiento del embrión temprano hacia el útero.'],
+  ['📌','implanta','Implantación','Fijación del blastocisto al endometrio.'],
+  ['🤏','adhiere','Adhesión','Primer contacto firme del blastocisto con el útero.'],
+  ['⬇️','invade','Invasión trofoblástica','Entrada progresiva del blastocisto al endometrio.'],
+  ['🩸','vasomat','Vasos maternos','Estructuras sanguíneas que nutren el desarrollo temprano.'],
+  ['🌿','vellosid','Vellosidades coriónicas','Aumentan el intercambio entre madre y embrión.'],
+  ['🔄','intercam','Intercambio','Paso de oxígeno, nutrientes y desechos.'],
+  ['🌍','placenta','Placenta','Órgano de intercambio entre madre y feto.'],
+  ['🪢','cordon','Cordón umbilical','Conecta al embrión o feto con la placenta.'],
+  ['💧','amnios','Amnios','Membrana que rodea al embrión.'],
+  ['🌊','liquido','Líquido amniótico','Protege y amortigua al embrión o feto.'],
+  ['🧿','disco','Disco embrionario','Estructura inicial de organización del embrión.'],
+  ['2️⃣','bilamin','Disco bilaminar','Etapa con dos capas celulares principales.'],
+  ['3️⃣','trilami','Disco trilaminar','Etapa con tres capas embrionarias.'],
+  ['🚪','gastrula','Gastrulación','Proceso que forma las tres capas embrionarias.'],
+  ['🔵','ecto','Ectodermo','Capa externa embrionaria.'],
+  ['🔴','meso','Mesodermo','Capa media embrionaria.'],
+  ['🟡','endo','Endodermo','Capa interna embrionaria.'],
+  ['🧠','nervio','Sistema nervioso','Se origina principalmente del ectodermo.'],
+  ['💪','musculo','Músculo','Tejido derivado sobre todo del mesodermo.'],
+  ['🦴','hueso','Hueso','Tejido de sostén derivado del mesodermo.'],
+  ['❤️','corazon','Corazón','Órgano que empieza a formarse muy temprano.'],
+  ['🫀','sangre','Sangre','Tejido derivado principalmente del mesodermo.'],
+  ['🍽️','digesti','Sistema digestivo','Se relaciona con derivados del endodermo.'],
+  ['🫁','respira','Sistema respiratorio','Se relaciona con derivados del endodermo.'],
+  ['🪈','neurula','Neurulación','Proceso ligado a la formación del tubo neural.'],
+  ['🧵','tubon','Tubo neural','Estructura precursora del sistema nervioso central.'],
+  ['⚠️','espina','Espina bífida','Defecto por cierre incompleto del tubo neural.'],
+  ['🫀','organo','Organogénesis','Formación inicial de órganos.'],
+  ['👼','embrion','Embrión','Etapa temprana de desarrollo posterior a la implantación.'],
+  ['🤰','feto','Feto','Etapa desde la novena semana hasta el nacimiento.'],
+  ['📆','semana','Semana gestacional','Forma de ubicar el avance del embarazo.'],
+  ['⏳','trimest','Trimestre','Cada uno de los tres grandes periodos del embarazo.'],
+  ['👯','gemelos','Gemelos','Dos descendientes desarrollados en un mismo embarazo.'],
+  ['🪞','monozi','Monocigóticos','Gemelos originados a partir de un solo cigoto.'],
+  ['👫','dizigot','Dicigóticos','Gemelos originados a partir de dos óvulos fecundados.'],
+  ['✂️','separa','Separación embrionaria','División del embrión temprano que puede originar gemelos.'],
+  ['🫂','siames','Siameses','Gemelos unidos por separación incompleta.'],
+  ['🔁','placuna','Placenta única','Situación frecuente en gemelos monocigóticos.'],
+  ['2️⃣🫙','placdob','Doble placenta','Situación frecuente en gemelos dicigóticos.'],
+  ['⚖️','tts','Transfusión feto-fetal','Desbalance de sangre entre gemelos que comparten placenta.'],
+  ['📏','rciu','Restricción de crecimiento','Desarrollo fetal menor al esperado.'],
+  ['🚫','ectopic','Embarazo ectópico','Implantación fuera del útero.'],
+  ['🧠','malform','Malformación','Alteración estructural durante el desarrollo.'],
+  ['🧪','teratog','Teratógeno','Factor que puede alterar el desarrollo embrionario.'],
+  ['🚬','tabaco','Tabaco','Ejemplo de factor dañino durante el embarazo.'],
+  ['🍺','alcohol','Alcohol','Sustancia que puede afectar el desarrollo del embrión.'],
+  ['🦠','virus','Infección viral','Puede alterar el desarrollo según el momento.'],
+  ['💊','farmaco','Fármaco','Medicamento que debe evaluarse en embarazo.'],
+  ['🥗','folico','Ácido fólico','Ayuda a prevenir defectos del tubo neural.'],
+  ['🩺','eco','Ecografía','Técnica para observar el desarrollo prenatal.'],
+  ['📝','diagno','Diagnóstico prenatal','Evaluación médica del desarrollo antes del nacimiento.'],
+  ['📊','evidenc','Evidencia','Dato observable que apoya una explicación científica.'],
+  ['❓','hipotes','Hipótesis','Respuesta provisional ante una pregunta científica.'],
+  ['🎯','variabl','Variable','Factor que puede cambiar en una investigación.'],
+  ['🧪','control','Control','Elemento que se mantiene para comparar resultados.'],
+  ['📋','registro','Registro','Anotación ordenada de observaciones o datos.'],
+  ['📈','conclus','Conclusión','Respuesta final basada en evidencia.'],
+  ['🧑‍⚕️','junta','Junta médica','Grupo que analiza un caso y propone decisiones.'],
+  ['🧠','caso','Caso clínico','Situación concreta para analizar con evidencia.'],
+  ['⚕️','riesgo','Riesgo médico','Probabilidad de daño o complicación.'],
+  ['✅','decision','Decisión médica','Opción elegida después del análisis del caso.'],
+  ['🍼','nacim','Nacimiento','Salida del bebé al final de la gestación.']
+];
+
+const ITEMS = RAW_ITEMS.map(([emoji, short, name, clue], index) => {
+  const hue = (index * 31) % 360;
+  return {
+    emoji,
+    short,
+    name,
+    clue,
+    accent:`hsl(${hue} 90% 72%)`,
+    shade:`hsl(${hue} 70% 46%)`
+  };
+});
+
+const grid = document.getElementById('grid');
+const ticketNo = document.getElementById('ticketNo');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const clearBtn = document.getElementById('clearBtn');
+const printBtn = document.getElementById('printBtn');
+let serial = Math.floor(Math.random() * 900) + 100;
+
+function shuffle(list){
+  const clone = [...list];
+  for(let i = clone.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [clone[i], clone[j]] = [clone[j], clone[i]];
+  }
+  return clone;
+}
+
+function makeIcon(item){
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="${item.name}">
+      <defs>
+        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${item.accent}"/>
+          <stop offset="100%" stop-color="${item.shade}"/>
+        </linearGradient>
+      </defs>
+      <rect x="6" y="6" width="108" height="108" rx="24" fill="url(#g)"/>
+      <circle cx="60" cy="50" r="31" fill="rgba(255,255,255,.9)"/>
+      <text x="60" y="61" text-anchor="middle" font-size="31">${item.emoji}</text>
+      <rect x="14" y="85" width="92" height="20" rx="10" fill="rgba(255,255,255,.94)"/>
+      <text x="60" y="98" text-anchor="middle" font-size="11" font-family="Arial" font-weight="700" fill="#214169">${item.short.toUpperCase()}</text>
+    </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function createCell(item, free = false){
+  const cell = document.createElement('button');
+  cell.type = 'button';
+  cell.className = `cell${free ? ' free' : ''}`;
+  if(free){
+    cell.disabled = true;
+    cell.innerHTML = `
+      <div class="freeBadge">⭐</div>
+      <div class="freeText">LIBRE</div>
+    `;
+    return cell;
+  }
+  cell.setAttribute('aria-pressed', 'false');
+  cell.title = item.name;
+  cell.innerHTML = `<img src="${makeIcon(item)}" alt="${item.name}">`;
+  cell.addEventListener('click', () => {
+    cell.classList.toggle('marked');
+    cell.setAttribute('aria-pressed', cell.classList.contains('marked') ? 'true' : 'false');
+  });
+  return cell;
+}
+
+function clearMarks(){
+  grid.querySelectorAll('.cell.marked').forEach((cell) => {
+    cell.classList.remove('marked');
+    cell.setAttribute('aria-pressed', 'false');
+  });
+}
+
+function renderCard(){
+  grid.innerHTML = '';
+  const items = shuffle(ITEMS).slice(0, 24);
+  let index = 0;
+  for(let row = 0; row < 5; row++){
+    for(let col = 0; col < 5; col++){
+      if(row === 2 && col === 2){
+        grid.appendChild(createCell(null, true));
+      }else{
+        grid.appendChild(createCell(items[index++]));
+      }
+    }
+  }
+  serial += 1;
+  ticketNo.textContent = `N.° ${String(serial).padStart(3, '0')}`;
+}
+
+shuffleBtn.addEventListener('click', renderCard);
+clearBtn.addEventListener('click', clearMarks);
+printBtn.addEventListener('click', () => window.print());
+
+renderCard();
+</script>
+</body>
+</html>
+
+
+
+
