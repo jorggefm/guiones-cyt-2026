@@ -49,5 +49,24 @@ function toggleStep(h){
 }
 function expandAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.add('open'));}
 function collapseAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.remove('open'));}
-document.addEventListener('DOMContentLoaded',function(){showClass(9);});
+document.addEventListener('DOMContentLoaded',function(){
+  showClass(9);
+  var topActions=document.querySelector('.top-actions');
+  if(topActions&&!document.getElementById('link-feedback-4s')){
+    var a=document.createElement('a');
+    a.id='link-feedback-4s';
+    a.href='4S_feedback_oral_pulso_escolar.pdf';
+    a.target='_blank';
+    a.textContent='Feedback oral PDF';
+    a.style.color='#fff';
+    a.style.fontSize='12px';
+    a.style.textDecoration='none';
+    a.style.fontWeight='700';
+    a.style.marginLeft='6px';
+    a.style.display='inline-block';
+    var idx=topActions.querySelector('a[href=\"index.html\"]');
+    if(idx) topActions.insertBefore(a, idx);
+    else topActions.appendChild(a);
+  }
+});
 </script></body></html>
