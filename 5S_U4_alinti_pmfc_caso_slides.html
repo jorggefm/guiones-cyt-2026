@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>5.° Secundaria | Caso Alinti — PMFC bajo la lupa</title>
+<style>
+  :root {
+    --bg: #070b0c;
+    --ink: #f6fbf7;
+    --muted: #cfded5;
+    --panel: rgba(8, 12, 13, .72);
+    --panel2: rgba(8, 12, 13, .88);
+    --line: rgba(255,255,255,.16);
+    --accent: #9fdd75;
+    --warn: #ffb35c;
+    --bad: #ff6b5c;
+    --blue: #79c7ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: "Aptos", "Segoe UI", sans-serif; }
+  body.hideText .textLayer, body.hideText .progress { opacity: 0; pointer-events: none; }
+  .deck { position: relative; width: 100vw; height: 100vh; background: radial-gradient(circle at 22% 18%, #183124 0%, #071112 48%, #030506 100%); }
+  .slide { position: absolute; inset: 0; opacity: 0; transform: scale(1.01); transition: .24s ease; display: grid; place-items: center; padding: 5.5vh 5vw; }
+  .slide.active { opacity: 1; transform: scale(1); z-index: 2; }
+  .media { position: absolute; inset: 0; display: grid; place-items: center; background: #050606; overflow: hidden; }
+  .media img, .media video { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,.44), transparent 22%, transparent 70%, rgba(0,0,0,.52)); }
+  .textLayer { z-index: 5; transition: opacity .18s ease; }
+  .topbar { position: absolute; top: 14px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+  .titleBox { max-width: min(820px, 62vw); padding: 9px 12px; border-radius: 12px; background: rgba(4,7,8,.58); border: 1px solid rgba(255,255,255,.13); backdrop-filter: blur(5px); }
+  h1 { margin: 0; font-size: clamp(17px, 1.5vw, 28px); line-height: 1.1; letter-spacing: -.01em; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+  .counter { min-width: 56px; padding: 7px 8px; text-align: center; border-radius: 999px; background: rgba(4,7,8,.56); border: 1px solid rgba(255,255,255,.12); color: var(--muted); font-size: 11px; font-weight: 900; }
+  .notes { position: absolute; left: 14px; bottom: 12px; max-width: min(760px, 60vw); display: grid; gap: 7px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { padding: 4px 7px; border-radius: 999px; background: rgba(159,221,117,.12); border: 1px solid rgba(159,221,117,.28); color: #f0ffe8; font-size: 12px; font-weight: 900; }
+  .comment { width: fit-content; max-width: min(760px, 60vw); margin: 0; padding: 8px 10px; border-radius: 12px; background: rgba(4,7,8,.55); border: 1px solid rgba(255,255,255,.12); color: #f8fff8; font-size: clamp(13px, 1.1vw, 18px); line-height: 1.28; font-weight: 650; backdrop-filter: blur(5px); }
+  .panel { position: relative; z-index: 4; width: min(1120px, 91vw); padding: 30px 34px; border-radius: 28px; background: var(--panel2); border: 1px solid var(--line); box-shadow: 0 20px 72px rgba(0,0,0,.38); backdrop-filter: blur(10px); }
+  .tag { margin-bottom: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 950; }
+  .big { margin: 0 0 14px; font-size: clamp(34px, 3.4vw, 62px); line-height: 1.02; letter-spacing: -.035em; }
+  .lead { margin: 0; color: #effbf0; font-size: clamp(18px, 1.55vw, 26px); line-height: 1.35; font-weight: 680; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+  .box { padding: 18px; border-radius: 20px; background: rgba(255,255,255,.055); border: 1px solid var(--line); }
+  .box h3 { margin: 0 0 10px; font-size: clamp(19px, 1.5vw, 27px); }
+  .box p, .box li { font-size: clamp(15px, 1.15vw, 19px); line-height: 1.32; color: #edf7ef; }
+  .formula { font-family: "Cascadia Mono", Consolas, monospace; font-size: clamp(22px, 2.1vw, 40px); line-height: 1.35; padding: 18px 20px; border-radius: 20px; background: rgba(0,0,0,.30); border: 1px solid rgba(255,255,255,.14); color: #f5fff3; }
+  .flow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .step { padding: 12px 14px; border-radius: 16px; background: rgba(159,221,117,.10); border: 1px solid rgba(159,221,117,.22); font-weight: 900; }
+  .arrow { align-self: center; color: var(--warn); font-weight: 950; font-size: 22px; }
+  .barWrap { display: grid; gap: 10px; margin-top: 16px; }
+  .bar { display: grid; grid-template-columns: 180px 1fr 90px; align-items: center; gap: 12px; font-weight: 800; }
+  .track { height: 24px; border-radius: 999px; background: rgba(255,255,255,.10); overflow: hidden; border: 1px solid rgba(255,255,255,.10); }
+  .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--warn)); }
+  .fill.bad { background: linear-gradient(90deg, var(--warn), var(--bad)); }
+  table { width: 100%; border-collapse: collapse; font-size: clamp(14px, 1.05vw, 18px); overflow: hidden; border-radius: 16px; }
+  th, td { padding: 12px 13px; border-bottom: 1px solid rgba(255,255,255,.12); text-align: left; vertical-align: top; }
+  th { color: var(--accent); background: rgba(255,255,255,.06); }
+  td strong { color: #fff; }
+  .verdict { color: var(--warn); font-weight: 950; }
+  .source { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+  .controls { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); z-index: 9; display: flex; flex-direction: column; gap: 9px; opacity: .16; transition: opacity .18s ease; }
+  .controls:hover { opacity: .95; }
+  .ctrl { width: 34px; height: 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: rgba(0,0,0,.44); color: #fff; font-weight: 900; cursor: pointer; }
+  .hit { position: absolute; top: 0; bottom: 0; z-index: 4; }
+  .hit.left { left: 0; width: 18%; }
+  .hit.right { right: 0; width: 18%; }
+  .help { position: absolute; top: 76px; right: 18px; z-index: 12; width: 320px; padding: 13px 15px; border-radius: 15px; background: rgba(5,8,9,.88); border: 1px solid var(--line); font-size: 13px; line-height: 1.5; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .18s ease; backdrop-filter: blur(8px); }
+  .help.show { opacity: 1; transform: translateY(0); }
+  .overview { position: absolute; inset: 0; z-index: 20; display: none; padding: 26px; overflow: auto; background: rgba(3,5,6,.96); }
+  .overview.show { display: block; }
+  .overviewHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .close { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; background: rgba(255,255,255,.08); color: var(--ink); font-weight: 900; cursor: pointer; }
+  .thumbGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .thumb { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.045); overflow: hidden; cursor: pointer; }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .thumb div { padding: 10px 12px; font-size: 13px; font-weight: 850; line-height: 1.25; }
+  .progress { position: absolute; left: 0; bottom: 0; z-index: 10; height: 4px; width: 0; background: linear-gradient(90deg, var(--accent), var(--warn)); transition: width .2s ease, opacity .18s ease; }
+  @media (max-width: 900px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .titleBox { max-width: 72vw; }
+    h1 { font-size: 15px; }
+    .notes { max-width: 70vw; }
+    .comment { max-width: 70vw; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls">
+    <button class="ctrl" onclick="prevSlide()">‹</button>
+    <button class="ctrl" onclick="nextSlide()">›</button>
+    <button class="ctrl" onclick="toggleText()">H</button>
+    <button class="ctrl" onclick="toggleOverview()">□</button>
+  </div>
+  <div class="help" id="help"><b>Controles</b><br>→ / espacio: avanzar<br>←: retroceder<br><b>H: ocultar/mostrar textos</b><br>O: miniaturas<br>F: pantalla completa<br>?: ayuda</div>
+  <div class="overview" id="overview"><div class="overviewHeader"><h2>Vista general</h2><button class="close" onclick="toggleOverview(false)">Cerrar</button></div><div class="thumbGrid" id="thumbGrid"></div></div>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+const A = "assets/5s_alinti_pmfc_case/";
+const slides = [
+  {type:"intro", title:"Caso Alinti: ¿energía de plantas o afirmación no demostrada?", tag:"Caso forense científico", body:"La pregunta no es si hay una lectura eléctrica. La pregunta es si esa lectura demuestra que la planta es la fuente real de energía útil.", image:A+"evidence_01_promesa.jpg"},
+  {type:"video", title:"Evidencia 1: la promesa pública", src:A+"clip_01_promesa.mp4", poster:A+"evidence_01_promesa.jpg", keywords:["Promesa", "Planta", "Electricidad"], comment:"Aquí aparece la narrativa que vamos a auditar: una planta conectada a cables como fuente de energía eléctrica."},
+  {type:"panel", title:"Tesis de la clase", html:`<div class="panel"><div class="tag">No basta ver una planta conectada</div><h2 class="big">Una medición eléctrica no prueba causalidad biológica</h2><p class="lead">Para creer la afirmación se necesita cerrar la cadena: Sol → fotosíntesis → rizodepósitos → bacterias → ánodo → corriente bajo carga.</p></div>`},
+  {type:"panel", title:"La cadena energética real de una PMFC", html:`<div class="panel"><div class="tag">Plant Microbial Fuel Cell</div><h2 class="big">La planta no entrega electrones al cable directamente</h2><div class="flow"><span class="step">Irradiancia solar</span><span class="arrow">→</span><span class="step">Fotosíntesis</span><span class="arrow">→</span><span class="step">Glucosa / biomasa</span><span class="arrow">→</span><span class="step">Rizodepósitos</span><span class="arrow">→</span><span class="step">Bacterias</span><span class="arrow">→</span><span class="step">Ánodo</span><span class="arrow">→</span><span class="step">Corriente pequeña</span></div><p class="source">Clave oral: cada flecha es una pérdida de energía y una hipótesis que debe demostrarse.</p></div>`},
+  {type:"panel", title:"Demostración del máximo teórico", html:`<div class="panel"><div class="tag">Balance energético ideal</div><h2 class="big">El límite teórico sale de multiplicar pérdidas</h2><div class="formula">150 W/m² × 0.05 × 0.70 × 0.60<br>= 3.15 W/m² ≈ 3.2 W/m²</div><div class="grid2" style="margin-top:18px"><div class="box"><h3>Qué significa</h3><p>150 W/m² de irradiancia promedio; 5% fotosíntesis; 70% como rizodeposición; 60% recuperable electroquímicamente.</p></div><div class="box"><h3>Por qué importa</h3><p>Si alguien reporta valores muy superiores, hay que sospechar de otra fuente energética, error de unidades o mala medición.</p></div></div><p class="source">Referencia usada para el orden de magnitud: criterios de diseño de Plant-Microbial Fuel Cell y reportes PlantPower.</p></div>`},
+  {type:"panel", title:"El embudo de pérdidas", html:`<div class="panel"><div class="tag">La energía se va perdiendo</div><h2 class="big">Del Sol al cable no llega todo</h2><div class="barWrap"><div class="bar"><span>Irradiancia</span><div class="track"><div class="fill" style="width:100%"></div></div><span>150</span></div><div class="bar"><span>Fotosíntesis</span><div class="track"><div class="fill" style="width:5%"></div></div><span>7.5</span></div><div class="bar"><span>Rizodepósitos</span><div class="track"><div class="fill" style="width:3.5%"></div></div><span>5.25</span></div><div class="bar"><span>Electricidad ideal</span><div class="track"><div class="fill" style="width:2.1%"></div></div><span>3.15</span></div></div><p class="source">Unidades aproximadas en W/m². El gráfico no es comercial: es un límite físico-biológico idealizado.</p></div>`},
+  {type:"image", title:"Evidencia 2: rendimiento reportado y literatura", src:A+"evidence_04_literatura.jpg", keywords:["mW/m²", "W/m²", "Literatura"], comment:"La comparación seria exige normalizar por área, tiempo, carga externa y tipo de electrodo."},
+  {type:"video", title:"Clip: valores reportados frente a literatura", src:A+"clip_03_valores_literatura.mp4", poster:A+"evidence_04_literatura.jpg", keywords:["12.5 Wh/m²", "Tabla", "Comparación"], comment:"Este tramo sirve para mostrar el choque entre valores promocionados y rangos reportados en investigación."},
+  {type:"panel", title:"El problema de las unidades", html:`<div class="panel"><div class="tag">Wh/m² no es W/m²</div><h2 class="big">Energía y potencia no son lo mismo</h2><div class="grid2"><div class="box"><h3>Energía</h3><p class="formula">Wh/m²</p><p>Cuánta energía se acumula por área durante cierto tiempo.</p></div><div class="box"><h3>Potencia</h3><p class="formula">W/m²</p><p>Qué tan rápido se produce energía por área.</p></div></div><p class="source">Error típico: vender Wh/m² como si fuera potencia continua sin aclarar el intervalo temporal.</p></div>`},
+  {type:"image", title:"Caso sospechoso: si 25 Wh/m² fuera por hora", src:A+"evidence_05_25wh_hora.jpg", keywords:["25 W/m²", "Alarma", "Máximo teórico"], comment:"Si se interpreta por hora, 25 Wh/m² equivale a 25 W/m²: muy por encima del límite teórico ideal de ~3.2 W/m²."},
+  {type:"image", title:"Caso menos imposible: si 25 Wh/m² fuera por día", src:A+"evidence_06_25wh_dia.jpg", keywords:["1.04 W/m²", "Optimista", "Aclarar tiempo"], comment:"Si es por día, 25 Wh/m² ÷ 24 h ≈ 1.04 W/m². Alto, pero dentro de una discusión posible si el sistema estuviera muy optimizado."},
+  {type:"video", title:"Clip: conversión Wh/m² a W/m²", src:A+"clip_04_wh_calculo.mp4", poster:A+"evidence_07_104_wm2.jpg", keywords:["Conversión", "Hora vs día", "Potencia"], comment:"Este clip es el núcleo cuantitativo: el supuesto cambia radicalmente el veredicto."},
+  {type:"panel", title:"0.46 W/dispositivo: falta el área", html:`<div class="panel"><div class="tag">Dato incompleto</div><h2 class="big">Sin área no hay comparación científica</h2><div class="formula">0.46 W ÷ 0.05 m² = 9.2 W/m²<br>0.46 W ÷ 0.10 m² = 4.6 W/m²<br>0.46 W ÷ 0.20 m² = 2.3 W/m²</div><p class="source">El mismo dato puede parecer posible o absurdo según el área. Por eso “por dispositivo” no basta.</p></div>`},
+  {type:"video", title:"Evidencia 3: fertilizante y conductividad", src:A+"clip_02_fertilizante.mp4", poster:A+"evidence_02_fertilizante.jpg", keywords:["Fertilizante", "Sales", "Conductividad"], comment:"Agregar fertilizante puede aumentar conductividad iónica. Eso no prueba que la planta produzca más energía."},
+  {type:"panel", title:"Explicaciones alternativas", html:`<div class="panel"><div class="tag">Lo que debe descartarse</div><h2 class="big">La lectura eléctrica puede venir de otros factores</h2><table><tr><th>Factor</th><th>Cómo puede confundir</th><th>Control necesario</th></tr><tr><td><strong>Fertilizante</strong></td><td>Aporta iones y baja resistencia interna.</td><td>Con y sin fertilizante.</td></tr><tr><td><strong>Metales distintos</strong></td><td>Puede formar una celda galvánica común.</td><td>Electrodos inertes de grafito/carbono.</td></tr><tr><td><strong>Panel solar</strong></td><td>Fuente externa directa de energía.</td><td>Panel desconectado y oscuridad.</td></tr><tr><td><strong>Voltaje abierto</strong></td><td>Puede marcar V sin entregar potencia útil.</td><td>Medir bajo carga y curva de polarización.</td></tr></table></div>`},
+  {type:"panel", title:"Controles mínimos para creer la afirmación", html:`<div class="panel"><div class="tag">Diseño experimental</div><h2 class="big">Si no hay controles, no hay causalidad</h2><div class="grid2"><div class="box"><h3>Controles biológicos</h3><ul><li>Con planta vs sin planta</li><li>Planta viva vs planta muerta</li><li>Luz vs oscuridad</li><li>Con y sin fertilizante</li></ul></div><div class="box"><h3>Controles electroquímicos</h3><ul><li>Electrodos de grafito</li><li>Sin panel solar</li><li>Potencia bajo carga</li><li>Curva de polarización</li></ul></div></div></div>`},
+  {type:"panel", title:"Veredicto defendible", html:`<div class="panel"><div class="tag">Conclusión rigurosa</div><h2 class="big">No se demuestra que la planta sea la fuente real</h2><p class="lead">El fenómeno PMFC existe. Lo que no queda demostrado, con esa evidencia pública, es que el dispositivo obtenga energía útil de la planta y no de factores alternativos.</p><p class="lead verdict" style="margin-top:18px">Si conoce esas limitaciones y aun así vende la lectura como “electricidad de plantas”, la comunicación es engañosa.</p></div>`},
+  {type:"panel", title:"Frase de cierre", html:`<div class="panel"><div class="tag">Para cerrar la exposición</div><h2 class="big">La ciencia no pregunta si prende. Pregunta de dónde viene la energía.</h2><p class="lead">Una planta con cables no es evidencia. Evidencia es balance energético, potencia bajo carga y controles que descarten paneles, sales, metales y fertilizantes.</p></div>`}
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function topbar(s, i) {
+  return `<div class="topbar textLayer"><div class="titleBox"><h1>${s.title}</h1></div><div class="counter">${i+1} / ${slides.length}</div></div>`;
+}
+
+function makeSlide(s, i) {
+  const active = i === 0 ? "active" : "";
+  if (s.type === "panel" || s.type === "intro") {
+    const bg = s.image ? `<div class="media"><img src="${s.image}" alt=""></div><div class="shade"></div>` : "";
+    const content = s.type === "intro" ? `<div class="panel textLayer"><div class="tag">${s.tag}</div><h2 class="big">${s.title}</h2><p class="lead">${s.body}</p></div>` : s.html;
+    return `<section class="slide ${active}">${bg}${topbar(s,i)}${content}</section>`;
+  }
+  if (s.type === "video") {
+    return `<section class="slide ${active}"><div class="media"><video src="${s.src}" poster="${s.poster || ''}" controls preload="metadata"></video></div><div class="shade"></div>${topbar(s,i)}${notes(s)}</section>`;
+  }
+  return `<section class="slide ${active}"><div class="media"><img src="${s.src}" alt="${s.title}"></div><div class="shade"></div>${topbar(s,i)}${notes(s)}</section>`;
+}
+
+function notes(s) {
+  return `<div class="notes textLayer"><div class="chips">${(s.keywords||[]).map(k=>`<span class="chip">${k}</span>`).join("")}</div><p class="comment">${s.comment||""}</p></div>`;
+}
+
+function render() {
+  host.innerHTML = slides.map(makeSlide).join("");
+  grid.innerHTML = slides.map((s,i)=>{
+    const img = s.poster || s.src || s.image || A+"evidence_01_promesa.jpg";
+    return `<div class="thumb" onclick="goTo(${i}); toggleOverview(false);"><img src="${img}" alt=""><div>${i+1}. ${s.title}</div></div>`;
+  }).join("");
+  showSlide(0);
+}
+
+function pauseVideos() { document.querySelectorAll("video").forEach(v => v.pause()); }
+function showSlide(i) {
+  pauseVideos();
+  current = (i + slides.length) % slides.length;
+  document.querySelectorAll(".slide").forEach((el,idx)=>el.classList.toggle("active", idx===current));
+  document.getElementById("progress").style.width = ((current+1)/slides.length*100) + "%";
+}
+function nextSlide(){ showSlide(current+1); }
+function prevSlide(){ showSlide(current-1); }
+function goTo(i){ showSlide(i); }
+function toggleText(){ document.body.classList.toggle("hideText"); }
+function toggleHelp(){ document.getElementById("help").classList.toggle("show"); }
+function toggleOverview(force){ const ov=document.getElementById("overview"); const show=typeof force==="boolean"?force:!ov.classList.contains("show"); ov.classList.toggle("show",show); }
+function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+document.addEventListener("keydown", e => {
+  const k=e.key.toLowerCase();
+  if(e.key==="ArrowRight" || e.key===" "){ e.preventDefault(); nextSlide(); }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); prevSlide(); }
+  if(k==="h") toggleText();
+  if(k==="o") toggleOverview();
+  if(k==="f") toggleFullscreen();
+  if(e.key==="?") toggleHelp();
+  if(e.key==="Escape") toggleOverview(false);
+});
+render();
+</script>
+</body>
+</html>
