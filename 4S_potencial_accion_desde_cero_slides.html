@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>4S | Potencial de acción desde cero</title>
+<style>
+  :root {
+    --bg: #08111a;
+    --panel: rgba(8, 18, 28, 0.78);
+    --line: rgba(255,255,255,0.16);
+    --ink: #eff6fb;
+    --muted: #b9c8d6;
+    --accent: #8fd0ff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+  }
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(37,66,92,.5), transparent 30%),
+      radial-gradient(circle at 85% 20%, rgba(61,92,133,.25), transparent 28%),
+      linear-gradient(180deg, #102031 0%, #08111a 100%);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.01);
+    transition: opacity .24s ease, transform .24s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    z-index: 2;
+  }
+  .cover {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+  }
+  .coverCard {
+    width: min(980px, calc(100vw - 40px));
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(11,22,34,.94), rgba(20,38,59,.92));
+    box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    padding: 42px 44px;
+  }
+  .eyebrow {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .title {
+    margin: 0 0 14px;
+    font-size: clamp(34px, 4vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -.03em;
+  }
+  .subtitle {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: clamp(16px, 1.5vw, 22px);
+    line-height: 1.45;
+    max-width: 860px;
+  }
+  .bullets {
+    margin: 0;
+    padding-left: 18px;
+    color: #d9e6f1;
+    font-size: clamp(15px, 1.2vw, 19px);
+    line-height: 1.55;
+  }
+  .bullets li { margin: 6px 0; }
+  .imageWrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+  .imageWrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+  }
+  .slideNum {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    min-width: 72px;
+    text-align: center;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(7, 13, 20, .55);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+  }
+  .controls {
+    position: absolute;
+    right: 14px;
+    bottom: 50%;
+    transform: translateY(50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 20;
+    opacity: .2;
+    transition: opacity .2s ease;
+  }
+  .controls:hover { opacity: .95; }
+  button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    font-size: 19px;
+    cursor: pointer;
+  }
+  .hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 18%;
+    z-index: 8;
+  }
+  .hit.left { left: 0; }
+  .hit.right { right: 0; }
+  .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    background: rgba(7, 12, 19, .96);
+    display: none;
+    padding: 24px;
+    overflow: auto;
+  }
+  .overview.show { display: block; }
+  .overviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .overviewHeader h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  .closeBtn {
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .thumb {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    cursor: pointer;
+  }
+  .thumb img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: #fff;
+  }
+  .thumb div {
+    padding: 10px 12px;
+    color: #dce7f0;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .help {
+    position: absolute;
+    top: 78px;
+    right: 20px;
+    z-index: 25;
+    width: 290px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: rgba(9, 15, 23, .82);
+    color: #d7e4ef;
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: .2s ease;
+    backdrop-filter: blur(8px);
+  }
+  .help.show { opacity: 1; transform: translateY(0); }
+  @media (max-width: 900px) {
+    .coverCard { padding: 28px 22px; border-radius: 22px; }
+    .slideNum { top: 10px; right: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="hit left" onclick="prevSlide()"></div>
+  <div class="hit right" onclick="nextSlide()"></div>
+  <div id="slideHost"></div>
+  <div class="controls">
+    <button onclick="prevSlide()" title="Anterior">&#8249;</button>
+    <button onclick="nextSlide()" title="Siguiente">&#8250;</button>
+    <button onclick="toggleOverview()" title="Vista general">#</button>
+  </div>
+  <div class="help" id="help">
+    Flechas izquierda/derecha: cambiar slide<br>
+    Espacio: siguiente<br>
+    O: vista general<br>
+    H: mostrar u ocultar ayuda
+  </div>
+  <div class="overview" id="overview">
+    <div class="overviewHeader">
+      <h2>Potencial de acción desde cero</h2>
+      <button class="closeBtn" onclick="toggleOverview()">Cerrar</button>
+    </div>
+    <div class="grid" id="thumbGrid"></div>
+  </div>
+</div>
+<script>
+const slides = [
+  {
+    kind: "cover",
+    title: "Potencial de accion desde cero",
+    subtitle: "Secuencia visual para 4.° de secundaria: de la neurona completa al potencial de accion, la propagacion y la sinapsis.",
+    bullets: [
+      "1. Neurona completa",
+      "2. Potencial de reposo",
+      "3. Mantenimiento del reposo",
+      "4. Estimulo local y umbral",
+      "5. Despolarizacion",
+      "6. Repolarizacion e hiperpolarizacion",
+      "7. Propagacion por el axon",
+      "8. Conduccion saltatoria y sinapsis"
+    ]
+  },
+  { kind: "image", title: "Neurona completa", image: "assets/4s_potencial_accion/01_neurona_completa.png" },
+  { kind: "image", title: "Potencial de reposo", image: "assets/4s_potencial_accion/02_potencial_reposo.png" },
+  { kind: "image", title: "Mantenimiento del reposo", image: "assets/4s_potencial_accion/03_mantenimiento_reposo.png" },
+  { kind: "image", title: "Estimulo local y umbral", image: "assets/4s_potencial_accion/04_estimulo_subumbral.png" },
+  { kind: "image", title: "Despolarizacion", image: "assets/4s_potencial_accion/05_despolarizacion.png" },
+  { kind: "image", title: "Repolarizacion e hiperpolarizacion", image: "assets/4s_potencial_accion/06_repolarizacion_hiperpolarizacion.png" },
+  { kind: "image", title: "Propagacion del potencial de accion", image: "assets/4s_potencial_accion/07_propagacion.png" },
+  { kind: "image", title: "Conduccion saltatoria y sinapsis", image: "assets/4s_potencial_accion/08_conduccion_saltatoria_sinapsis.png" }
+];
+
+let current = 0;
+const host = document.getElementById("slideHost");
+const grid = document.getElementById("thumbGrid");
+
+function renderCover(s, i) {
+  return `
+    <section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+      <div class="slideNum">${i + 1} / ${slides.length}</div>
+      <div class="cover">
+        <div class="coverCard">
+          <p class="eyebrow">4S | Sistema nervioso</p>
+          <h1 class="title">${s.title}</h1>
+          <p class="subtitle">${s.subtitle}</p>
+          <ul class="bullets">${s.bullets.map(item => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderImage(s, i) {
+  return `
+    <section class="slide ${i === 0 ? "active" : ""}" data-index="${i}">
+      <div class="slideNum">${i + 1} / ${slides.length}</div>
+      <div class="imageWrap"><img src="${s.image}" alt="${s.title}"></div>
+    </section>`;
+}
+
+function renderSlides() {
+  host.innerHTML = slides.map((s, i) => s.kind === "cover" ? renderCover(s, i) : renderImage(s, i)).join("");
+  grid.innerHTML = slides.map((s, i) => `
+    <div class="thumb" onclick="goTo(${i});toggleOverview();">
+      <img src="${s.image || 'assets/4s_potencial_accion/01_neurona_completa.png'}" alt="${s.title}">
+      <div>${i + 1}. ${s.title}</div>
+    </div>`).join("");
+}
+
+function updateSlides() {
+  document.querySelectorAll(".slide").forEach((slide, i) => slide.classList.toggle("active", i === current));
+}
+
+function goTo(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  updateSlides();
+}
+
+function nextSlide() {
+  goTo((current + 1) % slides.length);
+}
+
+function prevSlide() {
+  goTo((current - 1 + slides.length) % slides.length);
+}
+
+function toggleOverview() {
+  document.getElementById("overview").classList.toggle("show");
+}
+
+function toggleHelp() {
+  document.getElementById("help").classList.toggle("show");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === "PageDown") nextSlide();
+  else if (e.key === "ArrowLeft" || e.key === "PageUp") prevSlide();
+  else if (e.key === " " && !e.shiftKey) { e.preventDefault(); nextSlide(); }
+  else if (e.key.toLowerCase() === "o") toggleOverview();
+  else if (e.key.toLowerCase() === "h") toggleHelp();
+  else if (e.key === "Escape") document.getElementById("overview").classList.remove("show");
+});
+
+renderSlides();
+</script>
+</body>
+</html>
