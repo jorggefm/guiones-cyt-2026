@@ -68,5 +68,21 @@ document.addEventListener('DOMContentLoaded',function(){
     if(idx) topActions.insertBefore(a, idx);
     else topActions.appendChild(a);
   }
+  if(topActions&&!document.getElementById('link-potencial-4s')){
+    var b=document.createElement('a');
+    b.id='link-potencial-4s';
+    b.href='4S_potencial_accion_desde_cero_slides.html';
+    b.target='_blank';
+    b.textContent='Potencial de accion';
+    b.style.color='#fff';
+    b.style.fontSize='12px';
+    b.style.textDecoration='none';
+    b.style.fontWeight='700';
+    b.style.marginLeft='6px';
+    b.style.display='inline-block';
+    var idx2=topActions.querySelector('a[href=\"index.html\"]');
+    if(idx2) topActions.insertBefore(b, idx2);
+    else topActions.appendChild(b);
+  }
 });
 </script></body></html>
