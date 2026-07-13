@@ -52,6 +52,11 @@ function collapseAll(){document.querySelectorAll('.step-body').forEach(b=>b.clas
 document.addEventListener('DOMContentLoaded',function(){
   showClass(9);
   var topActions=document.querySelector('.top-actions');
+  var slidesLink=topActions?topActions.querySelector('a[href=\"4S_U4_sistema_neuroendocrino_integrado_slides.html\"]'):null;
+  if(slidesLink){
+    slidesLink.href='4S_potencial_accion_desde_cero_slides.html';
+    slidesLink.textContent='Potencial de accion';
+  }
   if(topActions&&!document.getElementById('link-feedback-4s')){
     var a=document.createElement('a');
     a.id='link-feedback-4s';
@@ -67,22 +72,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var idx=topActions.querySelector('a[href=\"index.html\"]');
     if(idx) topActions.insertBefore(a, idx);
     else topActions.appendChild(a);
-  }
-  if(topActions&&!document.getElementById('link-potencial-4s')){
-    var b=document.createElement('a');
-    b.id='link-potencial-4s';
-    b.href='4S_potencial_accion_desde_cero_slides.html';
-    b.target='_blank';
-    b.textContent='Potencial de accion';
-    b.style.color='#fff';
-    b.style.fontSize='12px';
-    b.style.textDecoration='none';
-    b.style.fontWeight='700';
-    b.style.marginLeft='6px';
-    b.style.display='inline-block';
-    var idx2=topActions.querySelector('a[href=\"index.html\"]');
-    if(idx2) topActions.insertBefore(b, idx2);
-    else topActions.appendChild(b);
   }
 });
 </script></body></html>
