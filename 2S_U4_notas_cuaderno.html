@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2S · U4 · Notas de cuaderno</title>
+  <style>
+    :root{
+      --bg:#f3ebff;
+      --ink:#24123a;
+      --accent:#6d28d9;
+      --accent-2:#8b5cf6;
+      --card:#ffffff;
+      --line:#e7d9ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,.18), transparent 30%),
+        linear-gradient(180deg,#f7f2ff 0%, #efe7ff 100%);
+    }
+    .hero{
+      padding:32px 18px 18px;
+      text-align:center;
+      background:linear-gradient(135deg,#5b21b6 0%, #7c3aed 55%, #8b5cf6 100%);
+      color:#fff;
+      box-shadow:0 8px 30px rgba(68,33,126,.25);
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.05;
+    }
+    .hero p{
+      margin:0 auto;
+      max-width:900px;
+      font-size:clamp(14px,1.7vw,20px);
+      opacity:.95;
+    }
+    .toolbar{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:16px 18px 6px;
+    }
+    .btn{
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      background:var(--accent);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      box-shadow:0 8px 18px rgba(109,40,217,.18);
+    }
+    .btn.secondary{
+      background:#fff;
+      color:var(--accent);
+      border:1px solid rgba(109,40,217,.2);
+      box-shadow:none;
+    }
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:18px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+      margin-bottom:24px;
+    }
+    .card{
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      backdrop-filter:blur(8px);
+      box-shadow:0 14px 30px rgba(79,37,146,.08);
+    }
+    .card strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:4px;
+      color:var(--accent);
+    }
+    .card span{
+      font-size:14px;
+      opacity:.82;
+    }
+    .notes{
+      display:grid;
+      gap:26px;
+    }
+    .note{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:18px;
+      box-shadow:0 18px 38px rgba(64,28,117,.1);
+    }
+    .note h2{
+      margin:0 0 14px;
+      font-size:22px;
+      color:var(--accent);
+    }
+    .note img{
+      display:block;
+      width:100%;
+      max-width:720px;
+      margin:0 auto;
+      border-radius:18px;
+      box-shadow:0 18px 30px rgba(0,0,0,.12);
+      background:#fff;
+    }
+    footer{
+      text-align:center;
+      padding:12px 18px 32px;
+      font-size:13px;
+      opacity:.72;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>2.° Secundaria · U4 · Notas de cuaderno</h1>
+    <p>Resumen visual realista de las cuatro presentaciones: desde fecundación y blastocisto hasta feto temprano y casos médicos.</p>
+  </header>
+
+  <div class="toolbar">
+    <a class="btn" href="Guion_2S.html">Volver a Guion 2S</a>
+    <a class="btn secondary" href="2S_Unidad_4_capas_a_feto_teoria.html" target="_blank">Abrir slides</a>
+  </div>
+
+  <main class="wrap">
+    <section class="grid">
+      <div class="card"><strong>Nota 1</strong><span>Fecundación a blastocisto</span></div>
+      <div class="card"><strong>Nota 2</strong><span>Implantación y soporte inicial</span></div>
+      <div class="card"><strong>Nota 3</strong><span>Gastrulación y capas embrionarias</span></div>
+      <div class="card"><strong>Nota 4</strong><span>Neurulación y organogénesis inicial</span></div>
+      <div class="card"><strong>Nota 5</strong><span>Embrión a feto y aplicación</span></div>
+    </section>
+
+    <section class="notes">
+      <article class="note">
+        <h2>1. Fecundación a blastocisto</h2>
+        <img src="assets/2s_u4_notas_cuaderno/01_fecundacion_blastocisto.png" alt="Nota de cuaderno sobre fecundación a blastocisto">
+      </article>
+
+      <article class="note">
+        <h2>2. Implantación y soporte inicial</h2>
+        <img src="assets/2s_u4_notas_cuaderno/02_implantacion_soporte.png" alt="Nota de cuaderno sobre implantación y soporte inicial">
+      </article>
+
+      <article class="note">
+        <h2>3. Gastrulación y capas embrionarias</h2>
+        <img src="assets/2s_u4_notas_cuaderno/03_gastrulacion_capas.png" alt="Nota de cuaderno sobre gastrulación y capas embrionarias">
+      </article>
+
+      <article class="note">
+        <h2>4. Neurulación y organogénesis inicial</h2>
+        <img src="assets/2s_u4_notas_cuaderno/04_neurulacion_organogenesis.png" alt="Nota de cuaderno sobre neurulación y organogénesis inicial">
+      </article>
+
+      <article class="note">
+        <h2>5. Del embrión al feto y aplicación</h2>
+        <img src="assets/2s_u4_notas_cuaderno/05_feto_aplicacion.png" alt="Nota de cuaderno sobre embrión a feto y casos médicos">
+      </article>
+    </section>
+  </main>
+
+  <footer>Material de apoyo visual para 2.° Secundaria · Unidad 4</footer>
+</body>
+</html>
