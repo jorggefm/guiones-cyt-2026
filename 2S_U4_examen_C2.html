@@ -249,6 +249,10 @@
           <input id="studentName" name="studentName" type="text" autocomplete="name" required>
         </div>
         <div>
+          <label for="studentEmail">Correo del estudiante</label>
+          <input id="studentEmail" name="studentEmail" type="email" autocomplete="email" placeholder="Opcional">
+        </div>
+        <div>
           <label for="grade">Grado</label>
           <select id="grade" name="grade">
             <option>2.° Secundaria</option>
@@ -397,7 +401,7 @@
     <div class="actions-inner">
       <button class="ghost" type="button" onclick="saveDraft()">Guardar avance</button>
       <button class="secondary" type="button" onclick="buildReport(true)">Imprimir reporte</button>
-      <button type="button" onclick="submitExam()">Enviar / generar reporte</button>
+      <button type="button" onclick="submitExam()">Enviar respuestas</button>
     </div>
   </div>
 
@@ -422,6 +426,7 @@
       const form = document.getElementById("exam");
       const data = Object.fromEntries(new FormData(form).entries());
       data.studentName = document.getElementById("studentName").value.trim();
+      data.studentEmail = document.getElementById("studentEmail").value.trim();
       data.grade = document.getElementById("grade").value;
       data.section = document.getElementById("section").value.trim();
       data.startedAt = startedAt;
@@ -456,6 +461,7 @@
       const lines = [
         "EVIDENCIA C2 U4 - 2S",
         "Estudiante: " + (data.studentName || "(sin nombre)"),
+        "Correo: " + (data.studentEmail || "(sin correo)"),
         "Grado/seccion: " + data.grade + " - " + (data.section || "(sin seccion)"),
         "Inicio: " + data.startedAt,
         "Envio: " + data.finishedAt,
@@ -478,17 +484,17 @@
         return;
       }
       if(!SUBMIT_ENDPOINT){
-        alert("Reporte generado. Cuando se conecte el servidor, este mismo boton enviara las respuestas automaticamente.");
+        alert("Todavia falta pegar la URL del Apps Script en el HTML. Por ahora se genero el reporte local.");
         return;
       }
       try{
-        const res = await fetch(SUBMIT_ENDPOINT, {
+        await fetch(SUBMIT_ENDPOINT, {
           method:"POST",
-          headers:{"Content-Type":"application/json"},
+          mode:"no-cors",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
           body:JSON.stringify(data)
         });
-        if(!res.ok) throw new Error("No se pudo enviar");
-        alert("Respuestas enviadas correctamente.");
+        alert("Respuestas enviadas. Revisa la hoja de Google Sheets para confirmar el registro.");
       }catch(err){
         alert("No se pudo enviar al servidor. Se genero el reporte local para imprimir o guardar.");
       }
