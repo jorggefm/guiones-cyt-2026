@@ -399,7 +399,6 @@
 
   <div class="actions">
     <div class="actions-inner">
-      <button class="ghost" type="button" onclick="saveDraft()">Guardar avance</button>
       <button class="secondary" type="button" onclick="buildReport(true)">Imprimir reporte</button>
       <button type="button" onclick="submitExam()">Enviar respuestas</button>
     </div>
@@ -407,14 +406,12 @@
 
   <script>
     const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec";
-    let exits = Number(localStorage.getItem("u4_c2_exits") || "0");
-    const startedAt = localStorage.getItem("u4_c2_started_at") || new Date().toISOString();
-    localStorage.setItem("u4_c2_started_at", startedAt);
+    let exits = 0;
+    const startedAt = new Date().toISOString();
     document.getElementById("exitCount").textContent = exits;
 
     function countExit(){
       exits += 1;
-      localStorage.setItem("u4_c2_exits", String(exits));
       document.getElementById("exitCount").textContent = exits;
     }
     document.addEventListener("visibilitychange", () => {
@@ -433,27 +430,6 @@
       data.finishedAt = new Date().toISOString();
       data.screenExits = exits;
       return data;
-    }
-
-    function saveDraft(){
-      localStorage.setItem("u4_c2_draft", JSON.stringify(formDataObject()));
-      alert("Avance guardado en este dispositivo.");
-    }
-
-    function restoreDraft(){
-      const raw = localStorage.getItem("u4_c2_draft");
-      if(!raw) return;
-      const data = JSON.parse(raw);
-      for(const [key,value] of Object.entries(data)){
-        const el = document.querySelector(`[name="${key}"], #${key}`);
-        if(!el) continue;
-        if(el.type === "radio"){
-          const radio = document.querySelector(`[name="${key}"][value="${value}"]`);
-          if(radio) radio.checked = true;
-        }else{
-          el.value = value;
-        }
-      }
     }
 
     function buildReport(printNow=false){
@@ -484,7 +460,7 @@
         return;
       }
       if(!SUBMIT_ENDPOINT){
-        alert("Todavia falta pegar la URL del Apps Script en el HTML. Por ahora se genero el reporte local.");
+        alert("No se pudo iniciar el envio. Recarga la pagina del examen y vuelve a intentar.");
         return;
       }
       try{
@@ -499,8 +475,6 @@
         alert("No se pudo enviar al servidor. Se genero el reporte local para imprimir o guardar.");
       }
     }
-
-    restoreDraft();
   </script>
 </body>
 </html>
