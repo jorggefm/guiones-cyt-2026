@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3S - Mol y molaridad</title>
+<style>
+  :root{
+    --paper:#f7f8f4;
+    --surface:#ffffff;
+    --ink:#14212b;
+    --muted:#5a6670;
+    --line:#d9ded7;
+    --teal:#0f7c7b;
+    --green:#477a38;
+    --amber:#d88c1d;
+    --red:#b94b4b;
+    --slate:#293846;
+    --shadow:0 14px 42px rgba(20,33,43,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI", Verdana, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg, rgba(15,124,123,.06) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(15,124,123,.05) 1px, transparent 1px);
+    background-size:44px 44px;
+  }
+  .deck{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+  }
+  .deck::-webkit-scrollbar{display:none}
+  .slide{
+    flex:0 0 100vw;
+    width:100vw;
+    height:100vh;
+    padding:72px 32px 84px;
+    scroll-snap-align:start;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .board{
+    width:min(1360px,100%);
+    height:min(760px,100%);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:20px;
+    align-items:stretch;
+  }
+  .image-panel,
+  .note-panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+  }
+  .image-panel{
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:0;
+  }
+  .image-panel img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:6px;
+    display:block;
+    background:#fff;
+  }
+  .note-panel{
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .kicker{
+    margin:0 0 10px;
+    color:var(--teal);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1,h2,p{margin:0}
+  h1,h2{
+    font-weight:800;
+    letter-spacing:0;
+    line-height:1.04;
+  }
+  h1{font-size:34px}
+  h2{font-size:30px}
+  .lesson{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.42;
+  }
+  .focus-card{
+    border-left:5px solid var(--amber);
+    background:#fff8ec;
+    padding:14px;
+    border-radius:6px;
+  }
+  .focus-card strong,
+  .steps strong{
+    display:block;
+    margin-bottom:8px;
+    color:var(--slate);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .focus-card p{
+    font-size:18px;
+    line-height:1.35;
+    font-weight:700;
+  }
+  .steps{
+    display:grid;
+    gap:10px;
+  }
+  .steps p{
+    font-size:15px;
+    line-height:1.38;
+    color:var(--muted);
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:7px 10px;
+    color:var(--slate);
+    background:#f8faf7;
+    font-size:12px;
+    font-weight:800;
+  }
+  .nav{
+    position:fixed;
+    left:50%;
+    bottom:16px;
+    transform:translateX(-50%);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border:1px solid rgba(20,33,43,.16);
+    border-radius:999px;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 26px rgba(20,33,43,.16);
+  }
+  .nav button,
+  .top-links a{
+    border:0;
+    border-radius:999px;
+    background:var(--slate);
+    color:#fff;
+    font-weight:800;
+    font-size:14px;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .nav button{padding:10px 14px}
+  .nav span{
+    min-width:92px;
+    text-align:center;
+    color:var(--slate);
+    font-weight:800;
+    font-size:14px;
+  }
+  .top-links{
+    position:fixed;
+    left:18px;
+    top:16px;
+    z-index:20;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .top-links a{
+    padding:10px 13px;
+    background:var(--teal);
+  }
+  .top-links a.secondary{background:var(--green)}
+  .counter{
+    position:fixed;
+    right:18px;
+    top:16px;
+    z-index:20;
+    border:1px solid rgba(20,33,43,.16);
+    border-radius:999px;
+    padding:10px 14px;
+    background:rgba(255,255,255,.86);
+    color:var(--slate);
+    font-weight:900;
+    box-shadow:0 8px 26px rgba(20,33,43,.12);
+  }
+  .progress{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:6px;
+    background:#dfe5dc;
+    z-index:22;
+  }
+  .progress span{
+    display:block;
+    width:0;
+    height:100%;
+    background:linear-gradient(90deg,var(--teal),var(--amber),var(--green));
+    transition:width .2s ease;
+  }
+  @media (max-width: 980px){
+    .slide{padding:66px 16px 84px}
+    .board{
+      height:calc(100vh - 150px);
+      grid-template-columns:1fr;
+      grid-template-rows:minmax(0,1fr) auto;
+    }
+    .note-panel{padding:16px}
+    h1{font-size:28px}
+    h2{font-size:24px}
+    .lesson,.focus-card p{font-size:15px}
+    .steps p{font-size:14px}
+  }
+  @media print{
+    html,body{height:auto;overflow:visible}
+    body::before,.nav,.top-links,.counter,.progress{display:none}
+    .deck{display:block;height:auto;overflow:visible}
+    .slide{break-after:page;height:100vh;padding:18mm}
+    .board{height:100%;grid-template-columns:1fr 300px}
+  }
+</style>
+</head>
+<body>
+  <div class="top-links">
+    <a href="Guion_3S.html" target="_blank">Guion 3S</a>
+    <a class="secondary" href="3S_Semana_8_clase_integrada.html" target="_blank">Clase S8</a>
+  </div>
+  <div class="counter"><span id="current">1</span>/<span id="total">12</span></div>
+  <div class="nav">
+    <button type="button" onclick="moveSlide(-1)" aria-label="Slide anterior">Anterior</button>
+    <span id="navLabel">1 / 12</span>
+    <button type="button" onclick="moveSlide(1)" aria-label="Slide siguiente">Siguiente</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/01_ruta_tema.png" alt="Ruta del tema: mol, masa molar, conversiones, molaridad y ejercicios"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Apertura</p>
+            <h1>De contar a concentrar</h1>
+            <p class="lesson">La secuencia tiene una lógica clara: primero entendemos qué cuenta el mol, luego cuánto pesa un mol, después convertimos y recién al final entramos a molaridad.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué necesito dominar antes de resolver ejercicios de molaridad sin adivinar?</p></div>
+          <div class="tag-row"><span class="tag">Ruta visual</span><span class="tag">Mol</span><span class="tag">Molaridad</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/02_que_es_mol.png" alt="Comparación entre docena y mol"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Concepto base</p>
+            <h2>Qué es un mol</h2>
+            <p class="lesson">El mol no es masa ni volumen. Es una unidad para contar cantidad de sustancia, igual que una docena cuenta objetos.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>Si una docena cuenta 12, ¿qué idea similar cumple el mol en química?</p></div>
+          <div class="steps"><strong>Uso en clase</strong><p>Primero anclarlo con la docena. Después retirar la analogía y dejar claro que el mol cuenta partículas químicas.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/03_mol_particulas.png" alt="Mol como puente entre partículas y química medible"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Puente conceptual</p>
+            <h2>Mol y partículas</h2>
+            <p class="lesson">El mol conecta el mundo microscópico con la química que se puede medir y calcular. Sin ese puente, los números quedan aislados.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Por qué no podemos trabajar una reacción contando moléculas una por una?</p></div>
+          <div class="tag-row"><span class="tag">Partículas</span><span class="tag">Conteo químico</span><span class="tag">Cálculo</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/04_masa_molar.png" alt="Masa molar de H2O como ejemplo"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Masa molar</p>
+            <h2>Cuánto pesa un mol</h2>
+            <p class="lesson">Cada sustancia tiene su propia masa molar. Esa masa se expresa en gramos por mol y depende de la fórmula química.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Por qué H2O y CO2 no pueden tener la misma masa molar?</p></div>
+          <div class="steps"><strong>Enfoque</strong><p>Que distingan bien fórmula química, masa molar y unidad. Si eso queda borroso, las conversiones se caen.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/05_gramos_a_moles.png" alt="Conversión de gramos a moles"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Conversión 1</p>
+            <h2>De gramos a moles</h2>
+            <p class="lesson">Cuando te dan masa, el paso correcto es dividir entre la masa molar. Aquí la unidad g/mol es la clave del cambio.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué dato necesitas sí o sí antes de dividir?</p></div>
+          <div class="tag-row"><span class="tag">Datos</span><span class="tag">Masa molar</span><span class="tag">Dividir</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/06_moles_a_gramos.png" alt="Conversión de moles a gramos"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Conversión 2</p>
+            <h2>De moles a gramos</h2>
+            <p class="lesson">Esta ruta es la inversa. Si ya tienes moles, multiplicas por la masa molar para encontrar cuánta masa representa esa cantidad de sustancia.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Cómo sabes si en un ejercicio debes multiplicar o dividir?</p></div>
+          <div class="steps"><strong>Contraste</strong><p>Poner esta slide junto a la anterior ayuda a ver el espejo: gramos a moles divide; moles a gramos multiplica.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/07_que_es_molaridad.png" alt="Definición visual de molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Molaridad</p>
+            <h2>Qué tan concentrada está una solución</h2>
+            <p class="lesson">La molaridad expresa cuántos moles de soluto hay en un litro de solución. Más moles en el mismo volumen significa mayor concentración.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>Si dos soluciones tienen el mismo volumen, ¿qué hace que una sea más concentrada?</p></div>
+          <div class="tag-row"><span class="tag">Soluto</span><span class="tag">Litro</span><span class="tag">Concentración</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/08_formula_molaridad.png" alt="Fórmula de la molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Fórmula</p>
+            <h2>M = n / V</h2>
+            <p class="lesson">La fórmula es simple, pero solo funciona bien si el volumen está en litros. Ese es el error más frecuente en este punto.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué ocurre si colocas el volumen en mililitros sin convertirlo?</p></div>
+          <div class="steps"><strong>Recordatorio</strong><p>Aquí conviene repetir varias veces que V no es cualquier volumen: es volumen de solución y en litros.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/09_gramos_a_molaridad.png" alt="Ejercicio completo de gramos a molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Ejercicio encadenado</p>
+            <h2>De gramos a molaridad</h2>
+            <p class="lesson">Aquí ya se unen varios pasos. No se llega directo: primero masa molar, luego moles, luego litros y recién al final molaridad.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿En qué paso se cometería el error más grave si alguien va demasiado rápido?</p></div>
+          <div class="tag-row"><span class="tag">Gramos</span><span class="tag">Moles</span><span class="tag">Litros</span><span class="tag">Molaridad</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/10_errores_tipicos.png" alt="Errores típicos en mol, masa molar y molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Chequeo</p>
+            <h2>Errores típicos</h2>
+            <p class="lesson">Muchos errores no son de cálculo sino de procedimiento: usar mal unidades, confundir magnitudes o aplicar una fórmula sin ordenar datos.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Cuál de estos errores te parece más fácil de cometer y cómo lo evitarías?</p></div>
+          <div class="steps"><strong>Buena práctica</strong><p>Usar esta slide para que ellos mismos verbalicen la corrección antes de resolver más ejercicios.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/11_ejercicios_guiados.png" alt="Tres ejercicios guiados de mol, gramos y molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Práctica guiada</p>
+            <h2>Tres problemas, tres puertas de entrada</h2>
+            <p class="lesson">La intención aquí no es correr sino entrenar el método: identificar datos, elegir fórmula, calcular y revisar unidades.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué paso no deberías saltarte aunque el ejercicio parezca fácil?</p></div>
+          <div class="tag-row"><span class="tag">Método</span><span class="tag">Revisión</span><span class="tag">Unidades</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="board">
+        <figure class="image-panel"><img src="assets/3s-mol-molaridad/12_reto_final.png" alt="Reto final integrador sobre mol, masa molar y molaridad"></figure>
+        <aside class="note-panel">
+          <div>
+            <p class="kicker">Cierre</p>
+            <h2>Reto final integrador</h2>
+            <p class="lesson">Este problema mezcla mol, masa molar y molaridad en una sola situación. Si el proceso está claro, el resultado sale con lógica.</p>
+          </div>
+          <div class="focus-card"><strong>Pregunta guía</strong><p>¿Qué representa 0.5 M y cómo llegas desde esa idea hasta los gramos que debes pesar?</p></div>
+          <div class="tag-row"><span class="tag">Interpretar</span><span class="tag">Calcular</span><span class="tag">Explicar</span></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+<script>
+  const deck = document.getElementById("deck");
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const currentEl = document.getElementById("current");
+  const totalEl = document.getElementById("total");
+  const navLabel = document.getElementById("navLabel");
+  const progress = document.getElementById("progress");
+  totalEl.textContent = String(slides.length);
+
+  function currentIndex() {
+    return Math.round(deck.scrollLeft / window.innerWidth);
+  }
+
+  function updateCounter() {
+    const index = currentIndex();
+    const label = `${index + 1} / ${slides.length}`;
+    currentEl.textContent = String(index + 1);
+    navLabel.textContent = label;
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function moveSlide(step) {
+    const next = Math.max(0, Math.min(slides.length - 1, currentIndex() + step));
+    deck.scrollTo({ left: next * window.innerWidth, behavior: "smooth" });
+  }
+
+  deck.addEventListener("scroll", () => window.requestAnimationFrame(updateCounter));
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") moveSlide(1);
+    if (event.key === "ArrowLeft") moveSlide(-1);
+  });
+  window.addEventListener("resize", updateCounter);
+  updateCounter();
+</script>
+</body>
+</html>
