@@ -124,6 +124,31 @@
       font-size:14px;
     }
     .instruction strong{display:block;color:#312e81;margin-bottom:2px}
+    .hint{
+      margin-top:12px;
+      border:1px solid #bae6fd;
+      border-radius:9px;
+      background:#f0f9ff;
+      color:#0c4a6e;
+    }
+    .hint summary{
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      padding:9px 12px;
+      cursor:pointer;
+      font-weight:700;
+      user-select:none;
+    }
+    .hint summary::before{content:"?";display:inline-grid;place-items:center;width:23px;height:23px;margin-right:8px;border-radius:50%;background:#0284c7;color:#fff}
+    .hint p{margin:0;padding:0 12px 12px;font-size:14px}
+    .q12-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:10px;
+    }
+    .q12-grid textarea{min-height:120px}
     .q{
       padding:18px;
       border-top:1px solid var(--line);
@@ -294,6 +319,7 @@
       .student-grid,.two,.relation{grid-template-columns:1fr}
       .sequence{grid-template-columns:1fr 1fr}
       .instructions{grid-template-columns:1fr 1fr}
+      .q12-grid{grid-template-columns:1fr}
       header .bar{align-items:flex-start}
       .status{min-width:auto}
     }
@@ -380,6 +406,7 @@
           <label class="option"><input type="radio" name="q1" value="c">Un embrión con órganos completamente formados.</label>
           <label class="option"><input type="radio" name="q1" value="d">Una mórula con placenta funcional.</label>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Piensa en el nombre de la primera célula que aparece inmediatamente después de la unión del óvulo y el espermatozoide.</p></details>
       </section>
 
       <section class="q">
@@ -393,6 +420,7 @@
           <div><label>Segmentación</label><select name="q2_segmentacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
           <div><label>Implantación</label><select name="q2_implantacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>La secuencia comienza con la fecundación y termina con la implantación. La mórula aparece antes que el blastocisto.</p></details>
       </section>
 
       <section class="q">
@@ -408,6 +436,7 @@
             <input name="q3_c" type="text" required>
           </div>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Observa tres zonas: una capa celular externa, un grupo de células concentrado en un lado y un espacio interno lleno de líquido.</p></details>
       </section>
 
       <section class="q">
@@ -417,6 +446,7 @@
           <div class="term">Mesodermo</div><div class="pick"><select name="q4_meso" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
           <div class="term">Endodermo</div><div class="pick"><select name="q4_endo" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>“Ecto” se relaciona con lo externo; “meso”, con sostén y movimiento; “endo”, con revestimientos internos.</p></details>
       </section>
 
       <section class="q">
@@ -428,6 +458,7 @@
             <textarea name="q5" required></textarea>
           </div>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Son tres capas germinales. Solo una parte del ectodermo comienza después a especializarse para formar estructuras nerviosas.</p></details>
       </section>
 
       <section class="q">
@@ -439,23 +470,26 @@
           <label class="option"><input type="radio" name="q6" value="c">El feto inicia el parto.</label>
           <label class="option"><input type="radio" name="q6" value="d">Se forma el tubo neural completo.</label>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Implantar significa adherirse y comenzar a introducirse en el tejido que recubre el interior del útero.</p></details>
       </section>
 
       <section class="q">
-        <h2><span class="tag">7</span>Ordena un proceso tipo algoritmo</h2>
-        <p>Completa el orden lógico de la neurulación usando los números del 1 al 4 sin repetirlos.</p>
-        <div class="sequence">
-          <div><label>Formación del tubo neural</label><select name="q7_tubo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Engrosamiento del ectodermo</label><select name="q7_ecto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Plegamiento de la placa neural</label><select name="q7_placa" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Cierre correcto o defecto</label><select name="q7_cierre" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        <h2><span class="tag">7</span>Reconoce la neurulación</h2>
+        <p>¿Qué cambio importante ocurre durante la neurulación?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="q7_choice" value="a" required>El endodermo forma directamente la placenta.</label>
+          <label class="option"><input type="radio" name="q7_choice" value="b">Parte del ectodermo se pliega y forma el tubo neural.</label>
+          <label class="option"><input type="radio" name="q7_choice" value="c">El blastocisto se convierte nuevamente en cigoto.</label>
+          <label class="option"><input type="radio" name="q7_choice" value="d">El feto inicia el alumbramiento.</label>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Busca la opción que relaciona el ectodermo con la estructura que dará origen al sistema nervioso central.</p></details>
       </section>
 
       <section class="q">
         <h2><span class="tag">8</span>Desarrolla</h2>
         <p>Explica la diferencia entre saco vitelino, cordón umbilical y placenta.</p>
         <textarea name="q8" required></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>El saco vitelino ayuda al inicio; la placenta realiza intercambios con la madre; el cordón comunica al embrión o feto con la placenta.</p></details>
       </section>
 
       <section class="q">
@@ -467,6 +501,7 @@
           <label class="option"><input type="radio" name="q9" value="c">Implantación normal.</label>
           <label class="option"><input type="radio" name="q9" value="d">Gastrulación normal.</label>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>El problema ocurre por una conexión desigual de vasos sanguíneos dentro de una placenta compartida.</p></details>
       </section>
 
       <section class="q">
@@ -480,6 +515,7 @@
         <input name="q10_c" type="text" required>
         <label>D. Etapa desde la semana 9, con crecimiento y maduración</label>
         <input name="q10_d" type="text" required>
+        <details class="hint"><summary>Mostrar pista</summary><p>Usa cada palabra una sola vez. La etapa que comienza alrededor de la semana 9 ya no se denomina embrionaria.</p></details>
       </section>
 
       <section class="q">
@@ -489,12 +525,25 @@
           <div class="term">Gemelos unidos</div><div class="pick"><select name="q11_b" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
           <div class="term">Transfusión feto-fetal</div><div class="pick"><select name="q11_c" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
         </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Relaciona cada nombre con su origen: cierre nervioso, separación de gemelos o circulación compartida en la placenta.</p></details>
       </section>
 
       <section class="q">
         <h2><span class="tag">12</span>Pregunta integradora</h2>
-        <p>Elige uno de los casos de la junta médica y explica qué proceso embrionario está alterado, qué riesgo produce y qué decisión médica sería razonable.</p>
-        <textarea name="q12" required></textarea>
+        <p>Elige un caso y responde tres partes breves. No necesitas escribir un informe médico completo.</p>
+        <label for="q12_case">Caso elegido</label>
+        <select id="q12_case" name="q12_case" required>
+          <option value="">Elige un caso</option>
+          <option>Espina bífida</option>
+          <option>Gemelos unidos</option>
+          <option>Transfusión feto-fetal</option>
+        </select>
+        <div class="q12-grid">
+          <div><label for="q12_process">¿Qué ocurrió durante el desarrollo?</label><textarea id="q12_process" name="q12_process" required></textarea></div>
+          <div><label for="q12_risk">¿Qué riesgo puede producir?</label><textarea id="q12_risk" name="q12_risk" required></textarea></div>
+          <div><label for="q12_decision">¿Qué ayuda médica podría recomendarse?</label><textarea id="q12_decision" name="q12_decision" required></textarea></div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Puedes comenzar así: “Durante el desarrollo ocurrió…”, “El principal riesgo es…” y “Una ayuda médica podría ser…”.</p></details>
       </section>
     </form>
   </main>
@@ -604,6 +653,17 @@
     function formDataObject(){
       const form = document.getElementById("exam");
       const data = Object.fromEntries(new FormData(form).entries());
+      const q7Correct = data.q7_choice === "b";
+      data.q7_ecto = q7Correct ? "1" : "0";
+      data.q7_placa = q7Correct ? "2" : "0";
+      data.q7_tubo = q7Correct ? "3" : "0";
+      data.q7_cierre = q7Correct ? "4" : "0";
+      data.q12 = [
+        "Caso: " + (data.q12_case || ""),
+        "Proceso: " + (data.q12_process || ""),
+        "Riesgo: " + (data.q12_risk || ""),
+        "Decisión médica: " + (data.q12_decision || "")
+      ].join(" | ");
       data.studentName = document.getElementById("studentName").value.trim();
       data.studentEmail = document.getElementById("studentEmail").value.trim();
       data.grade = document.getElementById("grade").value;
