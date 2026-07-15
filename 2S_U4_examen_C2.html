@@ -14,6 +14,8 @@
       --brand:#5b21b6;
       --brand2:#0f766e;
       --warn:#b45309;
+      --danger:#b91c1c;
+      --success:#047857;
       --soft:#eef2ff;
     }
     *{box-sizing:border-box}
@@ -24,6 +26,7 @@
       color:var(--ink);
       font-size:16px;
       line-height:1.45;
+      padding-bottom:84px;
     }
     header{
       position:sticky;
@@ -53,11 +56,13 @@
       font-size:13px;
     }
     .status{
-      min-width:132px;
-      text-align:right;
+      display:flex;
+      gap:18px;
+      text-align:center;
       font-size:13px;
       color:rgba(255,255,255,.9);
     }
+    .status span{min-width:94px}
     .status strong{display:block;font-size:20px;color:#fff}
     main{
       max-width:1100px;
@@ -85,7 +90,7 @@
       color:#39465a;
       margin-bottom:6px;
     }
-    input[type="text"], select, textarea{
+    input[type="text"], input[type="email"], select, textarea{
       width:100%;
       border:1px solid #c8d3e2;
       border-radius:8px;
@@ -93,6 +98,7 @@
       font:inherit;
       background:#fff;
       color:var(--ink);
+      min-height:46px;
     }
     textarea{min-height:96px;resize:vertical}
     .note{
@@ -104,6 +110,20 @@
       margin-top:12px;
       font-size:14px;
     }
+    .instructions{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+    .instruction{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:9px;
+      padding:11px 12px;
+      font-size:14px;
+    }
+    .instruction strong{display:block;color:#312e81;margin-bottom:2px}
     .q{
       padding:18px;
       border-top:1px solid var(--line);
@@ -135,8 +155,12 @@
       border-radius:8px;
       padding:10px 11px;
       background:#fbfdff;
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      cursor:pointer;
     }
-    .option input{margin-right:8px}
+    .option input{margin-right:10px;min-width:20px;min-height:20px}
     .two{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -190,6 +214,13 @@
       gap:10px;
       flex-wrap:wrap;
     }
+    .action-message{
+      align-self:center;
+      margin-right:auto;
+      color:var(--danger);
+      font-weight:700;
+      font-size:14px;
+    }
     button{
       border:0;
       border-radius:8px;
@@ -199,7 +230,9 @@
       color:#fff;
       background:var(--brand);
       font-size:15px;
+      min-height:46px;
     }
+    button:disabled{opacity:.6;cursor:not-allowed}
     button.secondary{background:#475569}
     button.ghost{background:#fff;color:#334155;border:1px solid #cbd5e1}
     #report{
@@ -215,15 +248,77 @@
       font-size:13px;
       overflow:auto;
     }
+    .invalid{
+      outline:3px solid rgba(185,28,28,.18);
+      border-color:var(--danger)!important;
+    }
+    .field-error{
+      color:var(--danger);
+      font-weight:700;
+      font-size:13px;
+      margin:8px 0 0;
+    }
+    .submission-panel{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:none;
+      place-items:center;
+      padding:22px;
+      background:rgba(15,23,42,.72);
+    }
+    .submission-panel.visible{display:grid}
+    .submission-card{
+      width:min(520px,100%);
+      background:#fff;
+      border-radius:18px;
+      padding:26px;
+      box-shadow:0 24px 80px rgba(0,0,0,.28);
+      text-align:center;
+    }
+    .submission-card h2{margin:0 0 8px;color:var(--success)}
+    .submission-card p{margin:0;color:#475569}
+    .submission-card .receipt{
+      margin:16px 0;
+      padding:10px;
+      border-radius:8px;
+      background:#ecfdf5;
+      color:#065f46;
+      font-weight:700;
+      word-break:break-all;
+    }
+    .sending-label{display:none}
+    button.sending .sending-label{display:inline}
+    button.sending .ready-label{display:none}
     @media (max-width:820px){
       .student-grid,.two,.relation{grid-template-columns:1fr}
       .sequence{grid-template-columns:1fr 1fr}
+      .instructions{grid-template-columns:1fr 1fr}
       header .bar{align-items:flex-start}
       .status{min-width:auto}
     }
+    @media (max-width:540px){
+      header{padding:11px 12px}
+      header .bar{display:block}
+      .status{justify-content:flex-start;margin-top:8px}
+      main{padding:10px}
+      .card.pad,.q{padding:14px}
+      .instructions,.sequence{grid-template-columns:1fr}
+      .actions{padding:9px 10px}
+      .actions-inner{display:grid;grid-template-columns:1fr 1fr}
+      .action-message{grid-column:1/-1;margin:0}
+      button{width:100%}
+    }
+    @media (orientation:landscape) and (max-height:820px){
+      header{position:relative}
+      main{max-width:1200px}
+      .student-grid{grid-template-columns:2fr 1.2fr .8fr 1fr}
+      .instructions{grid-template-columns:repeat(4,1fr)}
+      .two{grid-template-columns:1.15fr 1fr}
+    }
     @media print{
       header,.actions{display:none}
-      body{background:#fff}
+      body{background:#fff;padding-bottom:0}
       main{padding:0}
       .card{box-shadow:none;break-inside:avoid}
       #report{display:block;color:#000;background:#fff;border:1px solid #999}
@@ -235,9 +330,12 @@
     <div class="bar">
       <div>
         <h1>2.° Secundaria - Evidencia C2 U4</h1>
-        <div class="meta">Reproduccion humana, desarrollo embrionario y casos medicos</div>
+        <div class="meta">Reproducción humana, desarrollo embrionario y casos médicos</div>
       </div>
-      <div class="status">salidas de pantalla<strong id="exitCount">0</strong></div>
+      <div class="status">
+        <span>preguntas respondidas<strong id="progressCount">0/12</strong></span>
+        <span>salidas de pantalla<strong id="exitCount">0</strong></span>
+      </div>
     </div>
   </header>
 
@@ -259,49 +357,55 @@
           </select>
         </div>
         <div>
-          <label for="section">Seccion</label>
-          <input id="section" name="section" type="text" placeholder="Ej. A / B / C">
+          <label for="section">Sección</label>
+          <input id="section" name="section" type="text" placeholder="Ej. A / B / C" required>
         </div>
       </div>
-      <div class="note">El sistema registra cuantas veces se pierde el foco de la pantalla durante la evidencia. Responde con tus propias palabras y usa vocabulario cientifico.</div>
+      <div class="instructions" aria-label="Instrucciones del examen">
+        <div class="instruction"><strong>1. Revisa</strong>Puedes recorrer las 12 preguntas antes de responder.</div>
+        <div class="instruction"><strong>2. Responde</strong>Completa todas las preguntas con vocabulario científico.</div>
+        <div class="instruction"><strong>3. Verifica</strong>El sistema te avisará si falta alguna respuesta.</div>
+        <div class="instruction"><strong>4. Envía una vez</strong>Al finalizar, pulsa una sola vez “Enviar respuestas”.</div>
+      </div>
+      <div class="note">Durante la evidencia se registra cuántas veces se cambia de pantalla. Mantén abierto este examen hasta ver la confirmación final.</div>
     </section>
 
     <form id="exam" class="card">
       <section class="q">
         <h2><span class="tag">1</span>Marca la alternativa correcta</h2>
-        <p>La fecundacion humana produce principalmente:</p>
+        <p>La fecundación humana produce principalmente:</p>
         <div class="options">
-          <label class="option"><input type="radio" name="q1" value="a">un blastocisto implantado directamente en el endometrio</label>
-          <label class="option"><input type="radio" name="q1" value="b">un cigoto diploide formado por la union de gametos</label>
-          <label class="option"><input type="radio" name="q1" value="c">un embrion con organos completamente formados</label>
-          <label class="option"><input type="radio" name="q1" value="d">una morula con placenta funcional</label>
+          <label class="option"><input type="radio" name="q1" value="a" required>Un blastocisto implantado directamente en el endometrio.</label>
+          <label class="option"><input type="radio" name="q1" value="b">Un cigoto diploide formado por la unión de gametos.</label>
+          <label class="option"><input type="radio" name="q1" value="c">Un embrión con órganos completamente formados.</label>
+          <label class="option"><input type="radio" name="q1" value="d">Una mórula con placenta funcional.</label>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">2</span>Ordena el desarrollo temprano</h2>
-        <p>Escribe el orden correcto del 1 al 6.</p>
+        <p>Asigna los números del 1 al 6 sin repetirlos.</p>
         <div class="sequence">
-          <div><label>Blastocisto</label><select name="q2_blastocisto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Cigoto</label><select name="q2_cigoto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Fecundacion</label><select name="q2_fecundacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Morula</label><select name="q2_morula"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Segmentacion</label><select name="q2_segmentacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Implantacion</label><select name="q2_implantacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Blastocisto</label><select name="q2_blastocisto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Cigoto</label><select name="q2_cigoto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Fecundación</label><select name="q2_fecundacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Mórula</label><select name="q2_morula" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Segmentación</label><select name="q2_segmentacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Implantación</label><select name="q2_implantacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">3</span>Completa partes del blastocisto</h2>
         <div class="two">
-          <div class="imgbox"><img src="assets/2s_u4_implantacion/01_repaso_timeline.png" alt="Secuencia del desarrollo embrionario temprano"></div>
+          <div class="imgbox"><img src="assets/2s_u4_implantacion/02_blastocisto_llega.png" alt="Blastocisto antes de la implantación en el endometrio"></div>
           <div>
-            <label>A. Capa externa que participara en la placenta</label>
-            <input name="q3_a" type="text">
-            <label>B. Grupo de celulas que formara el embrion</label>
-            <input name="q3_b" type="text">
+            <label>A. Capa externa que participará en la placenta</label>
+            <input name="q3_a" type="text" required>
+            <label>B. Grupo de células que formará el embrión</label>
+            <input name="q3_b" type="text" required>
             <label>C. Cavidad interna del blastocisto</label>
-            <input name="q3_c" type="text">
+            <input name="q3_c" type="text" required>
           </div>
         </div>
       </section>
@@ -309,9 +413,9 @@
       <section class="q">
         <h2><span class="tag">4</span>Relaciona conceptos</h2>
         <div class="relation">
-          <div class="term">Ectodermo</div><div class="pick"><select name="q4_ecto"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
-          <div class="term">Mesodermo</div><div class="pick"><select name="q4_meso"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
-          <div class="term">Endodermo</div><div class="pick"><select name="q4_endo"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
+          <div class="term">Ectodermo</div><div class="pick"><select name="q4_ecto" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
+          <div class="term">Mesodermo</div><div class="pick"><select name="q4_meso" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
+          <div class="term">Endodermo</div><div class="pick"><select name="q4_endo" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
         </div>
       </section>
 
@@ -320,77 +424,77 @@
         <div class="two">
           <div class="imgbox"><img src="assets/2s_u4_implantacion/09_capas_germinales.png" alt="Capas embrionarias"></div>
           <div>
-            <p>Explica que representa la imagen y por que no es correcto llamar a estas estructuras "capas neurales".</p>
-            <textarea name="q5"></textarea>
+            <p>Explica qué representa la imagen y por qué no es correcto llamar a estas estructuras “capas neurales”.</p>
+            <textarea name="q5" required></textarea>
           </div>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">6</span>Marca la alternativa correcta</h2>
-        <p>La implantacion ocurre cuando:</p>
+        <p>La implantación ocurre cuando:</p>
         <div class="options">
-          <label class="option"><input type="radio" name="q6" value="a">el cigoto se divide por primera vez</label>
-          <label class="option"><input type="radio" name="q6" value="b">el blastocisto se adhiere e introduce en el endometrio</label>
-          <label class="option"><input type="radio" name="q6" value="c">el feto inicia el parto</label>
-          <label class="option"><input type="radio" name="q6" value="d">se forma el tubo neural completo</label>
+          <label class="option"><input type="radio" name="q6" value="a" required>El cigoto se divide por primera vez.</label>
+          <label class="option"><input type="radio" name="q6" value="b">El blastocisto se adhiere y se introduce en el endometrio.</label>
+          <label class="option"><input type="radio" name="q6" value="c">El feto inicia el parto.</label>
+          <label class="option"><input type="radio" name="q6" value="d">Se forma el tubo neural completo.</label>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">7</span>Ordena un proceso tipo algoritmo</h2>
-        <p>Completa el orden logico de la neurulacion.</p>
+        <p>Completa el orden lógico de la neurulación usando los números del 1 al 4 sin repetirlos.</p>
         <div class="sequence">
-          <div><label>Formacion del tubo neural</label><select name="q7_tubo"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Engrosamiento del ectodermo</label><select name="q7_ecto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Plegamiento de la placa neural</label><select name="q7_placa"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-          <div><label>Cierre correcto o defecto</label><select name="q7_cierre"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Formación del tubo neural</label><select name="q7_tubo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Engrosamiento del ectodermo</label><select name="q7_ecto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Plegamiento de la placa neural</label><select name="q7_placa" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Cierre correcto o defecto</label><select name="q7_cierre" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">8</span>Desarrolla</h2>
-        <p>Explica la diferencia entre saco vitelino, cordon umbilical y placenta.</p>
-        <textarea name="q8"></textarea>
+        <p>Explica la diferencia entre saco vitelino, cordón umbilical y placenta.</p>
+        <textarea name="q8" required></textarea>
       </section>
 
       <section class="q">
-        <h2><span class="tag">9</span>Caso medico: identifica el problema</h2>
-        <p>Dos gemelos comparten placenta. Uno recibe demasiada sangre y liquido; el otro recibe poco y crece menos. Que condicion se parece mas a este caso?</p>
+        <h2><span class="tag">9</span>Caso médico: identifica el problema</h2>
+        <p>Dos gemelos comparten placenta. Uno recibe demasiada sangre y líquido; el otro recibe poco y crece menos. ¿Qué condición se parece más a este caso?</p>
         <div class="options">
-          <label class="option"><input type="radio" name="q9" value="a">espina bifida</label>
-          <label class="option"><input type="radio" name="q9" value="b">transfusion feto-fetal</label>
-          <label class="option"><input type="radio" name="q9" value="c">implantacion normal</label>
-          <label class="option"><input type="radio" name="q9" value="d">gastrulacion normal</label>
+          <label class="option"><input type="radio" name="q9" value="a" required>Espina bífida.</label>
+          <label class="option"><input type="radio" name="q9" value="b">Transfusión feto-fetal.</label>
+          <label class="option"><input type="radio" name="q9" value="c">Implantación normal.</label>
+          <label class="option"><input type="radio" name="q9" value="d">Gastrulación normal.</label>
         </div>
       </section>
 
       <section class="q">
-        <h2><span class="tag">10</span>Completa con vocabulario cientifico</h2>
-        <p>Usa estas palabras: <strong>tubo neural, organogenesis, somitas, feto</strong>.</p>
-        <label>A. Bloques que originan estructuras relacionadas con columna y musculos</label>
-        <input name="q10_a" type="text">
-        <label>B. Estructura que dara origen al sistema nervioso central</label>
-        <input name="q10_b" type="text">
-        <label>C. Etapa donde se inician organos y sistemas</label>
-        <input name="q10_c" type="text">
-        <label>D. Etapa desde la semana 9, con crecimiento y maduracion</label>
-        <input name="q10_d" type="text">
+        <h2><span class="tag">10</span>Completa con vocabulario científico</h2>
+        <p>Usa estas palabras: <strong>tubo neural, organogénesis, somitas, feto</strong>.</p>
+        <label>A. Bloques que originan estructuras relacionadas con columna y músculos</label>
+        <input name="q10_a" type="text" required>
+        <label>B. Estructura que dará origen al sistema nervioso central</label>
+        <input name="q10_b" type="text" required>
+        <label>C. Etapa donde se inician órganos y sistemas</label>
+        <input name="q10_c" type="text" required>
+        <label>D. Etapa desde la semana 9, con crecimiento y maduración</label>
+        <input name="q10_d" type="text" required>
       </section>
 
       <section class="q">
         <h2><span class="tag">11</span>Relaciona caso y etapa afectada</h2>
         <div class="relation">
-          <div class="term">Espina bifida</div><div class="pick"><select name="q11_a"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
-          <div class="term">Gemelos unidos</div><div class="pick"><select name="q11_b"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
-          <div class="term">Transfusion feto-fetal</div><div class="pick"><select name="q11_c"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
+          <div class="term">Espina bífida</div><div class="pick"><select name="q11_a" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
+          <div class="term">Gemelos unidos</div><div class="pick"><select name="q11_b" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
+          <div class="term">Transfusión feto-fetal</div><div class="pick"><select name="q11_c" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
         </div>
       </section>
 
       <section class="q">
         <h2><span class="tag">12</span>Pregunta integradora</h2>
-        <p>Elige uno de los casos de la junta medica y explica: que proceso embrionario esta alterado, que riesgo produce y que decision medica seria razonable.</p>
-        <textarea name="q12"></textarea>
+        <p>Elige uno de los casos de la junta médica y explica qué proceso embrionario está alterado, qué riesgo produce y qué decisión médica sería razonable.</p>
+        <textarea name="q12" required></textarea>
       </section>
     </form>
   </main>
@@ -399,18 +503,41 @@
 
   <div class="actions">
     <div class="actions-inner">
+      <div id="actionMessage" class="action-message" role="alert" aria-live="polite"></div>
       <button class="secondary" type="button" onclick="buildReport(true)">Imprimir reporte</button>
-      <button type="button" onclick="submitExam()">Enviar respuestas</button>
+      <button id="submitButton" type="button" onclick="submitExam()"><span class="ready-label">Enviar respuestas</span><span class="sending-label">Enviando...</span></button>
+    </div>
+  </div>
+
+  <div id="submissionPanel" class="submission-panel" role="dialog" aria-modal="true" aria-labelledby="submissionTitle">
+    <div class="submission-card">
+      <h2 id="submissionTitle">Examen enviado</h2>
+      <p>Tus respuestas fueron enviadas. Mantén esta pantalla abierta y avisa al docente.</p>
+      <div id="submissionReceipt" class="receipt"></div>
+      <p>No se muestra calificación en este dispositivo.</p>
     </div>
   </div>
 
   <script>
     const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec";
+    const exam = document.getElementById("exam");
+    const questionSections = [...exam.querySelectorAll(".q")];
+    const submitButton = document.getElementById("submitButton");
+    const actionMessage = document.getElementById("actionMessage");
     let exits = 0;
+    let lastExitAt = 0;
+    let submitting = false;
+    let submitted = false;
     const startedAt = new Date().toISOString();
+    const submissionId = typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : Date.now().toString(36) + Math.random().toString(36).slice(2);
     document.getElementById("exitCount").textContent = exits;
 
     function countExit(){
+      const now = Date.now();
+      if(now - lastExitAt < 800) return;
+      lastExitAt = now;
       exits += 1;
       document.getElementById("exitCount").textContent = exits;
     }
@@ -418,6 +545,61 @@
       if (document.hidden) countExit();
     });
     window.addEventListener("blur", countExit);
+
+    function sectionIsComplete(section){
+      const radios = [...section.querySelectorAll('input[type="radio"]')];
+      if(radios.length && !radios.some(input => input.checked)) return false;
+
+      const fields = [...section.querySelectorAll("input:not([type=radio]), select, textarea")];
+      if(fields.some(field => !String(field.value || "").trim())) return false;
+
+      const sequence = [...section.querySelectorAll(".sequence select")];
+      if(sequence.length){
+        const values = sequence.map(field => field.value);
+        if(new Set(values).size !== values.length) return false;
+      }
+      return true;
+    }
+
+    function updateProgress(){
+      const complete = questionSections.filter(sectionIsComplete).length;
+      document.getElementById("progressCount").textContent = complete + "/" + questionSections.length;
+      questionSections.forEach(section => section.classList.remove("invalid"));
+      document.querySelectorAll(".student-grid input.invalid").forEach(field => field.classList.remove("invalid"));
+      actionMessage.textContent = "";
+    }
+
+    function validateExam(){
+      updateProgress();
+      const identityFields = [
+        document.getElementById("studentName"),
+        document.getElementById("section")
+      ];
+      const missingIdentity = identityFields.find(field => !field.value.trim());
+      if(missingIdentity){
+        missingIdentity.classList.add("invalid");
+        actionMessage.textContent = "Completa tus apellidos, nombres y sección.";
+        missingIdentity.scrollIntoView({behavior:"smooth", block:"center"});
+        missingIdentity.focus({preventScroll:true});
+        return false;
+      }
+
+      const firstIncomplete = questionSections.find(section => !sectionIsComplete(section));
+      if(firstIncomplete){
+        questionSections.filter(section => !sectionIsComplete(section)).forEach(section => section.classList.add("invalid"));
+        const number = questionSections.indexOf(firstIncomplete) + 1;
+        actionMessage.textContent = "Revisa la pregunta " + number + ": falta responder o hay números repetidos.";
+        firstIncomplete.scrollIntoView({behavior:"smooth", block:"center"});
+        return false;
+      }
+      return true;
+    }
+
+    document.querySelectorAll("input, select, textarea").forEach(field => {
+      field.addEventListener("input", updateProgress);
+      field.addEventListener("change", updateProgress);
+    });
+    updateProgress();
 
     function formDataObject(){
       const form = document.getElementById("exam");
@@ -429,6 +611,7 @@
       data.startedAt = startedAt;
       data.finishedAt = new Date().toISOString();
       data.screenExits = exits;
+      data.submissionId = submissionId;
       return data;
     }
 
@@ -438,9 +621,9 @@
         "EVIDENCIA C2 U4 - 2S",
         "Estudiante: " + (data.studentName || "(sin nombre)"),
         "Correo: " + (data.studentEmail || "(sin correo)"),
-        "Grado/seccion: " + data.grade + " - " + (data.section || "(sin seccion)"),
+        "Grado/sección: " + data.grade + " - " + (data.section || "(sin sección)"),
         "Inicio: " + data.startedAt,
-        "Envio: " + data.finishedAt,
+        "Envío: " + data.finishedAt,
         "Salidas de pantalla registradas: " + data.screenExits,
         "",
         "RESPUESTAS",
@@ -454,25 +637,44 @@
     }
 
     async function submitExam(){
-      const data = buildReport(false);
-      if(!data.studentName){
-        alert("Falta colocar apellidos y nombres.");
-        return;
-      }
+      if(submitting || submitted) return;
+      if(!validateExam()) return;
       if(!SUBMIT_ENDPOINT){
-        alert("No se pudo iniciar el envio. Recarga la pagina del examen y vuelve a intentar.");
+        actionMessage.textContent = "No se pudo iniciar el envío. Recarga la página y vuelve a intentar.";
         return;
       }
+      if(!navigator.onLine){
+        actionMessage.textContent = "No hay conexión a internet. Conéctate y vuelve a pulsar Enviar respuestas.";
+        return;
+      }
+
+      const data = formDataObject();
+      submitting = true;
+      submitButton.disabled = true;
+      submitButton.classList.add("sending");
+      actionMessage.textContent = "Enviando el examen. No cierres esta pantalla...";
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
       try{
         await fetch(SUBMIT_ENDPOINT, {
           method:"POST",
           mode:"no-cors",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body:JSON.stringify(data)
+          body:JSON.stringify(data),
+          keepalive:true,
+          signal:controller.signal
         });
-        alert("Respuestas enviadas. Revisa la hoja de Google Sheets para confirmar el registro.");
+        clearTimeout(timeout);
+        submitted = true;
+        actionMessage.textContent = "";
+        document.getElementById("submissionReceipt").textContent = "Código de envío: " + submissionId.slice(0,8).toUpperCase();
+        document.getElementById("submissionPanel").classList.add("visible");
       }catch(err){
-        alert("No se pudo enviar al servidor. Se genero el reporte local para imprimir o guardar.");
+        clearTimeout(timeout);
+        submitting = false;
+        submitButton.disabled = false;
+        submitButton.classList.remove("sending");
+        actionMessage.textContent = "No se pudo enviar. Verifica la conexión y vuelve a pulsar Enviar respuestas.";
       }
     }
   </script>
