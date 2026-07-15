@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2S - Evidencia C2 U4</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --paper:#ffffff;
+      --ink:#1d2733;
+      --muted:#617086;
+      --line:#d9e2ef;
+      --brand:#5b21b6;
+      --brand2:#0f766e;
+      --warn:#b45309;
+      --soft:#eef2ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      font-size:16px;
+      line-height:1.45;
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      background:#2e1065;
+      color:#fff;
+      padding:14px 18px;
+      box-shadow:0 2px 12px rgba(17,24,39,.18);
+    }
+    header .bar{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(20px,3vw,30px);
+      line-height:1.12;
+    }
+    .meta{
+      margin-top:4px;
+      color:rgba(255,255,255,.82);
+      font-size:13px;
+    }
+    .status{
+      min-width:132px;
+      text-align:right;
+      font-size:13px;
+      color:rgba(255,255,255,.9);
+    }
+    .status strong{display:block;font-size:20px;color:#fff}
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px;
+    }
+    .card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:10px;
+      box-shadow:0 10px 24px rgba(15,23,42,.06);
+      margin-bottom:14px;
+      overflow:hidden;
+    }
+    .card.pad{padding:18px}
+    .student-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:12px;
+    }
+    label{
+      display:block;
+      font-weight:700;
+      font-size:13px;
+      color:#39465a;
+      margin-bottom:6px;
+    }
+    input[type="text"], select, textarea{
+      width:100%;
+      border:1px solid #c8d3e2;
+      border-radius:8px;
+      padding:10px 11px;
+      font:inherit;
+      background:#fff;
+      color:var(--ink);
+    }
+    textarea{min-height:96px;resize:vertical}
+    .note{
+      background:#fff7ed;
+      color:#7c2d12;
+      border-left:5px solid #f97316;
+      padding:10px 12px;
+      border-radius:8px;
+      margin-top:12px;
+      font-size:14px;
+    }
+    .q{
+      padding:18px;
+      border-top:1px solid var(--line);
+    }
+    .q:first-child{border-top:0}
+    .q h2{
+      margin:0 0 10px;
+      font-size:18px;
+      color:#1f2937;
+    }
+    .tag{
+      display:inline-block;
+      font-size:12px;
+      font-weight:700;
+      color:#fff;
+      background:var(--brand2);
+      border-radius:999px;
+      padding:2px 8px;
+      margin-right:8px;
+      vertical-align:1px;
+    }
+    .options{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    .option{
+      border:1px solid #d7deea;
+      border-radius:8px;
+      padding:10px 11px;
+      background:#fbfdff;
+    }
+    .option input{margin-right:8px}
+    .two{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    .imgbox{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      text-align:center;
+    }
+    .imgbox img{
+      max-width:100%;
+      max-height:280px;
+      object-fit:contain;
+      border-radius:7px;
+    }
+    .relation{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+    .relation .row{display:contents}
+    .relation .term,.relation .pick{
+      border:1px solid #d7deea;
+      padding:10px;
+      border-radius:8px;
+      background:#fbfdff;
+    }
+    .sequence{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+    .actions{
+      position:sticky;
+      bottom:0;
+      background:rgba(244,247,251,.96);
+      border-top:1px solid var(--line);
+      padding:12px 18px;
+      backdrop-filter:blur(8px);
+    }
+    .actions-inner{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      border-radius:8px;
+      padding:11px 14px;
+      font-weight:700;
+      cursor:pointer;
+      color:#fff;
+      background:var(--brand);
+      font-size:15px;
+    }
+    button.secondary{background:#475569}
+    button.ghost{background:#fff;color:#334155;border:1px solid #cbd5e1}
+    #report{
+      display:none;
+      white-space:pre-wrap;
+      background:#0f172a;
+      color:#e5e7eb;
+      border-radius:10px;
+      padding:16px;
+      margin:18px auto;
+      max-width:1100px;
+      font-family:Consolas,monospace;
+      font-size:13px;
+      overflow:auto;
+    }
+    @media (max-width:820px){
+      .student-grid,.two,.relation{grid-template-columns:1fr}
+      .sequence{grid-template-columns:1fr 1fr}
+      header .bar{align-items:flex-start}
+      .status{min-width:auto}
+    }
+    @media print{
+      header,.actions{display:none}
+      body{background:#fff}
+      main{padding:0}
+      .card{box-shadow:none;break-inside:avoid}
+      #report{display:block;color:#000;background:#fff;border:1px solid #999}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div>
+        <h1>2.° Secundaria - Evidencia C2 U4</h1>
+        <div class="meta">Reproduccion humana, desarrollo embrionario y casos medicos</div>
+      </div>
+      <div class="status">salidas de pantalla<strong id="exitCount">0</strong></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card pad">
+      <div class="student-grid">
+        <div>
+          <label for="studentName">Apellidos y nombres</label>
+          <input id="studentName" name="studentName" type="text" autocomplete="name" required>
+        </div>
+        <div>
+          <label for="grade">Grado</label>
+          <select id="grade" name="grade">
+            <option>2.° Secundaria</option>
+          </select>
+        </div>
+        <div>
+          <label for="section">Seccion</label>
+          <input id="section" name="section" type="text" placeholder="Ej. A / B / C">
+        </div>
+      </div>
+      <div class="note">El sistema registra cuantas veces se pierde el foco de la pantalla durante la evidencia. Responde con tus propias palabras y usa vocabulario cientifico.</div>
+    </section>
+
+    <form id="exam" class="card">
+      <section class="q">
+        <h2><span class="tag">1</span>Marca la alternativa correcta</h2>
+        <p>La fecundacion humana produce principalmente:</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="q1" value="a">un blastocisto implantado directamente en el endometrio</label>
+          <label class="option"><input type="radio" name="q1" value="b">un cigoto diploide formado por la union de gametos</label>
+          <label class="option"><input type="radio" name="q1" value="c">un embrion con organos completamente formados</label>
+          <label class="option"><input type="radio" name="q1" value="d">una morula con placenta funcional</label>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">2</span>Ordena el desarrollo temprano</h2>
+        <p>Escribe el orden correcto del 1 al 6.</p>
+        <div class="sequence">
+          <div><label>Blastocisto</label><select name="q2_blastocisto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Cigoto</label><select name="q2_cigoto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Fecundacion</label><select name="q2_fecundacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Morula</label><select name="q2_morula"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Segmentacion</label><select name="q2_segmentacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label>Implantacion</label><select name="q2_implantacion"><option></option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">3</span>Completa partes del blastocisto</h2>
+        <div class="two">
+          <div class="imgbox"><img src="assets/2s_u4_implantacion/01_repaso_timeline.png" alt="Secuencia del desarrollo embrionario temprano"></div>
+          <div>
+            <label>A. Capa externa que participara en la placenta</label>
+            <input name="q3_a" type="text">
+            <label>B. Grupo de celulas que formara el embrion</label>
+            <input name="q3_b" type="text">
+            <label>C. Cavidad interna del blastocisto</label>
+            <input name="q3_c" type="text">
+          </div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">4</span>Relaciona conceptos</h2>
+        <div class="relation">
+          <div class="term">Ectodermo</div><div class="pick"><select name="q4_ecto"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
+          <div class="term">Mesodermo</div><div class="pick"><select name="q4_meso"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
+          <div class="term">Endodermo</div><div class="pick"><select name="q4_endo"><option></option><option>Piel y sistema nervioso</option><option>Musculos, huesos y sangre</option><option>Revestimiento digestivo y respiratorio</option></select></div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">5</span>Interpreta una imagen</h2>
+        <div class="two">
+          <div class="imgbox"><img src="assets/2s_u4_implantacion/09_capas_germinales.png" alt="Capas embrionarias"></div>
+          <div>
+            <p>Explica que representa la imagen y por que no es correcto llamar a estas estructuras "capas neurales".</p>
+            <textarea name="q5"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">6</span>Marca la alternativa correcta</h2>
+        <p>La implantacion ocurre cuando:</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="q6" value="a">el cigoto se divide por primera vez</label>
+          <label class="option"><input type="radio" name="q6" value="b">el blastocisto se adhiere e introduce en el endometrio</label>
+          <label class="option"><input type="radio" name="q6" value="c">el feto inicia el parto</label>
+          <label class="option"><input type="radio" name="q6" value="d">se forma el tubo neural completo</label>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">7</span>Ordena un proceso tipo algoritmo</h2>
+        <p>Completa el orden logico de la neurulacion.</p>
+        <div class="sequence">
+          <div><label>Formacion del tubo neural</label><select name="q7_tubo"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Engrosamiento del ectodermo</label><select name="q7_ecto"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Plegamiento de la placa neural</label><select name="q7_placa"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+          <div><label>Cierre correcto o defecto</label><select name="q7_cierre"><option></option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">8</span>Desarrolla</h2>
+        <p>Explica la diferencia entre saco vitelino, cordon umbilical y placenta.</p>
+        <textarea name="q8"></textarea>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">9</span>Caso medico: identifica el problema</h2>
+        <p>Dos gemelos comparten placenta. Uno recibe demasiada sangre y liquido; el otro recibe poco y crece menos. Que condicion se parece mas a este caso?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="q9" value="a">espina bifida</label>
+          <label class="option"><input type="radio" name="q9" value="b">transfusion feto-fetal</label>
+          <label class="option"><input type="radio" name="q9" value="c">implantacion normal</label>
+          <label class="option"><input type="radio" name="q9" value="d">gastrulacion normal</label>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">10</span>Completa con vocabulario cientifico</h2>
+        <p>Usa estas palabras: <strong>tubo neural, organogenesis, somitas, feto</strong>.</p>
+        <label>A. Bloques que originan estructuras relacionadas con columna y musculos</label>
+        <input name="q10_a" type="text">
+        <label>B. Estructura que dara origen al sistema nervioso central</label>
+        <input name="q10_b" type="text">
+        <label>C. Etapa donde se inician organos y sistemas</label>
+        <input name="q10_c" type="text">
+        <label>D. Etapa desde la semana 9, con crecimiento y maduracion</label>
+        <input name="q10_d" type="text">
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">11</span>Relaciona caso y etapa afectada</h2>
+        <div class="relation">
+          <div class="term">Espina bifida</div><div class="pick"><select name="q11_a"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
+          <div class="term">Gemelos unidos</div><div class="pick"><select name="q11_b"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
+          <div class="term">Transfusion feto-fetal</div><div class="pick"><select name="q11_c"><option></option><option>Cierre del tubo neural</option><option>Separacion incompleta temprana</option><option>Conexion vascular en placenta</option></select></div>
+        </div>
+      </section>
+
+      <section class="q">
+        <h2><span class="tag">12</span>Pregunta integradora</h2>
+        <p>Elige uno de los casos de la junta medica y explica: que proceso embrionario esta alterado, que riesgo produce y que decision medica seria razonable.</p>
+        <textarea name="q12"></textarea>
+      </section>
+    </form>
+  </main>
+
+  <pre id="report"></pre>
+
+  <div class="actions">
+    <div class="actions-inner">
+      <button class="ghost" type="button" onclick="saveDraft()">Guardar avance</button>
+      <button class="secondary" type="button" onclick="buildReport(true)">Imprimir reporte</button>
+      <button type="button" onclick="submitExam()">Enviar / generar reporte</button>
+    </div>
+  </div>
+
+  <script>
+    const SUBMIT_ENDPOINT = "";
+    let exits = Number(localStorage.getItem("u4_c2_exits") || "0");
+    const startedAt = localStorage.getItem("u4_c2_started_at") || new Date().toISOString();
+    localStorage.setItem("u4_c2_started_at", startedAt);
+    document.getElementById("exitCount").textContent = exits;
+
+    function countExit(){
+      exits += 1;
+      localStorage.setItem("u4_c2_exits", String(exits));
+      document.getElementById("exitCount").textContent = exits;
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) countExit();
+    });
+    window.addEventListener("blur", countExit);
+
+    function formDataObject(){
+      const form = document.getElementById("exam");
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.studentName = document.getElementById("studentName").value.trim();
+      data.grade = document.getElementById("grade").value;
+      data.section = document.getElementById("section").value.trim();
+      data.startedAt = startedAt;
+      data.finishedAt = new Date().toISOString();
+      data.screenExits = exits;
+      return data;
+    }
+
+    function saveDraft(){
+      localStorage.setItem("u4_c2_draft", JSON.stringify(formDataObject()));
+      alert("Avance guardado en este dispositivo.");
+    }
+
+    function restoreDraft(){
+      const raw = localStorage.getItem("u4_c2_draft");
+      if(!raw) return;
+      const data = JSON.parse(raw);
+      for(const [key,value] of Object.entries(data)){
+        const el = document.querySelector(`[name="${key}"], #${key}`);
+        if(!el) continue;
+        if(el.type === "radio"){
+          const radio = document.querySelector(`[name="${key}"][value="${value}"]`);
+          if(radio) radio.checked = true;
+        }else{
+          el.value = value;
+        }
+      }
+    }
+
+    function buildReport(printNow=false){
+      const data = formDataObject();
+      const lines = [
+        "EVIDENCIA C2 U4 - 2S",
+        "Estudiante: " + (data.studentName || "(sin nombre)"),
+        "Grado/seccion: " + data.grade + " - " + (data.section || "(sin seccion)"),
+        "Inicio: " + data.startedAt,
+        "Envio: " + data.finishedAt,
+        "Salidas de pantalla registradas: " + data.screenExits,
+        "",
+        "RESPUESTAS",
+        JSON.stringify(data, null, 2)
+      ];
+      const report = document.getElementById("report");
+      report.textContent = lines.join("\n");
+      report.style.display = "block";
+      if(printNow) window.print();
+      return data;
+    }
+
+    async function submitExam(){
+      const data = buildReport(false);
+      if(!data.studentName){
+        alert("Falta colocar apellidos y nombres.");
+        return;
+      }
+      if(!SUBMIT_ENDPOINT){
+        alert("Reporte generado. Cuando se conecte el servidor, este mismo boton enviara las respuestas automaticamente.");
+        return;
+      }
+      try{
+        const res = await fetch(SUBMIT_ENDPOINT, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(data)
+        });
+        if(!res.ok) throw new Error("No se pudo enviar");
+        alert("Respuestas enviadas correctamente.");
+      }catch(err){
+        alert("No se pudo enviar al servidor. Se genero el reporte local para imprimir o guardar.");
+      }
+    }
+
+    restoreDraft();
+  </script>
+</body>
+</html>
