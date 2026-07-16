@@ -2,741 +2,662 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2S - Evidencia C2 U4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>2S - Examen oficial C2 U4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bitter:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#f4f7fb;
-      --paper:#ffffff;
-      --ink:#1d2733;
-      --muted:#617086;
-      --line:#d9e2ef;
-      --brand:#5b21b6;
-      --brand2:#0f766e;
-      --warn:#b45309;
-      --danger:#b91c1c;
-      --success:#047857;
-      --soft:#eef2ff;
+    :root {
+      --ink: #17211d;
+      --muted: #5b6b63;
+      --paper: #fffdf8;
+      --line: #d8e1d9;
+      --leaf: #1d6650;
+      --leaf-dark: #124436;
+      --coral: #d65f49;
+      --coral-soft: #fff0eb;
+      --gold: #e0a02b;
+      --blue: #26718a;
+      --danger: #a72f2f;
+      --success: #166446;
+      --shadow: 0 14px 34px rgba(36, 58, 47, .10);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial,Helvetica,sans-serif;
-      background:var(--bg);
-      color:var(--ink);
-      font-size:16px;
-      line-height:1.45;
-      padding-bottom:84px;
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(224, 160, 43, .13), transparent 24rem),
+        radial-gradient(circle at 92% 18%, rgba(214, 95, 73, .12), transparent 28rem),
+        #f3f6f1;
+      color: var(--ink);
+      font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      padding-bottom: 96px;
     }
-    header{
-      position:sticky;
-      top:0;
-      z-index:10;
-      background:#2e1065;
-      color:#fff;
-      padding:14px 18px;
-      box-shadow:0 2px 12px rgba(17,24,39,.18);
+    button, input, select, textarea { font: inherit; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      color: white;
+      background:
+        linear-gradient(105deg, rgba(18, 68, 54, .98), rgba(29, 102, 80, .97)),
+        repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,.03) 12px 24px);
+      box-shadow: 0 3px 18px rgba(18, 68, 54, .24);
     }
-    header .bar{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
+    .topbar-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
     }
-    h1{
-      margin:0;
-      font-size:clamp(20px,3vw,30px);
-      line-height:1.12;
+    .eyebrow {
+      margin: 0 0 2px;
+      color: #f9d68e;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .11em;
+      text-transform: uppercase;
     }
-    .meta{
-      margin-top:4px;
-      color:rgba(255,255,255,.82);
-      font-size:13px;
+    h1, h2, h3 { font-family: "Bitter", Georgia, serif; }
+    h1 { margin: 0; font-size: clamp(1.25rem, 2.8vw, 2rem); line-height: 1.12; }
+    .top-meta { margin-top: 3px; color: rgba(255,255,255,.82); font-size: .88rem; }
+    .status { display: flex; gap: 10px; flex: 0 0 auto; }
+    .status-card {
+      min-width: 112px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 12px;
+      background: rgba(255,255,255,.09);
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.1;
     }
-    .status{
-      display:flex;
-      gap:18px;
-      text-align:center;
-      font-size:13px;
-      color:rgba(255,255,255,.9);
+    .status-card strong { display: block; margin-top: 3px; color: #fff; font-size: 1.25rem; }
+    main { width: min(1120px, 100%); margin: 0 auto; padding: 22px 18px; }
+    .card {
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,253,248,.96);
+      box-shadow: var(--shadow);
     }
-    .status span{min-width:94px}
-    .status strong{display:block;font-size:20px;color:#fff}
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:18px;
+    .intro { padding: 22px; }
+    .intro-title { margin: 0 0 6px; font-size: clamp(1.35rem, 3vw, 1.9rem); color: var(--leaf-dark); }
+    .intro-copy { margin: 0 0 18px; color: var(--muted); }
+    .student-grid { display: grid; grid-template-columns: 2fr 1.5fr .7fr; gap: 14px; }
+    .field label, .answer-label { display: block; margin-bottom: 6px; color: #34483e; font-weight: 700; font-size: .9rem; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 12px;
+      border: 1.5px solid #bdccc2;
+      border-radius: 10px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .18s, box-shadow .18s, background .18s;
     }
-    .card{
-      background:var(--paper);
-      border:1px solid var(--line);
-      border-radius:10px;
-      box-shadow:0 10px 24px rgba(15,23,42,.06);
-      margin-bottom:14px;
-      overflow:hidden;
+    textarea { min-height: 112px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 4px rgba(29, 102, 80, .12);
     }
-    .card.pad{padding:18px}
-    .student-grid{
-      display:grid;
-      grid-template-columns:2fr 1fr 1fr;
-      gap:12px;
+    .instructions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+    .instruction { padding: 12px; border: 1px solid #d9e5dc; border-radius: 12px; background: #f7faf6; font-size: .9rem; }
+    .instruction b { display: block; color: var(--leaf-dark); }
+    .notice {
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-left: 5px solid var(--gold);
+      border-radius: 9px;
+      background: #fff7df;
+      color: #6f4b07;
+      font-size: .9rem;
     }
-    label{
-      display:block;
-      font-weight:700;
-      font-size:13px;
-      color:#39465a;
-      margin-bottom:6px;
+    .question {
+      position: relative;
+      padding: 23px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 116px;
     }
-    input[type="text"], input[type="email"], select, textarea{
-      width:100%;
-      border:1px solid #c8d3e2;
-      border-radius:8px;
-      padding:10px 11px;
-      font:inherit;
-      background:#fff;
-      color:var(--ink);
-      min-height:46px;
+    .question:first-child { border-top: 0; }
+    .question.complete { background: linear-gradient(90deg, rgba(29,102,80,.045), transparent 32%); }
+    .question-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .question-number {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px 12px 12px 3px;
+      background: var(--leaf);
+      color: white;
+      font-weight: 700;
     }
-    textarea{min-height:96px;resize:vertical}
-    .note{
-      background:#fff7ed;
-      color:#7c2d12;
-      border-left:5px solid #f97316;
-      padding:10px 12px;
-      border-radius:8px;
-      margin-top:12px;
-      font-size:14px;
+    .question h2 { margin: 2px 0 0; color: #243b31; font-size: 1.13rem; line-height: 1.28; }
+    .question-type { margin-top: 3px; color: var(--coral); font-weight: 700; font-size: .79rem; text-transform: uppercase; letter-spacing: .07em; }
+    .prompt { margin: 10px 0; }
+    .options { display: grid; gap: 9px; margin-top: 12px; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 48px;
+      padding: 11px 13px;
+      border: 1.5px solid #d5dfd7;
+      border-radius: 11px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, transform .18s;
     }
-    .instructions{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-      margin-top:14px;
+    .option:hover { border-color: #91aa9a; transform: translateY(-1px); }
+    .option:has(input:checked) { border-color: var(--leaf); background: #edf7f1; }
+    .option input { width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 20px; accent-color: var(--leaf); }
+    .sequence { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px; }
+    .sequence label { display: block; margin-bottom: 5px; font-weight: 700; font-size: .88rem; }
+    .image-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(290px, .7fr); gap: 18px; align-items: start; }
+    figure { margin: 0; }
+    .exam-image {
+      width: 100%;
+      max-height: 520px;
+      display: block;
+      object-fit: contain;
+      border: 1px solid #ccd8d0;
+      border-radius: 14px;
+      background: #0b1420;
+      box-shadow: 0 10px 24px rgba(17,33,26,.12);
     }
-    .instruction{
-      background:#f8fafc;
-      border:1px solid var(--line);
-      border-radius:9px;
-      padding:11px 12px;
-      font-size:14px;
+    figcaption { margin-top: 7px; color: var(--muted); font-size: .82rem; text-align: center; }
+    .answer-stack { display: grid; gap: 12px; }
+    .compact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .relation { display: grid; grid-template-columns: minmax(150px,.7fr) minmax(230px,1.3fr); gap: 9px 12px; align-items: center; }
+    .term { padding: 12px; border-radius: 10px; background: var(--coral-soft); color: #713224; font-weight: 700; }
+    details.hint { margin-top: 14px; border: 1px solid #bdd8e1; border-radius: 11px; background: #f0f9fc; color: #174d61; }
+    details.hint summary { min-height: 46px; padding: 10px 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; user-select: none; }
+    details.hint summary::before { content: "?"; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--blue); color: #fff; }
+    details.hint p { margin: 0; padding: 0 14px 13px 45px; font-size: .9rem; }
+    .error-box {
+      display: none;
+      margin: 0 0 18px;
+      padding: 13px 15px;
+      border: 1px solid #e4aaaa;
+      border-left: 6px solid var(--danger);
+      border-radius: 11px;
+      background: #fff2f2;
+      color: #7c2020;
+      font-weight: 700;
     }
-    .instruction strong{display:block;color:#312e81;margin-bottom:2px}
-    .hint{
-      margin-top:12px;
-      border:1px solid #bae6fd;
-      border-radius:9px;
-      background:#f0f9ff;
-      color:#0c4a6e;
+    .error-box.visible { display: block; }
+    .invalid { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(167,47,47,.12) !important; }
+    .actions {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 50;
+      border-top: 1px solid rgba(29,102,80,.2);
+      background: rgba(247,249,245,.94);
+      backdrop-filter: blur(12px);
     }
-    .hint summary{
-      min-height:44px;
-      display:flex;
-      align-items:center;
-      padding:9px 12px;
-      cursor:pointer;
-      font-weight:700;
-      user-select:none;
+    .actions-inner { width: min(1120px, 100%); margin: 0 auto; padding: 11px 18px max(11px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .action-message { color: var(--danger); font-weight: 700; font-size: .9rem; }
+    .submit-button {
+      min-height: 48px;
+      padding: 11px 20px;
+      border: 0;
+      border-radius: 11px;
+      background: linear-gradient(120deg, var(--coral), #b94436);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(185,68,54,.22);
     }
-    .hint summary::before{content:"?";display:inline-grid;place-items:center;width:23px;height:23px;margin-right:8px;border-radius:50%;background:#0284c7;color:#fff}
-    .hint p{margin:0;padding:0 12px 12px;font-size:14px}
-    .q12-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-      margin-top:10px;
+    .submit-button:disabled { opacity: .62; cursor: wait; }
+    .sending-label { display: none; }
+    .submit-button.sending .sending-label { display: inline; }
+    .submit-button.sending .ready-label { display: none; }
+    .submission-panel { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; padding: 20px; background: rgba(10,25,19,.78); }
+    .submission-panel.visible { display: grid; }
+    .submission-card { width: min(560px, 100%); padding: 30px; border-radius: 22px; background: var(--paper); box-shadow: 0 28px 80px rgba(0,0,0,.32); text-align: center; }
+    .success-mark { width: 70px; height: 70px; margin: 0 auto 16px; display: grid; place-items: center; border-radius: 50%; background: #dff4e8; color: var(--success); font-size: 2.2rem; font-weight: 700; }
+    .submission-card h2 { margin: 0 0 8px; color: var(--success); font-size: 1.55rem; }
+    .submission-card p { margin: 5px 0; color: #53645b; }
+    .submission-card .final-note { margin-top: 16px; padding: 11px; border-radius: 10px; background: #eef7f1; color: #205941; font-weight: 700; }
+    @media (max-width: 900px) {
+      .student-grid { grid-template-columns: 1.4fr 1fr; }
+      .field.section-field { grid-column: 1 / -1; }
+      .instructions { grid-template-columns: 1fr 1fr; }
+      .image-layout { grid-template-columns: 1fr; }
+      .image-layout .exam-image { max-height: 620px; }
+      .sequence { grid-template-columns: repeat(3, 1fr); }
     }
-    .q12-grid textarea{min-height:120px}
-    .q{
-      padding:18px;
-      border-top:1px solid var(--line);
+    @media (max-width: 620px) {
+      body { font-size: 16px; padding-bottom: 108px; }
+      .topbar-inner { display: block; padding: 11px 13px; }
+      .top-meta { display: none; }
+      .status { margin-top: 9px; }
+      .status-card { flex: 1; min-width: 0; }
+      main { padding: 12px 10px; }
+      .intro, .question { padding: 16px 14px; }
+      .student-grid, .instructions, .compact-grid, .relation { grid-template-columns: 1fr; }
+      .sequence { grid-template-columns: 1fr 1fr; }
+      .relation .term { margin-top: 6px; }
+      .actions-inner { align-items: stretch; flex-direction: column; padding: 8px 10px max(8px, env(safe-area-inset-bottom)); }
+      .submit-button { width: 100%; }
     }
-    .q:first-child{border-top:0}
-    .q h2{
-      margin:0 0 10px;
-      font-size:18px;
-      color:#1f2937;
+    @media (orientation: landscape) and (max-height: 760px) {
+      .topbar { position: relative; }
+      .topbar-inner { padding-block: 9px; }
+      main { width: min(1240px,100%); }
+      .image-layout { grid-template-columns: minmax(0, 1.3fr) minmax(290px, .7fr); }
+      .exam-image { max-height: 70vh; }
+      .question { scroll-margin-top: 20px; }
     }
-    .tag{
-      display:inline-block;
-      font-size:12px;
-      font-weight:700;
-      color:#fff;
-      background:var(--brand2);
-      border-radius:999px;
-      padding:2px 8px;
-      margin-right:8px;
-      vertical-align:1px;
-    }
-    .options{
-      display:grid;
-      gap:8px;
-      margin-top:8px;
-    }
-    .option{
-      border:1px solid #d7deea;
-      border-radius:8px;
-      padding:10px 11px;
-      background:#fbfdff;
-      min-height:46px;
-      display:flex;
-      align-items:center;
-      cursor:pointer;
-    }
-    .option input{margin-right:10px;min-width:20px;min-height:20px}
-    .two{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      align-items:start;
-    }
-    .imgbox{
-      background:#f8fafc;
-      border:1px solid var(--line);
-      border-radius:10px;
-      padding:10px;
-      text-align:center;
-    }
-    .imgbox img{
-      max-width:100%;
-      max-height:280px;
-      object-fit:contain;
-      border-radius:7px;
-    }
-    .relation{
-      display:grid;
-      grid-template-columns:1.2fr 1fr;
-      gap:10px;
-      margin-top:8px;
-    }
-    .relation .row{display:contents}
-    .relation .term,.relation .pick{
-      border:1px solid #d7deea;
-      padding:10px;
-      border-radius:8px;
-      background:#fbfdff;
-    }
-    .sequence{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-    .actions{
-      position:sticky;
-      bottom:0;
-      background:rgba(244,247,251,.96);
-      border-top:1px solid var(--line);
-      padding:12px 18px;
-      backdrop-filter:blur(8px);
-    }
-    .actions-inner{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .action-message{
-      align-self:center;
-      margin-right:auto;
-      color:var(--danger);
-      font-weight:700;
-      font-size:14px;
-    }
-    button{
-      border:0;
-      border-radius:8px;
-      padding:11px 14px;
-      font-weight:700;
-      cursor:pointer;
-      color:#fff;
-      background:var(--brand);
-      font-size:15px;
-      min-height:46px;
-    }
-    button:disabled{opacity:.6;cursor:not-allowed}
-    button.secondary{background:#475569}
-    button.ghost{background:#fff;color:#334155;border:1px solid #cbd5e1}
-    #report{
-      display:none;
-      white-space:pre-wrap;
-      background:#0f172a;
-      color:#e5e7eb;
-      border-radius:10px;
-      padding:16px;
-      margin:18px auto;
-      max-width:1100px;
-      font-family:Consolas,monospace;
-      font-size:13px;
-      overflow:auto;
-    }
-    .invalid{
-      outline:3px solid rgba(185,28,28,.18);
-      border-color:var(--danger)!important;
-    }
-    .field-error{
-      color:var(--danger);
-      font-weight:700;
-      font-size:13px;
-      margin:8px 0 0;
-    }
-    .submission-panel{
-      position:fixed;
-      inset:0;
-      z-index:100;
-      display:none;
-      place-items:center;
-      padding:22px;
-      background:rgba(15,23,42,.72);
-    }
-    .submission-panel.visible{display:grid}
-    .submission-card{
-      width:min(520px,100%);
-      background:#fff;
-      border-radius:18px;
-      padding:26px;
-      box-shadow:0 24px 80px rgba(0,0,0,.28);
-      text-align:center;
-    }
-    .submission-card h2{margin:0 0 8px;color:var(--success)}
-    .submission-card p{margin:0;color:#475569}
-    .submission-card .receipt{
-      margin:16px 0;
-      padding:10px;
-      border-radius:8px;
-      background:#ecfdf5;
-      color:#065f46;
-      font-weight:700;
-      word-break:break-all;
-    }
-    .sending-label{display:none}
-    button.sending .sending-label{display:inline}
-    button.sending .ready-label{display:none}
-    @media (max-width:820px){
-      .student-grid,.two,.relation{grid-template-columns:1fr}
-      .sequence{grid-template-columns:1fr 1fr}
-      .instructions{grid-template-columns:1fr 1fr}
-      .q12-grid{grid-template-columns:1fr}
-      header .bar{align-items:flex-start}
-      .status{min-width:auto}
-    }
-    @media (max-width:540px){
-      header{padding:11px 12px}
-      header .bar{display:block}
-      .status{justify-content:flex-start;margin-top:8px}
-      main{padding:10px}
-      .card.pad,.q{padding:14px}
-      .instructions,.sequence{grid-template-columns:1fr}
-      .actions{padding:9px 10px}
-      .actions-inner{display:grid;grid-template-columns:1fr 1fr}
-      .action-message{grid-column:1/-1;margin:0}
-      button{width:100%}
-    }
-    @media (orientation:landscape) and (max-height:820px){
-      header{position:relative}
-      main{max-width:1200px}
-      .student-grid{grid-template-columns:2fr 1.2fr .8fr 1fr}
-      .instructions{grid-template-columns:repeat(4,1fr)}
-      .two{grid-template-columns:1.15fr 1fr}
-    }
-    @media print{
-      header,.actions{display:none}
-      body{background:#fff;padding-bottom:0}
-      main{padding:0}
-      .card{box-shadow:none;break-inside:avoid}
-      #report{display:block;color:#000;background:#fff;border:1px solid #999}
+    @media print {
+      .topbar, .actions, details.hint { display: none !important; }
+      body { padding: 0; background: #fff; }
+      main { width: 100%; padding: 0; }
+      .card { box-shadow: none; }
+      .question { break-inside: avoid; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="bar">
+  <header class="topbar">
+    <div class="topbar-inner">
       <div>
-        <h1>2.° Secundaria - Evidencia C2 U4</h1>
-        <div class="meta">Reproducción humana, desarrollo embrionario y casos médicos</div>
+        <p class="eyebrow">Ciencia y Tecnología · Unidad 4</p>
+        <h1>2.° Secundaria · Examen oficial C2</h1>
+        <div class="top-meta">Reproducción humana y desarrollo embrionario</div>
       </div>
-      <div class="status">
-        <span>preguntas respondidas<strong id="progressCount">0/12</strong></span>
-        <span>salidas de pantalla<strong id="exitCount">0</strong></span>
+      <div class="status" aria-label="Estado del examen">
+        <div class="status-card">Respondidas<strong id="progressCount">0/12</strong></div>
+        <div class="status-card">Salidas de pantalla<strong id="exitCount">0</strong></div>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="card pad">
+    <section class="card intro" aria-labelledby="introTitle">
+      <h2 class="intro-title" id="introTitle">Antes de comenzar</h2>
+      <p class="intro-copy">Completa tus datos con cuidado. Puedes revisar todas las preguntas y abrir una pista cuando la necesites.</p>
       <div class="student-grid">
-        <div>
+        <div class="field">
           <label for="studentName">Apellidos y nombres</label>
-          <input id="studentName" name="studentName" type="text" autocomplete="name" required>
+          <input id="studentName" name="studentName" form="exam" type="text" autocomplete="name" required>
         </div>
-        <div>
-          <label for="studentEmail">Correo del estudiante</label>
-          <input id="studentEmail" name="studentEmail" type="email" autocomplete="email" placeholder="Opcional">
+        <div class="field">
+          <label for="studentEmail">Correo institucional</label>
+          <input id="studentEmail" name="studentEmail" form="exam" type="email" inputmode="email" autocomplete="email" placeholder="nombre@colegiomilagrosdedios.edu.pe" required>
         </div>
-        <div>
-          <label for="grade">Grado</label>
-          <select id="grade" name="grade">
-            <option>2.° Secundaria</option>
-          </select>
-        </div>
-        <div>
+        <div class="field section-field">
           <label for="section">Sección</label>
-          <input id="section" name="section" type="text" placeholder="Ej. A / B / C" required>
+          <input id="section" name="section" form="exam" type="text" maxlength="8" placeholder="Ej. A" required>
         </div>
       </div>
-      <div class="instructions" aria-label="Instrucciones del examen">
-        <div class="instruction"><strong>1. Revisa</strong>Puedes recorrer las 12 preguntas antes de responder.</div>
-        <div class="instruction"><strong>2. Responde</strong>Completa todas las preguntas con vocabulario científico.</div>
-        <div class="instruction"><strong>3. Verifica</strong>El sistema te avisará si falta alguna respuesta.</div>
-        <div class="instruction"><strong>4. Envía una vez</strong>Al finalizar, pulsa una sola vez “Enviar respuestas”.</div>
+      <div class="instructions" aria-label="Instrucciones">
+        <div class="instruction"><b>1. Observa</b>Las imágenes contienen información necesaria para responder.</div>
+        <div class="instruction"><b>2. Responde</b>Usa conceptos científicos y explica con tus propias palabras.</div>
+        <div class="instruction"><b>3. Revisa</b>Antes de enviar, el sistema señalará lo que falte completar.</div>
+        <div class="instruction"><b>4. Envía una vez</b>No cierres la página hasta ver la confirmación final.</div>
       </div>
-      <div class="note">Durante la evidencia se registra cuántas veces se cambia de pantalla. Mantén abierto este examen hasta ver la confirmación final.</div>
+      <div class="notice">El examen registra los cambios de pantalla. Mantén esta página abierta durante toda la evaluación.</div>
     </section>
 
-    <form id="exam" class="card">
-      <section class="q">
-        <h2><span class="tag">1</span>Marca la alternativa correcta</h2>
-        <p>La fecundación humana produce principalmente:</p>
+    <div id="errorBox" class="error-box" role="alert" aria-live="assertive"></div>
+
+    <form id="exam" class="card" novalidate>
+      <section class="question" data-question="1">
+        <div class="question-heading"><span class="question-number">1</span><div><div class="question-type">Alternativa</div><h2>Un blastocisto llega al útero, pero no logra adherirse ni introducirse en el endometrio. ¿Qué proceso falló principalmente?</h2></div></div>
         <div class="options">
-          <label class="option"><input type="radio" name="q1" value="a" required>Un blastocisto implantado directamente en el endometrio.</label>
-          <label class="option"><input type="radio" name="q1" value="b">Un cigoto diploide formado por la unión de gametos.</label>
-          <label class="option"><input type="radio" name="q1" value="c">Un embrión con órganos completamente formados.</label>
-          <label class="option"><input type="radio" name="q1" value="d">Una mórula con placenta funcional.</label>
+          <label class="option"><input type="radio" name="q1" value="a" required><span>Segmentación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="b"><span>Implantación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="c"><span>Neurulación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="d"><span>Organogénesis.</span></label>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Piensa en el nombre de la primera célula que aparece inmediatamente después de la unión del óvulo y el espermatozoide.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>Piensa en el proceso que permite que el blastocisto quede sujeto al tejido uterino.</p></details>
       </section>
 
-      <section class="q">
-        <h2><span class="tag">2</span>Ordena el desarrollo temprano</h2>
-        <p>Asigna los números del 1 al 6 sin repetirlos.</p>
-        <div class="sequence">
-          <div><label>Blastocisto</label><select name="q2_blastocisto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Cigoto</label><select name="q2_cigoto" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Fecundación</label><select name="q2_fecundacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Mórula</label><select name="q2_morula" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Segmentación</label><select name="q2_segmentacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-          <div><label>Implantación</label><select name="q2_implantacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      <section class="question" data-question="2">
+        <div class="question-heading"><span class="question-number">2</span><div><div class="question-type">Ordenamiento</div><h2>Ordena del 1 al 5 las etapas del desarrollo.</h2></div></div>
+        <p class="prompt">Usa cada número una sola vez.</p>
+        <div class="sequence" id="q2Sequence">
+          <div><label for="q2_tubo">Tubo neural</label><select id="q2_tubo" name="q2_tubo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_fetal">Etapa fetal</label><select id="q2_fetal" name="q2_fetal" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_bilaminar">Disco bilaminar</label><select id="q2_bilaminar" name="q2_bilaminar" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_organogenesis">Organogénesis</label><select id="q2_organogenesis" name="q2_organogenesis" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_gastrulacion">Gastrulación</label><select id="q2_gastrulacion" name="q2_gastrulacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>La secuencia comienza con la fecundación y termina con la implantación. La mórula aparece antes que el blastocisto.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>Primero se organiza el disco; luego aparecen capas, sistema nervioso inicial, órganos y crecimiento fetal.</p></details>
       </section>
 
-      <section class="q">
-        <h2><span class="tag">3</span>Completa partes del blastocisto</h2>
-        <div class="two">
-          <div class="imgbox"><img src="assets/2s_u4_implantacion/02_blastocisto_llega.png" alt="Blastocisto antes de la implantación en el endometrio"></div>
-          <div>
-            <label>A. Capa externa que participará en la placenta</label>
-            <input name="q3_a" type="text" required>
-            <label>B. Grupo de células que formará el embrión</label>
-            <input name="q3_b" type="text" required>
-            <label>C. Cavidad interna del blastocisto</label>
-            <input name="q3_c" type="text" required>
+      <section class="question" data-question="3">
+        <div class="question-heading"><span class="question-number">3</span><div><div class="question-type">Lectura de imagen</div><h2>Identifica las partes del blastocisto señaladas con A, B y C.</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/01_blastocisto.png" alt="Blastocisto con tres estructuras señaladas A, B y C"><figcaption>Observa la ubicación de cada flecha antes de responder.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q3_a">A</label><input id="q3_a" name="q3_a" type="text" required></div>
+            <div><label class="answer-label" for="q3_b">B</label><input id="q3_b" name="q3_b" type="text" required></div>
+            <div><label class="answer-label" for="q3_c">C</label><input id="q3_c" name="q3_c" type="text" required></div>
+            <div><label class="answer-label" for="q3_placenta">¿Cuál participa principalmente en la formación de la futura placenta?</label><select id="q3_placenta" name="q3_placenta" required><option value="">Elige una letra</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
           </div>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Observa tres zonas: una capa celular externa, un grupo de células concentrado en un lado y un espacio interno lleno de líquido.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>La capa externa se relaciona con la implantación; el grupo interno formará el embrión.</p></details>
       </section>
 
-      <section class="q">
-        <h2><span class="tag">4</span>Relaciona conceptos</h2>
-        <div class="relation">
-          <div class="term">Ectodermo</div><div class="pick"><select name="q4_ecto" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
-          <div class="term">Mesodermo</div><div class="pick"><select name="q4_meso" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
-          <div class="term">Endodermo</div><div class="pick"><select name="q4_endo" required><option value="">Elige</option><option value="Piel y sistema nervioso">Piel y sistema nervioso</option><option value="Musculos, huesos y sangre">Músculos, huesos y sangre</option><option value="Revestimiento digestivo y respiratorio">Revestimiento digestivo y respiratorio</option></select></div>
-        </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>“Ecto” se relaciona con lo externo; “meso”, con sostén y movimiento; “endo”, con revestimientos internos.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">5</span>Interpreta una imagen</h2>
-        <div class="two">
-          <div class="imgbox"><img src="assets/2s_u4_implantacion/09_capas_germinales.png" alt="Capas embrionarias"></div>
-          <div>
-            <p>Explica qué representa la imagen y por qué no es correcto llamar a estas estructuras “capas neurales”.</p>
-            <textarea name="q5" required></textarea>
+      <section class="question" data-question="4">
+        <div class="question-heading"><span class="question-number">4</span><div><div class="question-type">Interpretación de imagen</div><h2>Observa la implantación. ¿Qué estructura o tejido señala A y por qué es importante su contacto con el endometrio?</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/02_implantacion.png" alt="Blastocisto implantándose con zonas A, B y C"><figcaption>La flecha A muestra la zona donde el blastocisto entra en contacto con el tejido uterino.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q4_a">La zona A corresponde principalmente a:</label><select id="q4_a" name="q4_a" required><option value="">Elige</option><option value="trofoblasto">Trofoblasto</option><option value="blastocele">Blastocele</option><option value="masa celular interna">Masa celular interna</option><option value="saco vitelino">Saco vitelino</option></select></div>
+            <div><label class="answer-label" for="q4_why">Explica su importancia</label><textarea id="q4_why" name="q4_why" minlength="25" required placeholder="Escribe una explicación breve y científica."></textarea></div>
           </div>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Son tres capas germinales. Solo una parte del ectodermo comienza después a especializarse para formar estructuras nerviosas.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>Mira la zona que está tocando e invadiendo el tejido uterino. Ese contacto permite el anclaje y el inicio del intercambio con la madre.</p></details>
       </section>
 
-      <section class="q">
-        <h2><span class="tag">6</span>Marca la alternativa correcta</h2>
-        <p>La implantación ocurre cuando:</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q6" value="a" required>El cigoto se divide por primera vez.</label>
-          <label class="option"><input type="radio" name="q6" value="b">El blastocisto se adhiere y se introduce en el endometrio.</label>
-          <label class="option"><input type="radio" name="q6" value="c">El feto inicia el parto.</label>
-          <label class="option"><input type="radio" name="q6" value="d">Se forma el tubo neural completo.</label>
-        </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Implantar significa adherirse y comenzar a introducirse en el tejido que recubre el interior del útero.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">7</span>Reconoce la neurulación</h2>
-        <p>¿Qué cambio importante ocurre durante la neurulación?</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q7_choice" value="a" required>El endodermo forma directamente la placenta.</label>
-          <label class="option"><input type="radio" name="q7_choice" value="b">Parte del ectodermo se pliega y forma el tubo neural.</label>
-          <label class="option"><input type="radio" name="q7_choice" value="c">El blastocisto se convierte nuevamente en cigoto.</label>
-          <label class="option"><input type="radio" name="q7_choice" value="d">El feto inicia el alumbramiento.</label>
-        </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Busca la opción que relaciona el ectodermo con la estructura que dará origen al sistema nervioso central.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">8</span>Desarrolla</h2>
-        <p>Explica la diferencia entre saco vitelino, cordón umbilical y placenta.</p>
-        <textarea name="q8" required></textarea>
-        <details class="hint"><summary>Mostrar pista</summary><p>El saco vitelino ayuda al inicio; la placenta realiza intercambios con la madre; el cordón comunica al embrión o feto con la placenta.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">9</span>Caso médico: identifica el problema</h2>
-        <p>Dos gemelos comparten placenta. Uno recibe demasiada sangre y líquido; el otro recibe poco y crece menos. ¿Qué condición se parece más a este caso?</p>
-        <div class="options">
-          <label class="option"><input type="radio" name="q9" value="a" required>Espina bífida.</label>
-          <label class="option"><input type="radio" name="q9" value="b">Transfusión feto-fetal.</label>
-          <label class="option"><input type="radio" name="q9" value="c">Implantación normal.</label>
-          <label class="option"><input type="radio" name="q9" value="d">Gastrulación normal.</label>
-        </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>El problema ocurre por una conexión desigual de vasos sanguíneos dentro de una placenta compartida.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">10</span>Completa con vocabulario científico</h2>
-        <p>Usa estas palabras: <strong>tubo neural, organogénesis, somitas, feto</strong>.</p>
-        <label>A. Bloques que originan estructuras relacionadas con columna y músculos</label>
-        <input name="q10_a" type="text" required>
-        <label>B. Estructura que dará origen al sistema nervioso central</label>
-        <input name="q10_b" type="text" required>
-        <label>C. Etapa donde se inician órganos y sistemas</label>
-        <input name="q10_c" type="text" required>
-        <label>D. Etapa desde la semana 9, con crecimiento y maduración</label>
-        <input name="q10_d" type="text" required>
-        <details class="hint"><summary>Mostrar pista</summary><p>Usa cada palabra una sola vez. La etapa que comienza alrededor de la semana 9 ya no se denomina embrionaria.</p></details>
-      </section>
-
-      <section class="q">
-        <h2><span class="tag">11</span>Relaciona caso y etapa afectada</h2>
+      <section class="question" data-question="5">
+        <div class="question-heading"><span class="question-number">5</span><div><div class="question-type">Relacionar</div><h2>Relaciona cada capa embrionaria con los tejidos u órganos que origina.</h2></div></div>
         <div class="relation">
-          <div class="term">Espina bífida</div><div class="pick"><select name="q11_a" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
-          <div class="term">Gemelos unidos</div><div class="pick"><select name="q11_b" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
-          <div class="term">Transfusión feto-fetal</div><div class="pick"><select name="q11_c" required><option value="">Elige</option><option value="Cierre del tubo neural">Cierre del tubo neural</option><option value="Separacion incompleta temprana">Separación incompleta temprana</option><option value="Conexion vascular en placenta">Conexión vascular en la placenta</option></select></div>
+          <div class="term">Ectodermo</div><select name="q5_ecto" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
+          <div class="term">Mesodermo</div><select name="q5_meso" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
+          <div class="term">Endodermo</div><select name="q5_endo" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Relaciona cada nombre con su origen: cierre nervioso, separación de gemelos o circulación compartida en la placenta.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>“Ecto” se asocia a lo externo; “meso” a sostén y movimiento; “endo” a revestimientos internos.</p></details>
       </section>
 
-      <section class="q">
-        <h2><span class="tag">12</span>Pregunta integradora</h2>
-        <p>Elige un caso y responde tres partes breves. No necesitas escribir un informe médico completo.</p>
-        <label for="q12_case">Caso elegido</label>
-        <select id="q12_case" name="q12_case" required>
-          <option value="">Elige un caso</option>
-          <option>Espina bífida</option>
-          <option>Gemelos unidos</option>
-          <option>Transfusión feto-fetal</option>
-        </select>
-        <div class="q12-grid">
-          <div><label for="q12_process">¿Qué ocurrió durante el desarrollo?</label><textarea id="q12_process" name="q12_process" required></textarea></div>
-          <div><label for="q12_risk">¿Qué riesgo puede producir?</label><textarea id="q12_risk" name="q12_risk" required></textarea></div>
-          <div><label for="q12_decision">¿Qué ayuda médica podría recomendarse?</label><textarea id="q12_decision" name="q12_decision" required></textarea></div>
+      <section class="question" data-question="6">
+        <div class="question-heading"><span class="question-number">6</span><div><div class="question-type">Explicación breve</div><h2>¿Por qué no basta con que se forme un blastocisto para que el embarazo continúe?</h2></div></div>
+        <textarea name="q6" minlength="45" required placeholder="Explica qué debe ocurrir después y por qué es necesario."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>El blastocisto necesita algo más que existir: debe conectarse con el ambiente uterino.</p></details>
+      </section>
+
+      <section class="question" data-question="7">
+        <div class="question-heading"><span class="question-number">7</span><div><div class="question-type">Lectura de imagen</div><h2>Observa el disco trilaminar. ¿Qué capa señala A y qué estructura del sistema nervioso se formará después a partir de ella?</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/03_capas_embrionarias.png" alt="Disco trilaminar con capas A, B y C"><figcaption>La orientación y el color permiten distinguir las tres capas.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q7_layer">La capa A es:</label><select id="q7_layer" name="q7_layer" required><option value="">Elige</option><option value="ectodermo">Ectodermo</option><option value="mesodermo">Mesodermo</option><option value="endodermo">Endodermo</option></select></div>
+            <div><label class="answer-label" for="q7_structure">Estructura nerviosa que se formará</label><input id="q7_structure" name="q7_structure" type="text" required></div>
+          </div>
         </div>
-        <details class="hint"><summary>Mostrar pista</summary><p>Puedes comenzar así: “Durante el desarrollo ocurrió…”, “El principal riesgo es…” y “Una ayuda médica podría ser…”.</p></details>
+        <details class="hint"><summary>Mostrar pista</summary><p>La capa más externa está relacionada con la piel y el sistema nervioso. Después se pliega hasta formar una estructura tubular.</p></details>
+      </section>
+
+      <section class="question" data-question="8">
+        <div class="question-heading"><span class="question-number">8</span><div><div class="question-type">Vocabulario científico</div><h2>¿Cómo se llama el proceso en el que empiezan a formarse órganos y sistemas a partir de los tejidos embrionarios?</h2></div></div>
+        <label class="answer-label" for="q8">Escribe el término</label><input id="q8" name="q8" type="text" required>
+        <details class="hint"><summary>Mostrar pista</summary><p>La palabra contiene “órgano”.</p></details>
+      </section>
+
+      <section class="question" data-question="9">
+        <div class="question-heading"><span class="question-number">9</span><div><div class="question-type">Secuencia visual</div><h2>¿Qué proceso ocurre principalmente en la imagen 2, antes de que aparezca el tubo neural cerrado?</h2></div></div>
+        <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/04_secuencia_neurulacion.png" alt="Secuencia de cuatro momentos desde capas embrionarias hasta embrión"><figcaption>Compara especialmente las imágenes 1, 2 y 3.</figcaption></figure>
+        <div class="options">
+          <label class="option"><input type="radio" name="q9" value="a" required><span>Implantación del blastocisto.</span></label>
+          <label class="option"><input type="radio" name="q9" value="b"><span>Formación de la placa y los pliegues neurales.</span></label>
+          <label class="option"><input type="radio" name="q9" value="c"><span>Formación completa de todos los órganos.</span></label>
+          <label class="option"><input type="radio" name="q9" value="d"><span>Inicio de la etapa fetal.</span></label>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Fíjate en el ectodermo azul que empieza a plegarse.</p></details>
+      </section>
+
+      <section class="question" data-question="10">
+        <div class="question-heading"><span class="question-number">10</span><div><div class="question-type">Comparación visual</div><h2>Identifica B y C. Luego explica una diferencia entre ambas estructuras.</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/05_soporte_temprano.png" alt="Embrión con estructuras A, B, C y D"><figcaption>Observa qué estructura es una bolsa y cuál conecta al embrión con la zona placentaria.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q10_b">B</label><select id="q10_b" name="q10_b" required><option value="">Elige</option><option value="saco_vitelino">Saco vitelino</option><option value="cordon">Cordón umbilical o tallo de conexión</option><option value="placenta">Placenta</option><option value="amnios">Amnios</option></select></div>
+            <div><label class="answer-label" for="q10_c">C</label><select id="q10_c" name="q10_c" required><option value="">Elige</option><option value="saco_vitelino">Saco vitelino</option><option value="cordon">Cordón umbilical o tallo de conexión</option><option value="placenta">Placenta</option><option value="amnios">Amnios</option></select></div>
+            <div><label class="answer-label" for="q10_diff">Diferencia</label><textarea id="q10_diff" name="q10_diff" minlength="25" required placeholder="Compara su forma o función."></textarea></div>
+          </div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Una es una bolsa temporal de apoyo temprano; la otra es una conexión hacia la placenta.</p></details>
+      </section>
+
+      <section class="question" data-question="11">
+        <div class="question-heading"><span class="question-number">11</span><div><div class="question-type">Caso visual</div><h2>Si en B el tubo neural no cierra correctamente, ¿qué condición se relaciona más con ese problema?</h2></div></div>
+        <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/06_cierre_tubo_neural.png" alt="Comparación A tubo neural cerrado y B cierre incompleto"><figcaption>Compara el cierre de la estructura azul en A y B.</figcaption></figure>
+        <div class="options">
+          <label class="option"><input type="radio" name="q11" value="a" required><span>Transfusión feto-fetal.</span></label>
+          <label class="option"><input type="radio" name="q11" value="b"><span>Espina bífida.</span></label>
+          <label class="option"><input type="radio" name="q11" value="c"><span>Implantación normal.</span></label>
+          <label class="option"><input type="radio" name="q11" value="d"><span>Gastrulación completa.</span></label>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>El problema está en el cierre del tubo neural, no en la placenta.</p></details>
+      </section>
+
+      <section class="question" data-question="12">
+        <div class="question-heading"><span class="question-number">12</span><div><div class="question-type">Integración</div><h2>Explica en tres pasos cómo se pasa de las tres capas embrionarias a un feto temprano.</h2></div></div>
+        <p class="prompt">Usa por lo menos tres términos científicos aprendidos en la unidad.</p>
+        <textarea name="q12" minlength="80" required placeholder="Paso 1...&#10;Paso 2...&#10;Paso 3..."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>Usa esta ruta: capas embrionarias → sistema nervioso inicial → formación de órganos → crecimiento fetal.</p></details>
       </section>
     </form>
   </main>
 
-  <pre id="report"></pre>
-
   <div class="actions">
     <div class="actions-inner">
-      <div id="actionMessage" class="action-message" role="alert" aria-live="polite"></div>
-      <button class="secondary" type="button" onclick="buildReport(true)">Imprimir reporte</button>
-      <button id="submitButton" type="button" onclick="submitExam()"><span class="ready-label">Enviar respuestas</span><span class="sending-label">Enviando...</span></button>
+      <div id="actionMessage" class="action-message" role="status" aria-live="polite"></div>
+      <button id="submitButton" class="submit-button" type="button"><span class="ready-label">Revisar y enviar respuestas</span><span class="sending-label">Enviando y confirmando...</span></button>
     </div>
   </div>
 
   <div id="submissionPanel" class="submission-panel" role="dialog" aria-modal="true" aria-labelledby="submissionTitle">
     <div class="submission-card">
-      <h2 id="submissionTitle">Examen enviado</h2>
-      <p>Tus respuestas fueron enviadas. Mantén esta pantalla abierta y avisa al docente.</p>
-      <div id="submissionReceipt" class="receipt"></div>
-      <p>No se muestra calificación en este dispositivo.</p>
+      <div class="success-mark">✓</div>
+      <h2 id="submissionTitle">Examen enviado correctamente</h2>
+      <p>Tus respuestas han sido registradas.</p>
+      <p class="final-note">Espera las indicaciones del docente. Tu reporte será entregado en breve.</p>
     </div>
   </div>
 
   <script>
+    const EXAM_ID = "2S-U4-C2-OFICIAL-2026";
+    const EXAM_VERSION = "2026-07-16";
     const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec";
-    const exam = document.getElementById("exam");
-    const questionSections = [...exam.querySelectorAll(".q")];
+    const SCHOOL_DOMAIN = "@colegiomilagrosdedios.edu.pe";
+
+    const form = document.getElementById("exam");
     const submitButton = document.getElementById("submitButton");
     const actionMessage = document.getElementById("actionMessage");
-    let exits = 0;
-    let lastExitAt = 0;
+    const errorBox = document.getElementById("errorBox");
+    const questions = [...document.querySelectorAll(".question")];
+    const startedAt = new Date().toISOString();
+    const submissionId = createSubmissionId();
+    let screenExits = 0;
     let submitting = false;
     let submitted = false;
-    const startedAt = new Date().toISOString();
-    const submissionId = typeof crypto.randomUUID === "function"
-      ? crypto.randomUUID()
-      : Date.now().toString(36) + Math.random().toString(36).slice(2);
-    document.getElementById("exitCount").textContent = exits;
+    let examStarted = false;
 
-    function countExit(){
-      const now = Date.now();
-      if(now - lastExitAt < 800) return;
-      lastExitAt = now;
-      exits += 1;
-      document.getElementById("exitCount").textContent = exits;
-    }
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) countExit();
-    });
-    window.addEventListener("blur", countExit);
-
-    function sectionIsComplete(section){
-      const radios = [...section.querySelectorAll('input[type="radio"]')];
-      if(radios.length && !radios.some(input => input.checked)) return false;
-
-      const fields = [...section.querySelectorAll("input:not([type=radio]), select, textarea")];
-      if(fields.some(field => !String(field.value || "").trim())) return false;
-
-      const sequence = [...section.querySelectorAll(".sequence select")];
-      if(sequence.length){
-        const values = sequence.map(field => field.value);
-        if(new Set(values).size !== values.length) return false;
-      }
-      return true;
+    function createSubmissionId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "2s-" + Date.now() + "-" + Math.random().toString(16).slice(2);
     }
 
-    function updateProgress(){
-      const complete = questionSections.filter(sectionIsComplete).length;
-      document.getElementById("progressCount").textContent = complete + "/" + questionSections.length;
-      questionSections.forEach(section => section.classList.remove("invalid"));
-      document.querySelectorAll(".student-grid input.invalid").forEach(field => field.classList.remove("invalid"));
-      actionMessage.textContent = "";
+    function allControls(question) {
+      return [...question.querySelectorAll("input, select, textarea")];
     }
 
-    function validateExam(){
+    function questionComplete(question) {
+      const controls = allControls(question);
+      const radioNames = [...new Set(controls.filter(el => el.type === "radio").map(el => el.name))];
+      const radiosReady = radioNames.every(name => form.querySelector(`input[name="${name}"]:checked`));
+      const otherReady = controls.filter(el => el.type !== "radio").every(el => String(el.value || "").trim() !== "");
+      return radiosReady && otherReady;
+    }
+
+    function updateProgress() {
+      const completed = questions.filter(questionComplete).length;
+      document.getElementById("progressCount").textContent = `${completed}/12`;
+      questions.forEach(q => q.classList.toggle("complete", questionComplete(q)));
+    }
+
+    function markExamStarted() {
+      examStarted = true;
       updateProgress();
-      const identityFields = [
-        document.getElementById("studentName"),
-        document.getElementById("section")
-      ];
-      const missingIdentity = identityFields.find(field => !field.value.trim());
-      if(missingIdentity){
-        missingIdentity.classList.add("invalid");
-        actionMessage.textContent = "Completa tus apellidos, nombres y sección.";
-        missingIdentity.scrollIntoView({behavior:"smooth", block:"center"});
-        missingIdentity.focus({preventScroll:true});
-        return false;
+    }
+
+    form.addEventListener("input", markExamStarted);
+    form.addEventListener("change", markExamStarted);
+    document.querySelectorAll("input[form='exam']").forEach(el => {
+      el.addEventListener("input", markExamStarted);
+      el.addEventListener("change", markExamStarted);
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && examStarted && !submitted) {
+        screenExits += 1;
+        document.getElementById("exitCount").textContent = screenExits;
+      }
+    });
+
+    window.addEventListener("beforeunload", event => {
+      if (examStarted && !submitted) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    });
+
+    function clearValidation() {
+      document.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
+      errorBox.classList.remove("visible");
+      errorBox.textContent = "";
+    }
+
+    function invalidate(element, message) {
+      element.classList.add("invalid");
+      element.setAttribute("aria-invalid", "true");
+      return { element, message };
+    }
+
+    function validateExam() {
+      clearValidation();
+      const errors = [];
+      const name = document.getElementById("studentName");
+      const email = document.getElementById("studentEmail");
+      const section = document.getElementById("section");
+
+      if (name.value.trim().length < 5) errors.push(invalidate(name, "Escribe tus apellidos y nombres completos."));
+      const cleanEmail = email.value.trim().toLowerCase();
+      if (!cleanEmail.endsWith(SCHOOL_DOMAIN) || cleanEmail.length <= SCHOOL_DOMAIN.length) {
+        errors.push(invalidate(email, "Usa tu correo institucional del colegio."));
+      }
+      if (!section.value.trim()) errors.push(invalidate(section, "Escribe tu sección."));
+
+      questions.forEach(question => {
+        if (!questionComplete(question)) {
+          const firstEmpty = allControls(question).find(el => el.type === "radio"
+            ? !form.querySelector(`input[name="${el.name}"]:checked`)
+            : !String(el.value || "").trim());
+          if (firstEmpty) errors.push(invalidate(firstEmpty, `Completa la pregunta ${question.dataset.question}.`));
+        }
+      });
+
+      document.querySelectorAll("[minlength]").forEach(el => {
+        if (el.value.trim() && el.value.trim().length < Number(el.minLength)) {
+          errors.push(invalidate(el, `Amplía tu respuesta en la pregunta ${el.closest(".question").dataset.question}.`));
+        }
+      });
+
+      const sequenceValues = [...document.querySelectorAll("#q2Sequence select")].map(el => el.value).filter(Boolean);
+      if (sequenceValues.length === 5 && new Set(sequenceValues).size !== 5) {
+        const first = document.querySelector("#q2Sequence select");
+        errors.push(invalidate(first, "En la pregunta 2 usa cada número una sola vez."));
       }
 
-      const firstIncomplete = questionSections.find(section => !sectionIsComplete(section));
-      if(firstIncomplete){
-        questionSections.filter(section => !sectionIsComplete(section)).forEach(section => section.classList.add("invalid"));
-        const number = questionSections.indexOf(firstIncomplete) + 1;
-        actionMessage.textContent = "Revisa la pregunta " + number + ": falta responder o hay números repetidos.";
-        firstIncomplete.scrollIntoView({behavior:"smooth", block:"center"});
+      if (errors.length) {
+        const uniqueMessages = [...new Set(errors.map(error => error.message))];
+        errorBox.innerHTML = `<strong>Revisa antes de enviar:</strong><br>${uniqueMessages.slice(0, 5).join("<br>")}${uniqueMessages.length > 5 ? "<br>Hay más respuestas por completar." : ""}`;
+        errorBox.classList.add("visible");
+        errors[0].element.closest(".question, .intro").scrollIntoView({ behavior: "smooth", block: "center" });
+        errors[0].element.focus({ preventScroll: true });
         return false;
       }
       return true;
     }
 
-    document.querySelectorAll("input, select, textarea").forEach(field => {
-      field.addEventListener("input", updateProgress);
-      field.addEventListener("change", updateProgress);
-    });
-    updateProgress();
-
-    function formDataObject(){
-      const form = document.getElementById("exam");
+    function buildPayload() {
       const data = Object.fromEntries(new FormData(form).entries());
-      const q7Correct = data.q7_choice === "b";
-      data.q7_ecto = q7Correct ? "1" : "0";
-      data.q7_placa = q7Correct ? "2" : "0";
-      data.q7_tubo = q7Correct ? "3" : "0";
-      data.q7_cierre = q7Correct ? "4" : "0";
-      data.q12 = [
-        "Caso: " + (data.q12_case || ""),
-        "Proceso: " + (data.q12_process || ""),
-        "Riesgo: " + (data.q12_risk || ""),
-        "Decisión médica: " + (data.q12_decision || "")
-      ].join(" | ");
-      data.studentName = document.getElementById("studentName").value.trim();
-      data.studentEmail = document.getElementById("studentEmail").value.trim();
-      data.grade = document.getElementById("grade").value;
-      data.section = document.getElementById("section").value.trim();
+      data.examId = EXAM_ID;
+      data.examVersion = EXAM_VERSION;
+      data.submissionId = submissionId;
+      data.grade = "2.° Secundaria";
       data.startedAt = startedAt;
       data.finishedAt = new Date().toISOString();
-      data.screenExits = exits;
-      data.submissionId = submissionId;
+      data.screenExits = screenExits;
+      data.userAgent = navigator.userAgent;
+      data.viewport = `${window.innerWidth}x${window.innerHeight}`;
       return data;
     }
 
-    function buildReport(printNow=false){
-      const data = formDataObject();
-      const lines = [
-        "EVIDENCIA C2 U4 - 2S",
-        "Estudiante: " + (data.studentName || "(sin nombre)"),
-        "Correo: " + (data.studentEmail || "(sin correo)"),
-        "Grado/sección: " + data.grade + " - " + (data.section || "(sin sección)"),
-        "Inicio: " + data.startedAt,
-        "Envío: " + data.finishedAt,
-        "Salidas de pantalla registradas: " + data.screenExits,
-        "",
-        "RESPUESTAS",
-        JSON.stringify(data, null, 2)
-      ];
-      const report = document.getElementById("report");
-      report.textContent = lines.join("\n");
-      report.style.display = "block";
-      if(printNow) window.print();
-      return data;
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async function submitExam(){
-      if(submitting || submitted) return;
-      if(!validateExam()) return;
-      if(!SUBMIT_ENDPOINT){
-        actionMessage.textContent = "No se pudo iniciar el envío. Recarga la página y vuelve a intentar.";
-        return;
+    async function verifySubmission() {
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        await wait(attempt === 0 ? 900 : 1400);
+        try {
+          const url = `${SUBMIT_ENDPOINT}?action=status&submissionId=${encodeURIComponent(submissionId)}&t=${Date.now()}`;
+          const response = await fetch(url, { cache: "no-store", redirect: "follow" });
+          if (!response.ok) continue;
+          const result = await response.json();
+          if (result && result.ok && result.found) return true;
+        } catch (_) {
+          // Se reintenta automáticamente; no se confirma hasta encontrar la fila.
+        }
       }
-      if(!navigator.onLine){
-        actionMessage.textContent = "No hay conexión a internet. Conéctate y vuelve a pulsar Enviar respuestas.";
+      return false;
+    }
+
+    async function submitExam() {
+      if (submitting || submitted) return;
+      if (!validateExam()) return;
+      if (!navigator.onLine) {
+        actionMessage.textContent = "No hay conexión a internet. Conéctate y vuelve a intentar.";
         return;
       }
 
-      const data = formDataObject();
       submitting = true;
       submitButton.disabled = true;
       submitButton.classList.add("sending");
       actionMessage.textContent = "Enviando el examen. No cierres esta pantalla...";
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
-      try{
+
+      try {
         await fetch(SUBMIT_ENDPOINT, {
-          method:"POST",
-          mode:"no-cors",
-          headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body:JSON.stringify(data),
-          keepalive:true,
-          signal:controller.signal
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(buildPayload()),
+          keepalive: true
         });
-        clearTimeout(timeout);
+
+        const confirmed = await verifySubmission();
+        if (!confirmed) throw new Error("El servidor aún no confirmó el registro.");
+
         submitted = true;
         actionMessage.textContent = "";
-        document.getElementById("submissionReceipt").textContent = "Código de envío: " + submissionId.slice(0,8).toUpperCase();
         document.getElementById("submissionPanel").classList.add("visible");
-      }catch(err){
-        clearTimeout(timeout);
+      } catch (error) {
         submitting = false;
         submitButton.disabled = false;
         submitButton.classList.remove("sending");
-        actionMessage.textContent = "No se pudo enviar. Verifica la conexión y vuelve a pulsar Enviar respuestas.";
+        actionMessage.textContent = "No se confirmó el envío. Verifica tu conexión y pulsa nuevamente; no se duplicará el examen.";
       }
     }
+
+    submitButton.addEventListener("click", submitExam);
+    updateProgress();
   </script>
 </body>
 </html>

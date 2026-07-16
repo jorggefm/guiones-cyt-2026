@@ -1,169 +1,288 @@
 const SPREADSHEET_ID = '1J_zSUrgqXN0fg9H2ylyOpaXctvrxZpB6ewAutZwN9lQ';
-const SHEET_NAME = 'Respuestas';
+const RESPONSES_SHEET = 'Respuestas oficial';
+const EXAM_ID = '2S-U4-C2-OFICIAL-2026';
+const EXAM_VERSION = '2026-07-16';
 
 const HEADERS = [
   'timestamp',
+  'submissionId',
+  'examId',
+  'version',
   'nombre',
   'correo',
   'grado',
   'seccion',
   'salidasPantalla',
-  'intentosInteractivos',
-  'puntajeInterno',
-  'nivel',
-  'q1',
+  'puntajeAutomatico',
+  'maximoAutomatico',
+  'revisionDocente',
+  'q1_implantacion',
   'q2_orden',
-  'q3_imagen_blastocisto',
-  'q4_relacion_capas',
-  'q5_desarrollo',
-  'q6',
-  'q7_orden_neurulacion',
-  'q8_desarrollo',
-  'q9',
-  'q10_vocabulario',
-  'q11_caso_etapa',
+  'q3_blastocisto',
+  'q4_implantacion_imagen',
+  'q5_capas',
+  'q6_desarrollo',
+  'q7_ectodermo',
+  'q8_organogenesis',
+  'q9_neurulacion',
+  'q10_soporte_temprano',
+  'q11_tubo_neural',
   'q12_integradora',
   'respuestas_json'
 ];
 
-function doGet() {
-  return json_({ ok: true, message: 'Endpoint activo para el examen 2S U4 C2.' });
+const KEY_ROWS = [
+  ['1', 'Alternativa', 'Implantación', 'b', 'La implantación permite que el blastocisto se adhiera e introduzca en el endometrio.', 1, 'Automática'],
+  ['2', 'Ordenamiento', 'Disco bilaminar → gastrulación → tubo neural → organogénesis → etapa fetal', 'bilaminar=1; gastrulación=2; tubo=3; organogénesis=4; fetal=5', 'Orden temporal desde la organización inicial hasta el crecimiento fetal.', 2, 'Automática'],
+  ['3', 'Imagen y vocabulario', 'A: trofoblasto; B: masa celular interna; C: blastocele; futura placenta: A', 'Sinónimos científicos aceptados', 'La capa externa interviene en implantación y placenta; la masa interna forma el embrión.', 2, 'Automática'],
+  ['4', 'Imagen y explicación', 'A: trofoblasto; permite anclaje e inicio del intercambio con la madre', 'Estructura automática; explicación docente', 'Debe relacionar trofoblasto, endometrio, anclaje y soporte/intercambio.', 1.5, 'Mixta'],
+  ['5', 'Relacionar', 'Ectodermo: sistema nervioso y piel; mesodermo: músculos, huesos y sangre; endodermo: revestimiento digestivo y respiratorio', 'Coincidencia exacta de relaciones', 'Cada capa origina grupos de tejidos diferentes.', 2, 'Automática'],
+  ['6', 'Explicación', 'El blastocisto debe implantarse en el endometrio para recibir soporte, protección e intercambio inicial.', 'Respuesta abierta', 'Evaluar relación causal y vocabulario científico, no coincidencia literal.', 2, 'Docente'],
+  ['7', 'Imagen y vocabulario', 'A: ectodermo; estructura posterior: tubo neural', 'Aceptar tubo neural/tubo neuronal y errores leves', 'El ectodermo origina el sistema nervioso; durante la neurulación forma el tubo neural.', 1.5, 'Automática'],
+  ['8', 'Vocabulario', 'Organogénesis', 'Aceptar errores ortográficos leves y formación de órganos', 'Es el proceso de formación inicial de órganos y sistemas.', 1, 'Automática'],
+  ['9', 'Secuencia visual', 'Formación de la placa y los pliegues neurales', 'b', 'La imagen 2 representa la neurulación inicial previa al cierre del tubo.', 1.5, 'Automática'],
+  ['10', 'Comparación visual', 'B: saco vitelino; C: cordón/tallo de conexión', 'Identificación automática; diferencia docente', 'El saco vitelino brinda apoyo temprano; el tallo conecta con la zona placentaria.', 2, 'Mixta'],
+  ['11', 'Caso visual', 'Espina bífida', 'b', 'La espina bífida se relaciona con cierre incompleto del tubo neural.', 1.5, 'Automática'],
+  ['12', 'Integración', 'Capas embrionarias → neurulación/tubo neural → organogénesis → etapa fetal', 'Respuesta abierta', 'Evaluar secuencia, relaciones y al menos tres términos científicos pertinentes.', 2, 'Docente']
+];
+
+function doGet(e) {
+  const action = String((e && e.parameter && e.parameter.action) || 'health').toLowerCase();
+  if (action === 'status') return submissionStatus_(e.parameter.submissionId || '');
+  return json_({
+    ok: true,
+    examId: EXAM_ID,
+    version: EXAM_VERSION,
+    message: 'Endpoint activo para el examen oficial 2S U4 C2.'
+  });
 }
 
 function doPost(e) {
+  const lock = LockService.getScriptLock();
   try {
+    lock.waitLock(15000);
     const payload = parsePayload_(e);
-    const result = score_(payload);
-    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    validatePayload_(payload);
+    const sheet = getOrCreateSheet_(RESPONSES_SHEET);
     ensureHeaders_(sheet);
 
-    sheet.appendRow([
-      payload.finishedAt || new Date().toISOString(),
-      payload.studentName || '',
-      payload.studentEmail || payload.email || '',
-      payload.grade || '',
-      payload.section || '',
-      Number(payload.screenExits || 0),
-      Number(payload.interactiveAttempts || 0),
-      result.score,
-      result.level,
-      payload.q1 || '',
-      orderSummary_(payload, 'q2'),
-      ['A: ' + (payload.q3_a || ''), 'B: ' + (payload.q3_b || ''), 'C: ' + (payload.q3_c || '')].join(' | '),
-      ['Ectodermo: ' + (payload.q4_ecto || ''), 'Mesodermo: ' + (payload.q4_meso || ''), 'Endodermo: ' + (payload.q4_endo || '')].join(' | '),
-      payload.q5 || '',
-      payload.q6 || '',
-      orderSummary_(payload, 'q7'),
-      payload.q8 || '',
-      payload.q9 || '',
-      ['A: ' + (payload.q10_a || ''), 'B: ' + (payload.q10_b || ''), 'C: ' + (payload.q10_c || ''), 'D: ' + (payload.q10_d || '')].join(' | '),
-      ['Espina bifida: ' + (payload.q11_a || ''), 'Gemelos unidos: ' + (payload.q11_b || ''), 'Transfusion feto-fetal: ' + (payload.q11_c || '')].join(' | '),
-      payload.q12 || '',
-      JSON.stringify(payload)
-    ]);
+    const existingRow = findSubmissionRow_(sheet, payload.submissionId);
+    if (existingRow > 0) {
+      return json_({ ok: true, duplicate: true, submissionId: payload.submissionId });
+    }
 
-    return json_({ ok: true, level: result.level, score: result.score });
+    const result = scoreAutomatic_(payload);
+    sheet.appendRow(buildResponseRow_(payload, result));
+    SpreadsheetApp.flush();
+
+    return json_({ ok: true, duplicate: false, submissionId: payload.submissionId });
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message ? err.message : err) });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+function setupExamWorkbook() {
+  const responses = getOrCreateSheet_(RESPONSES_SHEET);
+  ensureHeaders_(responses);
+  responses.setFrozenRows(1);
+
+  const key = getOrCreateSheet_('Clave oficial');
+  key.clearContents();
+  key.getRange(1, 1, 1, 7).setValues([[
+    'pregunta', 'tipo', 'respuestaIdeal', 'criterioAutomatico', 'explicacion', 'puntajeMaximo', 'revision'
+  ]]);
+  key.getRange(2, 1, KEY_ROWS.length, KEY_ROWS[0].length).setValues(KEY_ROWS);
+  key.setFrozenRows(1);
+
+  const grading = getOrCreateSheet_('Calificacion oficial');
+  if (grading.getLastRow() === 0) {
+    grading.getRange(1, 1, 1, 11).setValues([[
+      'submissionId', 'correo', 'nombre', 'puntajeAutomatico', 'puntajeDocente', 'puntajeFinal', 'nivel', 'comentario', 'revisado', 'liberado', 'fechaRevision'
+    ]]);
+  }
+  grading.setFrozenRows(1);
+
+  const control = getOrCreateSheet_('Control');
+  control.clearContents();
+  control.getRange(1, 1, 4, 2).setValues([
+    ['clave', 'valor'],
+    ['REPORTES_ACTIVOS', 'NO'],
+    ['EXAM_ID', EXAM_ID],
+    ['VERSION', EXAM_VERSION]
+  ]);
+  control.setFrozenRows(1);
+
+  const reports = getOrCreateSheet_('Reportes');
+  if (reports.getLastRow() === 0) {
+    reports.getRange(1, 1, 1, 8).setValues([[
+      'submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado'
+    ]]);
+  }
+  reports.setFrozenRows(1);
+
+  [responses, key, grading, control, reports].forEach(sheet => {
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+  });
+}
+
+function validatePayload_(payload) {
+  if (!payload || payload.examId !== EXAM_ID) throw new Error('Examen no reconocido.');
+  if (!payload.submissionId) throw new Error('Falta el identificador del envío.');
+  if (!String(payload.studentName || '').trim()) throw new Error('Falta el nombre del estudiante.');
+  const email = String(payload.studentEmail || '').trim().toLowerCase();
+  if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) throw new Error('Correo institucional no válido.');
+}
+
+function buildResponseRow_(payload, result) {
+  return [
+    payload.finishedAt || new Date().toISOString(),
+    payload.submissionId,
+    payload.examId,
+    payload.examVersion || '',
+    payload.studentName || '',
+    payload.studentEmail || '',
+    payload.grade || '',
+    payload.section || '',
+    Number(payload.screenExits || 0),
+    result.points,
+    result.max,
+    'PENDIENTE',
+    payload.q1 || '',
+    orderSummary_(payload, 'q2'),
+    ['A: ' + value_(payload.q3_a), 'B: ' + value_(payload.q3_b), 'C: ' + value_(payload.q3_c), 'Placenta: ' + value_(payload.q3_placenta)].join(' | '),
+    ['A: ' + value_(payload.q4_a), 'Explica: ' + value_(payload.q4_why)].join(' | '),
+    ['Ectodermo: ' + value_(payload.q5_ecto), 'Mesodermo: ' + value_(payload.q5_meso), 'Endodermo: ' + value_(payload.q5_endo)].join(' | '),
+    payload.q6 || '',
+    ['Capa: ' + value_(payload.q7_layer), 'Estructura: ' + value_(payload.q7_structure)].join(' | '),
+    payload.q8 || '',
+    payload.q9 || '',
+    ['B: ' + value_(payload.q10_b), 'C: ' + value_(payload.q10_c), 'Diferencia: ' + value_(payload.q10_diff)].join(' | '),
+    payload.q11 || '',
+    payload.q12 || '',
+    JSON.stringify(payload)
+  ];
+}
+
+function scoreAutomatic_(data) {
+  let points = 0;
+  let max = 0;
+
+  max += 1;
+  if (data.q1 === 'b') points += 1;
+
+  max += 2;
+  const q2Correct = [
+    correctNumber_(data.q2_bilaminar, 1),
+    correctNumber_(data.q2_gastrulacion, 2),
+    correctNumber_(data.q2_tubo, 3),
+    correctNumber_(data.q2_organogenesis, 4),
+    correctNumber_(data.q2_fetal, 5)
+  ].reduce((sum, item) => sum + item, 0);
+  points += q2Correct * 0.4;
+
+  max += 2;
+  points += accepted_(data.q3_a, ['trofoblasto', 'trofoblast']) ? 0.5 : 0;
+  points += accepted_(data.q3_b, ['masa celular interna', 'embrioblasto']) ? 0.5 : 0;
+  points += accepted_(data.q3_c, ['blastocele', 'cavidad del blastocisto', 'cavidad blastocistica']) ? 0.5 : 0;
+  points += String(data.q3_placenta || '').toUpperCase() === 'A' ? 0.5 : 0;
+
+  max += 0.5;
+  if (data.q4_a === 'trofoblasto') points += 0.5;
+
+  max += 2;
+  if (data.q5_ecto === 'nervioso_piel') points += 2 / 3;
+  if (data.q5_meso === 'musculo_hueso_sangre') points += 2 / 3;
+  if (data.q5_endo === 'digestivo_respiratorio') points += 2 / 3;
+
+  max += 1.5;
+  if (data.q7_layer === 'ectodermo') points += 0.75;
+  if (accepted_(data.q7_structure, ['tubo neural', 'tubo neuronal'])) points += 0.75;
+
+  max += 1;
+  if (accepted_(data.q8, ['organogenesis', 'formacion de organos'], 0.78)) points += 1;
+
+  max += 1.5;
+  if (data.q9 === 'b') points += 1.5;
+
+  max += 1;
+  if (data.q10_b === 'saco_vitelino') points += 0.5;
+  if (data.q10_c === 'cordon') points += 0.5;
+
+  max += 1.5;
+  if (data.q11 === 'b') points += 1.5;
+
+  return { points: Math.round(points * 100) / 100, max: Math.round(max * 100) / 100 };
+}
+
+function submissionStatus_(submissionId) {
+  if (!submissionId) return json_({ ok: false, found: false, error: 'Falta submissionId.' });
+  const sheet = getOrCreateSheet_(RESPONSES_SHEET);
+  ensureHeaders_(sheet);
+  return json_({ ok: true, found: findSubmissionRow_(sheet, submissionId) > 0 });
+}
+
+function findSubmissionRow_(sheet, submissionId) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return -1;
+  const values = sheet.getRange(2, 2, lastRow - 1, 1).getDisplayValues();
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    if (values[index][0] === submissionId) return index + 2;
+  }
+  return -1;
+}
+
+function accepted_(value, candidates, threshold) {
+  const actual = normalize_(value);
+  if (!actual) return false;
+  const limit = threshold || 0.82;
+  return candidates.some(candidate => {
+    const expected = normalize_(candidate);
+    return actual.indexOf(expected) !== -1 || expected.indexOf(actual) !== -1 || similarity_(actual, expected) >= limit;
+  });
+}
+
+function similarity_(a, b) {
+  const longest = Math.max(a.length, b.length);
+  if (!longest) return 1;
+  return 1 - levenshtein_(a, b) / longest;
+}
+
+function levenshtein_(a, b) {
+  const matrix = [];
+  for (let i = 0; i <= b.length; i += 1) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j += 1) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i += 1) {
+    for (let j = 1; j <= a.length; j += 1) {
+      matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+        ? matrix[i - 1][j - 1]
+        : Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+    }
+  }
+  return matrix[b.length][a.length];
 }
 
 function parsePayload_(e) {
-  if (!e || !e.postData || !e.postData.contents) {
-    throw new Error('No llego informacion del examen.');
-  }
+  if (!e || !e.postData || !e.postData.contents) throw new Error('No llegó información del examen.');
   return JSON.parse(e.postData.contents);
 }
 
+function getOrCreateSheet_(name) {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  return spreadsheet.getSheetByName(name) || spreadsheet.insertSheet(name);
+}
+
 function ensureHeaders_(sheet) {
-  const lastColumn = sheet.getLastColumn();
-  const current = lastColumn ? sheet.getRange(1, 1, 1, lastColumn).getValues()[0] : [];
+  const currentWidth = Math.max(sheet.getLastColumn(), HEADERS.length);
+  const current = sheet.getRange(1, 1, 1, currentWidth).getDisplayValues()[0].slice(0, HEADERS.length);
   if (current.join('|') !== HEADERS.join('|')) {
     sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
   }
 }
 
-function score_(data) {
-  let raw = 0;
-  let max = 0;
-
-  max += 1;
-  if (data.q1 === 'b') raw += 1;
-
-  max += 6;
-  raw += correctNumber_(data.q2_fecundacion, 1);
-  raw += correctNumber_(data.q2_cigoto, 2);
-  raw += correctNumber_(data.q2_segmentacion, 3);
-  raw += correctNumber_(data.q2_morula, 4);
-  raw += correctNumber_(data.q2_blastocisto, 5);
-  raw += correctNumber_(data.q2_implantacion, 6);
-
-  max += 3;
-  if (containsAny_(data.q3_a, ['trofoblasto'])) raw += 1;
-  if (containsAny_(data.q3_b, ['masa celular interna', 'embrioblasto'])) raw += 1;
-  if (containsAny_(data.q3_c, ['blastocele', 'cavidad'])) raw += 1;
-
-  max += 3;
-  if (data.q4_ecto === 'Piel y sistema nervioso') raw += 1;
-  if (data.q4_meso === 'Musculos, huesos y sangre') raw += 1;
-  if (data.q4_endo === 'Revestimiento digestivo y respiratorio') raw += 1;
-
-  max += 2;
-  if (longAnswer_(data.q5, ['ectodermo', 'mesodermo', 'endodermo', 'germinal'])) raw += 2;
-  else if (String(data.q5 || '').trim().length >= 50) raw += 1;
-
-  max += 1;
-  if (data.q6 === 'b') raw += 1;
-
-  max += 4;
-  raw += correctNumber_(data.q7_ecto, 1);
-  raw += correctNumber_(data.q7_placa, 2);
-  raw += correctNumber_(data.q7_tubo, 3);
-  raw += correctNumber_(data.q7_cierre, 4);
-
-  max += 2;
-  if (longAnswer_(data.q8, ['saco vitelino', 'cordon', 'placenta'])) raw += 2;
-  else if (String(data.q8 || '').trim().length >= 50) raw += 1;
-
-  max += 1;
-  if (data.q9 === 'b') raw += 1;
-
-  max += 4;
-  if (containsAny_(data.q10_a, ['somitas'])) raw += 1;
-  if (containsAny_(data.q10_b, ['tubo neural'])) raw += 1;
-  if (containsAny_(data.q10_c, ['organogenesis'])) raw += 1;
-  if (containsAny_(data.q10_d, ['feto'])) raw += 1;
-
-  max += 3;
-  if (data.q11_a === 'Cierre del tubo neural') raw += 1;
-  if (data.q11_b === 'Separacion incompleta temprana') raw += 1;
-  if (data.q11_c === 'Conexion vascular en placenta') raw += 1;
-
-  max += 2;
-  if (longAnswer_(data.q12, ['proceso', 'riesgo', 'decision'])) raw += 2;
-  else if (String(data.q12 || '').trim().length >= 60) raw += 1;
-
-  const exits = Number(data.screenExits || 0);
-  const penalty = exits >= 8 ? 2 : exits >= 4 ? 1 : 0;
-  const score = Math.max(0, Math.round(((raw / max) * 20 - penalty) * 10) / 10);
-  const level = score >= 18 ? 'AD' : score >= 14 ? 'A' : score >= 11 ? 'B' : 'C';
-  return { score, level };
-}
-
 function correctNumber_(value, expected) {
   return Number(value) === expected ? 1 : 0;
-}
-
-function containsAny_(value, words) {
-  const text = normalize_(value);
-  return words.some(word => text.indexOf(normalize_(word)) !== -1);
-}
-
-function longAnswer_(value, requiredWords) {
-  const text = String(value || '').trim();
-  if (text.length < 80) return false;
-  const normalized = normalize_(text);
-  return requiredWords.every(word => normalized.indexOf(normalize_(word)) !== -1);
 }
 
 function normalize_(value) {
@@ -171,6 +290,8 @@ function normalize_(value) {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 
@@ -180,6 +301,10 @@ function orderSummary_(payload, prefix) {
     .sort()
     .map(key => key + ': ' + payload[key])
     .join(' | ');
+}
+
+function value_(value) {
+  return String(value || '').trim();
 }
 
 function json_(obj) {
