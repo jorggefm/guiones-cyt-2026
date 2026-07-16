@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>4S U4 · Recursos Google Forms</title>
+  <style>
+    :root{
+      --bg:#f6efe9;
+      --card:#fffdfb;
+      --ink:#2d1f1f;
+      --muted:#6a5957;
+      --brand:#8f1f2d;
+      --brand-2:#d06a3a;
+      --line:#ead7cd;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Segoe UI,system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, #fff5ef 0, transparent 30%),
+        linear-gradient(180deg, #f7efe8 0%, #f2e4d7 100%);
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px}
+    .hero{
+      background:linear-gradient(135deg, #8f1f2d 0%, #b33a35 55%, #d06a3a 100%);
+      color:#fff;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 20px 50px rgba(78,28,18,.18);
+    }
+    h1{margin:0 0 8px;font-size:clamp(28px,4vw,42px);line-height:1.05}
+    .hero p{margin:0;max-width:860px;line-height:1.65;color:rgba(255,255,255,.92)}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:20px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 12px 30px rgba(68,38,28,.08);
+    }
+    h2{margin:0 0 14px;font-size:22px}
+    p,li{line-height:1.65}
+    .mono{
+      width:100%;
+      min-height:560px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      font:13px/1.55 Consolas, Monaco, monospace;
+      background:#fffaf7;
+      color:#342120;
+      resize:vertical;
+      white-space:pre;
+    }
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      border:none;
+      border-radius:999px;
+      padding:11px 18px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--brand);
+      color:#fff;
+    }
+    .btn.alt{background:#fff;color:var(--brand);border:1px solid rgba(255,255,255,.45)}
+    .btn.soft{background:#f4e1d8;color:#7a2b27}
+    .note{
+      margin-top:12px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:#fff5df;
+      color:#6e4f14;
+      border:1px solid #f0ddb0;
+    }
+    .img-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .img-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .img-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#fff}
+    .img-card .meta{padding:12px}
+    .img-card a{color:var(--brand);font-weight:700;text-decoration:none;word-break:break-all}
+    .small{font-size:14px;color:var(--muted)}
+    ul{padding-left:18px}
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+      .img-grid{grid-template-columns:1fr}
+      .mono{min-height:460px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>4S U4 · Plan B para Google Forms</h1>
+      <p>
+        Aquí queda listo el paquete alternativo: imágenes cuadradas publicadas en GitHub Pages y un script de Apps Script
+        que crea un formulario de Google Forms con 12 preguntas adaptadas al contenido exacto de las fichas de estudio.
+      </p>
+      <div class="actions">
+        <a class="btn alt" href="Guion_4S.html">Volver a Guion 4S</a>
+        <a class="btn alt" href="4S_U4_google_forms_script.js" target="_blank">Abrir script</a>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Script para Apps Script</h2>
+        <p class="small">
+          Copia este código en un proyecto nuevo de Apps Script, guarda y ejecuta la función
+          <strong><code>create4SU4ExamForm</code></strong>. El script crea el formulario como cuestionario
+          e inserta las imágenes desde los links públicos de este repositorio.
+        </p>
+        <textarea id="codeBox" class="mono" readonly>Cargando script...</textarea>
+        <div class="actions">
+          <button class="btn" id="copyBtn" type="button">Copiar script</button>
+          <a class="btn soft" href="4S_U4_google_forms_script.js" target="_blank">Ver archivo fuente</a>
+        </div>
+        <div class="note">
+          Google Forms no permite algunas mecánicas como arrastrar para ordenar o señalar zonas sobre la imagen.
+          Por eso esas preguntas fueron adaptadas a opción múltiple o casillas, manteniendo el contenido de las fichas.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Qué incluye</h2>
+        <ul>
+          <li>12 preguntas alineadas a las cuatro hojas de estudio que compartiste.</li>
+          <li>4 imágenes cuadradas, listas para insertarse en Google Forms.</li>
+          <li>Preguntas automáticas y autoevaluables en formato quiz.</li>
+          <li>Tipos adaptados: alternativa contextualizada, comparación, secuencia, interpretación de imagen y caso aplicado.</li>
+        </ul>
+        <p class="small">
+          Temas cubiertos: señales y comunicación, neurona, ruta nerviosa, sinapsis, sistema endocrino, ruta hormonal,
+          potencial de membrana y caso de glucosa/insulina.
+        </p>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:20px">
+      <h2>Imágenes públicas</h2>
+      <p class="small">
+        Estos links ya quedan públicos vía GitHub Pages. El script los usa directamente para insertar las imágenes en el formulario.
+      </p>
+      <div class="img-grid">
+        <article class="img-card">
+          <img src="assets/4s_u4_examen/neurona_cuadrada.png" alt="Neurona cuadrada">
+          <div class="meta">
+            <strong>Neurona cuadrada</strong><br>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/neurona_cuadrada.png" target="_blank">https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/neurona_cuadrada.png</a>
+          </div>
+        </article>
+        <article class="img-card">
+          <img src="assets/4s_u4_examen/sinapsis_cuadrada.png" alt="Sinapsis cuadrada">
+          <div class="meta">
+            <strong>Sinapsis cuadrada</strong><br>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/sinapsis_cuadrada.png" target="_blank">https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/sinapsis_cuadrada.png</a>
+          </div>
+        </article>
+        <article class="img-card">
+          <img src="assets/4s_u4_examen/sistema_endocrino_cuadrada.png" alt="Sistema endocrino cuadrado">
+          <div class="meta">
+            <strong>Sistema endocrino cuadrado</strong><br>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/sistema_endocrino_cuadrada.png" target="_blank">https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/sistema_endocrino_cuadrada.png</a>
+          </div>
+        </article>
+        <article class="img-card">
+          <img src="assets/4s_u4_examen/potencial_membrana_cuadrada.png" alt="Potencial de membrana cuadrado">
+          <div class="meta">
+            <strong>Potencial de membrana cuadrado</strong><br>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/potencial_membrana_cuadrada.png" target="_blank">https://jorggefm.github.io/guiones-cyt-2026/assets/4s_u4_examen/potencial_membrana_cuadrada.png</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const scriptPath = '4S_U4_google_forms_script.js';
+    const codeBox = document.getElementById('codeBox');
+    const copyBtn = document.getElementById('copyBtn');
+
+    fetch(scriptPath)
+      .then(res => res.text())
+      .then(text => {
+        codeBox.value = text;
+      })
+      .catch(() => {
+        codeBox.value = 'No se pudo cargar el script automáticamente. Abre el enlace "Abrir script".';
+      });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codeBox.value);
+        copyBtn.textContent = 'Script copiado';
+        setTimeout(() => copyBtn.textContent = 'Copiar script', 1600);
+      } catch (err) {
+        codeBox.select();
+        document.execCommand('copy');
+        copyBtn.textContent = 'Script copiado';
+        setTimeout(() => copyBtn.textContent = 'Copiar script', 1600);
+      }
+    });
+  </script>
+</body>
+</html>

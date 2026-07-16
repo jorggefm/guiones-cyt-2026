@@ -57,6 +57,22 @@ document.addEventListener('DOMContentLoaded',function(){
     slidesLink.href='4S_potencial_accion_desde_cero_slides.html';
     slidesLink.textContent='Potencial de accion';
   }
+  if(topActions&&!document.getElementById('link-forms-4s')){
+    var forms=document.createElement('a');
+    forms.id='link-forms-4s';
+    forms.href='4S_U4_google_forms_recursos.html';
+    forms.target='_blank';
+    forms.textContent='Forms U4';
+    forms.style.color='#fff';
+    forms.style.fontSize='12px';
+    forms.style.textDecoration='none';
+    forms.style.fontWeight='700';
+    forms.style.marginLeft='6px';
+    forms.style.display='inline-block';
+    var idxForms=topActions.querySelector('a[href=\"index.html\"]');
+    if(idxForms) topActions.insertBefore(forms, idxForms);
+    else topActions.appendChild(forms);
+  }
   if(topActions&&!document.getElementById('link-feedback-4s')){
     var a=document.createElement('a');
     a.id='link-feedback-4s';
