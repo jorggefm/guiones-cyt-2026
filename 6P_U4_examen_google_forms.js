@@ -4,6 +4,8 @@ function buildSixthGradeU4Exam() {
     description: [
       'Sexto de Primaria - Unidad 4',
       'Temas: ecosistemas, biodiversidad, amenazas y cuidado del ambiente.',
+      'Escribe tu nombre completo antes de empezar.',
+      'Este formulario no recoge correo y no exige correo institucional.',
       'Nota tecnica: algunas preguntas fueron adaptadas al formato disponible en Google Forms.'
     ].join('\n'),
     showHints: false,
@@ -20,12 +22,19 @@ function buildSixthGradeU4Exam() {
   var form = FormsApp.create(config.title);
   form.setDescription(config.description);
   form.setIsQuiz(true);
+  form.setCollectEmail(false);
   form.setShuffleQuestions(false);
   form.setProgressBar(true);
   form.setLimitOneResponsePerUser(false);
+  form.setAllowResponseEdits(false);
+  form.setShowLinkToRespondAgain(true);
   form.setConfirmationMessage('Tu examen fue enviado. Gracias por participar.');
+  if (typeof form.setRequireLogin === 'function') {
+    form.setRequireLogin(false);
+  }
 
   addIntroSection_(form);
+  addStudentName_(form);
 
   addMultipleChoice_(
     form,
@@ -190,7 +199,7 @@ function buildSixthGradeU4Exam() {
       { value: 'La polinizacion, que es parte de la biodiversidad funcional.', correct: true },
       { value: 'Solo el color de las flores, sin afectar nada mas.', correct: false },
       { value: 'El tamaño de las rocas del campo.', correct: false },
-      { value: 'La forma del cuaderno del estudiante.', correct: false }
+      { value: 'La cantidad de nubes en el cielo, sin relacion con las abejas.', correct: false }
     ],
     'Piensa en la funcion que ayudan a cumplir las abejas.',
     config.showHints,
@@ -214,8 +223,16 @@ function addIntroSection_(form) {
     .setTitle('Instrucciones')
     .setHelpText(
       'Lee con calma cada pregunta. Algunas incluyen imagenes. ' +
-      'Marca una sola respuesta cuando corresponda y escribe con tus propias palabras en las preguntas abiertas.'
+      'Marca una sola respuesta cuando corresponda y escribe con tus propias palabras en las preguntas abiertas. ' +
+      'Antes de empezar, coloca tu nombre completo.'
     );
+}
+
+function addStudentName_(form) {
+  var item = form.addTextItem();
+  item.setTitle('Nombre completo');
+  item.setRequired(true);
+  item.setHelpText('Escribe tus nombres y apellidos.');
 }
 
 function addImageQuestion_(form, imageUrl, title, helpText) {
