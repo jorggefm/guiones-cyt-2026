@@ -288,7 +288,7 @@
     const questions = [...document.querySelectorAll(".question")];
     const startedAt = new Date().toISOString();
     const submissionId = createSubmissionId();
-    let screenExits = 0, submitting = false, submitted = false, examStarted = false;
+    let screenExits = 0, submitting = false, submitted = false, examStarted = false, screenAway = false;
     let googleCredential = "", verifiedIdentity = null, googleLoadAttempts = 0, alertTimer = null;
 
     function decodeGoogleCredential(token) {
@@ -322,8 +322,20 @@
     function markExamStarted() { examStarted = true; updateProgress(); }
     form.addEventListener("input", markExamStarted); form.addEventListener("change", markExamStarted); document.querySelectorAll("input[form='exam']").forEach(el => { el.addEventListener("input",markExamStarted); el.addEventListener("change",markExamStarted); });
     function showScreenAlert() { const alert = document.getElementById("screenAlert"); alert.textContent = `Aviso ${screenExits}: se registró una salida de la pantalla del examen. Permanece en esta página.`; alert.classList.add("visible"); clearTimeout(alertTimer); alertTimer = setTimeout(() => alert.classList.remove("visible"),4500); }
-    document.addEventListener("visibilitychange", () => { if (document.hidden && examStarted && !submitted) { screenExits += 1; document.getElementById("exitCount").textContent = screenExits; } else if (!document.hidden && screenExits > 0 && !submitted) showScreenAlert(); });
-    window.addEventListener("blur", () => { if (examStarted && !submitted && document.visibilityState === "visible") { screenExits += 1; document.getElementById("exitCount").textContent = screenExits; showScreenAlert(); } });
+    function registerScreenExit() {
+      if (!examStarted || submitted || screenAway) return;
+      screenAway = true;
+      screenExits += 1;
+      document.getElementById("exitCount").textContent = screenExits;
+    }
+    function registerScreenReturn() {
+      if (!screenAway || submitted) return;
+      screenAway = false;
+      showScreenAlert();
+    }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) registerScreenExit(); else registerScreenReturn(); });
+    window.addEventListener("blur", registerScreenExit);
+    window.addEventListener("focus", registerScreenReturn);
     window.addEventListener("beforeunload", event => { if (examStarted && !submitted) { event.preventDefault(); event.returnValue = ""; } });
     function clearValidation() { document.querySelectorAll(".invalid").forEach(el => { el.classList.remove("invalid"); el.removeAttribute("aria-invalid"); }); errorBox.classList.remove("visible"); errorBox.textContent = ""; }
     function invalidate(element,message) { element.classList.add("invalid"); element.setAttribute("aria-invalid","true"); return { element,message }; }
