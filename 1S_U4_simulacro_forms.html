@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>1S U4 - Simulacro en Google Forms</title>
+  <style>
+    :root{--bg:#f5f7fb;--card:#fff;--line:#d9e2ec;--text:#1f2937;--muted:#5b6472;--a1:#1565c0;--a2:#0d47a1}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Arial,sans-serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 40px}
+    .hero{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(13,71,161,.2)}
+    h1{margin:0 0 8px;font-size:28px}
+    .sub{margin:0;line-height:1.55;font-size:14px;opacity:.92}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .btn{display:inline-block;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:700;font-size:14px;border:none;cursor:pointer}
+    .primary{background:#ff8f00;color:#fff}
+    .secondary{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.36)}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 4px 12px rgba(15,23,42,.05)}
+    h2{margin:0 0 10px;font-size:18px}
+    p,li{line-height:1.55}
+    ul{margin:8px 0 0 18px;padding:0}
+    pre{margin:0;background:#0f172a;color:#e5eef9;border-radius:12px;padding:16px;overflow:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+    .mini{font-size:12px;color:var(--muted)}
+    .links a{display:block;margin:6px 0;color:var(--a1);text-decoration:none;font-weight:600}
+    .links a:hover{text-decoration:underline}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>1S U4 - Script de simulacro en Google Forms</h1>
+      <p class="sub">Abre Apps Script, pega este codigo, ejecuta <code>crearSimulacro1SU4</code> y acepta permisos. El formulario se crea usando las imagenes publicas de este repositorio.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://script.new/" target="_blank" rel="noopener">Abrir Apps Script</a>
+        <a class="btn secondary" href="1S_U4_simulacro_forms.gs" target="_blank" rel="noopener">Ver archivo .gs</a>
+        <a class="btn secondary" href="Guion_1S.html" target="_blank" rel="noopener">Volver a Guion 1S</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Codigo</h2>
+        <p class="mini">Copia el bloque completo y pegalo en un proyecto nuevo de Apps Script.</p>
+        <p><button class="btn primary" id="copyBtn" type="button">Copiar script</button></p>
+        <pre id="codeBlock"></pre>
+      </div>
+
+      <div class="card">
+        <h2>Uso</h2>
+        <ul>
+          <li>Abre Apps Script.</li>
+          <li>Crea un proyecto nuevo.</li>
+          <li>Pega el codigo.</li>
+          <li>Guarda.</li>
+          <li>Ejecuta <code>crearSimulacro1SU4</code>.</li>
+          <li>Revisa los enlaces en el registro de ejecucion.</li>
+        </ul>
+
+        <h2 style="margin-top:18px">Imagenes publicas</h2>
+        <div class="links">
+          <a href="assets/1s-simulacro/01_direccion_agua_suelos.png" target="_blank" rel="noopener">01 - Direccion del agua</a>
+          <a href="assets/1s-simulacro/02_efecto_invernadero_calor.png" target="_blank" rel="noopener">02 - GEI y calor</a>
+          <a href="assets/1s-simulacro/03_chacra_lluvia_suelos.png" target="_blank" rel="noopener">03 - Chacra y lluvia</a>
+          <a href="assets/1s-simulacro/04_cuaderno_pacifico_cinturon_fuego.png" target="_blank" rel="noopener">04 - Pacifico y Cinturon de Fuego</a>
+          <a href="assets/1s-simulacro/05_cuaderno_contaminacion_gei.png" target="_blank" rel="noopener">05 - Contaminacion y GEI</a>
+          <a href="assets/1s-simulacro/06_cuaderno_formacion_suelo.png" target="_blank" rel="noopener">06 - Formacion del suelo</a>
+          <a href="assets/1s-simulacro/07_cuaderno_permeabilidad.png" target="_blank" rel="noopener">07 - Permeabilidad</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    fetch('1S_U4_simulacro_forms.gs')
+      .then(function(r){return r.text();})
+      .then(function(code){document.getElementById('codeBlock').textContent = code;});
+
+    document.getElementById('copyBtn').addEventListener('click', async function() {
+      const code = document.getElementById('codeBlock').textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+        this.textContent = 'Copiado';
+        setTimeout(() => { this.textContent = 'Copiar script'; }, 1500);
+      } catch (err) {
+        alert('No se pudo copiar automaticamente. Copia el bloque manualmente.');
+      }
+    });
+  </script>
+</body>
+</html>
