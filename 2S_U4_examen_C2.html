@@ -124,6 +124,35 @@
       color: #6f4b07;
       font-size: .9rem;
     }
+    .auth-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid #b8d6cc;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #edf8f3, #fffdf5);
+    }
+    .auth-panel strong { display: block; color: var(--leaf-dark); font-size: 1.02rem; }
+    .auth-panel p { margin: 5px 0 0; color: var(--muted); font-size: .9rem; }
+    .auth-actions { min-width: 230px; text-align: center; }
+    .auth-status { margin-top: 8px; color: #8a4d13; font-size: .82rem; font-weight: 700; }
+    .auth-status.verified { color: var(--leaf); }
+    .auth-user {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #dff3e9;
+      color: var(--leaf-dark);
+      font-weight: 800;
+    }
+    .auth-user.visible { display: flex; }
+    .exam-locked { opacity: .48; pointer-events: none; user-select: none; filter: grayscale(.2); }
     .question {
       position: relative;
       padding: 23px;
@@ -247,6 +276,8 @@
       .status-card { flex: 1; min-width: 0; }
       main { padding: 12px 10px; }
       .intro, .question { padding: 16px 14px; }
+      .auth-panel { grid-template-columns: 1fr; }
+      .auth-actions { min-width: 0; text-align: left; }
       .student-grid, .instructions, .compact-grid, .relation { grid-template-columns: 1fr; }
       .sequence { grid-template-columns: 1fr 1fr; }
       .relation .term { margin-top: 6px; }
@@ -269,6 +300,7 @@
       .question { break-inside: avoid; }
     }
   </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -288,15 +320,26 @@
   <main>
     <section class="card intro" aria-labelledby="introTitle">
       <h2 class="intro-title" id="introTitle">Antes de comenzar</h2>
-      <p class="intro-copy">Completa tus datos con cuidado. Puedes revisar todas las preguntas y abrir una pista cuando la necesites.</p>
+      <p class="intro-copy">Inicia sesión con tu cuenta institucional. Puedes revisar todas las preguntas y abrir una pista cuando la necesites.</p>
+      <div class="auth-panel" id="authPanel">
+        <div>
+          <strong>Verifica tu identidad con Google</strong>
+          <p>Solo se aceptan cuentas reales de <b>colegiomilagrosdedios.edu.pe</b>. El examen se habilitará después de verificarla.</p>
+        </div>
+        <div class="auth-actions">
+          <div id="googleSignInButton"></div>
+          <div class="auth-user" id="authUser" aria-live="polite"></div>
+          <div class="auth-status" id="authStatus">Esperando el inicio de sesión institucional.</div>
+        </div>
+      </div>
       <div class="student-grid">
         <div class="field">
           <label for="studentName">Apellidos y nombres</label>
-          <input id="studentName" name="studentName" form="exam" type="text" autocomplete="name" required>
+          <input id="studentName" name="studentName" form="exam" type="text" autocomplete="name" readonly required>
         </div>
         <div class="field">
-          <label for="studentEmail">Correo institucional</label>
-          <input id="studentEmail" name="studentEmail" form="exam" type="email" inputmode="email" autocomplete="email" placeholder="nombre@colegiomilagrosdedios.edu.pe" required>
+          <label for="studentEmail">Correo institucional verificado</label>
+          <input id="studentEmail" name="studentEmail" form="exam" type="email" inputmode="email" autocomplete="email" placeholder="Se completará al iniciar sesión" readonly required>
         </div>
         <div class="field section-field">
           <label for="section">Sección</label>
@@ -314,7 +357,7 @@
 
     <div id="errorBox" class="error-box" role="alert" aria-live="assertive"></div>
 
-    <form id="exam" class="card" novalidate>
+    <form id="exam" class="card exam-locked" aria-disabled="true" novalidate>
       <section class="question" data-question="1">
         <div class="question-heading"><span class="question-number">1</span><div><div class="question-type">Alternativa</div><h2>Un blastocisto llega al útero, pero no logra adherirse ni introducirse en el endometrio. ¿Qué proceso falló principalmente?</h2></div></div>
         <div class="options">
@@ -466,6 +509,7 @@
     const EXAM_VERSION = "2026-07-16";
     const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec";
     const SCHOOL_DOMAIN = "@colegiomilagrosdedios.edu.pe";
+    const GOOGLE_CLIENT_ID = "120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com";
 
     const form = document.getElementById("exam");
     const submitButton = document.getElementById("submitButton");
@@ -478,6 +522,87 @@
     let submitting = false;
     let submitted = false;
     let examStarted = false;
+    let googleCredential = "";
+    let verifiedIdentity = null;
+    let googleLoadAttempts = 0;
+
+    function decodeGoogleCredential(token) {
+      try {
+        const encoded = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function lockExam(message) {
+      googleCredential = "";
+      verifiedIdentity = null;
+      form.classList.add("exam-locked");
+      form.setAttribute("aria-disabled", "true");
+      submitButton.disabled = true;
+      document.getElementById("studentName").value = "";
+      document.getElementById("studentEmail").value = "";
+      document.getElementById("authUser").classList.remove("visible");
+      document.getElementById("authStatus").classList.remove("verified");
+      document.getElementById("authStatus").textContent = message;
+    }
+
+    function handleGoogleCredential(response) {
+      const identity = response && response.credential ? decodeGoogleCredential(response.credential) : null;
+      const email = String(identity && identity.email || "").toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith(SCHOOL_DOMAIN)) {
+        lockExam("La cuenta seleccionada no pertenece al dominio institucional.");
+        if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+        return;
+      }
+
+      googleCredential = response.credential;
+      verifiedIdentity = identity;
+      document.getElementById("studentName").value = identity.name || "Estudiante";
+      document.getElementById("studentEmail").value = email;
+      document.getElementById("authUser").textContent = `✓ ${identity.name || email}`;
+      document.getElementById("authUser").classList.add("visible");
+      document.getElementById("googleSignInButton").replaceChildren();
+      document.getElementById("authStatus").textContent = "Cuenta institucional verificada. Ya puedes responder.";
+      document.getElementById("authStatus").classList.add("verified");
+      form.classList.remove("exam-locked");
+      form.removeAttribute("aria-disabled");
+      submitButton.disabled = false;
+      markExamStarted();
+    }
+
+    function initializeGoogleLogin() {
+      if (GOOGLE_CLIENT_ID.startsWith("__")) {
+        lockExam("La autenticación institucional aún está siendo configurada por el docente.");
+        return;
+      }
+      if (!window.google || !google.accounts || !google.accounts.id) {
+        googleLoadAttempts += 1;
+        if (googleLoadAttempts >= 80) {
+          lockExam("No se pudo cargar el acceso de Google. Revisa internet y recarga la página.");
+          return;
+        }
+        window.setTimeout(initializeGoogleLogin, 250);
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: false,
+        hd: "colegiomilagrosdedios.edu.pe"
+      });
+      google.accounts.id.renderButton(document.getElementById("googleSignInButton"), {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "pill",
+        width: 230
+      });
+    }
 
     function createSubmissionId() {
       if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -547,6 +672,9 @@
       const email = document.getElementById("studentEmail");
       const section = document.getElementById("section");
 
+      if (!googleCredential || !verifiedIdentity) {
+        errors.push(invalidate(document.getElementById("authPanel"), "Inicia sesión con tu correo institucional antes de enviar."));
+      }
       if (name.value.trim().length < 5) errors.push(invalidate(name, "Escribe tus apellidos y nombres completos."));
       const cleanEmail = email.value.trim().toLowerCase();
       if (!cleanEmail.endsWith(SCHOOL_DOMAIN) || cleanEmail.length <= SCHOOL_DOMAIN.length) {
@@ -597,6 +725,7 @@
       data.screenExits = screenExits;
       data.userAgent = navigator.userAgent;
       data.viewport = `${window.innerWidth}x${window.innerHeight}`;
+      data.googleCredential = googleCredential;
       return data;
     }
 
@@ -657,6 +786,8 @@
     }
 
     submitButton.addEventListener("click", submitExam);
+    submitButton.disabled = true;
+    initializeGoogleLogin();
     updateProgress();
   </script>
 </body>

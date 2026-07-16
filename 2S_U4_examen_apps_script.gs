@@ -2,6 +2,8 @@ const SPREADSHEET_ID = '1J_zSUrgqXN0fg9H2ylyOpaXctvrxZpB6ewAutZwN9lQ';
 const RESPONSES_SHEET = 'Respuestas oficial';
 const EXAM_ID = '2S-U4-C2-OFICIAL-2026';
 const EXAM_VERSION = '2026-07-16';
+const GOOGLE_CLIENT_ID = '120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com';
+const SCHOOL_DOMAIN = 'colegiomilagrosdedios.edu.pe';
 
 const HEADERS = [
   'timestamp',
@@ -62,7 +64,11 @@ function doPost(e) {
   try {
     lock.waitLock(15000);
     const payload = parsePayload_(e);
-    validatePayload_(payload);
+    const identity = validatePayload_(payload);
+    payload.studentName = identity.name || payload.studentName || '';
+    payload.studentEmail = String(identity.email || '').toLowerCase();
+    payload.googleSubject = identity.sub || '';
+    delete payload.googleCredential;
     const sheet = getOrCreateSheet_(RESPONSES_SHEET);
     ensureHeaders_(sheet);
 
@@ -130,9 +136,40 @@ function setupExamWorkbook() {
 function validatePayload_(payload) {
   if (!payload || payload.examId !== EXAM_ID) throw new Error('Examen no reconocido.');
   if (!payload.submissionId) throw new Error('Falta el identificador del envío.');
-  if (!String(payload.studentName || '').trim()) throw new Error('Falta el nombre del estudiante.');
-  const email = String(payload.studentEmail || '').trim().toLowerCase();
-  if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) throw new Error('Correo institucional no válido.');
+  return verifyGoogleIdentity_(payload.googleCredential || '');
+}
+
+function verifyGoogleIdentity_(credential) {
+  if (!credential) throw new Error('Falta iniciar sesión con Google.');
+  if (GOOGLE_CLIENT_ID.indexOf('__') === 0) throw new Error('OAuth institucional aún no configurado.');
+
+  const response = UrlFetchApp.fetch(
+    'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(credential),
+    { muteHttpExceptions: true }
+  );
+  if (response.getResponseCode() !== 200) throw new Error('Google no pudo verificar la sesión.');
+
+  const identity = JSON.parse(response.getContentText());
+  const email = String(identity.email || '').trim().toLowerCase();
+  const issuer = String(identity.iss || '');
+  const verified = identity.email_verified === true || String(identity.email_verified) === 'true';
+  const expiresAt = Number(identity.exp || 0);
+
+  if (identity.aud !== GOOGLE_CLIENT_ID) throw new Error('La sesión pertenece a otra aplicación.');
+  if (issuer !== 'accounts.google.com' && issuer !== 'https://accounts.google.com') throw new Error('Emisor de sesión no válido.');
+  if (!verified) throw new Error('Google no confirmó el correo.');
+  if (expiresAt <= Math.floor(Date.now() / 1000)) throw new Error('La sesión de Google expiró.');
+  if (String(identity.hd || '').toLowerCase() !== SCHOOL_DOMAIN || !email.endsWith('@' + SCHOOL_DOMAIN)) {
+    throw new Error('Debes usar el correo institucional del colegio.');
+  }
+  return identity;
+}
+
+function authorizeGoogleIdentityVerification() {
+  return UrlFetchApp.fetch(
+    'https://oauth2.googleapis.com/tokeninfo?id_token=authorization-check',
+    { muteHttpExceptions: true }
+  ).getResponseCode();
 }
 
 function buildResponseRow_(payload, result) {
