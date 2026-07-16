@@ -19,7 +19,7 @@ function buildSixthGradeU4Exam() {
     secuencia: config.imageBase + '04_secuencia_cuidado_ambiente.png'
   };
 
-  var form = FormsApp.create(config.title);
+  var form = FormApp.create(config.title);
   form.setDescription(config.description);
   form.setIsQuiz(true);
   form.setCollectEmail(false);
