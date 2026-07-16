@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>4S - Examen oficial C2 U4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bitter:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #201a1b; --muted: #6d5e60; --paper: #fffaf7; --line: #ead8d9;
+      --wine: #8e2638; --wine-dark: #5d1725; --coral: #e16a52; --gold: #d99c2b;
+      --blue: #286a82; --danger: #a52d32; --success: #176447;
+      --shadow: 0 14px 34px rgba(78, 31, 39, .11);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-width: 320px; padding-bottom: 96px; color: var(--ink);
+      font-family: "Atkinson Hyperlegible", Verdana, sans-serif; font-size: 17px; line-height: 1.5;
+      background:
+        radial-gradient(circle at 8% 7%, rgba(217,156,43,.14), transparent 24rem),
+        radial-gradient(circle at 94% 15%, rgba(225,106,82,.13), transparent 28rem), #f7f2ef;
+    }
+    button, input, select, textarea { font: inherit; }
+    h1, h2, h3 { font-family: "Bitter", Georgia, serif; }
+    .topbar { position: sticky; top: 0; z-index: 40; color: #fff; background: linear-gradient(108deg, var(--wine-dark), var(--wine)); box-shadow: 0 3px 18px rgba(93,23,37,.28); }
+    .topbar-inner { width: min(1180px,100%); margin: auto; padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .eyebrow { margin: 0 0 2px; color: #ffd59c; font-weight: 700; font-size: .77rem; letter-spacing: .11em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(1.2rem,2.8vw,2rem); line-height: 1.12; }
+    .top-meta { margin-top: 3px; color: rgba(255,255,255,.82); font-size: .88rem; }
+    .status { display: flex; gap: 9px; flex: 0 0 auto; }
+    .status-card { min-width: 108px; padding: 7px 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 12px; background: rgba(255,255,255,.1); text-align: center; font-size: .75rem; line-height: 1.1; }
+    .status-card strong { display: block; margin-top: 3px; font-size: 1.22rem; }
+    main { width: min(1120px,100%); margin: auto; padding: 22px 18px; }
+    .card { margin-bottom: 18px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,250,247,.97); box-shadow: var(--shadow); }
+    .intro { padding: 22px; }
+    .intro-title { margin: 0 0 6px; color: var(--wine-dark); font-size: clamp(1.3rem,3vw,1.9rem); }
+    .intro-copy { margin: 0 0 16px; color: var(--muted); }
+    .auth-panel { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; align-items: center; margin: 18px 0; padding: 16px; border: 1px solid #ddb9c0; border-radius: 16px; background: linear-gradient(135deg,#fff1f2,#fffaf1); }
+    .auth-panel strong { display: block; color: var(--wine-dark); font-size: 1.02rem; }
+    .auth-panel p { margin: 5px 0 0; color: var(--muted); font-size: .9rem; }
+    .auth-actions { min-width: 230px; text-align: center; }
+    .auth-status { margin-top: 8px; color: #8a4d13; font-size: .82rem; font-weight: 700; }
+    .auth-status.verified { color: var(--success); }
+    .auth-user { display: none; padding: 10px 12px; border-radius: 12px; background: #dff3e9; color: var(--success); font-weight: 800; }
+    .auth-user.visible { display: block; }
+    .student-grid { display: grid; grid-template-columns: 2fr 1.5fr .7fr; gap: 14px; }
+    .field label, .answer-label { display: block; margin-bottom: 6px; color: #503b3f; font-weight: 700; font-size: .9rem; }
+    input[type="text"], input[type="email"], select, textarea { width: 100%; min-height: 48px; padding: 11px 12px; border: 1.5px solid #d3bfc2; border-radius: 10px; outline: none; background: #fff; color: var(--ink); }
+    textarea { min-height: 112px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: var(--wine); box-shadow: 0 0 0 4px rgba(142,38,56,.11); }
+    .instructions { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 17px; }
+    .instruction { padding: 12px; border: 1px solid #ead9d5; border-radius: 12px; background: #fffdf9; font-size: .9rem; }
+    .instruction b { display: block; color: var(--wine-dark); }
+    .notice { margin-top: 14px; padding: 11px 13px; border-left: 5px solid var(--gold); border-radius: 9px; background: #fff7df; color: #6f4b07; font-size: .9rem; }
+    .screen-alert { display: none; position: fixed; top: 90px; left: 50%; z-index: 80; width: min(560px,calc(100% - 24px)); transform: translateX(-50%); padding: 13px 16px; border: 2px solid var(--danger); border-radius: 13px; background: #fff2f2; color: #7d2026; box-shadow: 0 14px 36px rgba(80,15,20,.25); font-weight: 700; text-align: center; }
+    .screen-alert.visible { display: block; }
+    .exam-locked { opacity: .46; pointer-events: none; user-select: none; filter: grayscale(.18); }
+    .question { position: relative; padding: 23px; border-top: 1px solid var(--line); scroll-margin-top: 116px; }
+    .question:first-child { border-top: 0; }
+    .question.complete { background: linear-gradient(90deg,rgba(142,38,56,.04),transparent 32%); }
+    .question-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .question-number { width: 38px; height: 38px; flex: 0 0 38px; display: grid; place-items: center; border-radius: 12px 12px 12px 3px; background: var(--wine); color: #fff; font-weight: 700; }
+    .question h2 { margin: 2px 0 0; color: #482c32; font-size: 1.13rem; line-height: 1.28; }
+    .question-type { margin-top: 3px; color: var(--coral); font-weight: 700; font-size: .79rem; text-transform: uppercase; letter-spacing: .07em; }
+    .prompt { margin: 10px 0; }
+    .options { display: grid; gap: 9px; margin-top: 12px; }
+    .option { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; padding: 11px 13px; border: 1.5px solid #e1d2d3; border-radius: 11px; background: #fff; cursor: pointer; transition: .18s; }
+    .option:hover { border-color: #b98991; transform: translateY(-1px); }
+    .option:has(input:checked) { border-color: var(--wine); background: #fff0f2; }
+    .option input { width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 20px; accent-color: var(--wine); }
+    .sequence { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 12px; }
+    .sequence label { display: block; margin-bottom: 5px; font-weight: 700; font-size: .88rem; }
+    .image-layout { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(290px,.75fr); gap: 18px; align-items: start; }
+    figure { margin: 0; }
+    .exam-image { width: 100%; max-height: 560px; display: block; object-fit: contain; border: 1px solid #dccbcd; border-radius: 14px; background: #fff; box-shadow: 0 10px 24px rgba(65,28,35,.11); }
+    figcaption { margin-top: 7px; color: var(--muted); font-size: .82rem; text-align: center; }
+    .answer-stack { display: grid; gap: 12px; }
+    .relation { display: grid; grid-template-columns: minmax(150px,.65fr) minmax(250px,1.35fr); gap: 9px 12px; align-items: center; }
+    .term { padding: 12px; border-radius: 10px; background: #fff0eb; color: #713224; font-weight: 700; }
+    details.hint { margin-top: 14px; border: 1px solid #bdd8e1; border-radius: 11px; background: #f0f9fc; color: #174d61; }
+    details.hint summary { min-height: 46px; padding: 10px 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; user-select: none; }
+    details.hint summary::before { content: "?"; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--blue); color: #fff; }
+    details.hint p { margin: 0; padding: 0 14px 13px 45px; font-size: .9rem; }
+    .error-box { display: none; margin: 0 0 18px; padding: 13px 15px; border: 1px solid #e4aaaa; border-left: 6px solid var(--danger); border-radius: 11px; background: #fff2f2; color: #7c2020; font-weight: 700; }
+    .error-box.visible { display: block; }
+    .invalid { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(167,47,47,.12) !important; }
+    .actions { position: fixed; inset: auto 0 0; z-index: 50; border-top: 1px solid rgba(142,38,56,.2); background: rgba(252,247,244,.95); backdrop-filter: blur(12px); }
+    .actions-inner { width: min(1120px,100%); margin: auto; padding: 11px 18px max(11px,env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .action-message { color: var(--danger); font-weight: 700; font-size: .9rem; }
+    .submit-button { min-height: 48px; padding: 11px 20px; border: 0; border-radius: 11px; background: linear-gradient(120deg,var(--coral),#b8423d); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 8px 18px rgba(185,68,54,.22); }
+    .submit-button:disabled { opacity: .62; cursor: wait; }
+    .sending-label { display: none; }
+    .submit-button.sending .sending-label { display: inline; }
+    .submit-button.sending .ready-label { display: none; }
+    .submission-panel { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; padding: 20px; background: rgba(38,12,18,.82); }
+    .submission-panel.visible { display: grid; }
+    .submission-card { width: min(560px,100%); padding: 30px; border-radius: 22px; background: var(--paper); box-shadow: 0 28px 80px rgba(0,0,0,.32); text-align: center; }
+    .success-mark { width: 70px; height: 70px; margin: 0 auto 16px; display: grid; place-items: center; border-radius: 50%; background: #dff4e8; color: var(--success); font-size: 2.2rem; font-weight: 700; }
+    .submission-card h2 { margin: 0 0 8px; color: var(--success); font-size: 1.55rem; }
+    .submission-card p { margin: 5px 0; color: #635457; }
+    .final-note { margin-top: 16px !important; padding: 11px; border-radius: 10px; background: #eef7f1; color: #205941 !important; font-weight: 700; }
+    @media (max-width:900px) {
+      .student-grid { grid-template-columns: 1.4fr 1fr; }
+      .section-field { grid-column: 1/-1; }
+      .instructions { grid-template-columns: 1fr 1fr; }
+      .image-layout { grid-template-columns: 1fr; }
+      .exam-image { max-height: 620px; }
+    }
+    @media (max-width:620px) {
+      body { font-size: 16px; padding-bottom: 108px; }
+      .topbar-inner { display: block; padding: 11px 13px; }
+      .top-meta { display: none; }
+      .status { margin-top: 9px; }
+      .status-card { flex: 1; min-width: 0; }
+      main { padding: 12px 10px; }
+      .intro, .question { padding: 16px 14px; }
+      .auth-panel { grid-template-columns: 1fr; }
+      .auth-actions { min-width: 0; text-align: left; }
+      .student-grid, .instructions, .sequence, .relation { grid-template-columns: 1fr; }
+      .relation .term { margin-top: 6px; }
+      .actions-inner { align-items: stretch; flex-direction: column; padding: 8px 10px max(8px,env(safe-area-inset-bottom)); }
+      .submit-button { width: 100%; }
+    }
+    @media (orientation:landscape) and (max-height:760px) {
+      .topbar { position: relative; }
+      .topbar-inner { padding-block: 9px; }
+      main { width: min(1240px,100%); }
+      .image-layout { grid-template-columns: minmax(0,1.3fr) minmax(290px,.7fr); }
+      .exam-image { max-height: 70vh; }
+      .question { scroll-margin-top: 20px; }
+    }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div><p class="eyebrow">Ciencia y Tecnología · Unidad 4</p><h1>4.° Secundaria · Examen oficial C2</h1><div class="top-meta">Relación, coordinación y regulación</div></div>
+      <div class="status" aria-label="Estado del examen"><div class="status-card">Respondidas<strong id="progressCount">0/12</strong></div><div class="status-card">Salidas de pantalla<strong id="exitCount">0</strong></div></div>
+    </div>
+  </header>
+
+  <div id="screenAlert" class="screen-alert" role="alert" aria-live="assertive"></div>
+
+  <main>
+    <section class="card intro" aria-labelledby="introTitle">
+      <h2 class="intro-title" id="introTitle">Antes de comenzar</h2>
+      <p class="intro-copy">Inicia sesión con tu cuenta institucional. Puedes recorrer libremente el examen, revisar tus respuestas y abrir una pista cuando la necesites.</p>
+      <div class="auth-panel" id="authPanel">
+        <div><strong>Verifica tu identidad con Google</strong><p>Solo se aceptan cuentas verificadas de <b>colegiomilagrosdedios.edu.pe</b>. El formulario permanece bloqueado hasta completar el acceso.</p></div>
+        <div class="auth-actions"><div id="googleSignInButton"></div><div class="auth-user" id="authUser" aria-live="polite"></div><div class="auth-status" id="authStatus">Esperando el inicio de sesión institucional.</div></div>
+      </div>
+      <div class="student-grid">
+        <div class="field"><label for="studentName">Apellidos y nombres</label><input id="studentName" name="studentName" form="exam" type="text" autocomplete="name" readonly required></div>
+        <div class="field"><label for="studentEmail">Correo institucional verificado</label><input id="studentEmail" name="studentEmail" form="exam" type="email" autocomplete="email" placeholder="Se completará al iniciar sesión" readonly required></div>
+        <div class="field section-field"><label for="section">Sección</label><input id="section" name="section" form="exam" type="text" maxlength="8" placeholder="Ej. A" required></div>
+      </div>
+      <div class="instructions"><div class="instruction"><b>1. Observa</b>Las imágenes contienen datos necesarios.</div><div class="instruction"><b>2. Responde</b>Usa vocabulario científico.</div><div class="instruction"><b>3. Revisa</b>Puedes volver a cualquier pregunta.</div><div class="instruction"><b>4. Envía una vez</b>Espera la confirmación real.</div></div>
+      <div class="notice">Los cambios de pantalla quedan registrados como incidencias, sin descontar puntos. Mantén esta página visible durante la evaluación.</div>
+    </section>
+
+    <div id="errorBox" class="error-box" role="alert" aria-live="assertive"></div>
+
+    <form id="exam" class="card exam-locked" aria-disabled="true" novalidate>
+      <section class="question" data-question="1">
+        <div class="question-heading"><span class="question-number">1</span><div><div class="question-type">Alternativa contextualizada</div><h2>Un estudiante toca una olla caliente y retira la mano de inmediato. ¿Qué sistema predomina en esa respuesta y por qué?</h2></div></div>
+        <div class="options"><label class="option"><input type="radio" name="q1" value="a" required><span>El sistema endocrino, porque sus hormonas viajan por la sangre.</span></label><label class="option"><input type="radio" name="q1" value="b"><span>El sistema nervioso, porque produce una respuesta rápida y localizada.</span></label><label class="option"><input type="radio" name="q1" value="c"><span>El sistema endocrino, porque mantiene efectos duraderos.</span></label><label class="option"><input type="radio" name="q1" value="d"><span>El sistema digestivo, porque proporciona energía al músculo.</span></label></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Piensa en la velocidad y la precisión de la respuesta.</p></details>
+      </section>
+
+      <section class="question" data-question="2">
+        <div class="question-heading"><span class="question-number">2</span><div><div class="question-type">Ordenamiento</div><h2>Ordena del 1 al 6 la secuencia general de comunicación en el cuerpo.</h2></div></div>
+        <p class="prompt">Usa cada número una sola vez.</p>
+        <div class="sequence" id="q2Sequence">
+          <div><label for="q2_senal">Señal</label><select id="q2_senal" name="q2_senal" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q2_estimulo">Estímulo</label><select id="q2_estimulo" name="q2_estimulo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q2_respuesta">Respuesta</label><select id="q2_respuesta" name="q2_respuesta" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q2_receptor">Receptor</label><select id="q2_receptor" name="q2_receptor" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q2_efector">Efector</label><select id="q2_efector" name="q2_efector" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q2_coordinador">Coordinador</label><select id="q2_coordinador" name="q2_coordinador" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Empieza con el cambio detectado y termina con la acción del cuerpo.</p></details>
+      </section>
+
+      <section class="question" data-question="3">
+        <div class="question-heading"><span class="question-number">3</span><div><div class="question-type">Imagen con flechas</div><h2>Observa la neurona e identifica las estructuras A, B y D.</h2></div></div>
+        <div class="image-layout"><figure><img class="exam-image" src="assets/4s_u4_examen/neurona_cuadrada.png" alt="Neurona con estructuras A, B, C y D"><figcaption>La letra C no forma parte de esta pregunta.</figcaption></figure><div class="answer-stack">
+          <div><label class="answer-label" for="q3_a">A</label><select id="q3_a" name="q3_a" required><option value="">Elige</option><option value="dendritas">Dendritas</option><option value="soma">Soma</option><option value="axon">Axón</option><option value="terminales">Terminales axónicas</option></select></div>
+          <div><label class="answer-label" for="q3_b">B</label><select id="q3_b" name="q3_b" required><option value="">Elige</option><option value="dendritas">Dendritas</option><option value="soma">Soma o cuerpo celular</option><option value="axon">Axón</option><option value="terminales">Terminales axónicas</option></select></div>
+          <div><label class="answer-label" for="q3_d">D</label><select id="q3_d" name="q3_d" required><option value="">Elige</option><option value="dendritas">Dendritas</option><option value="soma">Soma</option><option value="axon">Axón</option><option value="terminales">Terminales axónicas</option></select></div>
+        </div></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Las ramificaciones reciben; el cuerpo central contiene el núcleo; los extremos liberan neurotransmisores.</p></details>
+      </section>
+
+      <section class="question" data-question="4">
+        <div class="question-heading"><span class="question-number">4</span><div><div class="question-type">Relación estructura-función</div><h2>Relaciona cada parte de la neurona con su función principal.</h2></div></div>
+        <div class="relation">
+          <div class="term">Dendritas</div><select name="q4_dendritas" required><option value="">Elige una función</option><option value="reciben">Reciben señales de otras neuronas o receptores</option><option value="mantiene">Contiene el núcleo y mantiene la célula</option><option value="conduce">Conduce el impulso nervioso</option><option value="liberan">Libera neurotransmisores</option></select>
+          <div class="term">Soma</div><select name="q4_soma" required><option value="">Elige una función</option><option value="reciben">Recibe señales</option><option value="mantiene">Contiene el núcleo y mantiene la célula</option><option value="conduce">Conduce el impulso nervioso</option><option value="liberan">Libera neurotransmisores</option></select>
+          <div class="term">Axón</div><select name="q4_axon" required><option value="">Elige una función</option><option value="reciben">Recibe señales</option><option value="mantiene">Contiene el núcleo</option><option value="conduce">Conduce el impulso desde el soma</option><option value="liberan">Libera neurotransmisores</option></select>
+          <div class="term">Terminales axónicas</div><select name="q4_terminales" required><option value="">Elige una función</option><option value="reciben">Reciben estímulos externos</option><option value="mantiene">Mantienen el núcleo</option><option value="conduce">Conducen sangre</option><option value="liberan">Liberan neurotransmisores</option></select>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Sigue el recorrido de la información desde la recepción hasta la comunicación con otra célula.</p></details>
+      </section>
+
+      <section class="question" data-question="5">
+        <div class="question-heading"><span class="question-number">5</span><div><div class="question-type">Vocabulario científico tolerante</div><h2>Explica con tus palabras qué hace una interneurona.</h2></div></div>
+        <textarea name="q5" minlength="35" required placeholder="Escribe una explicación breve y científica."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>No detecta directamente el estímulo ni ejecuta la respuesta final: trabaja dentro del sistema nervioso central.</p></details>
+      </section>
+
+      <section class="question" data-question="6">
+        <div class="question-heading"><span class="question-number">6</span><div><div class="question-type">Imagen interpretativa</div><h2>¿Desde qué estructura se liberan los neurotransmisores y hacia dónde se dirigen?</h2></div></div>
+        <figure><img class="exam-image" src="assets/4s_u4_examen/sinapsis_cuadrada.png" alt="Sinapsis con terminal presináptica, neurotransmisores y célula postsináptica"><figcaption>Observa el sentido de salida de las partículas moradas.</figcaption></figure>
+        <div class="options"><label class="option"><input type="radio" name="q6" value="a" required><span>Desde la célula postsináptica hacia la terminal presináptica.</span></label><label class="option"><input type="radio" name="q6" value="b"><span>Desde la terminal presináptica hacia la célula postsináptica.</span></label><label class="option"><input type="radio" name="q6" value="c"><span>Desde el núcleo hacia la sangre.</span></label><label class="option"><input type="radio" name="q6" value="d"><span>Desde las dendritas hacia el exterior del cuerpo.</span></label></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Busca las vesículas, el espacio entre ambas células y los receptores de la membrana inferior.</p></details>
+      </section>
+
+      <section class="question" data-question="7">
+        <div class="question-heading"><span class="question-number">7</span><div><div class="question-type">Comparación</div><h2>Compara el sistema nervioso y el sistema endocrino según velocidad, medio de transporte y duración del efecto.</h2></div></div>
+        <textarea name="q7" minlength="70" required placeholder="Sistema nervioso:...&#10;Sistema endocrino:..."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>Contrasta impulsos que viajan por neuronas en milisegundos con hormonas que circulan por la sangre y producen efectos más sostenidos.</p></details>
+      </section>
+
+      <section class="question" data-question="8">
+        <div class="question-heading"><span class="question-number">8</span><div><div class="question-type">Imagen con flechas</div><h2>Identifica las glándulas endocrinas señaladas con A, B, C y D.</h2></div></div>
+        <div class="image-layout"><figure><img class="exam-image" src="assets/4s_u4_examen/sistema_endocrino_cuadrada.png" alt="Sistema endocrino con glándulas A, B, C y D"><figcaption>La letra D señala la glándula situada sobre el riñón, no el riñón.</figcaption></figure><div class="answer-stack">
+          <div><label class="answer-label" for="q8_a">A</label><select id="q8_a" name="q8_a" required><option value="">Elige</option><option value="hipofisis">Hipófisis</option><option value="tiroides">Tiroides</option><option value="pancreas">Páncreas</option><option value="suprarrenales">Suprarrenales</option></select></div>
+          <div><label class="answer-label" for="q8_b">B</label><select id="q8_b" name="q8_b" required><option value="">Elige</option><option value="hipofisis">Hipófisis</option><option value="tiroides">Tiroides</option><option value="pancreas">Páncreas</option><option value="suprarrenales">Suprarrenales</option></select></div>
+          <div><label class="answer-label" for="q8_c">C</label><select id="q8_c" name="q8_c" required><option value="">Elige</option><option value="hipofisis">Hipófisis</option><option value="tiroides">Tiroides</option><option value="pancreas">Páncreas</option><option value="suprarrenales">Suprarrenales</option></select></div>
+          <div><label class="answer-label" for="q8_d">D</label><select id="q8_d" name="q8_d" required><option value="">Elige</option><option value="hipofisis">Hipófisis</option><option value="tiroides">Tiroides</option><option value="pancreas">Páncreas</option><option value="suprarrenales">Suprarrenales</option></select></div>
+        </div></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Una está en la base del encéfalo, otra en el cuello, otra regula la glucosa y otra está sobre los riñones.</p></details>
+      </section>
+
+      <section class="question" data-question="9">
+        <div class="question-heading"><span class="question-number">9</span><div><div class="question-type">Ordenamiento</div><h2>Ordena del 1 al 6 la ruta hormonal desde el cambio interno hasta la respuesta.</h2></div></div>
+        <p class="prompt">Usa cada número una sola vez.</p>
+        <div class="sequence" id="q9Sequence">
+          <div><label for="q9_sangre">Sangre</label><select id="q9_sangre" name="q9_sangre" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q9_respuesta">Respuesta</label><select id="q9_respuesta" name="q9_respuesta" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q9_glandula">Glándula endocrina</label><select id="q9_glandula" name="q9_glandula" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q9_estimulo">Cambio o estímulo</label><select id="q9_estimulo" name="q9_estimulo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q9_celula">Célula diana</label><select id="q9_celula" name="q9_celula" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div><label for="q9_hormona">Hormona</label><select id="q9_hormona" name="q9_hormona" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>La hormona debe entrar en la sangre antes de alcanzar una célula con el receptor adecuado.</p></details>
+      </section>
+
+      <section class="question" data-question="10">
+        <div class="question-heading"><span class="question-number">10</span><div><div class="question-type">Respuesta causal</div><h2>¿Por qué el interior de una neurona en reposo es relativamente más negativo que el exterior?</h2></div></div>
+        <div class="options"><label class="option"><input type="radio" name="q10" value="a" required><span>Porque dentro de la neurona hay más Na+ que K+.</span></label><label class="option"><input type="radio" name="q10" value="b"><span>Por la distribución desigual de Na+ y K+, las proteínas negativas internas y la acción de la bomba Na+/K+.</span></label><label class="option"><input type="radio" name="q10" value="c"><span>Porque todos los iones atraviesan libremente la membrana.</span></label><label class="option"><input type="radio" name="q10" value="d"><span>Porque no existe K+ dentro de la célula.</span></label></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>La explicación completa incluye gradientes iónicos, proteínas negativas y una bomba que usa ATP.</p></details>
+      </section>
+
+      <section class="question" data-question="11">
+        <div class="question-heading"><span class="question-number">11</span><div><div class="question-type">Imagen interpretativa</div><h2>¿Qué letra muestra la entrada de Na+ y el valor más alto del voltaje?</h2></div></div>
+        <figure><img class="exam-image" src="assets/4s_u4_examen/potencial_membrana_cuadrada.png" alt="Cambios iónicos y curva del potencial de acción con letras A, B, C y D"><figcaption>Relaciona el movimiento del ion con la posición correspondiente en la curva.</figcaption></figure>
+        <div class="options"><label class="option"><input type="radio" name="q11" value="a" required><span>A</span></label><label class="option"><input type="radio" name="q11" value="b"><span>B</span></label><label class="option"><input type="radio" name="q11" value="c"><span>C</span></label><label class="option"><input type="radio" name="q11" value="d"><span>D</span></label></div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Ubica el canal verde por el que entra sodio y el punto más elevado de la curva.</p></details>
+      </section>
+
+      <section class="question" data-question="12">
+        <div class="question-heading"><span class="question-number">12</span><div><div class="question-type">Pregunta integradora</div><h2>Después de comer, aumenta la glucosa en sangre. Explica qué glándula actúa, qué hormona libera, por dónde viaja y sobre qué células actúa.</h2></div></div>
+        <textarea name="q12" minlength="70" required placeholder="Explica la ruta completa desde la glándula hasta la respuesta."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>Integra cuatro elementos: glándula, hormona, medio de transporte y célula diana.</p></details>
+      </section>
+    </form>
+  </main>
+
+  <div class="actions"><div class="actions-inner"><div id="actionMessage" class="action-message" role="status" aria-live="polite"></div><button id="submitButton" class="submit-button" type="button"><span class="ready-label">Revisar y enviar respuestas</span><span class="sending-label">Enviando y confirmando...</span></button></div></div>
+  <div id="submissionPanel" class="submission-panel" role="dialog" aria-modal="true" aria-labelledby="submissionTitle"><div class="submission-card"><div class="success-mark">✓</div><h2 id="submissionTitle">Examen enviado correctamente</h2><p>Tus respuestas han sido registradas en el sistema de 4.° de Secundaria.</p><p class="final-note">No cierres esta confirmación hasta que el docente lo indique.</p></div></div>
+
+  <script>
+    const EXAM_ID = "4S-U4-C2-OFICIAL-2026";
+    const EXAM_VERSION = "2026-07-16";
+    const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxfnHmyojchWve5qOPe7brcgFlQ4vjcnbTvQ65moorGM1v9NHHPf-EbKb80-4m59aU3rA/exec";
+    const SCHOOL_DOMAIN = "@colegiomilagrosdedios.edu.pe";
+    const GOOGLE_CLIENT_ID = "120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com";
+    const form = document.getElementById("exam");
+    const submitButton = document.getElementById("submitButton");
+    const actionMessage = document.getElementById("actionMessage");
+    const errorBox = document.getElementById("errorBox");
+    const questions = [...document.querySelectorAll(".question")];
+    const startedAt = new Date().toISOString();
+    const submissionId = createSubmissionId();
+    let screenExits = 0, submitting = false, submitted = false, examStarted = false;
+    let googleCredential = "", verifiedIdentity = null, googleLoadAttempts = 0, alertTimer = null;
+
+    function decodeGoogleCredential(token) {
+      try { const encoded = token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"); const bytes = Uint8Array.from(atob(encoded), c => c.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); } catch (_) { return null; }
+    }
+    function lockExam(message) {
+      googleCredential = ""; verifiedIdentity = null; form.classList.add("exam-locked"); form.setAttribute("aria-disabled","true"); submitButton.disabled = true;
+      document.getElementById("studentName").value = ""; document.getElementById("studentEmail").value = ""; document.getElementById("authUser").classList.remove("visible");
+      document.getElementById("authStatus").classList.remove("verified"); document.getElementById("authStatus").textContent = message;
+    }
+    function handleGoogleCredential(response) {
+      const identity = response && response.credential ? decodeGoogleCredential(response.credential) : null;
+      const email = String(identity && identity.email || "").toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith(SCHOOL_DOMAIN)) { lockExam("La cuenta seleccionada no pertenece al dominio institucional."); if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); return; }
+      googleCredential = response.credential; verifiedIdentity = identity;
+      document.getElementById("studentName").value = identity.name || "Estudiante"; document.getElementById("studentEmail").value = email;
+      document.getElementById("authUser").textContent = `✓ ${identity.name || email}`; document.getElementById("authUser").classList.add("visible"); document.getElementById("googleSignInButton").replaceChildren();
+      document.getElementById("authStatus").textContent = "Cuenta institucional verificada. Ya puedes responder."; document.getElementById("authStatus").classList.add("verified");
+      form.classList.remove("exam-locked"); form.removeAttribute("aria-disabled"); submitButton.disabled = false; markExamStarted();
+    }
+    function initializeGoogleLogin() {
+      if (SUBMIT_ENDPOINT.startsWith("__")) { lockExam("El backend de 4S todavía no está desplegado."); return; }
+      if (!window.google || !google.accounts || !google.accounts.id) { googleLoadAttempts += 1; if (googleLoadAttempts >= 80) { lockExam("No se pudo cargar el acceso de Google. Revisa internet y recarga la página."); return; } window.setTimeout(initializeGoogleLogin,250); return; }
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select: false, cancel_on_tap_outside: false, hd: "colegiomilagrosdedios.edu.pe" });
+      google.accounts.id.renderButton(document.getElementById("googleSignInButton"), { type:"standard", theme:"outline", size:"large", text:"signin_with", shape:"pill", width:230 });
+    }
+    function createSubmissionId() { return window.crypto && crypto.randomUUID ? crypto.randomUUID() : "4s-" + Date.now() + "-" + Math.random().toString(16).slice(2); }
+    function allControls(question) { return [...question.querySelectorAll("input, select, textarea")]; }
+    function questionComplete(question) { const controls = allControls(question); const radioNames = [...new Set(controls.filter(el => el.type === "radio").map(el => el.name))]; return radioNames.every(name => form.querySelector(`input[name="${name}"]:checked`)) && controls.filter(el => el.type !== "radio").every(el => String(el.value || "").trim() !== ""); }
+    function updateProgress() { const completed = questions.filter(questionComplete).length; document.getElementById("progressCount").textContent = `${completed}/12`; questions.forEach(q => q.classList.toggle("complete", questionComplete(q))); }
+    function markExamStarted() { examStarted = true; updateProgress(); }
+    form.addEventListener("input", markExamStarted); form.addEventListener("change", markExamStarted); document.querySelectorAll("input[form='exam']").forEach(el => { el.addEventListener("input",markExamStarted); el.addEventListener("change",markExamStarted); });
+    function showScreenAlert() { const alert = document.getElementById("screenAlert"); alert.textContent = `Aviso ${screenExits}: se registró una salida de la pantalla del examen. Permanece en esta página.`; alert.classList.add("visible"); clearTimeout(alertTimer); alertTimer = setTimeout(() => alert.classList.remove("visible"),4500); }
+    document.addEventListener("visibilitychange", () => { if (document.hidden && examStarted && !submitted) { screenExits += 1; document.getElementById("exitCount").textContent = screenExits; } else if (!document.hidden && screenExits > 0 && !submitted) showScreenAlert(); });
+    window.addEventListener("blur", () => { if (examStarted && !submitted && document.visibilityState === "visible") { screenExits += 1; document.getElementById("exitCount").textContent = screenExits; showScreenAlert(); } });
+    window.addEventListener("beforeunload", event => { if (examStarted && !submitted) { event.preventDefault(); event.returnValue = ""; } });
+    function clearValidation() { document.querySelectorAll(".invalid").forEach(el => { el.classList.remove("invalid"); el.removeAttribute("aria-invalid"); }); errorBox.classList.remove("visible"); errorBox.textContent = ""; }
+    function invalidate(element,message) { element.classList.add("invalid"); element.setAttribute("aria-invalid","true"); return { element,message }; }
+    function uniqueSequence(selector,count,message,errors) { const values = [...document.querySelectorAll(selector)].map(el => el.value).filter(Boolean); if (values.length === count && new Set(values).size !== count) errors.push(invalidate(document.querySelector(selector),message)); }
+    function validateExam() {
+      clearValidation(); const errors = []; const name = document.getElementById("studentName"), email = document.getElementById("studentEmail"), section = document.getElementById("section");
+      if (!googleCredential || !verifiedIdentity) errors.push(invalidate(document.getElementById("authPanel"),"Inicia sesión con tu correo institucional."));
+      if (name.value.trim().length < 5) errors.push(invalidate(name,"Google no proporcionó un nombre completo."));
+      const cleanEmail = email.value.trim().toLowerCase(); if (!cleanEmail.endsWith(SCHOOL_DOMAIN) || cleanEmail.length <= SCHOOL_DOMAIN.length) errors.push(invalidate(email,"Usa tu correo institucional."));
+      if (!section.value.trim()) errors.push(invalidate(section,"Escribe tu sección."));
+      questions.forEach(question => { if (!questionComplete(question)) { const firstEmpty = allControls(question).find(el => el.type === "radio" ? !form.querySelector(`input[name="${el.name}"]:checked`) : !String(el.value || "").trim()); if (firstEmpty) errors.push(invalidate(firstEmpty,`Completa la pregunta ${question.dataset.question}.`)); } });
+      document.querySelectorAll("[minlength]").forEach(el => { if (el.value.trim() && el.value.trim().length < Number(el.minLength)) errors.push(invalidate(el,`Amplía tu respuesta en la pregunta ${el.closest(".question").dataset.question}.`)); });
+      uniqueSequence("#q2Sequence select",6,"En la pregunta 2 usa cada número una sola vez.",errors); uniqueSequence("#q9Sequence select",6,"En la pregunta 9 usa cada número una sola vez.",errors);
+      if (errors.length) { const messages = [...new Set(errors.map(e => e.message))]; errorBox.innerHTML = `<strong>Revisa antes de enviar:</strong><br>${messages.slice(0,5).join("<br>")}${messages.length > 5 ? "<br>Hay más respuestas por completar." : ""}`; errorBox.classList.add("visible"); const target = errors[0].element.closest(".question, .intro"); target.scrollIntoView({behavior:"smooth",block:"center"}); errors[0].element.focus({preventScroll:true}); return false; }
+      return true;
+    }
+    function buildPayload() { const data = Object.fromEntries(new FormData(form).entries()); Object.assign(data,{ examId:EXAM_ID, examVersion:EXAM_VERSION, submissionId, grade:"4.° Secundaria", startedAt, finishedAt:new Date().toISOString(), screenExits, userAgent:navigator.userAgent, viewport:`${window.innerWidth}x${window.innerHeight}`, googleCredential, answersComplete:questions.every(questionComplete) }); return data; }
+    function wait(ms) { return new Promise(resolve => setTimeout(resolve,ms)); }
+    async function verifySubmission() { for (let attempt=0; attempt<5; attempt+=1) { await wait(attempt===0 ? 900 : 1500); try { const url = `${SUBMIT_ENDPOINT}?action=status&submissionId=${encodeURIComponent(submissionId)}&t=${Date.now()}`; const response = await fetch(url,{cache:"no-store",redirect:"follow"}); if (!response.ok) continue; const result = await response.json(); if (result && result.ok && result.found) return true; } catch (_) {} } return false; }
+    async function submitExam() {
+      if (submitting || submitted || !validateExam()) return; if (!navigator.onLine) { actionMessage.textContent = "No hay conexión a internet. Conéctate y vuelve a intentar."; return; }
+      submitting = true; submitButton.disabled = true; submitButton.classList.add("sending"); actionMessage.textContent = "Enviando el examen. No cierres esta pantalla...";
+      try { await fetch(SUBMIT_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(buildPayload()),keepalive:true}); const confirmed = await verifySubmission(); if (!confirmed) throw new Error("Sin confirmación"); submitted = true; actionMessage.textContent = ""; document.getElementById("submissionPanel").classList.add("visible"); }
+      catch (_) { submitting = false; submitButton.disabled = false; submitButton.classList.remove("sending"); actionMessage.textContent = "No se confirmó el envío. Verifica tu conexión y pulsa nuevamente; el sistema evita duplicados."; }
+    }
+    submitButton.addEventListener("click",submitExam); submitButton.disabled = true; initializeGoogleLogin(); updateProgress();
+  </script>
+</body>
+</html>

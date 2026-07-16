@@ -73,6 +73,22 @@ document.addEventListener('DOMContentLoaded',function(){
     if(idxForms) topActions.insertBefore(forms, idxForms);
     else topActions.appendChild(forms);
   }
+  if(topActions&&!document.getElementById('link-examen-oficial-4s')){
+    var exam=document.createElement('a');
+    exam.id='link-examen-oficial-4s';
+    exam.href='4S_U4_examen_C2.html';
+    exam.target='_blank';
+    exam.textContent='Examen oficial U4';
+    exam.style.color='#fff';
+    exam.style.fontSize='12px';
+    exam.style.textDecoration='none';
+    exam.style.fontWeight='700';
+    exam.style.marginLeft='6px';
+    exam.style.display='inline-block';
+    var idxExam=topActions.querySelector('a[href=\"index.html\"]');
+    if(idxExam) topActions.insertBefore(exam, idxExam);
+    else topActions.appendChild(exam);
+  }
   if(topActions&&!document.getElementById('link-feedback-4s')){
     var a=document.createElement('a');
     a.id='link-feedback-4s';
