@@ -11,8 +11,7 @@ function create4SU4ExamForm() {
 
   form
     .setDescription(
-      'Examen adaptado a Google Forms a partir de las fichas de estudio de 4. de Secundaria: ' +
-      'senales y comunicacion, sistema nervioso, sistema endocrino y potencial de membrana.'
+      'Examen de 4. de Secundaria sobre senales y comunicacion, sistema nervioso, sistema endocrino y potencial de membrana.'
     )
     .setConfirmationMessage('Tu examen fue enviado correctamente.')
     .setIsQuiz(true)
@@ -23,8 +22,8 @@ function create4SU4ExamForm() {
   addSectionHeader_(form, 'Bloque 1 - Senales y coordinacion');
 
   addMultipleChoiceQuestion_(form, {
-    title: '1. Segun la ficha de estudio, cual es la secuencia general correcta de la comunicacion en el cuerpo?',
-    helpText: 'Pista: revisa el esquema central de la hoja "Senales y comunicacion en el cuerpo".',
+    title: '1. Cual es la secuencia general correcta de la comunicacion en el cuerpo?',
+    helpText: 'Pista: piensa en el orden logico desde que aparece un cambio hasta que el cuerpo responde.',
     points: 1,
     choices: [
       { text: 'Estimulo -> receptor -> coordinador -> senal -> efector -> respuesta', correct: true },
@@ -36,7 +35,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '2. Cuando aumenta la glucosa en sangre y se libera insulina, la senal que predomina es:',
-    helpText: 'Pista: mira la lista de tipos de senales y el ejemplo de glucosa alta.',
+    helpText: 'Pista: distingue entre una senal que viaja por neuronas y una que viaja por sustancias en la sangre.',
     points: 1,
     choices: [
       { text: 'Electrica', correct: false },
@@ -51,7 +50,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '3. En la imagen de la neurona, que letra senala el axon?',
-    helpText: 'Pista: el axon conduce el impulso nervioso desde el soma hacia otras celulas.',
+    helpText: 'Pista: identifica la prolongacion larga que lleva el impulso nervioso.',
     points: 1,
     choices: [
       { text: 'A', correct: false },
@@ -63,7 +62,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '4. Que opcion explica mejor la funcion de la interneurona?',
-    helpText: 'Pista: revisa la seccion "Tipos de neuronas".',
+    helpText: 'Pista: no recibe el estimulo directamente ni ejecuta la respuesta final; conecta e integra.',
     points: 1,
     choices: [
       { text: 'Lleva informacion desde los receptores al sistema nervioso central.', correct: false },
@@ -74,8 +73,8 @@ function create4SU4ExamForm() {
   });
 
   addMultipleChoiceQuestion_(form, {
-    title: '5. Segun la ficha del sistema nervioso, cual es la ruta nerviosa correcta?',
-    helpText: 'Pista: sigue el esquema "Receptor -> ... -> Efector".',
+    title: '5. Cual es la ruta nerviosa correcta?',
+    helpText: 'Pista: la informacion entra por una via sensorial, se procesa y luego sale por una via motora.',
     points: 1,
     choices: [
       { text: 'Receptor -> neurona sensorial -> sistema nervioso central -> neurona motora -> efector', correct: true },
@@ -89,7 +88,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '6. En la imagen de la sinapsis, que letra senala la parte desde la que se liberan neurotransmisores?',
-    helpText: 'Pista: relaciona la imagen con la funcion de las terminales axonicas.',
+    helpText: 'Pista: busca la estructura presinaptica desde la que salen las vesiculas y los neurotransmisores.',
     points: 1,
     choices: [
       { text: 'A', correct: true },
@@ -101,8 +100,8 @@ function create4SU4ExamForm() {
   addSection_(form, 'Bloque 3 - Sistema endocrino');
 
   addCheckboxQuestion_(form, {
-    title: '7. Selecciona todas las caracteristicas del sistema endocrino que aparecen en la ficha.',
-    helpText: 'Pista: revisa la seccion "Caracteristicas" del sistema endocrino.',
+    title: '7. Selecciona todas las caracteristicas correctas del sistema endocrino.',
+    helpText: 'Pista: piensa en velocidad de accion, via de transporte y duracion del efecto.',
     points: 1,
     choices: [
       { text: 'Mas lento que los impulsos nerviosos', correct: true },
@@ -117,7 +116,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '8. En la imagen del sistema endocrino, que letra senala el pancreas?',
-    helpText: 'Pista: busca la glandula relacionada con insulina y glucagon.',
+    helpText: 'Pista: identifica la glandula asociada al control de la glucosa en sangre.',
     points: 1,
     choices: [
       { text: 'A', correct: false },
@@ -128,8 +127,8 @@ function create4SU4ExamForm() {
   });
 
   addMultipleChoiceQuestion_(form, {
-    title: '9. Segun la ruta hormonal de la ficha, cual es el orden correcto?',
-    helpText: 'Pista: empieza con "cambio interno o estimulo".',
+    title: '9. Cual es el orden correcto de una ruta hormonal?',
+    helpText: 'Pista: comienza con un cambio o estimulo y termina con una respuesta en la celula diana.',
     points: 1,
     choices: [
       { text: 'Cambio interno o estimulo -> glandula endocrina -> hormona -> sangre -> celula diana -> respuesta', correct: true },
@@ -143,7 +142,7 @@ function create4SU4ExamForm() {
 
   addCheckboxQuestion_(form, {
     title: '10. Marca todas las afirmaciones correctas sobre el potencial de membrana en reposo.',
-    helpText: 'Pista: revisa la parte superior de la hoja "Potencial de membrana y potencial de accion".',
+    helpText: 'Pista: piensa en la distribucion de Na+, K+, proteinas negativas y la accion de la bomba Na+/K+.',
     points: 1,
     choices: [
       { text: 'Hay mas Na+ afuera que adentro.', correct: true },
@@ -159,7 +158,7 @@ function create4SU4ExamForm() {
 
   addMultipleChoiceQuestion_(form, {
     title: '11. En la imagen, que momento representa la entrada de Na+ y la subida del voltaje?',
-    helpText: 'Pista: identifica el cuadro en el que Na+ entra a la celula.',
+    helpText: 'Pista: busca el momento en que el sodio entra y el voltaje se vuelve menos negativo.',
     points: 1,
     choices: [
       { text: 'A', correct: false },
@@ -170,8 +169,8 @@ function create4SU4ExamForm() {
   });
 
   addMultipleChoiceQuestion_(form, {
-    title: '12. Despues de comer, aumenta la glucosa en sangre. Que explicacion es la mas completa segun tus fichas?',
-    helpText: 'Pista: integra el ejemplo de glucosa e insulina con la ruta hormonal.',
+    title: '12. Despues de comer, aumenta la glucosa en sangre. Cual es la explicacion mas completa?',
+    helpText: 'Pista: identifica que glandula actua, que sustancia libera, por donde viaja y sobre que tipo de celulas actua.',
     points: 1,
     choices: [
       { text: 'Predomina una respuesta endocrina: el pancreas libera insulina, la hormona viaja por la sangre y actua en celulas diana.', correct: true },
