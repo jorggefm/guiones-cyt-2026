@@ -6,7 +6,7 @@ var EXAM_CONFIG = Object.freeze({
   title: "1.° Secundaria · Examen oficial C2 · Unidad 4",
   subject: "Ciencia y Tecnología",
   examId: "1S-U4-C2-OFICIAL-2026",
-  version: "2026-07-17",
+  version: "2026-07-17-R2",
   date: "2026-07-17",
   schoolDomain: "colegiomilagrosdedios.edu.pe",
   spreadsheetId: "1sgBXCl3-RWWN7qUUOev5i9SxqQRIvrNJsX1TATCpt7o",
@@ -55,53 +55,79 @@ var EXAM_CONFIG = Object.freeze({
       grading: { method: "automatic", correct: "B" }
     },
     {
-      id: "q2", type: "text", label: "Ordenamiento",
+      id: "q2", type: "sequence", label: "Ordenamiento desplegable",
       prompt: "Ordena el proceso de formación del suelo: fragmentación de rocas, roca madre, mezcla con materia orgánica, meteorización por lluvia y temperatura.",
-      imageKey: null, placeholder: "Escribe el proceso en orden.", minLength: 1,
+      imageKey: null,
+      items: ["Roca madre", "Meteorización por lluvia y temperatura", "Fragmentación de rocas", "Mezcla con materia orgánica"],
       hint: "Empieza con la roca completa y termina con suelo fértil.", points: 2,
-      grading: { method: "mixed", accepted: ["Roca madre → meteorización por lluvia y temperatura → fragmentación de rocas → mezcla con materia orgánica."], threshold: 0.70, automaticPoints: 1, rubric: "Verificar el orden: roca madre, meteorización, fragmentación y mezcla con materia orgánica." }
+      grading: { method: "automatic", correct: ["1", "2", "3", "4"] }
     },
     {
-      id: "q3", type: "text", label: "Lectura de imagen / flechas",
+      id: "q3", type: "dropdown", label: "Palabras clave desplegables",
       prompt: "Observa la imagen de los tres suelos. Identifica cuál filtra rápido, cuál filtra de forma equilibrada y cuál filtra lento.",
-      imageKey: "permeabilidad", placeholder: "Identifica el comportamiento de cada suelo.", minLength: 1,
+      imageKey: "permeabilidad",
+      options: [
+        { value: "rapido", label: "Filtra rápido" },
+        { value: "equilibrado", label: "Filtra de forma equilibrada" },
+        { value: "lento", label: "Filtra lento" }
+      ],
+      items: ["Suelo arenoso", "Suelo con humus", "Suelo arcilloso"],
       hint: "Mira cuánta agua logra pasar hacia abajo.", points: 2,
-      grading: { method: "mixed", accepted: ["Suelo arenoso: filtra rápido. Suelo con humus: filtra equilibrado. Suelo arcilloso: filtra lento."], threshold: 0.72, automaticPoints: 1, rubric: "Confirmar las tres correspondencias: arenoso rápido, humus equilibrado y arcilloso lento." }
+      grading: { method: "automatic", correct: ["rapido", "equilibrado", "lento"] }
     },
     {
-      id: "q4", type: "text", label: "Interpretación de imagen",
-      prompt: "Observa la imagen. Explica la cadena que conecta contaminación, GEI, calor atrapado, glaciares y menos agua.",
-      imageKey: "gei_glaciares", placeholder: "Explica la cadena de causa y consecuencia.", minLength: 1,
+      id: "q4", type: "sequence", label: "Cadena causal desplegable",
+      prompt: "Observa la imagen y ordena la cadena que conecta contaminación, GEI, calor atrapado, glaciares y menos agua.",
+      imageKey: "gei_glaciares",
+      items: ["Contaminación", "Aumento de GEI", "Calor atrapado", "Derretimiento de glaciares", "Menos agua disponible"],
       hint: "Sigue el orden de causa y consecuencia.", points: 2,
-      grading: { method: "teacher", rubric: "Debe relacionar contaminación, GEI, calor atrapado, aumento de temperatura, derretimiento de glaciares y menor disponibilidad de agua." }
+      grading: { method: "automatic", correct: ["1", "2", "3", "4", "5"] }
     },
     {
-      id: "q5", type: "text", label: "Relación estructura-función",
+      id: "q5", type: "dropdown", label: "Relación desplegable",
       prompt: "Relaciona cada tipo de suelo con su función frente al agua: suelo arenoso, suelo con humus y suelo arcilloso.",
-      imageKey: null, placeholder: "Relaciona los tres suelos.", minLength: 1,
+      imageKey: null,
+      options: [
+        { value: "pasa", label: "Deja pasar el agua rápidamente" },
+        { value: "equilibra", label: "Retiene y filtra de forma equilibrada" },
+        { value: "retiene", label: "Deja pasar lentamente y retiene más" }
+      ],
+      items: ["Suelo arenoso", "Suelo con humus", "Suelo arcilloso"],
       hint: "La función depende de cómo el suelo permite pasar o retener agua.", points: 3,
-      grading: { method: "teacher", rubric: "Arenoso: deja pasar el agua rápido. Con humus: retiene y filtra de forma equilibrada. Arcilloso: deja pasar el agua lentamente." }
+      grading: { method: "automatic", correct: ["pasa", "equilibra", "retiene"] }
     },
     {
-      id: "q6", type: "text", label: "Explicación breve causal",
+      id: "q6", type: "single", label: "Alternativa causal",
       prompt: "¿Por qué la subducción de la placa de Nazca bajo la placa Sudamericana puede causar sismos en el Perú?",
-      imageKey: null, placeholder: "Explica la causa.", minLength: 1,
+      imageKey: null,
+      options: [
+        { value: "A", label: "Porque la placa de Nazca se hunde bajo la Sudamericana, se acumula energía y luego se libera." },
+        { value: "B", label: "Porque el agua del océano empuja directamente a las ciudades." },
+        { value: "C", label: "Porque los ríos desgastan el suelo y hacen temblar las rocas." },
+        { value: "D", label: "Porque la placa Sudamericana deja de moverse para siempre." }
+      ],
       hint: "Usa “placa de Nazca”, “placa Sudamericana” y “subducción”.", points: 1,
-      grading: { method: "mixed", accepted: ["Porque las placas se mueven y chocan; al hundirse la placa de Nazca bajo la Sudamericana se acumula y libera energía, lo que produce sismos."], threshold: 0.68, automaticPoints: 0.5, rubric: "Revisar movimiento, acumulación y liberación de energía." }
+      grading: { method: "automatic", correct: "A" }
     },
     {
-      id: "q7", type: "text", label: "Secuencia visual",
-      prompt: "Observa las cuatro escenas. Ordénalas desde roca madre hasta suelo fértil y explica qué ocurre en la meteorización.",
-      imageKey: "formacion_suelo", placeholder: "Escribe el orden y explica la meteorización.", minLength: 1,
+      id: "q7", type: "sequence", label: "Secuencia visual desplegable",
+      prompt: "Observa las cuatro escenas y asigna su orden desde roca madre hasta suelo fértil.",
+      imageKey: "formacion_suelo",
+      items: ["Escena A", "Escena B", "Escena C", "Escena D"],
       hint: "No empieces por la escena donde ya hay planta.", points: 2,
-      grading: { method: "mixed", accepted: ["B → C → D → A. La meteorización ocurre cuando la lluvia y los cambios de temperatura rompen la roca poco a poco."], threshold: 0.70, automaticPoints: 1, rubric: "Verificar B → C → D → A y la ruptura gradual de la roca por lluvia y temperatura." }
+      grading: { method: "automatic", correct: ["4", "1", "2", "3"] }
     },
     {
-      id: "q8", type: "text", label: "Vocabulario científico",
-      prompt: "Explica con tus palabras qué son los GEI y qué efecto producen en la atmósfera.",
-      imageKey: null, placeholder: "Explica qué son y qué efecto producen.", minLength: 1,
+      id: "q8", type: "dropdown", label: "Vocabulario desplegable",
+      prompt: "Completa las ideas sobre los GEI seleccionando la palabra o expresión correcta.",
+      imageKey: null,
+      items: [
+        { label: "CO₂, CH₄ y CO son", options: [{ value: "gei", label: "gases de efecto invernadero" }, { value: "suelos", label: "tipos de suelo" }, { value: "placas", label: "placas tectónicas" }] },
+        { label: "En la atmósfera, estos gases", options: [{ value: "atrapan", label: "atrapan parte del calor" }, { value: "eliminan", label: "eliminan todo el calor" }, { value: "filtran", label: "filtran el agua" }] },
+        { label: "Cuando aumentan demasiado", options: [{ value: "calientan", label: "aumenta la temperatura" }, { value: "enfrian", label: "se enfría toda la Tierra" }, { value: "sismos", label: "producen sismos" }] }
+      ],
       hint: "Debe aparecer la idea de “calor atrapado”.", points: 1,
-      grading: { method: "mixed", accepted: ["Son gases de efecto invernadero, como CO2, CH4 y CO, que calientan la atmósfera porque atrapan parte del calor."], threshold: 0.66, automaticPoints: 0.5, rubric: "Aceptar explicaciones equivalentes que identifiquen los GEI y el calor atrapado." }
+      grading: { method: "automatic", correct: ["gei", "atrapan", "calientan"] }
     },
     {
       id: "q9", type: "sequence", label: "Ordenamiento causal",
@@ -112,11 +138,17 @@ var EXAM_CONFIG = Object.freeze({
       grading: { method: "automatic", correct: ["5", "1", "3", "4", "2"] }
     },
     {
-      id: "q10", type: "text", label: "Comparación",
+      id: "q10", type: "single", label: "Alternativa comparativa",
       prompt: "Compara el suelo arenoso y el suelo arcilloso. ¿Cuál deja pasar más rápido el agua y cuál la retiene más?",
-      imageKey: null, placeholder: "Compara ambos suelos.", minLength: 1,
+      imageKey: null,
+      options: [
+        { value: "A", label: "El arenoso deja pasar el agua más rápido y el arcilloso la retiene más." },
+        { value: "B", label: "El arcilloso deja pasar el agua más rápido y el arenoso la retiene más." },
+        { value: "C", label: "Ambos dejan pasar y retienen exactamente la misma cantidad de agua." },
+        { value: "D", label: "Ninguno permite el paso del agua." }
+      ],
       hint: "Son comportamientos opuestos frente al agua.", points: 2,
-      grading: { method: "teacher", rubric: "El suelo arenoso deja pasar el agua más rápido. El suelo arcilloso la deja pasar lentamente y la retiene más." }
+      grading: { method: "automatic", correct: "A" }
     },
     {
       id: "q11", type: "text", label: "Caso visual",

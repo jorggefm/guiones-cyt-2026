@@ -37,7 +37,7 @@ var EXAM_CONFIG = Object.freeze({
 
   // Deben existir exactamente 12 preguntas, con id q1 ... q12.
   // grading.method: automatic | mixed | teacher
-  // type: single | multiple | text | sequence
+  // type: single | multiple | text | sequence | dropdown
   questions: [
     {
       id: "q1", type: "single", label: "Alternativa", prompt: "__PREGUNTA_01__",
@@ -82,9 +82,10 @@ var EXAM_CONFIG = Object.freeze({
       hint: "__PISTA_06__", points: 1, grading: { method: "automatic", correct: "B" }
     },
     {
-      id: "q7", type: "text", label: "Comparación", prompt: "__PREGUNTA_07__", imageKey: null,
-      placeholder: "Compara ambos elementos", minLength: 1, hint: "__PISTA_07__", points: 2,
-      grading: { method: "mixed", accepted: ["__IDEA_CLAVE__"], threshold: 0.8, automaticPoints: 1 }
+      id: "q7", type: "dropdown", label: "Relación desplegable", prompt: "__PREGUNTA_07__", imageKey: null,
+      options: [{ value: "A", label: "__PALABRA_CLAVE_A__" }, { value: "B", label: "__PALABRA_CLAVE_B__" }, { value: "C", label: "__PALABRA_CLAVE_C__" }],
+      items: ["__ELEMENTO_1__", "__ELEMENTO_2__", "__ELEMENTO_3__"], hint: "__PISTA_07__", points: 2,
+      grading: { method: "automatic", correct: ["A", "B", "C"] }
     },
     {
       id: "q8", type: "single", label: "Interpretación", prompt: "__PREGUNTA_08__", imageKey: null,
