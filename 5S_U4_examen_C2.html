@@ -138,6 +138,15 @@
     form.addEventListener("click", event => { if (event.target.closest(".question") && event.target.closest(".hint-toggle")) startAfterQuestionInteraction(); });
 
     function decodeCredential(token) { try { const part = token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"); const bytes = Uint8Array.from(atob(part), c => c.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); } catch (_) { return null; } }
+    function credentialIsFresh(seconds) { return Boolean(verifiedIdentity && Number(verifiedIdentity.exp || 0) > Math.floor(Date.now() / 1000) + Number(seconds || 0)); }
+    function requestFreshLogin(message) {
+      const status=document.getElementById("authStatus");
+      status.textContent=message || "La sesión de Google venció. Accede nuevamente; tus respuestas se conservan.";
+      status.classList.remove("verified");
+      actionMessage.className="message error-state";
+      actionMessage.textContent="Renueva el acceso institucional en la parte superior y vuelve a enviar.";
+      document.getElementById("authPanel").scrollIntoView({behavior:"smooth",block:"center"});
+    }
     function lockExam(message) { googleCredential = ""; verifiedIdentity = null; form.classList.add("exam-locked"); form.setAttribute("aria-disabled","true"); submitButton.disabled = true; actionMessage.textContent = message || ""; if (message) { const status=document.getElementById("authStatus"); status.textContent=message; status.classList.remove("verified"); } }
     function handleGoogleCredential(response) {
       const identity = response && response.credential ? decodeCredential(response.credential) : null;
@@ -145,7 +154,7 @@
       if (!identity || identity.email_verified !== true || !email.endsWith("@" + CONFIG.schoolDomain)) { lockExam("La cuenta no pertenece al dominio institucional."); return; }
       googleCredential = response.credential; verifiedIdentity = identity;
       document.getElementById("studentName").value = identity.name || ""; document.getElementById("studentEmail").value = email;
-      document.getElementById("authUser").textContent = "✓ " + (identity.name || email); document.getElementById("authUser").classList.add("visible"); document.getElementById("googleSignInButton").replaceChildren();
+      document.getElementById("authUser").textContent = "✓ " + (identity.name || email); document.getElementById("authUser").classList.add("visible");
       document.getElementById("authStatus").textContent = "Cuenta institucional verificada. Ya puedes responder."; document.getElementById("authStatus").classList.add("verified");
       form.classList.remove("exam-locked"); form.removeAttribute("aria-disabled"); submitButton.disabled = false; actionMessage.textContent = "";
       // El login no inicia el contador.
@@ -160,6 +169,7 @@
     function validateExam() {
       form.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
       if (!googleCredential || !verifiedIdentity) { actionMessage.textContent = "Inicia sesión con tu cuenta institucional."; return false; }
+      if (!credentialIsFresh(120)) { requestFreshLogin(); return false; }
       const section = document.getElementById("section"); if (!section.value.trim()) { section.classList.add("invalid"); actionMessage.textContent = "Escribe la sección."; return false; }
       const incomplete = [...form.querySelectorAll(".question")].find(s => !questionComplete(s));
       if (incomplete) { incomplete.classList.add("invalid"); incomplete.scrollIntoView({behavior:"smooth",block:"center"}); actionMessage.textContent = "Completa las 12 preguntas."; return false; }
@@ -177,12 +187,12 @@
     function createSubmissionId() { return window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : "exam-" + Date.now() + "-" + Math.random().toString(16).slice(2); }
     function payload() { return {examId:CONFIG.examId,examVersion:CONFIG.version,submissionId,grade:CONFIG.grade,unit:CONFIG.unit,studentName:verifiedIdentity.name,studentEmail:verifiedIdentity.email,section:document.getElementById("section").value.trim(),startedAt,finishedAt:new Date().toISOString(),screenExits:exitCounter.getCount(),answers:collectAnswers(),googleCredential}; }
     const wait = ms => new Promise(resolve => setTimeout(resolve,ms));
-    async function verifySubmission() { for (let i=0;i<5;i+=1) { await wait(i ? 1400 : 800); try { const url=CONFIG.appsScriptEndpoint+"?action=status&submissionId="+encodeURIComponent(submissionId)+"&examId="+encodeURIComponent(CONFIG.examId)+"&t="+Date.now(); const response=await fetch(url,{cache:"no-store",redirect:"follow"}); const result=await response.json(); if(result&&result.ok&&result.found) return true; } catch (_) {} } return false; }
+    async function verifySubmission() { for (let i=0;i<12;i+=1) { await wait(i ? 2000 : 900); try { const url=CONFIG.appsScriptEndpoint+"?action=status&submissionId="+encodeURIComponent(submissionId)+"&examId="+encodeURIComponent(CONFIG.examId)+"&t="+Date.now(); const response=await fetch(url,{cache:"no-store",redirect:"follow"}); const result=await response.json(); if(result&&result.ok&&result.found) return true; } catch (_) {} } return false; }
     async function submitExam() {
       if (submitting || submitted || !validateExam()) return;
       submitting = true; exitCounter.stop(); submitButton.disabled = true; submitButton.textContent = "Enviando y confirmando…"; actionMessage.className = "message sending"; actionMessage.textContent = "Enviando el examen. No cierres esta pantalla…";
       try { await fetch(CONFIG.appsScriptEndpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload()),keepalive:true}); if (!await verifySubmission()) throw new Error("Sin confirmación"); submitted=true; actionMessage.textContent=""; actionMessage.className="message"; document.getElementById("submissionPanel").classList.add("visible"); }
-      catch (_) { actionMessage.className="message error-state"; actionMessage.textContent="No se confirmó el envío. Reintenta: el identificador estable evita duplicados."; submitButton.textContent="Reintentar envío"; submitButton.disabled=false; }
+      catch (_) { actionMessage.className="message error-state"; if (!credentialIsFresh(0)) { requestFreshLogin(); submitButton.textContent="Reintentar después de acceder"; } else { actionMessage.textContent="No se confirmó el envío. Reintenta: el identificador estable evita duplicados."; submitButton.textContent="Reintentar envío"; } submitButton.disabled=false; }
       finally { submitting=false; }
     }
     submitButton.addEventListener("click", submitExam);
