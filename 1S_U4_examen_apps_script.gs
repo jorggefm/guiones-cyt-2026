@@ -125,7 +125,7 @@ function runScoringSelfTest() {
   CONFIG.questions.forEach(function (q) {
     if (q.grading.correct !== undefined) perfect[q.id] = q.grading.correct;
     else if (q.grading.accepted && q.grading.accepted.length) perfect[q.id] = q.grading.accepted[0];
-    else perfect[q.id] = '__RESPUESTA_DOCENTE__';
+    else perfect[q.id] = '[respuesta docente de prueba]';
   });
   var result = scoreAnswers_(perfect);
   if (result.maximum <= 0) throw new Error('Puntaje máximo inválido.');
