@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>2S - Examen oficial C2 U4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bitter:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #17211d;
+      --muted: #5b6b63;
+      --paper: #fffdf8;
+      --line: #d8e1d9;
+      --leaf: #1d6650;
+      --leaf-dark: #124436;
+      --coral: #d65f49;
+      --coral-soft: #fff0eb;
+      --gold: #e0a02b;
+      --blue: #26718a;
+      --danger: #a72f2f;
+      --success: #166446;
+      --shadow: 0 14px 34px rgba(36, 58, 47, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(224, 160, 43, .13), transparent 24rem),
+        radial-gradient(circle at 92% 18%, rgba(214, 95, 73, .12), transparent 28rem),
+        #f3f6f1;
+      color: var(--ink);
+      font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      padding-bottom: 96px;
+    }
+    button, input, select, textarea { font: inherit; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      color: white;
+      background:
+        linear-gradient(105deg, rgba(18, 68, 54, .98), rgba(29, 102, 80, .97)),
+        repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,.03) 12px 24px);
+      box-shadow: 0 3px 18px rgba(18, 68, 54, .24);
+    }
+    .topbar-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .eyebrow {
+      margin: 0 0 2px;
+      color: #f9d68e;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { font-family: "Bitter", Georgia, serif; }
+    h1 { margin: 0; font-size: clamp(1.25rem, 2.8vw, 2rem); line-height: 1.12; }
+    .top-meta { margin-top: 3px; color: rgba(255,255,255,.82); font-size: .88rem; }
+    .status { display: flex; gap: 10px; flex: 0 0 auto; }
+    .status-card {
+      min-width: 112px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 12px;
+      background: rgba(255,255,255,.09);
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.1;
+    }
+    .status-card strong { display: block; margin-top: 3px; color: #fff; font-size: 1.25rem; }
+    main { width: min(1120px, 100%); margin: 0 auto; padding: 22px 18px; }
+    .card {
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,253,248,.96);
+      box-shadow: var(--shadow);
+    }
+    .intro { padding: 22px; }
+    .intro-title { margin: 0 0 6px; font-size: clamp(1.35rem, 3vw, 1.9rem); color: var(--leaf-dark); }
+    .intro-copy { margin: 0 0 18px; color: var(--muted); }
+    .student-grid { display: grid; grid-template-columns: 2fr 1.5fr .7fr; gap: 14px; }
+    .field label, .answer-label { display: block; margin-bottom: 6px; color: #34483e; font-weight: 700; font-size: .9rem; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 12px;
+      border: 1.5px solid #bdccc2;
+      border-radius: 10px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+    textarea { min-height: 112px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 4px rgba(29, 102, 80, .12);
+    }
+    .instructions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+    .instruction { padding: 12px; border: 1px solid #d9e5dc; border-radius: 12px; background: #f7faf6; font-size: .9rem; }
+    .instruction b { display: block; color: var(--leaf-dark); }
+    .notice {
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-left: 5px solid var(--gold);
+      border-radius: 9px;
+      background: #fff7df;
+      color: #6f4b07;
+      font-size: .9rem;
+    }
+    .auth-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid #b8d6cc;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #edf8f3, #fffdf5);
+    }
+    .auth-panel strong { display: block; color: var(--leaf-dark); font-size: 1.02rem; }
+    .auth-panel p { margin: 5px 0 0; color: var(--muted); font-size: .9rem; }
+    .auth-actions { min-width: 230px; text-align: center; }
+    .auth-status { margin-top: 8px; color: #8a4d13; font-size: .82rem; font-weight: 700; }
+    .auth-status.verified { color: var(--leaf); }
+    .auth-user {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #dff3e9;
+      color: var(--leaf-dark);
+      font-weight: 800;
+    }
+    .auth-user.visible { display: flex; }
+    .exam-locked { opacity: .48; pointer-events: none; user-select: none; filter: grayscale(.2); }
+    .question {
+      position: relative;
+      padding: 23px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 116px;
+    }
+    .question:first-child { border-top: 0; }
+    .question.complete { background: linear-gradient(90deg, rgba(29,102,80,.045), transparent 32%); }
+    .question-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .question-number {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px 12px 12px 3px;
+      background: var(--leaf);
+      color: white;
+      font-weight: 700;
+    }
+    .question h2 { margin: 2px 0 0; color: #243b31; font-size: 1.13rem; line-height: 1.28; }
+    .question-type { margin-top: 3px; color: var(--coral); font-weight: 700; font-size: .79rem; text-transform: uppercase; letter-spacing: .07em; }
+    .prompt { margin: 10px 0; }
+    .options { display: grid; gap: 9px; margin-top: 12px; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 48px;
+      padding: 11px 13px;
+      border: 1.5px solid #d5dfd7;
+      border-radius: 11px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, transform .18s;
+    }
+    .option:hover { border-color: #91aa9a; transform: translateY(-1px); }
+    .option:has(input:checked) { border-color: var(--leaf); background: #edf7f1; }
+    .option input { width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 20px; accent-color: var(--leaf); }
+    .sequence { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px; }
+    .sequence label { display: block; margin-bottom: 5px; font-weight: 700; font-size: .88rem; }
+    .image-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(290px, .7fr); gap: 18px; align-items: start; }
+    figure { margin: 0; }
+    .exam-image {
+      width: 100%;
+      max-height: 520px;
+      display: block;
+      object-fit: contain;
+      border: 1px solid #ccd8d0;
+      border-radius: 14px;
+      background: #0b1420;
+      box-shadow: 0 10px 24px rgba(17,33,26,.12);
+    }
+    figcaption { margin-top: 7px; color: var(--muted); font-size: .82rem; text-align: center; }
+    .answer-stack { display: grid; gap: 12px; }
+    .compact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .relation { display: grid; grid-template-columns: minmax(150px,.7fr) minmax(230px,1.3fr); gap: 9px 12px; align-items: center; }
+    .term { padding: 12px; border-radius: 10px; background: var(--coral-soft); color: #713224; font-weight: 700; }
+    details.hint { margin-top: 14px; border: 1px solid #bdd8e1; border-radius: 11px; background: #f0f9fc; color: #174d61; }
+    details.hint summary { min-height: 46px; padding: 10px 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; user-select: none; }
+    details.hint summary::before { content: "?"; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--blue); color: #fff; }
+    details.hint p { margin: 0; padding: 0 14px 13px 45px; font-size: .9rem; }
+    .error-box {
+      display: none;
+      margin: 0 0 18px;
+      padding: 13px 15px;
+      border: 1px solid #e4aaaa;
+      border-left: 6px solid var(--danger);
+      border-radius: 11px;
+      background: #fff2f2;
+      color: #7c2020;
+      font-weight: 700;
+    }
+    .error-box.visible { display: block; }
+    .invalid { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(167,47,47,.12) !important; }
+    .actions {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 50;
+      border-top: 1px solid rgba(29,102,80,.2);
+      background: rgba(247,249,245,.94);
+      backdrop-filter: blur(12px);
+    }
+    .actions-inner { width: min(1120px, 100%); margin: 0 auto; padding: 11px 18px max(11px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .action-message { color: var(--danger); font-weight: 700; font-size: .9rem; }
+    .submit-button {
+      min-height: 48px;
+      padding: 11px 20px;
+      border: 0;
+      border-radius: 11px;
+      background: linear-gradient(120deg, var(--coral), #b94436);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(185,68,54,.22);
+    }
+    .submit-button:disabled { opacity: .62; cursor: wait; }
+    .sending-label { display: none; }
+    .submit-button.sending .sending-label { display: inline; }
+    .submit-button.sending .ready-label { display: none; }
+    .submission-panel { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; padding: 20px; background: rgba(10,25,19,.78); }
+    .submission-panel.visible { display: grid; }
+    .submission-card { width: min(560px, 100%); padding: 30px; border-radius: 22px; background: var(--paper); box-shadow: 0 28px 80px rgba(0,0,0,.32); text-align: center; }
+    .success-mark { width: 70px; height: 70px; margin: 0 auto 16px; display: grid; place-items: center; border-radius: 50%; background: #dff4e8; color: var(--success); font-size: 2.2rem; font-weight: 700; }
+    .submission-card h2 { margin: 0 0 8px; color: var(--success); font-size: 1.55rem; }
+    .submission-card p { margin: 5px 0; color: #53645b; }
+    .submission-card .final-note { margin-top: 16px; padding: 11px; border-radius: 10px; background: #eef7f1; color: #205941; font-weight: 700; }
+    @media (max-width: 900px) {
+      .student-grid { grid-template-columns: 1.4fr 1fr; }
+      .field.section-field { grid-column: 1 / -1; }
+      .instructions { grid-template-columns: 1fr 1fr; }
+      .image-layout { grid-template-columns: 1fr; }
+      .image-layout .exam-image { max-height: 620px; }
+      .sequence { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 620px) {
+      body { font-size: 16px; padding-bottom: 108px; }
+      .topbar-inner { display: block; padding: 11px 13px; }
+      .top-meta { display: none; }
+      .status { margin-top: 9px; }
+      .status-card { flex: 1; min-width: 0; }
+      main { padding: 12px 10px; }
+      .intro, .question { padding: 16px 14px; }
+      .auth-panel { grid-template-columns: 1fr; }
+      .auth-actions { min-width: 0; text-align: left; }
+      .student-grid, .instructions, .compact-grid, .relation { grid-template-columns: 1fr; }
+      .sequence { grid-template-columns: 1fr 1fr; }
+      .relation .term { margin-top: 6px; }
+      .actions-inner { align-items: stretch; flex-direction: column; padding: 8px 10px max(8px, env(safe-area-inset-bottom)); }
+      .submit-button { width: 100%; }
+    }
+    @media (orientation: landscape) and (max-height: 760px) {
+      .topbar { position: relative; }
+      .topbar-inner { padding-block: 9px; }
+      main { width: min(1240px,100%); }
+      .image-layout { grid-template-columns: minmax(0, 1.3fr) minmax(290px, .7fr); }
+      .exam-image { max-height: 70vh; }
+      .question { scroll-margin-top: 20px; }
+    }
+    @media print {
+      .topbar, .actions, details.hint { display: none !important; }
+      body { padding: 0; background: #fff; }
+      main { width: 100%; padding: 0; }
+      .card { box-shadow: none; }
+      .question { break-inside: avoid; }
+    }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <p class="eyebrow">Ciencia y Tecnología · Unidad 4</p>
+        <h1>2.° Secundaria · Examen oficial C2</h1>
+        <div class="top-meta">Reproducción humana y desarrollo embrionario</div>
+      </div>
+      <div class="status" aria-label="Estado del examen">
+        <div class="status-card">Respondidas<strong id="progressCount">0/12</strong></div>
+        <div class="status-card">Salidas de pantalla<strong id="exitCount">0</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card intro" aria-labelledby="introTitle">
+      <h2 class="intro-title" id="introTitle">Antes de comenzar</h2>
+      <p class="intro-copy">Inicia sesión con tu cuenta institucional. Puedes revisar todas las preguntas y abrir una pista cuando la necesites.</p>
+      <div class="auth-panel" id="authPanel">
+        <div>
+          <strong>Verifica tu identidad con Google</strong>
+          <p>Solo se aceptan cuentas reales de <b>colegiomilagrosdedios.edu.pe</b>. El examen se habilitará después de verificarla.</p>
+        </div>
+        <div class="auth-actions">
+          <div id="googleSignInButton"></div>
+          <div class="auth-user" id="authUser" aria-live="polite"></div>
+          <div class="auth-status" id="authStatus">Esperando el inicio de sesión institucional.</div>
+        </div>
+      </div>
+      <div class="student-grid">
+        <div class="field">
+          <label for="studentName">Apellidos y nombres</label>
+          <input id="studentName" name="studentName" form="exam" type="text" autocomplete="name" readonly required>
+        </div>
+        <div class="field">
+          <label for="studentEmail">Correo institucional verificado</label>
+          <input id="studentEmail" name="studentEmail" form="exam" type="email" inputmode="email" autocomplete="email" placeholder="Se completará al iniciar sesión" readonly required>
+        </div>
+        <div class="field section-field">
+          <label for="section">Sección</label>
+          <input id="section" name="section" form="exam" type="text" maxlength="8" placeholder="Ej. A" required>
+        </div>
+      </div>
+      <div class="instructions" aria-label="Instrucciones">
+        <div class="instruction"><b>1. Observa</b>Las imágenes contienen información necesaria para responder.</div>
+        <div class="instruction"><b>2. Responde</b>Usa conceptos científicos y explica con tus propias palabras.</div>
+        <div class="instruction"><b>3. Revisa</b>Antes de enviar, el sistema señalará lo que falte completar.</div>
+        <div class="instruction"><b>4. Envía una vez</b>No cierres la página hasta ver la confirmación final.</div>
+      </div>
+      <div class="notice">El examen registra los cambios de pantalla. Mantén esta página abierta durante toda la evaluación.</div>
+    </section>
+
+    <div id="errorBox" class="error-box" role="alert" aria-live="assertive"></div>
+
+    <form id="exam" class="card exam-locked" aria-disabled="true" novalidate>
+      <section class="question" data-question="1">
+        <div class="question-heading"><span class="question-number">1</span><div><div class="question-type">Alternativa</div><h2>Un blastocisto llega al útero, pero no logra adherirse ni introducirse en el endometrio. ¿Qué proceso falló principalmente?</h2></div></div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q1" value="a" required><span>Segmentación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="b"><span>Implantación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="c"><span>Neurulación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="d"><span>Organogénesis.</span></label>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Piensa en el proceso que permite que el blastocisto quede sujeto al tejido uterino.</p></details>
+      </section>
+
+      <section class="question" data-question="2">
+        <div class="question-heading"><span class="question-number">2</span><div><div class="question-type">Ordenamiento</div><h2>Ordena del 1 al 5 las etapas del desarrollo.</h2></div></div>
+        <p class="prompt">Usa cada número una sola vez.</p>
+        <div class="sequence" id="q2Sequence">
+          <div><label for="q2_tubo">Tubo neural</label><select id="q2_tubo" name="q2_tubo" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_fetal">Etapa fetal</label><select id="q2_fetal" name="q2_fetal" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_bilaminar">Disco bilaminar</label><select id="q2_bilaminar" name="q2_bilaminar" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_organogenesis">Organogénesis</label><select id="q2_organogenesis" name="q2_organogenesis" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div><label for="q2_gastrulacion">Gastrulación</label><select id="q2_gastrulacion" name="q2_gastrulacion" required><option value="">Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Primero se organiza el disco; luego aparecen capas, sistema nervioso inicial, órganos y crecimiento fetal.</p></details>
+      </section>
+
+      <section class="question" data-question="3">
+        <div class="question-heading"><span class="question-number">3</span><div><div class="question-type">Lectura de imagen</div><h2>Identifica las partes del blastocisto señaladas con A, B y C.</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/01_blastocisto.png" alt="Blastocisto con tres estructuras señaladas A, B y C"><figcaption>Observa la ubicación de cada flecha antes de responder.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q3_a">A</label><input id="q3_a" name="q3_a" type="text" required></div>
+            <div><label class="answer-label" for="q3_b">B</label><input id="q3_b" name="q3_b" type="text" required></div>
+            <div><label class="answer-label" for="q3_c">C</label><input id="q3_c" name="q3_c" type="text" required></div>
+            <div><label class="answer-label" for="q3_placenta">¿Cuál participa principalmente en la formación de la futura placenta?</label><select id="q3_placenta" name="q3_placenta" required><option value="">Elige una letra</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+          </div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>La capa externa se relaciona con la implantación; el grupo interno formará el embrión.</p></details>
+      </section>
+
+      <section class="question" data-question="4">
+        <div class="question-heading"><span class="question-number">4</span><div><div class="question-type">Interpretación de imagen</div><h2>Observa la implantación. ¿Qué estructura o tejido señala A y por qué es importante su contacto con el endometrio?</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/02_implantacion.png" alt="Blastocisto implantándose con zonas A, B y C"><figcaption>La flecha A muestra la zona donde el blastocisto entra en contacto con el tejido uterino.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q4_a">La zona A corresponde principalmente a:</label><select id="q4_a" name="q4_a" required><option value="">Elige</option><option value="trofoblasto">Trofoblasto</option><option value="blastocele">Blastocele</option><option value="masa celular interna">Masa celular interna</option><option value="saco vitelino">Saco vitelino</option></select></div>
+            <div><label class="answer-label" for="q4_why">Explica su importancia</label><textarea id="q4_why" name="q4_why" minlength="25" required placeholder="Escribe una explicación breve y científica."></textarea></div>
+          </div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Mira la zona que está tocando e invadiendo el tejido uterino. Ese contacto permite el anclaje y el inicio del intercambio con la madre.</p></details>
+      </section>
+
+      <section class="question" data-question="5">
+        <div class="question-heading"><span class="question-number">5</span><div><div class="question-type">Relacionar</div><h2>Relaciona cada capa embrionaria con los tejidos u órganos que origina.</h2></div></div>
+        <div class="relation">
+          <div class="term">Ectodermo</div><select name="q5_ecto" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
+          <div class="term">Mesodermo</div><select name="q5_meso" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
+          <div class="term">Endodermo</div><select name="q5_endo" required><option value="">Elige</option><option value="nervioso_piel">Sistema nervioso y piel</option><option value="musculo_hueso_sangre">Músculos, huesos y sangre</option><option value="digestivo_respiratorio">Revestimiento digestivo y respiratorio</option></select>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>“Ecto” se asocia a lo externo; “meso” a sostén y movimiento; “endo” a revestimientos internos.</p></details>
+      </section>
+
+      <section class="question" data-question="6">
+        <div class="question-heading"><span class="question-number">6</span><div><div class="question-type">Explicación breve</div><h2>¿Por qué no basta con que se forme un blastocisto para que el embarazo continúe?</h2></div></div>
+        <textarea name="q6" minlength="45" required placeholder="Explica qué debe ocurrir después y por qué es necesario."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>El blastocisto necesita algo más que existir: debe conectarse con el ambiente uterino.</p></details>
+      </section>
+
+      <section class="question" data-question="7">
+        <div class="question-heading"><span class="question-number">7</span><div><div class="question-type">Lectura de imagen</div><h2>Observa el disco trilaminar. ¿Qué capa señala A y qué estructura del sistema nervioso se formará después a partir de ella?</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/03_capas_embrionarias.png" alt="Disco trilaminar con capas A, B y C"><figcaption>La orientación y el color permiten distinguir las tres capas.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q7_layer">La capa A es:</label><select id="q7_layer" name="q7_layer" required><option value="">Elige</option><option value="ectodermo">Ectodermo</option><option value="mesodermo">Mesodermo</option><option value="endodermo">Endodermo</option></select></div>
+            <div><label class="answer-label" for="q7_structure">Estructura nerviosa que se formará</label><input id="q7_structure" name="q7_structure" type="text" required></div>
+          </div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>La capa más externa está relacionada con la piel y el sistema nervioso. Después se pliega hasta formar una estructura tubular.</p></details>
+      </section>
+
+      <section class="question" data-question="8">
+        <div class="question-heading"><span class="question-number">8</span><div><div class="question-type">Vocabulario científico</div><h2>¿Cómo se llama el proceso en el que empiezan a formarse órganos y sistemas a partir de los tejidos embrionarios?</h2></div></div>
+        <label class="answer-label" for="q8">Escribe el término</label><input id="q8" name="q8" type="text" required>
+        <details class="hint"><summary>Mostrar pista</summary><p>La palabra contiene “órgano”.</p></details>
+      </section>
+
+      <section class="question" data-question="9">
+        <div class="question-heading"><span class="question-number">9</span><div><div class="question-type">Secuencia visual</div><h2>¿Qué proceso ocurre principalmente en la imagen 2, antes de que aparezca el tubo neural cerrado?</h2></div></div>
+        <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/04_secuencia_neurulacion.png" alt="Secuencia de cuatro momentos desde capas embrionarias hasta embrión"><figcaption>Compara especialmente las imágenes 1, 2 y 3.</figcaption></figure>
+        <div class="options">
+          <label class="option"><input type="radio" name="q9" value="a" required><span>Implantación del blastocisto.</span></label>
+          <label class="option"><input type="radio" name="q9" value="b"><span>Formación de la placa y los pliegues neurales.</span></label>
+          <label class="option"><input type="radio" name="q9" value="c"><span>Formación completa de todos los órganos.</span></label>
+          <label class="option"><input type="radio" name="q9" value="d"><span>Inicio de la etapa fetal.</span></label>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Fíjate en el ectodermo azul que empieza a plegarse.</p></details>
+      </section>
+
+      <section class="question" data-question="10">
+        <div class="question-heading"><span class="question-number">10</span><div><div class="question-type">Comparación visual</div><h2>Identifica B y C. Luego explica una diferencia entre ambas estructuras.</h2></div></div>
+        <div class="image-layout">
+          <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/05_soporte_temprano.png" alt="Embrión con estructuras A, B, C y D"><figcaption>Observa qué estructura es una bolsa y cuál conecta al embrión con la zona placentaria.</figcaption></figure>
+          <div class="answer-stack">
+            <div><label class="answer-label" for="q10_b">B</label><select id="q10_b" name="q10_b" required><option value="">Elige</option><option value="saco_vitelino">Saco vitelino</option><option value="cordon">Cordón umbilical o tallo de conexión</option><option value="placenta">Placenta</option><option value="amnios">Amnios</option></select></div>
+            <div><label class="answer-label" for="q10_c">C</label><select id="q10_c" name="q10_c" required><option value="">Elige</option><option value="saco_vitelino">Saco vitelino</option><option value="cordon">Cordón umbilical o tallo de conexión</option><option value="placenta">Placenta</option><option value="amnios">Amnios</option></select></div>
+            <div><label class="answer-label" for="q10_diff">Diferencia</label><textarea id="q10_diff" name="q10_diff" minlength="25" required placeholder="Compara su forma o función."></textarea></div>
+          </div>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>Una es una bolsa temporal de apoyo temprano; la otra es una conexión hacia la placenta.</p></details>
+      </section>
+
+      <section class="question" data-question="11">
+        <div class="question-heading"><span class="question-number">11</span><div><div class="question-type">Caso visual</div><h2>Si en B el tubo neural no cierra correctamente, ¿qué condición se relaciona más con ese problema?</h2></div></div>
+        <figure><img class="exam-image" src="assets/2s_u4_examen_oficial/06_cierre_tubo_neural.png" alt="Comparación A tubo neural cerrado y B cierre incompleto"><figcaption>Compara el cierre de la estructura azul en A y B.</figcaption></figure>
+        <div class="options">
+          <label class="option"><input type="radio" name="q11" value="a" required><span>Transfusión feto-fetal.</span></label>
+          <label class="option"><input type="radio" name="q11" value="b"><span>Espina bífida.</span></label>
+          <label class="option"><input type="radio" name="q11" value="c"><span>Implantación normal.</span></label>
+          <label class="option"><input type="radio" name="q11" value="d"><span>Gastrulación completa.</span></label>
+        </div>
+        <details class="hint"><summary>Mostrar pista</summary><p>El problema está en el cierre del tubo neural, no en la placenta.</p></details>
+      </section>
+
+      <section class="question" data-question="12">
+        <div class="question-heading"><span class="question-number">12</span><div><div class="question-type">Integración</div><h2>Explica en tres pasos cómo se pasa de las tres capas embrionarias a un feto temprano.</h2></div></div>
+        <p class="prompt">Usa por lo menos tres términos científicos aprendidos en la unidad.</p>
+        <textarea name="q12" minlength="80" required placeholder="Paso 1...&#10;Paso 2...&#10;Paso 3..."></textarea>
+        <details class="hint"><summary>Mostrar pista</summary><p>Usa esta ruta: capas embrionarias → sistema nervioso inicial → formación de órganos → crecimiento fetal.</p></details>
+      </section>
+    </form>
+  </main>
+
+  <div class="actions">
+    <div class="actions-inner">
+      <div id="actionMessage" class="action-message" role="status" aria-live="polite"></div>
+      <button id="submitButton" class="submit-button" type="button"><span class="ready-label">Revisar y enviar respuestas</span><span class="sending-label">Enviando y confirmando...</span></button>
+    </div>
+  </div>
+
+  <div id="submissionPanel" class="submission-panel" role="dialog" aria-modal="true" aria-labelledby="submissionTitle">
+    <div class="submission-card">
+      <div class="success-mark">✓</div>
+      <h2 id="submissionTitle">Examen enviado correctamente</h2>
+      <p>Tus respuestas han sido registradas.</p>
+      <p class="final-note">Espera las indicaciones del docente. Tu reporte será entregado en breve.</p>
+    </div>
+  </div>
+
+  <script>
+    const EXAM_ID = "2S-U4-C2-OFICIAL-2026";
+    const EXAM_VERSION = "2026-07-16";
+    const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec";
+    const SCHOOL_DOMAIN = "@colegiomilagrosdedios.edu.pe";
+    const GOOGLE_CLIENT_ID = "120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com";
+
+    const form = document.getElementById("exam");
+    const submitButton = document.getElementById("submitButton");
+    const actionMessage = document.getElementById("actionMessage");
+    const errorBox = document.getElementById("errorBox");
+    const questions = [...document.querySelectorAll(".question")];
+    const startedAt = new Date().toISOString();
+    const submissionId = createSubmissionId();
+    let screenExits = 0;
+    let submitting = false;
+    let submitted = false;
+    let examStarted = false;
+    let googleCredential = "";
+    let verifiedIdentity = null;
+    let googleLoadAttempts = 0;
+
+    function decodeGoogleCredential(token) {
+      try {
+        const encoded = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function lockExam(message) {
+      googleCredential = "";
+      verifiedIdentity = null;
+      form.classList.add("exam-locked");
+      form.setAttribute("aria-disabled", "true");
+      submitButton.disabled = true;
+      document.getElementById("studentName").value = "";
+      document.getElementById("studentEmail").value = "";
+      document.getElementById("authUser").classList.remove("visible");
+      document.getElementById("authStatus").classList.remove("verified");
+      document.getElementById("authStatus").textContent = message;
+    }
+
+    function handleGoogleCredential(response) {
+      const identity = response && response.credential ? decodeGoogleCredential(response.credential) : null;
+      const email = String(identity && identity.email || "").toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith(SCHOOL_DOMAIN)) {
+        lockExam("La cuenta seleccionada no pertenece al dominio institucional.");
+        if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+        return;
+      }
+
+      googleCredential = response.credential;
+      verifiedIdentity = identity;
+      document.getElementById("studentName").value = identity.name || "Estudiante";
+      document.getElementById("studentEmail").value = email;
+      document.getElementById("authUser").textContent = `✓ ${identity.name || email}`;
+      document.getElementById("authUser").classList.add("visible");
+      document.getElementById("googleSignInButton").replaceChildren();
+      document.getElementById("authStatus").textContent = "Cuenta institucional verificada. Ya puedes responder.";
+      document.getElementById("authStatus").classList.add("verified");
+      form.classList.remove("exam-locked");
+      form.removeAttribute("aria-disabled");
+      submitButton.disabled = false;
+      markExamStarted();
+    }
+
+    function initializeGoogleLogin() {
+      if (GOOGLE_CLIENT_ID.startsWith("__")) {
+        lockExam("La autenticación institucional aún está siendo configurada por el docente.");
+        return;
+      }
+      if (!window.google || !google.accounts || !google.accounts.id) {
+        googleLoadAttempts += 1;
+        if (googleLoadAttempts >= 80) {
+          lockExam("No se pudo cargar el acceso de Google. Revisa internet y recarga la página.");
+          return;
+        }
+        window.setTimeout(initializeGoogleLogin, 250);
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: false,
+        hd: "colegiomilagrosdedios.edu.pe"
+      });
+      google.accounts.id.renderButton(document.getElementById("googleSignInButton"), {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "pill",
+        width: 230
+      });
+    }
+
+    function createSubmissionId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "2s-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
+
+    function allControls(question) {
+      return [...question.querySelectorAll("input, select, textarea")];
+    }
+
+    function questionComplete(question) {
+      const controls = allControls(question);
+      const radioNames = [...new Set(controls.filter(el => el.type === "radio").map(el => el.name))];
+      const radiosReady = radioNames.every(name => form.querySelector(`input[name="${name}"]:checked`));
+      const otherReady = controls.filter(el => el.type !== "radio").every(el => String(el.value || "").trim() !== "");
+      return radiosReady && otherReady;
+    }
+
+    function updateProgress() {
+      const completed = questions.filter(questionComplete).length;
+      document.getElementById("progressCount").textContent = `${completed}/12`;
+      questions.forEach(q => q.classList.toggle("complete", questionComplete(q)));
+    }
+
+    function markExamStarted() {
+      examStarted = true;
+      updateProgress();
+    }
+
+    form.addEventListener("input", markExamStarted);
+    form.addEventListener("change", markExamStarted);
+    document.querySelectorAll("input[form='exam']").forEach(el => {
+      el.addEventListener("input", markExamStarted);
+      el.addEventListener("change", markExamStarted);
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && examStarted && !submitted) {
+        screenExits += 1;
+        document.getElementById("exitCount").textContent = screenExits;
+      }
+    });
+
+    window.addEventListener("beforeunload", event => {
+      if (examStarted && !submitted) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    });
+
+    function clearValidation() {
+      document.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
+      errorBox.classList.remove("visible");
+      errorBox.textContent = "";
+    }
+
+    function invalidate(element, message) {
+      element.classList.add("invalid");
+      element.setAttribute("aria-invalid", "true");
+      return { element, message };
+    }
+
+    function validateExam() {
+      clearValidation();
+      const errors = [];
+      const name = document.getElementById("studentName");
+      const email = document.getElementById("studentEmail");
+      const section = document.getElementById("section");
+
+      if (!googleCredential || !verifiedIdentity) {
+        errors.push(invalidate(document.getElementById("authPanel"), "Inicia sesión con tu correo institucional antes de enviar."));
+      }
+      if (name.value.trim().length < 5) errors.push(invalidate(name, "Escribe tus apellidos y nombres completos."));
+      const cleanEmail = email.value.trim().toLowerCase();
+      if (!cleanEmail.endsWith(SCHOOL_DOMAIN) || cleanEmail.length <= SCHOOL_DOMAIN.length) {
+        errors.push(invalidate(email, "Usa tu correo institucional del colegio."));
+      }
+      if (!section.value.trim()) errors.push(invalidate(section, "Escribe tu sección."));
+
+      questions.forEach(question => {
+        if (!questionComplete(question)) {
+          const firstEmpty = allControls(question).find(el => el.type === "radio"
+            ? !form.querySelector(`input[name="${el.name}"]:checked`)
+            : !String(el.value || "").trim());
+          if (firstEmpty) errors.push(invalidate(firstEmpty, `Completa la pregunta ${question.dataset.question}.`));
+        }
+      });
+
+      document.querySelectorAll("[minlength]").forEach(el => {
+        if (el.value.trim() && el.value.trim().length < Number(el.minLength)) {
+          errors.push(invalidate(el, `Amplía tu respuesta en la pregunta ${el.closest(".question").dataset.question}.`));
+        }
+      });
+
+      const sequenceValues = [...document.querySelectorAll("#q2Sequence select")].map(el => el.value).filter(Boolean);
+      if (sequenceValues.length === 5 && new Set(sequenceValues).size !== 5) {
+        const first = document.querySelector("#q2Sequence select");
+        errors.push(invalidate(first, "En la pregunta 2 usa cada número una sola vez."));
+      }
+
+      if (errors.length) {
+        const uniqueMessages = [...new Set(errors.map(error => error.message))];
+        errorBox.innerHTML = `<strong>Revisa antes de enviar:</strong><br>${uniqueMessages.slice(0, 5).join("<br>")}${uniqueMessages.length > 5 ? "<br>Hay más respuestas por completar." : ""}`;
+        errorBox.classList.add("visible");
+        errors[0].element.closest(".question, .intro").scrollIntoView({ behavior: "smooth", block: "center" });
+        errors[0].element.focus({ preventScroll: true });
+        return false;
+      }
+      return true;
+    }
+
+    function buildPayload() {
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.examId = EXAM_ID;
+      data.examVersion = EXAM_VERSION;
+      data.submissionId = submissionId;
+      data.grade = "2.° Secundaria";
+      data.startedAt = startedAt;
+      data.finishedAt = new Date().toISOString();
+      data.screenExits = screenExits;
+      data.userAgent = navigator.userAgent;
+      data.viewport = `${window.innerWidth}x${window.innerHeight}`;
+      data.googleCredential = googleCredential;
+      return data;
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function verifySubmission() {
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        await wait(attempt === 0 ? 900 : 1400);
+        try {
+          const url = `${SUBMIT_ENDPOINT}?action=status&submissionId=${encodeURIComponent(submissionId)}&t=${Date.now()}`;
+          const response = await fetch(url, { cache: "no-store", redirect: "follow" });
+          if (!response.ok) continue;
+          const result = await response.json();
+          if (result && result.ok && result.found) return true;
+        } catch (_) {
+          // Se reintenta automáticamente; no se confirma hasta encontrar la fila.
+        }
+      }
+      return false;
+    }
+
+    async function submitExam() {
+      if (submitting || submitted) return;
+      if (!validateExam()) return;
+      if (!navigator.onLine) {
+        actionMessage.textContent = "No hay conexión a internet. Conéctate y vuelve a intentar.";
+        return;
+      }
+
+      submitting = true;
+      submitButton.disabled = true;
+      submitButton.classList.add("sending");
+      actionMessage.textContent = "Enviando el examen. No cierres esta pantalla...";
+
+      try {
+        await fetch(SUBMIT_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(buildPayload()),
+          keepalive: true
+        });
+
+        const confirmed = await verifySubmission();
+        if (!confirmed) throw new Error("El servidor aún no confirmó el registro.");
+
+        submitted = true;
+        actionMessage.textContent = "";
+        document.getElementById("submissionPanel").classList.add("visible");
+      } catch (error) {
+        submitting = false;
+        submitButton.disabled = false;
+        submitButton.classList.remove("sending");
+        actionMessage.textContent = "No se confirmó el envío. Verifica tu conexión y pulsa nuevamente; no se duplicará el examen.";
+      }
+    }
+
+    submitButton.addEventListener("click", submitExam);
+    submitButton.disabled = true;
+    initializeGoogleLogin();
+    updateProgress();
+  </script>
+</body>
+</html>

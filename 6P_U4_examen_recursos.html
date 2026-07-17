@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>6P U4 - Recursos del examen</title>
+  <style>
+    :root{
+      --bg1:#e8f5e9;
+      --bg2:#f5fbf6;
+      --green:#2e7d32;
+      --green-dark:#1b5e20;
+      --card:#ffffff;
+      --line:#cfe6d2;
+      --text:#213027;
+      --muted:#5b6d61;
+      --accent:#ff8f00;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Segoe UI,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 34%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+    .hero{
+      background:linear-gradient(135deg, #2e7d32, #1b5e20);
+      color:#fff;
+      padding:28px 20px 22px;
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size:clamp(28px,4vw,42px);
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      max-width:980px;
+      color:rgba(255,255,255,.9);
+      font-size:16px;
+    }
+    .wrap{
+      max-width:1180px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:12px 18px;
+      background:#fff;
+      color:var(--green-dark);
+      text-decoration:none;
+      font-weight:700;
+      border:1px solid rgba(27,94,32,.12);
+      box-shadow:0 10px 24px rgba(27,94,32,.08);
+    }
+    .btn.secondary{
+      background:rgba(255,255,255,.72);
+    }
+    .notice{
+      background:#fff8e1;
+      border-left:5px solid var(--accent);
+      border-radius:12px;
+      padding:14px 16px;
+      margin:12px 0 22px;
+      color:#6d4c07;
+      box-shadow:0 10px 24px rgba(0,0,0,.04);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
+      margin-top:18px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:0 16px 32px rgba(27,94,32,.08);
+    }
+    .card img{
+      display:block;
+      width:100%;
+      aspect-ratio:16/11;
+      object-fit:cover;
+      background:#f5f5f5;
+    }
+    .card-body{
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size:18px;
+      color:var(--green-dark);
+    }
+    .card p{
+      margin:0 0 12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .links a{
+      font-size:14px;
+      text-decoration:none;
+      color:#0d47a1;
+      font-weight:700;
+    }
+    .script-box{
+      margin-top:26px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:0 16px 32px rgba(27,94,32,.08);
+    }
+    .script-box h2{
+      margin:0 0 8px;
+      color:var(--green-dark);
+    }
+    .script-box ol{
+      margin:10px 0 0 18px;
+      padding:0;
+      color:var(--text);
+      line-height:1.55;
+    }
+    code{
+      background:#f1f8e9;
+      padding:2px 6px;
+      border-radius:6px;
+    }
+    @media (max-width:640px){
+      .hero{padding:24px 16px 18px}
+      .wrap{padding:18px 12px 32px}
+      .card-body,.script-box{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>🌿 6P U4 · Recursos del examen</h1>
+    <p>Imágenes públicas para Google Forms y script listo para generar el examen de Sexto de Primaria sobre ecosistemas y biodiversidad, sin exigir correo institucional y con nombre completo obligatorio.</p>
+  </header>
+
+  <main class="wrap">
+    <div class="actions">
+      <a class="btn" href="Guion_6P.html">← Volver a Guion 6P</a>
+      <a class="btn secondary" href="6P_U4_examen_google_forms.js" target="_blank">Ver script</a>
+      <a class="btn secondary" href="https://raw.githubusercontent.com/jorggefm/guiones-cyt-2026/master/6P_U4_examen_google_forms.js" target="_blank">Abrir script raw</a>
+    </div>
+
+    <div class="notice">
+      Usa el link <strong>raw</strong> si quieres copiar el script limpio. Las imágenes ya están en el repositorio y también publicadas por GitHub Pages para que Apps Script las pueda cargar. El formulario fue preparado para no recoger correo y para pedir solo el nombre completo.
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <img src="assets/6p_u4_examen/01_cadena_alimenticia.png" alt="Cadena alimenticia">
+        <div class="card-body">
+          <h2>Imagen 1 · Cadena alimenticia</h2>
+          <p>Sirve para las preguntas de ordenamiento e interpretación de flechas.</p>
+          <div class="links">
+            <a href="assets/6p_u4_examen/01_cadena_alimenticia.png" target="_blank">Abrir imagen</a>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/6p_u4_examen/01_cadena_alimenticia.png" target="_blank">Link público</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="assets/6p_u4_examen/02_amenaza_biodiversidad.png" alt="Amenaza a la biodiversidad">
+        <div class="card-body">
+          <h2>Imagen 2 · Amenaza a la biodiversidad</h2>
+          <p>Sirve para la pregunta interpretativa sobre deforestación y contaminación.</p>
+          <div class="links">
+            <a href="assets/6p_u4_examen/02_amenaza_biodiversidad.png" target="_blank">Abrir imagen</a>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/6p_u4_examen/02_amenaza_biodiversidad.png" target="_blank">Link público</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="assets/6p_u4_examen/03_bioticos_abioticos.png" alt="Bioticos y abioticos">
+        <div class="card-body">
+          <h2>Imagen 3 · Bióticos y abióticos</h2>
+          <p>Sirve para clasificar seres vivos y elementos no vivos del ecosistema.</p>
+          <div class="links">
+            <a href="assets/6p_u4_examen/03_bioticos_abioticos.png" target="_blank">Abrir imagen</a>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/6p_u4_examen/03_bioticos_abioticos.png" target="_blank">Link público</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="assets/6p_u4_examen/04_secuencia_cuidado_ambiente.png" alt="Secuencia de cuidado del ambiente">
+        <div class="card-body">
+          <h2>Imagen 4 · Secuencia de cuidado ambiental</h2>
+          <p>Sirve para la pregunta visual sobre separar, reutilizar, reciclar y cuidar el lugar.</p>
+          <div class="links">
+            <a href="assets/6p_u4_examen/04_secuencia_cuidado_ambiente.png" target="_blank">Abrir imagen</a>
+            <a href="https://jorggefm.github.io/guiones-cyt-2026/assets/6p_u4_examen/04_secuencia_cuidado_ambiente.png" target="_blank">Link público</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="script-box">
+      <h2>Cómo usar el script en Apps Script</h2>
+      <ol>
+        <li>Abre <code>script.google.com</code> con una cuenta que pueda crear formularios.</li>
+        <li>Crea un proyecto nuevo.</li>
+        <li>Copia el contenido de <a href="https://raw.githubusercontent.com/jorggefm/guiones-cyt-2026/master/6P_U4_examen_google_forms.js" target="_blank">este archivo raw</a>.</li>
+        <li>Pégalo en el editor y guarda el proyecto.</li>
+        <li>Ejecuta la función <code>buildSixthGradeU4Exam</code>.</li>
+        <li>Acepta permisos cuando Google los pida.</li>
+        <li>Revisa en el registro las URLs del formulario creado y su enlace de edición.</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

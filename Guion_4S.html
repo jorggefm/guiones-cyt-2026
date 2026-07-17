@@ -52,6 +52,59 @@ function collapseAll(){document.querySelectorAll('.step-body').forEach(b=>b.clas
 document.addEventListener('DOMContentLoaded',function(){
   showClass(9);
   var topActions=document.querySelector('.top-actions');
+  var slidesLink=topActions?topActions.querySelector('a[href=\"4S_U4_sistema_neuroendocrino_integrado_slides.html\"]'):null;
+  if(slidesLink){
+    slidesLink.href='4S_potencial_accion_desde_cero_slides.html';
+    slidesLink.textContent='Potencial de accion';
+  }
+  if(topActions&&!document.getElementById('link-forms-4s')){
+    var forms=document.createElement('a');
+    forms.id='link-forms-4s';
+    forms.href='4S_U4_google_forms_recursos.html';
+    forms.target='_blank';
+    forms.textContent='Forms U4';
+    forms.style.color='#fff';
+    forms.style.fontSize='12px';
+    forms.style.textDecoration='none';
+    forms.style.fontWeight='700';
+    forms.style.marginLeft='6px';
+    forms.style.display='inline-block';
+    var idxForms=topActions.querySelector('a[href=\"index.html\"]');
+    if(idxForms) topActions.insertBefore(forms, idxForms);
+    else topActions.appendChild(forms);
+  }
+  if(topActions&&!document.getElementById('link-examen-oficial-4s')){
+    var exam=document.createElement('a');
+    exam.id='link-examen-oficial-4s';
+    exam.href='4S_U4_examen_C2.html';
+    exam.target='_blank';
+    exam.textContent='Examen oficial U4';
+    exam.style.color='#fff';
+    exam.style.fontSize='12px';
+    exam.style.textDecoration='none';
+    exam.style.fontWeight='700';
+    exam.style.marginLeft='6px';
+    exam.style.display='inline-block';
+    var idxExam=topActions.querySelector('a[href=\"index.html\"]');
+    if(idxExam) topActions.insertBefore(exam, idxExam);
+    else topActions.appendChild(exam);
+  }
+  if(topActions&&!document.getElementById('link-examen-v2-4s')){
+    var examV2=document.createElement('a');
+    examV2.id='link-examen-v2-4s';
+    examV2.href='4S_U4_examen_C2_v2.html';
+    examV2.target='_blank';
+    examV2.textContent='Examen oficial U4 V2';
+    examV2.style.color='#fff';
+    examV2.style.fontSize='12px';
+    examV2.style.textDecoration='none';
+    examV2.style.fontWeight='700';
+    examV2.style.marginLeft='6px';
+    examV2.style.display='inline-block';
+    var idxExamV2=topActions.querySelector('a[href="index.html"]');
+    if(idxExamV2) topActions.insertBefore(examV2, idxExamV2);
+    else topActions.appendChild(examV2);
+  }
   if(topActions&&!document.getElementById('link-feedback-4s')){
     var a=document.createElement('a');
     a.id='link-feedback-4s';
