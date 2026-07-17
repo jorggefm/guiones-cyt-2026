@@ -38,6 +38,6 @@ Entrega:
 
 Conserva sin cambios la arquitectura fija: interfaz responsiva para tablet, acceso Google institucional, validación de dominio en cliente y servidor, verificación del token en Apps Script, progreso, pistas, validación, idempotencia, confirmación real, cinco pestañas de Sheets, calificación automática/mixta/docente y espacio de reportes.
 
-No añadas `blur`, `focusout` ni `pagehide`. El contador debe escuchar únicamente `visibilitychange`, comenzar después de la primera interacción con una pregunta, ignorar el login y quedar detenido antes del envío.
+El contador debe escuchar `visibilitychange` y `window.blur` con una única bandera antirrebote, comenzar después de la primera interacción con una pregunta, ignorar el login y quedar detenido antes del envío. No uses `focusout` ni `pagehide`.
 
 ---

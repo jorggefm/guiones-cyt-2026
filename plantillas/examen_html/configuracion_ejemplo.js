@@ -58,7 +58,7 @@ var EXAM_CONFIG = Object.freeze({
     },
     {
       id: "q3", type: "text", label: "Lectura de imagen", prompt: "__PREGUNTA_03__",
-      imageKey: "esquema_01", placeholder: "Escribe tu respuesta", minLength: 10,
+      imageKey: "esquema_01", placeholder: "Escribe tu respuesta", minLength: 1,
       hint: "__PISTA_03__", points: 2,
       grading: { method: "mixed", accepted: ["__RESPUESTA_MODELO_BREVE__"], threshold: 0.82, automaticPoints: 1 }
     },
@@ -73,7 +73,7 @@ var EXAM_CONFIG = Object.freeze({
     },
     {
       id: "q5", type: "text", label: "Explicación", prompt: "__PREGUNTA_05__", imageKey: null,
-      placeholder: "Explica con vocabulario científico", minLength: 30, hint: "__PISTA_05__", points: 3,
+      placeholder: "Explica con vocabulario científico", minLength: 1, hint: "__PISTA_05__", points: 3,
       grading: { method: "teacher", rubric: "__CRITERIO_DE_REVISION_DOCENTE__" }
     },
     {
@@ -83,7 +83,7 @@ var EXAM_CONFIG = Object.freeze({
     },
     {
       id: "q7", type: "text", label: "Comparación", prompt: "__PREGUNTA_07__", imageKey: null,
-      placeholder: "Compara ambos elementos", minLength: 25, hint: "__PISTA_07__", points: 2,
+      placeholder: "Compara ambos elementos", minLength: 1, hint: "__PISTA_07__", points: 2,
       grading: { method: "mixed", accepted: ["__IDEA_CLAVE__"], threshold: 0.8, automaticPoints: 1 }
     },
     {
@@ -98,7 +98,7 @@ var EXAM_CONFIG = Object.freeze({
     },
     {
       id: "q10", type: "text", label: "Respuesta causal", prompt: "__PREGUNTA_10__", imageKey: null,
-      placeholder: "Explica la causa", minLength: 25, hint: "__PISTA_10__", points: 2,
+      placeholder: "Explica la causa", minLength: 1, hint: "__PISTA_10__", points: 2,
       grading: { method: "teacher", rubric: "__CRITERIO_DE_REVISION_DOCENTE__" }
     },
     {
@@ -108,7 +108,7 @@ var EXAM_CONFIG = Object.freeze({
     },
     {
       id: "q12", type: "text", label: "Integración", prompt: "__PREGUNTA_12__", imageKeys: [],
-      placeholder: "Integra los conceptos", minLength: 40, hint: "__PISTA_12__", points: 4,
+      placeholder: "Integra los conceptos", minLength: 1, hint: "__PISTA_12__", points: 4,
       grading: { method: "teacher", rubric: "__RUBRICA_DE_INTEGRACION__" }
     }
   ]

@@ -38,14 +38,15 @@ El navegador nunca decide la nota oficial. La clave viaja en la configuración p
 
 ## Salidas de pantalla
 
-El contador tiene una sola fuente de eventos: `document.visibilitychange`.
+El contador combina `document.visibilitychange` con `window.blur` para registrar tanto el cambio de pestaña como otra ventana colocada sobre el examen.
 
 - Empieza con la primera entrada, cambio u apertura de pista dentro de una pregunta; el login, la sección y otros controles no lo inician.
 - Incrementa solo si el estado anterior era visible y el nuevo estado es hidden.
 - Un segundo evento hidden durante la misma ausencia se ignora.
 - El giro de la tableta solo reorganiza el CSS y no incrementa el contador.
 - `exitCounter.stop()` se ejecuta antes de iniciar el POST. Desde ese momento no vuelve a contar, aunque la conexión falle y sea necesario reintentar.
-- No hay listeners de `blur`, `focusout` ni `pagehide`.
+- `visibilitychange` y `blur` comparten un mismo bloqueo de salida; una acción nunca suma dos veces.
+- No hay listeners de `focusout` ni `pagehide`.
 
 Pruebas incluidas en `examen_base.html`:
 
