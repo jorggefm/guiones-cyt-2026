@@ -6,7 +6,7 @@ var EXAM_CONFIG = Object.freeze({
   title: "1.° Secundaria · Examen oficial C2 · Unidad 4",
   subject: "Ciencia y Tecnología",
   examId: "1S-U4-C2-OFICIAL-2026",
-  version: "2026-07-17-R2",
+  version: "2026-07-17-R3",
   date: "2026-07-17",
   schoolDomain: "colegiomilagrosdedios.edu.pe",
   spreadsheetId: "1sgBXCl3-RWWN7qUUOev5i9SxqQRIvrNJsX1TATCpt7o",
@@ -130,12 +130,11 @@ var EXAM_CONFIG = Object.freeze({
       grading: { method: "automatic", correct: ["gei", "atrapan", "calientan"] }
     },
     {
-      id: "q9", type: "sequence", label: "Ordenamiento causal",
-      prompt: "Ordena la cadena: menos agua en ríos, contaminación, calor atrapado, derretimiento de glaciares, GEI.",
-      imageKey: null,
-      items: ["Menos agua en ríos", "Contaminación", "Calor atrapado", "Derretimiento de glaciares", "GEI"],
-      hint: "Empieza con la acción humana y termina con la consecuencia.", points: 2,
-      grading: { method: "automatic", correct: ["5", "1", "3", "4", "2"] }
+      id: "q9", type: "text", label: "Aplicación ambiental",
+      prompt: "En una ladera, las lluvias están arrastrando el suelo. Explica cómo la vegetación y el humus pueden disminuir la erosión y ayudar a conservar el agua.",
+      imageKey: null, placeholder: "Relaciona raíces, suelo, erosión y conservación del agua.", minLength: 1,
+      hint: "Piensa en cómo las raíces sujetan el suelo y cómo el humus retiene humedad.", points: 2,
+      grading: { method: "teacher", rubric: "Debe explicar que las raíces sujetan el suelo y reducen su arrastre, mientras que el humus mejora la retención de humedad y favorece la conservación del agua." }
     },
     {
       id: "q10", type: "single", label: "Alternativa comparativa",
