@@ -26,9 +26,12 @@ Base reutilizable para exámenes de Ciencia y Tecnología con 12 preguntas. No e
 
 Cada pregunta declara `id`, `type`, `prompt`, alternativas o ítems, `hint`, `points`, `imageKey` (una imagen) o `imageKeys` (varias) y `grading`. `achievementScale` define AD, A y B, sin C; la pestaña de calificación calcula el nivel cuando el puntaje queda completo.
 
+Para mantener un examen ágil en tableta, usa como máximo tres preguntas abiertas `text` y distribuye las demás entre alternativas, selección múltiple, ordenamientos y palabras clave desplegables.
+
 - `single`: una alternativa; `grading.correct` es un valor.
 - `multiple`: varias alternativas; `grading.correct` es un arreglo en el mismo orden en que el navegador las recopila.
 - `sequence`: un selector por ítem; `grading.correct` es el arreglo de posiciones esperado.
+- `dropdown`: una palabra o expresión desplegable por ítem; puede usar `options` comunes o alternativas propias dentro de cada ítem, y `grading.correct` es el arreglo esperado.
 - `text`: respuesta abierta con longitud mínima.
 - `automatic`: todo el puntaje se asigna en Apps Script.
 - `mixed`: Apps Script asigna `automaticPoints` si la respuesta coincide y deja la pregunta pendiente para revisión.

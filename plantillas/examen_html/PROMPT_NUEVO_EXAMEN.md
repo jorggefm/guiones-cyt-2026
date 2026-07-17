@@ -24,6 +24,8 @@ Matriz de 12 preguntas:
 
 [PEGAR AQUÍ. Para cada pregunta incluye: id q1–q12, tipo, enunciado, alternativas o ítems, respuesta correcta o respuesta modelo, pista, puntaje, método automatic/mixed/teacher, umbral o rúbrica cuando corresponda e imageKey opcional.]
 
+Usa como máximo tres preguntas abiertas de tipo `text`. Distribuye las demás entre `single`, `multiple`, `sequence` y `dropdown`, conservando el contenido aprobado y usando menús desplegables para palabras clave o relaciones breves.
+
 Manifiesto de imágenes:
 
 [PEGAR AQUÍ. Para cada imageKey incluye ruta o URL, texto alternativo y pie opcional.]

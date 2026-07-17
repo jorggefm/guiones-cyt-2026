@@ -148,6 +148,7 @@ function validateConfiguration_() {
   CONFIG.questions.forEach(function (question, index) {
     if (question.id !== 'q' + (index + 1) || ids[question.id]) throw new Error('IDs de pregunta inválidos o duplicados.');
     ids[question.id] = true;
+    if (['single', 'multiple', 'text', 'sequence', 'dropdown'].indexOf(question.type) < 0) throw new Error('Tipo inválido en ' + question.id + '.');
     if (['automatic', 'mixed', 'teacher'].indexOf(question.grading && question.grading.method) < 0) throw new Error('Método inválido en ' + question.id + '.');
   });
 }
@@ -197,7 +198,7 @@ function automaticPoints_(question, answer) {
   var grading = question.grading;
   var available = grading.method === 'mixed' ? Number(grading.automaticPoints || 0) : Number(question.points || 0);
   if (question.type === 'single') return String(answer) === String(grading.correct) ? available : 0;
-  if (question.type === 'multiple' || question.type === 'sequence') return arraysEqual_(answer, grading.correct) ? available : 0;
+  if (question.type === 'multiple' || question.type === 'sequence' || question.type === 'dropdown') return arraysEqual_(answer, grading.correct) ? available : 0;
   if (question.type === 'text') {
     var accepted = grading.accepted || [];
     var pass = accepted.some(function (candidate) { return similarity_(normalize_(answer), normalize_(candidate)) >= Number(grading.threshold || 0.82); });

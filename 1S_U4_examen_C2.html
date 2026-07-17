@@ -51,7 +51,7 @@
       const ids = new Set(config.questions.map(q => q.id));
       if (ids.size !== 12 || config.questions.some((q,i) => q.id !== "q" + (i + 1))) throw new Error("Los IDs deben ser q1 ... q12, sin duplicados.");
       config.questions.forEach(q => {
-        if (!["single","multiple","text","sequence"].includes(q.type)) throw new Error("Tipo no válido en " + q.id);
+        if (!["single","multiple","text","sequence","dropdown"].includes(q.type)) throw new Error("Tipo no válido en " + q.id);
         if (!["automatic","mixed","teacher"].includes(q.grading && q.grading.method)) throw new Error("Método de revisión no válido en " + q.id);
         if (!(Number(q.points) > 0)) throw new Error("Puntaje no válido en " + q.id);
         const imageKeys = q.imageKeys || (q.imageKey ? [q.imageKey] : []);
@@ -71,6 +71,12 @@
       } else if (q.type === "sequence") {
         const choices = q.items.map((_,i) => '<option value="' + (i + 1) + '">' + (i + 1) + "</option>").join("");
         control = '<div class="sequence">' + q.items.map((item,i) => '<label class="sequence-row"><select name="' + escapeHtml(q.id) + '_' + (i + 1) + '"><option value="">Orden</option>' + choices + '</select><span>' + escapeHtml(item) + '</span></label>').join("") + "</div>";
+      } else if (q.type === "dropdown") {
+        control = '<div class="sequence">' + q.items.map((item,i) => {
+          const label = typeof item === "object" ? item.label : item;
+          const options = (typeof item === "object" && item.options ? item.options : q.options || []).map(option => '<option value="' + escapeHtml(option.value) + '">' + escapeHtml(option.label) + '</option>').join("");
+          return '<label class="sequence-row"><select name="' + escapeHtml(q.id) + '_' + (i + 1) + '"><option value="">Selecciona</option>' + options + '</select><span>' + escapeHtml(label) + '</span></label>';
+        }).join("") + "</div>";
       }
       const figures = images.map(image => '<figure><img class="exam-image" src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '"><figcaption class="caption">' + escapeHtml(image.caption || "") + "</figcaption></figure>").join("");
       return '<section class="question" data-question="' + escapeHtml(q.id) + '"><div class="heading"><span class="number">' + (index + 1) + '</span><div><div class="kind">' + escapeHtml(q.label) + " · " + Number(q.points) + ' pt</div><h2>' + escapeHtml(q.prompt) + '</h2></div></div>' + figures + control + '<div class="hint"><button type="button" class="hint-toggle" aria-expanded="false">▸ Ver pista</button><p>' + escapeHtml(q.hint) + "</p></div></section>";
@@ -119,7 +125,7 @@
       if (q.type === "multiple") return form.querySelectorAll('input[name="' + CSS.escape(id) + '"]:checked').length > 0;
       if (q.type === "text") return Boolean(form.elements[id].value.trim());
       const values = q.items.map((_,i) => form.elements[id + "_" + (i + 1)].value);
-      return values.every(Boolean) && new Set(values).size === values.length;
+      return values.every(Boolean) && (q.type === "dropdown" || new Set(values).size === values.length);
     }
     function updateProgress() {
       const sections = [...form.querySelectorAll(".question")], completed = sections.filter(questionComplete).length;
