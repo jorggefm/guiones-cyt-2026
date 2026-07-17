@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>Plantilla neutral de examen</title>
+  <style>
+    :root{--ink:#18332d;--muted:#5d706b;--paper:#fff;--bg:#edf5f1;--brand:#176b55;--accent:#d76545;--line:#cadbd4;--bad:#a12626;--ok:#18734e;--shadow:0 12px 34px rgba(24,51,45,.11)}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#f7fbf9,var(--bg));color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45;padding-bottom:98px}
+    button,input,select,textarea{font:inherit}.shell{width:min(980px,calc(100% - 28px));margin:auto}.top{position:sticky;top:0;z-index:20;background:rgba(247,251,249,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+    .top-inner{display:flex;gap:20px;justify-content:space-between;align-items:center;padding:14px 0}.eyebrow{margin:0;color:var(--brand);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}h1{font-size:clamp(1.28rem,3vw,2rem);margin:2px 0}.meta{color:var(--muted)}
+    .status{display:flex;gap:8px}.status-card{min-width:104px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:.75rem}.status-card strong{display:block;color:var(--ink);font-size:1.15rem}
+    .card{margin-top:20px;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}.intro{padding:22px}.intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.auth{padding:16px;border:1px solid var(--line);border-radius:14px;background:#f7fbf9}.auth strong{display:block;margin-bottom:5px}.auth-user{display:none;color:var(--ok);font-weight:700}.auth-user.visible{display:block}
+    .identity{display:grid;grid-template-columns:1fr 1fr 120px;gap:12px;margin-top:18px}.field label{display:block;font-size:.8rem;font-weight:700}.field input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.notice{padding:11px 14px;border-left:4px solid var(--accent);background:#fff6f1;border-radius:8px;color:#6b3d31}
+    .exam-locked{opacity:.48;pointer-events:none;user-select:none;filter:grayscale(.2)}.question{padding:22px;border-top:1px solid var(--line);scroll-margin-top:110px}.question:first-child{border-top:0}.question.complete{background:linear-gradient(90deg,rgba(23,107,85,.05),transparent 35%)}.heading{display:flex;gap:12px}.number{display:grid;place-items:center;flex:0 0 38px;height:38px;border-radius:12px 12px 12px 3px;background:var(--brand);color:white;font-weight:800}.kind{color:var(--accent);font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.question h2{font-size:1.08rem;margin:2px 0 12px}.options{display:grid;gap:9px;margin:12px 0}.option{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:11px}.option:has(input:checked){border-color:var(--brand);background:#eff8f4}.answer{width:100%;min-height:110px;padding:12px;border:1px solid var(--line);border-radius:11px;resize:vertical}.sequence{display:grid;gap:9px}.sequence-row{display:grid;grid-template-columns:76px 1fr;align-items:center;gap:10px}.sequence select{padding:9px;border:1px solid var(--line);border-radius:9px}.exam-image{display:block;max-width:100%;max-height:560px;object-fit:contain;margin:14px auto;border:1px solid var(--line);border-radius:14px}.caption{color:var(--muted);text-align:center;font-size:.86rem}.hint{margin-top:12px}.hint button{border:0;background:none;color:var(--brand);font-weight:800;cursor:pointer}.hint p{display:none;margin:7px 0 0;padding:10px 12px;background:#fff8dc;border-radius:9px}.hint.open p{display:block}
+    .invalid{outline:2px solid var(--bad)!important}.error{display:none;padding:12px;color:var(--bad);background:#fff0f0;border-radius:9px}.error.visible{display:block}.actions{position:fixed;inset:auto 0 0;z-index:30;padding:12px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom));background:rgba(247,251,249,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px)}.actions-inner{width:min(980px,100%);margin:auto;display:flex;align-items:center;justify-content:flex-end;gap:14px}.submit{padding:12px 22px;border:0;border-radius:999px;background:var(--brand);color:#fff;font-weight:800;cursor:pointer}.submit:disabled{opacity:.55;cursor:not-allowed}.message{color:var(--muted);font-size:.88rem}.screen-alert{display:none;position:fixed;top:88px;left:50%;z-index:50;transform:translateX(-50%);padding:10px 14px;background:#603829;color:#fff;border-radius:10px}.screen-alert.visible{display:block}.submission{display:none;position:fixed;inset:0;z-index:80;background:rgba(11,31,26,.72);place-items:center;padding:20px}.submission.visible{display:grid}.submission-card{max-width:480px;padding:30px;background:#fff;border-radius:20px;text-align:center}.test-report{display:none;white-space:pre-wrap;margin:20px auto;padding:16px;background:#10241f;color:#d8ffef;border-radius:12px}.test-report.visible{display:block}
+    @media(max-width:720px){.top-inner{align-items:flex-start}.status{flex-direction:column}.intro-grid,.identity{grid-template-columns:1fr}.question,.intro{padding:16px}.actions-inner{justify-content:stretch;flex-direction:column}.submit{width:100%}.message{min-height:1.2em}}
+    @media(orientation:landscape) and (max-height:650px){.top{position:static}.question{scroll-margin-top:16px}.exam-image{max-height:68vh}}
+    @media print{.top,.actions,.hint,.notice{display:none}body{padding:0}.card{box-shadow:none}.question{break-inside:avoid}}
+  </style>
+  <script src="1S_U4_examen_configuracion.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <header class="top"><div class="shell top-inner"><div><p id="subject" class="eyebrow"></p><h1 id="examTitle">Cargando configuración…</h1><div id="examMeta" class="meta"></div></div><div class="status"><div class="status-card">Respondidas<strong id="progressCount">0/12</strong></div><div class="status-card">Salidas<strong id="exitCount">0</strong></div></div></div></header>
+  <main class="shell">
+    <pre id="testReport" class="test-report" aria-live="polite"></pre>
+    <section class="card intro"><div class="intro-grid"><div><h2>Acceso institucional</h2><p>Inicia sesión con tu cuenta institucional. El examen se habilitará después de verificarla.</p><div class="notice">Las salidas de pantalla se cuentan después de tu primera interacción con una pregunta y se detienen al enviar.</div></div><div id="authPanel" class="auth"><strong>Verifica tu identidad con Google</strong><div id="googleSignInButton"></div><div id="authUser" class="auth-user"></div></div></div><div class="identity"><div class="field"><label for="studentName">Nombre</label><input id="studentName" name="studentName" form="exam" readonly required></div><div class="field"><label for="studentEmail">Correo</label><input id="studentEmail" name="studentEmail" form="exam" type="email" readonly required></div><div class="field"><label for="section">Sección</label><input id="section" name="section" form="exam" maxlength="8" required></div></div></section>
+    <form id="exam" class="card exam-locked" aria-disabled="true" novalidate></form>
+  </main>
+  <div class="actions"><div class="actions-inner"><div id="actionMessage" class="message" aria-live="polite"></div><button id="submitButton" class="submit" type="button" disabled>Enviar examen</button></div></div>
+  <div id="screenAlert" class="screen-alert" role="status"></div>
+  <div id="submissionPanel" class="submission" role="dialog" aria-modal="true"><div class="submission-card"><h2>Examen enviado correctamente</h2><p>El servidor confirmó que las respuestas fueron registradas.</p><p>No cierres esta confirmación hasta que el docente lo indique.</p></div></div>
+  <script>
+  "use strict";
+  (function () {
+    const CONFIG = typeof EXAM_CONFIG === "object" ? EXAM_CONFIG : null;
+    const form = document.getElementById("exam");
+    const submitButton = document.getElementById("submitButton");
+    const actionMessage = document.getElementById("actionMessage");
+    let googleCredential = "", verifiedIdentity = null, submitting = false, submitted = false, questionInteracted = false;
+    const startedAt = new Date().toISOString();
+    const submissionId = createSubmissionId();
+
+    function assertConfiguration(config) {
+      if (!config) throw new Error("Falta configuracion.js");
+      const required = ["grade","unit","title","examId","version","spreadsheetId","appsScriptEndpoint","googleClientId"];
+      required.forEach(key => { if (!String(config[key] || "").trim()) throw new Error("Falta config." + key); });
+      if (!Array.isArray(config.questions) || config.questions.length !== 12) throw new Error("La matriz debe contener exactamente 12 preguntas.");
+      const ids = new Set(config.questions.map(q => q.id));
+      if (ids.size !== 12 || config.questions.some((q,i) => q.id !== "q" + (i + 1))) throw new Error("Los IDs deben ser q1 ... q12, sin duplicados.");
+      config.questions.forEach(q => {
+        if (!["single","multiple","text","sequence"].includes(q.type)) throw new Error("Tipo no válido en " + q.id);
+        if (!["automatic","mixed","teacher"].includes(q.grading && q.grading.method)) throw new Error("Método de revisión no válido en " + q.id);
+        if (!(Number(q.points) > 0)) throw new Error("Puntaje no válido en " + q.id);
+        const imageKeys = q.imageKeys || (q.imageKey ? [q.imageKey] : []);
+        if (imageKeys.some(key => !(config.images && config.images[key]))) throw new Error("Imagen inexistente en " + q.id);
+      });
+    }
+
+    function escapeHtml(value) { return String(value == null ? "" : value).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[c]); }
+    function renderQuestion(q, index) {
+      const images = (q.imageKeys || (q.imageKey ? [q.imageKey] : [])).map(key => CONFIG.images[key]);
+      let control = "";
+      if (q.type === "single" || q.type === "multiple") {
+        const inputType = q.type === "single" ? "radio" : "checkbox";
+        control = '<div class="options">' + q.options.map(o => '<label class="option"><input type="' + inputType + '" name="' + escapeHtml(q.id) + '" value="' + escapeHtml(o.value) + '"><span>' + escapeHtml(o.label) + '</span></label>').join("") + "</div>";
+      } else if (q.type === "text") {
+        control = '<textarea class="answer" name="' + escapeHtml(q.id) + '" minlength="' + Number(q.minLength || 1) + '" placeholder="' + escapeHtml(q.placeholder || "") + '"></textarea>';
+      } else if (q.type === "sequence") {
+        const choices = q.items.map((_,i) => '<option value="' + (i + 1) + '">' + (i + 1) + "</option>").join("");
+        control = '<div class="sequence">' + q.items.map((item,i) => '<label class="sequence-row"><select name="' + escapeHtml(q.id) + '_' + (i + 1) + '"><option value="">Orden</option>' + choices + '</select><span>' + escapeHtml(item) + '</span></label>').join("") + "</div>";
+      }
+      const figures = images.map(image => '<figure><img class="exam-image" src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '"><figcaption class="caption">' + escapeHtml(image.caption || "") + "</figcaption></figure>").join("");
+      return '<section class="question" data-question="' + escapeHtml(q.id) + '"><div class="heading"><span class="number">' + (index + 1) + '</span><div><div class="kind">' + escapeHtml(q.label) + " · " + Number(q.points) + ' pt</div><h2>' + escapeHtml(q.prompt) + '</h2></div></div>' + figures + control + '<div class="hint"><button type="button" class="hint-toggle" aria-expanded="false">▸ Ver pista</button><p>' + escapeHtml(q.hint) + "</p></div></section>";
+    }
+
+    function renderExam() {
+      document.title = CONFIG.title;
+      document.getElementById("subject").textContent = CONFIG.subject;
+      document.getElementById("examTitle").textContent = CONFIG.title;
+      document.getElementById("examMeta").textContent = CONFIG.grade + " · " + CONFIG.unit + " · Versión " + CONFIG.version;
+      form.innerHTML = CONFIG.questions.map(renderQuestion).join("");
+      form.querySelectorAll(".hint-toggle").forEach(button => button.addEventListener("click", () => {
+        const hint = button.closest(".hint"); hint.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(hint.classList.contains("open")));
+      }));
+    }
+
+    function createScreenExitCounter(options) {
+      let active = false, stopped = false, away = Boolean(options.initialHidden), count = 0;
+      return {
+        start: () => { if (!stopped) active = true; },
+        stop: () => { stopped = true; active = false; },
+        visibilityChanged: hidden => {
+          hidden = Boolean(hidden);
+          if (hidden && !away && active && !stopped) { away = true; count += 1; options.onCount(count); return; }
+          if (!hidden) away = false;
+        },
+        getCount: () => count
+      };
+    }
+
+    const exitCounter = createScreenExitCounter({ initialHidden: document.hidden, onCount: count => {
+      document.getElementById("exitCount").textContent = String(count);
+      const alert = document.getElementById("screenAlert"); alert.textContent = "Aviso " + count + ": se registró una salida de la pantalla."; alert.classList.add("visible");
+      window.setTimeout(() => alert.classList.remove("visible"), 4000);
+    }});
+    // Única fuente de eventos del contador: visibilitychange.
+    document.addEventListener("visibilitychange", () => exitCounter.visibilityChanged(document.hidden));
+
+    function questionComplete(section) {
+      const id = section.dataset.question, q = CONFIG.questions.find(item => item.id === id);
+      if (q.type === "single") return Boolean(form.querySelector('input[name="' + CSS.escape(id) + '"]:checked'));
+      if (q.type === "multiple") return form.querySelectorAll('input[name="' + CSS.escape(id) + '"]:checked').length > 0;
+      if (q.type === "text") return Boolean(form.elements[id].value.trim());
+      const values = q.items.map((_,i) => form.elements[id + "_" + (i + 1)].value);
+      return values.every(Boolean) && new Set(values).size === values.length;
+    }
+    function updateProgress() {
+      const sections = [...form.querySelectorAll(".question")], completed = sections.filter(questionComplete).length;
+      document.getElementById("progressCount").textContent = completed + "/" + CONFIG.questions.length;
+      sections.forEach(s => s.classList.toggle("complete", questionComplete(s)));
+    }
+    function startAfterQuestionInteraction() { questionInteracted = true; exitCounter.start(); }
+    form.addEventListener("input", event => { if (event.target.closest(".question")) startAfterQuestionInteraction(); updateProgress(); });
+    form.addEventListener("change", event => { if (event.target.closest(".question")) startAfterQuestionInteraction(); updateProgress(); });
+    form.addEventListener("click", event => { if (event.target.closest(".question") && event.target.closest(".hint-toggle")) startAfterQuestionInteraction(); });
+
+    function decodeCredential(token) { try { const part = token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"); const bytes = Uint8Array.from(atob(part), c => c.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); } catch (_) { return null; } }
+    function lockExam(message) { googleCredential = ""; verifiedIdentity = null; form.classList.add("exam-locked"); form.setAttribute("aria-disabled","true"); submitButton.disabled = true; actionMessage.textContent = message || ""; }
+    function handleGoogleCredential(response) {
+      const identity = response && response.credential ? decodeCredential(response.credential) : null;
+      const email = String(identity && identity.email || "").toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith("@" + CONFIG.schoolDomain)) { lockExam("La cuenta no pertenece al dominio institucional."); return; }
+      googleCredential = response.credential; verifiedIdentity = identity;
+      document.getElementById("studentName").value = identity.name || ""; document.getElementById("studentEmail").value = email;
+      document.getElementById("authUser").textContent = "✓ " + (identity.name || email); document.getElementById("authUser").classList.add("visible"); document.getElementById("googleSignInButton").replaceChildren();
+      form.classList.remove("exam-locked"); form.removeAttribute("aria-disabled"); submitButton.disabled = false; actionMessage.textContent = "";
+      // El login no inicia el contador.
+    }
+    function initializeGoogleLogin(attempt) {
+      if (String(CONFIG.googleClientId).startsWith("__") || String(CONFIG.appsScriptEndpoint).startsWith("__")) { lockExam("Completa la configuración antes de usar esta copia."); return; }
+      if (!window.google || !google.accounts || !google.accounts.id) { if (attempt < 80) window.setTimeout(() => initializeGoogleLogin(attempt + 1),250); else lockExam("No se pudo cargar el acceso de Google."); return; }
+      google.accounts.id.initialize({client_id:CONFIG.googleClientId,callback:handleGoogleCredential,auto_select:false,cancel_on_tap_outside:false,hd:CONFIG.schoolDomain});
+      google.accounts.id.renderButton(document.getElementById("googleSignInButton"),{type:"standard",theme:"outline",size:"large",text:"signin_with",shape:"pill",width:240});
+    }
+
+    function validateExam() {
+      form.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
+      if (!googleCredential || !verifiedIdentity) { actionMessage.textContent = "Inicia sesión con tu cuenta institucional."; return false; }
+      const section = document.getElementById("section"); if (!section.value.trim()) { section.classList.add("invalid"); actionMessage.textContent = "Escribe la sección."; return false; }
+      const incomplete = [...form.querySelectorAll(".question")].find(s => !questionComplete(s));
+      if (incomplete) { incomplete.classList.add("invalid"); incomplete.scrollIntoView({behavior:"smooth",block:"center"}); actionMessage.textContent = "Completa las 12 preguntas."; return false; }
+      const short = [...form.querySelectorAll("textarea[minlength]")].find(el => el.value.trim().length < Number(el.minLength));
+      if (short) { short.classList.add("invalid"); short.focus(); actionMessage.textContent = "Amplía la respuesta señalada."; return false; }
+      return true;
+    }
+    function collectAnswers() {
+      const answers = {};
+      CONFIG.questions.forEach(q => {
+        if (q.type === "single") answers[q.id] = (form.querySelector('input[name="' + CSS.escape(q.id) + '"]:checked') || {}).value || "";
+        else if (q.type === "multiple") answers[q.id] = [...form.querySelectorAll('input[name="' + CSS.escape(q.id) + '"]:checked')].map(el => el.value);
+        else if (q.type === "text") answers[q.id] = form.elements[q.id].value.trim();
+        else answers[q.id] = q.items.map((_,i) => form.elements[q.id + "_" + (i + 1)].value);
+      }); return answers;
+    }
+    function createSubmissionId() { return window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : "exam-" + Date.now() + "-" + Math.random().toString(16).slice(2); }
+    function payload() { return {examId:CONFIG.examId,examVersion:CONFIG.version,submissionId,grade:CONFIG.grade,unit:CONFIG.unit,studentName:verifiedIdentity.name,studentEmail:verifiedIdentity.email,section:document.getElementById("section").value.trim(),startedAt,finishedAt:new Date().toISOString(),screenExits:exitCounter.getCount(),answers:collectAnswers(),googleCredential}; }
+    const wait = ms => new Promise(resolve => setTimeout(resolve,ms));
+    async function verifySubmission() { for (let i=0;i<5;i+=1) { await wait(i ? 1400 : 800); try { const url=CONFIG.appsScriptEndpoint+"?action=status&submissionId="+encodeURIComponent(submissionId)+"&examId="+encodeURIComponent(CONFIG.examId)+"&t="+Date.now(); const response=await fetch(url,{cache:"no-store",redirect:"follow"}); const result=await response.json(); if(result&&result.ok&&result.found) return true; } catch (_) {} } return false; }
+    async function submitExam() {
+      if (submitting || submitted || !validateExam()) return;
+      submitting = true; exitCounter.stop(); submitButton.disabled = true; actionMessage.textContent = "Enviando y esperando confirmación real…";
+      try { await fetch(CONFIG.appsScriptEndpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload()),keepalive:true}); if (!await verifySubmission()) throw new Error("Sin confirmación"); submitted=true; actionMessage.textContent=""; document.getElementById("submissionPanel").classList.add("visible"); }
+      catch (_) { actionMessage.textContent="No se confirmó el envío. Reintenta: el identificador estable evita duplicados."; submitButton.disabled=false; }
+      finally { submitting=false; }
+    }
+    submitButton.addEventListener("click", submitExam);
+    window.addEventListener("beforeunload", event => { if (questionInteracted && !submitted) { event.preventDefault(); event.returnValue=""; } });
+
+    function runScreenExitCounterTests() {
+      const results=[]; let shown=0; const c=createScreenExitCounter({initialHidden:false,onCount:n=>{shown=n;}});
+      function check(name, expected) { const actual=c.getCount(); results.push({name,expected,actual,ok:actual===expected&&shown===expected}); }
+      c.visibilityChanged(true); c.visibilityChanged(false); check("Login y regreso",0);
+      c.start(); c.visibilityChanged(true); c.visibilityChanged(true); c.visibilityChanged(false); check("Una salida y regreso",1);
+      c.visibilityChanged(true); c.visibilityChanged(false); check("Segunda salida y regreso",2);
+      /* Un giro solo cambia el layout: no emite visibilitychange. */ check("Giro de tablet",2);
+      c.stop(); c.visibilityChanged(true); c.visibilityChanged(false); check("Envío",2);
+      return results;
+    }
+    window.runScreenExitCounterTests = runScreenExitCounterTests;
+
+    try { assertConfiguration(CONFIG); renderExam(); updateProgress(); initializeGoogleLogin(0); if (new URLSearchParams(location.search).get("pruebas") === "salidas") { const results=runScreenExitCounterTests(); const report=document.getElementById("testReport"); report.textContent=results.map(r=>(r.ok?"✓ ":"✗ ")+r.name+": "+r.actual).join("\n"); report.classList.add("visible"); if(results.some(r=>!r.ok)) throw new Error("Fallaron las pruebas del contador"); } }
+    catch (error) { lockExam(error.message); actionMessage.textContent="Configuración inválida: "+error.message; }
+  }());
+  </script>
+</body>
+</html>
+
