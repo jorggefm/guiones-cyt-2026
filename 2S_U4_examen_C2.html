@@ -536,6 +536,10 @@
       }
     }
 
+    function credentialIsFresh(seconds) {
+      return Boolean(verifiedIdentity && Number(verifiedIdentity.exp || 0) > Math.floor(Date.now() / 1000) + Number(seconds || 0));
+    }
+
     function lockExam(message) {
       googleCredential = "";
       verifiedIdentity = null;
@@ -564,7 +568,6 @@
       document.getElementById("studentEmail").value = email;
       document.getElementById("authUser").textContent = `✓ ${identity.name || email}`;
       document.getElementById("authUser").classList.add("visible");
-      document.getElementById("googleSignInButton").replaceChildren();
       document.getElementById("authStatus").textContent = "Cuenta institucional verificada. Ya puedes responder.";
       document.getElementById("authStatus").classList.add("verified");
       form.classList.remove("exam-locked");
@@ -674,6 +677,10 @@
 
       if (!googleCredential || !verifiedIdentity) {
         errors.push(invalidate(document.getElementById("authPanel"), "Inicia sesión con tu correo institucional antes de enviar."));
+      } else if (!credentialIsFresh(120)) {
+        document.getElementById("authStatus").textContent = "La sesión de Google venció. Accede nuevamente; tus respuestas se conservan.";
+        document.getElementById("authStatus").classList.remove("verified");
+        errors.push(invalidate(document.getElementById("authPanel"), "Renueva el acceso institucional antes de enviar."));
       }
       if (name.value.trim().length < 5) errors.push(invalidate(name, "Escribe tus apellidos y nombres completos."));
       const cleanEmail = email.value.trim().toLowerCase();
@@ -734,8 +741,8 @@
     }
 
     async function verifySubmission() {
-      for (let attempt = 0; attempt < 4; attempt += 1) {
-        await wait(attempt === 0 ? 900 : 1400);
+      for (let attempt = 0; attempt < 12; attempt += 1) {
+        await wait(attempt === 0 ? 900 : 2000);
         try {
           const url = `${SUBMIT_ENDPOINT}?action=status&submissionId=${encodeURIComponent(submissionId)}&t=${Date.now()}`;
           const response = await fetch(url, { cache: "no-store", redirect: "follow" });
@@ -781,7 +788,14 @@
         submitting = false;
         submitButton.disabled = false;
         submitButton.classList.remove("sending");
-        actionMessage.textContent = "No se confirmó el envío. Verifica tu conexión y pulsa nuevamente; no se duplicará el examen.";
+        if (!credentialIsFresh(0)) {
+          document.getElementById("authStatus").textContent = "La sesión de Google venció. Accede nuevamente; tus respuestas se conservan.";
+          document.getElementById("authStatus").classList.remove("verified");
+          document.getElementById("authPanel").scrollIntoView({ behavior: "smooth", block: "center" });
+          actionMessage.textContent = "Renueva el acceso institucional y vuelve a enviar.";
+        } else {
+          actionMessage.textContent = "No se confirmó el envío. Verifica tu conexión y pulsa nuevamente; no se duplicará el examen.";
+        }
       }
     }
 
