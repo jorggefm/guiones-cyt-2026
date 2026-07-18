@@ -12,7 +12,7 @@ var EXAM_CONFIG = Object.freeze({
   spreadsheetId: "1sgBXCl3-RWWN7qUUOev5i9SxqQRIvrNJsX1TATCpt7o",
   appsScriptEndpoint: "https://script.google.com/macros/s/AKfycbyN74Mg-AaI0UZY7V7Ple3-5fM61A55y3YezvEaTX0hIQUjDuAhmlmOmR1_dAR94UNQJQ/exec",
   googleClientId: "120108159327-flo4qh7s1goq2acdjdnu725lv5i1m138.apps.googleusercontent.com",
-  reportsEnabled: false,
+  reportsEnabled: true,
   achievementScale: [
     { label: "AD", minRatio: 0.90 },
     { label: "A", minRatio: 0.70 },

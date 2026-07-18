@@ -28,6 +28,14 @@ var GRADING_HEADERS = [
   'Automático', 'Docente', 'Total', 'Máximo', 'Escala', 'Estado', 'Retroalimentación'
 ];
 
+var ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
+var REPORT_HEADERS = ['submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado', 'reporte_json'];
+var EDITABLE_REVIEW_QUESTIONS = {
+  9: { maxTeacher: 2 },
+  11: { maxTeacher: 1 },
+  12: { maxTeacher: 4 }
+};
+
 function doGet(e) {
   try {
     validateConfiguration_();
@@ -35,6 +43,7 @@ function doGet(e) {
     if (action === 'status') {
       return submissionStatus_(String(e.parameter.submissionId || ''), String(e.parameter.examId || ''));
     }
+    if (action === 'report') return reportStatus_(String(e.parameter.requestId || ''));
     return json_({ ok: true, service: 'exam-template', examId: CONFIG.examId, version: CONFIG.version });
   } catch (error) {
     return json_({ ok: false, error: String(error && error.message || error) });
@@ -47,6 +56,9 @@ function doPost(e) {
   try {
     validateConfiguration_();
     var payload = parsePayload_(e);
+    var action = String(payload.action || '').toLowerCase();
+    if (action === 'requestreport') return requestReport_(payload);
+    if (action === 'savereportreview') return saveReportReview_(payload);
     var identity = validatePayload_(payload);
     var responses = getOrCreateSheet_(SHEETS.responses);
     ensureHeaders_(responses, RESPONSE_HEADERS);
@@ -101,8 +113,7 @@ function setupExamWorkbook() {
   control.clearContents();
   control.getRange(1, 1, controlRows.length, 2).setValues(controlRows);
 
-  ensureHeaders_(reports, ['Fecha', 'EXAM_ID', 'Indicador', 'Dimensión', 'Valor', 'Filtro', 'Detalle', 'Versión de reporte']);
-  reports.getRange('A2').setNote('Espacio reservado. No se generan reportes hasta implementar una rutina posterior y activar reportsEnabled.');
+  ensureHeaders_(reports, REPORT_HEADERS);
 
   [responses, key, grading, control, reports].forEach(function (sheet) {
     styleHeader_(sheet);
@@ -238,6 +249,245 @@ function findSubmissionRow_(sheet, submissionId) {
   if (last < 2) return -1;
   var match = sheet.getRange(2, 2, last - 1, 1).createTextFinder(String(submissionId)).matchEntireCell(true).findNext();
   return match ? match.getRow() : -1;
+}
+
+function requestReport_(payload) {
+  if (!payload || payload.examId !== CONFIG.examId) throw new Error('Examen no reconocido.');
+  var requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de consulta no válido.');
+  var identity = verifyGoogleIdentity_(String(payload.googleCredential || ''));
+  var email = String(identity.email || '').toLowerCase();
+  var isAdmin = ADMIN_EMAILS.indexOf(email) !== -1;
+  var targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  var cache = CacheService.getScriptCache();
+  var cacheKey = 'report:' + requestId;
+  if (!reportsEnabled_()) {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'disabled' }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+  var sheet = getOrCreateSheet_(SHEETS.reports);
+  ensureHeaders_(sheet, REPORT_HEADERS);
+  var rows = sheet.getLastRow() < 2 ? [] : sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getDisplayValues();
+  if (isAdmin && !targetEmail) {
+    var reports = rows.filter(function (row) { return String(row[7]).toUpperCase() === 'SI'; }).map(function (row) {
+      var section = '';
+      try { section = String(JSON.parse(String(row[8] || '{}')).section || ''); } catch (_) {}
+      return { email: String(row[1]).toLowerCase(), name: row[2], section: section, total: Number(row[3] || 0), level: row[4] };
+    }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'admin_index', reports: reports }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+  var lookup = isAdmin && targetEmail ? targetEmail : email;
+  var row = rows.find(function (item) { return String(item[1]).toLowerCase() === lookup; });
+  if (!row) cache.put(cacheKey, JSON.stringify({ ok: true, status: 'not_found' }), 300);
+  else if (String(row[7]).toUpperCase() !== 'SI') cache.put(cacheKey, JSON.stringify({ ok: true, status: 'pending' }), 300);
+  else {
+    var report = JSON.parse(String(row[8] || '{}'));
+    if (String(report.studentEmail || '').toLowerCase() !== lookup) throw new Error('El reporte no coincide con la identidad verificada.');
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: isAdmin ? prepareAdminReport_(report) : report, admin: isAdmin }), 300);
+  }
+  return json_({ ok: true, accepted: true, requestId: requestId });
+}
+
+function saveReportReview_(payload) {
+  if (!payload || payload.examId !== CONFIG.examId) throw new Error('Examen no reconocido.');
+  var requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de actualización no válido.');
+  var identity = verifyGoogleIdentity_(String(payload.googleCredential || ''));
+  if (ADMIN_EMAILS.indexOf(String(identity.email || '').toLowerCase()) === -1) throw new Error('Esta cuenta no tiene permisos para editar calificaciones.');
+  var targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  var number = Number(payload.questionNumber);
+  var edit = EDITABLE_REVIEW_QUESTIONS[number];
+  if (!edit) throw new Error('Esta pregunta no admite revisión manual.');
+  var points = round_(Number(payload.pointsEarned));
+  var feedback = String(payload.feedback || '').trim();
+  if (!Number.isFinite(points) || points < 0 || points > edit.maxTeacher) throw new Error('Puntaje fuera del rango permitido.');
+  if (!feedback || feedback.length > 1200) throw new Error('Escribe un comentario válido.');
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    var sheet = getOrCreateSheet_(SHEETS.reports);
+    var rows = sheet.getRange(2, 1, Math.max(0, sheet.getLastRow() - 1), 9).getDisplayValues();
+    var index = rows.findIndex(function (row) { return String(row[1]).toLowerCase() === targetEmail; });
+    if (index < 0) throw new Error('No se encontró el reporte del estudiante.');
+    var report = JSON.parse(String(rows[index][8] || '{}'));
+    var question = (report.questions || []).find(function (item) { return Number(item.number) === number; });
+    if (!question) throw new Error('No se encontró la pregunta.');
+    question.pointsEarned = points;
+    question.feedback = feedback;
+    question.status = reviewStatus_(points, Number(question.pointsMax || 0), question.studentAnswer);
+    var teacher = [9, 11, 12].reduce(function (sum, n) {
+      var q = (report.questions || []).find(function (item) { return Number(item.number) === n; });
+      return sum + Number(q && q.pointsEarned || 0);
+    }, 0);
+    var automatic = Number(report.score && report.score.automatic || 0);
+    var rawTotal = round_(automatic + teacher);
+    var total = round_(rawTotal / 23 * 20);
+    var level = levelFromScore_(total);
+    report.score = { automatic: automatic, automaticMax: 16, teacher: round_(teacher), teacherMax: 7, rawTotal: rawTotal, rawMaximum: 23, total: total, level: level };
+    report.reviewedAt = new Date().toISOString();
+    var detail = buildTeacherDetail_(report);
+    sheet.getRange(index + 2, 4, 1, 6).setValues([[total, level, detail, report.comment || '', 'SI', JSON.stringify(report)]]);
+    var grading = getOrCreateSheet_(SHEETS.grading);
+    if (grading.getLastRow() >= 2) {
+      var emails = grading.getRange(2, 5, grading.getLastRow() - 1, 1).getDisplayValues();
+      var gi = emails.findIndex(function (item) { return String(item[0]).toLowerCase() === targetEmail; });
+      if (gi >= 0) grading.getRange(gi + 2, 7, 1, 7).setValues([[automatic, round_(teacher), total, 20, level, 'Liberado', feedback]]);
+    }
+    SpreadsheetApp.flush();
+    CacheService.getScriptCache().put('report:' + requestId, JSON.stringify({ ok: true, status: 'ready', report: prepareAdminReport_(report), admin: true, saved: true }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function prepareAdminReport_(report) {
+  var copy = JSON.parse(JSON.stringify(report || {}));
+  (copy.questions || []).forEach(function (question) {
+    if (EDITABLE_REVIEW_QUESTIONS[Number(question.number)]) {
+      question.adminEditable = true;
+      question.minimumPoints = 0;
+    }
+  });
+  return copy;
+}
+
+function buildTeacherDetail_(report) {
+  function p(number) { var q = (report.questions || []).find(function (item) { return Number(item.number) === number; }); return Number(q && q.pointsEarned || 0); }
+  return ['Automático ' + Number(report.score.automatic || 0) + '/16', 'Docente ' + Number(report.score.teacher || 0) + '/7', 'P9 ' + p(9) + '/2', 'P11 ' + p(11) + '/1', 'P12 ' + p(12) + '/4'].join(' · ');
+}
+
+function reviewStatus_(points, maximum, answer) {
+  if (points <= 0) return String(answer || '').trim() ? 'incorrect' : 'unanswered';
+  return points >= maximum ? 'correct' : 'partial';
+}
+
+function levelFromScore_(value) { var score = Math.max(0, Math.min(20, Number(value) || 0)); return score < 12 ? 'B' : (score < 17 ? 'A' : 'AD'); }
+function reportStatus_(requestId) {
+  var clean = String(requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(clean)) return json_({ ok: false, error: 'Consulta no válida.' });
+  var value = CacheService.getScriptCache().get('report:' + clean);
+  return value ? json_(JSON.parse(value)) : json_({ ok: true, pendingRequest: true });
+}
+function reportsEnabled_() {
+  var sheet = getOrCreateSheet_(SHEETS.control);
+  if (sheet.getLastRow() < 2) return false;
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 2).getDisplayValues();
+  var row = rows.find(function (item) { return String(item[0]).toUpperCase() === 'REPORTES_ACTIVOS'; });
+  return !!row && ['SI', 'SÍ'].indexOf(String(row[1]).toUpperCase()) >= 0;
+}
+
+/** Genera y libera los doce reportes oficiales de 1S a partir de las respuestas registradas. */
+function generateOfficialReports() {
+  validateConfiguration_();
+  var reviews = {
+    'sebastian_pacheco@colegiomilagrosdedios.edu.pe': [0.75, 0.25, 0.75],
+    'paul_moreno@colegiomilagrosdedios.edu.pe': [2, 1, 2],
+    'mariana_ochoa@colegiomilagrosdedios.edu.pe': [0.75, 0.25, 1.5],
+    'emily_canales@colegiomilagrosdedios.edu.pe': [0.25, 0.6, 2.25],
+    'jazmin_cusi@colegiomilagrosdedios.edu.pe': [1, 0.5, 3],
+    'favio_valverde@colegiomilagrosdedios.edu.pe': [1.5, 0.85, 3.75],
+    'mathew_sanchez@colegiomilagrosdedios.edu.pe': [1.25, 0.9, 3.25],
+    'fabricio_navarro@colegiomilagrosdedios.edu.pe': [1.25, 0.25, 3.5],
+    'lucianna_alvarado@colegiomilagrosdedios.edu.pe': [1.25, 1, 2.75],
+    'tatiana_santos@colegiomilagrosdedios.edu.pe': [1, 1, 1],
+    'vania_zarate@colegiomilagrosdedios.edu.pe': [2, 0.4, 2.5],
+    'brittany_reyna@colegiomilagrosdedios.edu.pe': [1, 0.6, 2.5]
+  };
+  var ideals = {
+    1: 'La actividad tectónica del Cinturón de Fuego del Pacífico explica la alta sismicidad del Perú.',
+    2: 'Roca madre → meteorización → fragmentación de rocas → mezcla con materia orgánica.',
+    3: 'Arenoso: rápido; con humus: equilibrado; arcilloso: lento.',
+    4: 'Contaminación → aumento de GEI → calor atrapado → derretimiento de glaciares → menos agua disponible.',
+    5: 'Arenoso deja pasar; humus equilibra; arcilloso retiene.',
+    6: 'La placa de Nazca subduce bajo la Sudamericana, se acumula energía y luego se libera en forma de sismo.',
+    7: 'B → C → D → A.',
+    8: 'Son GEI; atrapan calor; al aumentar calientan más la atmósfera.',
+    9: 'Las raíces sujetan el suelo y reducen la erosión; el humus retiene humedad y ayuda a conservar agua.',
+    10: 'El suelo arenoso deja pasar el agua más rápido y el arcilloso la retiene más.',
+    11: 'El Perú está junto al Océano Pacífico, en el Cinturón de Fuego; la placa de Nazca subduce bajo la Sudamericana y produce sismos.',
+    12: 'Debe conectar correctamente tectónica del Pacífico, contaminación/GEI y formación o permeabilidad del suelo.'
+  };
+  var explanations = {
+    1: 'El mar no causa los sismos: importa la ubicación tectónica del Perú.', 2: 'La roca madre se altera, se fragmenta y después se mezcla con materia orgánica.',
+    3: 'Los poros grandes del suelo arenoso dejan pasar más agua; la arcilla retiene más.', 4: 'Más GEI retienen calor, favorecen el retroceso glaciar y reducen reservas de agua.',
+    5: 'Cada suelo se distingue por cuánto deja pasar o retiene el agua.', 6: 'La liberación súbita de la energía acumulada en el contacto de placas produce sismos.',
+    7: 'La secuencia va de roca intacta a roca meteorizada, fragmentos y suelo fértil.', 8: 'Los gases de efecto invernadero retienen parte del calor en la atmósfera.',
+    9: 'La vegetación protege físicamente el suelo y el humus mejora su capacidad de conservar humedad.', 10: 'Arenoso y arcilloso presentan comportamientos opuestos frente al agua.',
+    11: 'La explicación completa une ubicación, placas, subducción y consecuencia sísmica.', 12: 'Una integración científica conecta las tres ideas mediante relaciones claras de causa y efecto.'
+  };
+  var responses = getOrCreateSheet_(SHEETS.responses);
+  var values = responses.getRange(2, 1, responses.getLastRow() - 1, 17).getDisplayValues();
+  var students = values.filter(function (row) { return reviews[String(row[7] || '').toLowerCase()]; });
+  if (students.length !== 12) throw new Error('Se esperaban 12 estudiantes y se encontraron ' + students.length + '.');
+  var reportRows = [REPORT_HEADERS];
+  var grading = getOrCreateSheet_(SHEETS.grading);
+  ensureHeaders_(grading, GRADING_HEADERS);
+  students.forEach(function (row) {
+    var submissionId = row[1], name = row[6], email = String(row[7]).toLowerCase(), section = row[8] || 'Única';
+    var answers = JSON.parse(row[12] || '{}');
+    var automatic = Number(row[13] || 0);
+    var teacherParts = reviews[email];
+    var teacher = round_(teacherParts[0] + teacherParts[1] + teacherParts[2]);
+    var raw = round_(automatic + teacher);
+    var total = round_(raw / 23 * 20);
+    var level = levelFromScore_(total);
+    var questions = CONFIG.questions.map(function (q, index) {
+      var number = index + 1;
+      var points = number === 9 ? teacherParts[0] : (number === 11 ? teacherParts[1] : (number === 12 ? teacherParts[2] : automaticPoints_(q, answers[q.id])));
+      return {
+        number: number, label: q.label, prompt: q.prompt, studentAnswer: formatReportAnswer_(q, answers[q.id]), idealAnswer: ideals[number],
+        explanation: explanations[number], pointsEarned: round_(points), pointsMax: Number(q.points || 0), status: reviewStatus_(points, Number(q.points || 0), answers[q.id]),
+        feedback: feedbackForQuestion_(number, points, Number(q.points || 0))
+      };
+    });
+    var report = {
+      examId: CONFIG.examId, version: CONFIG.version, grade: CONFIG.grade, unit: CONFIG.unit, title: CONFIG.title,
+      submissionId: submissionId, studentName: name, studentEmail: email, section: section, submittedAt: row[10],
+      score: { automatic: automatic, automaticMax: 16, teacher: teacher, teacherMax: 7, rawTotal: raw, rawMaximum: 23, total: total, level: level },
+      comment: level === 'AD' ? 'Logro destacado: conectas los conceptos con claridad. Revisa los comentarios para seguir afinando tus explicaciones.' : (level === 'A' ? 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.' : 'Estás en proceso. Usa las respuestas ideales y los comentarios para reforzar las relaciones de causa y efecto.'),
+      questions: questions, reviewedAt: new Date().toISOString()
+    };
+    var detail = buildTeacherDetail_(report);
+    reportRows.push([submissionId, email, name, total, level, detail, report.comment, 'SI', JSON.stringify(report)]);
+    var emailValues = grading.getLastRow() < 2 ? [] : grading.getRange(2, 5, grading.getLastRow() - 1, 1).getDisplayValues();
+    var gradingIndex = emailValues.findIndex(function (item) { return String(item[0]).toLowerCase() === email; });
+    if (gradingIndex >= 0) grading.getRange(gradingIndex + 2, 7, 1, 7).setValues([[automatic, teacher, total, 20, level, 'Liberado', report.comment]]);
+  });
+  var reports = getOrCreateSheet_(SHEETS.reports);
+  reports.clearContents();
+  reports.getRange(1, 1, reportRows.length, 9).setValues(reportRows);
+  styleHeader_(reports); reports.setFrozenRows(1); reports.autoResizeColumns(1, 9);
+  var control = getOrCreateSheet_(SHEETS.control);
+  var controlValues = control.getRange(1, 1, control.getLastRow(), 2).getDisplayValues();
+  var controlIndex = controlValues.findIndex(function (item) { return String(item[0]).toUpperCase() === 'REPORTES_ACTIVOS'; });
+  if (controlIndex >= 0) control.getRange(controlIndex + 1, 2).setValue('SI');
+  SpreadsheetApp.flush();
+  return { ok: true, reports: students.length };
+}
+
+function formatReportAnswer_(q, answer) {
+  if (Array.isArray(answer)) {
+    var items = q.items || [];
+    return answer.map(function (value, index) {
+      var item = items[index];
+      var label = item && typeof item === 'object' ? String(item.label || item.prompt || item.text || '') : String(item || '');
+      return (label ? label + ': ' : '') + value;
+    }).join(' | ');
+  }
+  if (q.type === 'single') {
+    var option = (q.options || []).find(function (item) { return String(item.value) === String(answer); });
+    return option ? option.label : String(answer || '');
+  }
+  return String(answer == null ? '' : answer);
+}
+
+function feedbackForQuestion_(number, points, maximum) {
+  if (points >= maximum) return number === 9 ? 'Explicaste correctamente cómo la vegetación y el humus ayudan a conservar el suelo y el agua.' : (number === 11 ? 'Relacionaste correctamente la ubicación del Perú, las placas, la subducción y los sismos.' : (number === 12 ? 'Integraste correctamente las tres ideas principales de la unidad.' : 'Respuesta correcta: identificaste todos los elementos solicitados.'));
+  if (points <= 0) return 'Revisa la respuesta ideal y vuelve a identificar los conceptos científicos que pide la pregunta.';
+  if (number === 9) return 'Reconociste parte de la función de la vegetación; faltó explicar con claridad el papel del humus o la conservación del agua.';
+  if (number === 11) return 'Reconociste parte de la causa de los sismos; faltó conectar algunos de estos conceptos: Océano Pacífico, Cinturón de Fuego, placas y subducción.';
+  if (number === 12) return 'Incluiste algunas ideas correctas, pero faltó conectarlas mediante una cadena científica clara entre Tierra, atmósfera y suelo.';
+  return 'Respuesta parcialmente correcta: compara tu orden o selección con la respuesta ideal.';
 }
 
 function parsePayload_(e) {
