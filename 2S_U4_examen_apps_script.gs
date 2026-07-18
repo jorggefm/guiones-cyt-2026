@@ -4,6 +4,7 @@ const EXAM_ID = '2S-U4-C2-OFICIAL-2026';
 const EXAM_VERSION = '2026-07-16';
 const GOOGLE_CLIENT_ID = '120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com';
 const SCHOOL_DOMAIN = 'colegiomilagrosdedios.edu.pe';
+const ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
 
 const HEADERS = [
   'timestamp',
@@ -103,6 +104,8 @@ function requestReport_(payload) {
 
   const identity = verifyGoogleIdentity_(payload.googleCredential || '');
   const email = String(identity.email || '').trim().toLowerCase();
+  const isAdmin = ADMIN_EMAILS.indexOf(email) !== -1;
+  const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
   const cache = CacheService.getScriptCache();
   const cacheKey = 'report:' + requestId;
 
@@ -119,17 +122,38 @@ function requestReport_(payload) {
   }
 
   const rows = sheet.getRange(2, 1, lastRow - 1, 9).getDisplayValues();
-  const row = rows.find(item => String(item[1] || '').trim().toLowerCase() === email);
+  if (isAdmin && !targetEmail) {
+    const reports = rows
+      .filter(item => String(item[7] || '').trim().toUpperCase() === 'SI')
+      .filter(item => String(item[1] || '').trim().toLowerCase() !== email)
+      .map(item => {
+        let section = '';
+        try { section = String(JSON.parse(String(item[8] || '{}')).section || ''); } catch (_) {}
+        return {
+          email: String(item[1] || '').trim().toLowerCase(),
+          name: String(item[2] || '').trim(),
+          section: section,
+          total: Number(item[3] || 0),
+          level: String(item[4] || '').trim()
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'admin_index', reports: reports }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+
+  const lookupEmail = isAdmin && targetEmail ? targetEmail : email;
+  const row = rows.find(item => String(item[1] || '').trim().toLowerCase() === lookupEmail);
   if (!row) {
     cache.put(cacheKey, JSON.stringify({ ok: true, status: 'not_found' }), 300);
   } else if (String(row[7] || '').trim().toUpperCase() !== 'SI') {
     cache.put(cacheKey, JSON.stringify({ ok: true, status: 'pending', message: 'La revisión docente todavía no ha sido liberada.' }), 300);
   } else {
     const report = JSON.parse(String(row[8] || '{}'));
-    if (!report.studentEmail || String(report.studentEmail).trim().toLowerCase() !== email) {
+    if (!report.studentEmail || String(report.studentEmail).trim().toLowerCase() !== lookupEmail) {
       throw new Error('El reporte no coincide con la identidad verificada.');
     }
-    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: report }), 300);
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: report, admin: isAdmin }), 300);
   }
   return json_({ ok: true, accepted: true, requestId: requestId });
 }

@@ -96,6 +96,15 @@
       cursor: pointer;
     }
 
+    .admin-panel { display: none; padding: clamp(20px, 4vw, 30px); }
+    .admin-panel.visible { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; }
+    .admin-panel h2 { margin-bottom: 5px; font-family: "Newsreader", serif; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    .admin-panel p { margin: 0; color: var(--muted); }
+    .admin-controls { display: flex; gap: 10px; align-items: end; }
+    .admin-controls label { display: grid; gap: 6px; color: var(--forest); font-size: .78rem; font-weight: 800; }
+    .admin-controls select { min-width: min(420px, 55vw); min-height: 46px; padding: 0 42px 0 13px; border: 1px solid #9ab8aa; border-radius: 13px; color: var(--ink); background: #fff; font: inherit; }
+    .admin-controls .retry-button { margin-top: 0; white-space: nowrap; }
+
     #reportView { display: none; }
     #reportView.visible { display: block; }
     .report-hero { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; padding: clamp(24px, 4vw, 38px); }
@@ -151,6 +160,9 @@
       .shell { width: min(100% - 20px, 680px); padding-top: 10px; }
       .masthead { border-radius: 22px; }
       .access-panel, .report-hero { grid-template-columns: 1fr; }
+      .admin-panel.visible { grid-template-columns: 1fr; }
+      .admin-controls { align-items: stretch; flex-direction: column; }
+      .admin-controls select, .admin-controls .retry-button { width: 100%; min-width: 0; }
       .score-block { width: 100%; }
       .summary-grid { grid-template-columns: 1fr 1fr; }
       .questions-header { align-items: stretch; flex-direction: column; }
@@ -226,6 +238,20 @@
       <button id="errorRetryButton" class="retry-button" type="button">Intentar otra vez</button>
     </section>
 
+    <section id="adminPanel" class="panel admin-panel" aria-live="polite">
+      <div>
+        <p class="eyebrow" style="color:var(--leaf)">Acceso de administrador</p>
+        <h2>Reportes de estudiantes</h2>
+        <p id="adminCount">Selecciona un estudiante para abrir su revisión completa.</p>
+      </div>
+      <div class="admin-controls">
+        <label>Estudiante
+          <select id="adminReportSelect" aria-label="Seleccionar reporte de estudiante"></select>
+        </label>
+        <button id="adminOpenButton" class="retry-button" type="button">Ver reporte</button>
+      </div>
+    </section>
+
     <section id="reportView">
       <article class="panel report-hero">
         <div>
@@ -283,8 +309,10 @@
     let verifiedIdentity = null;
     let activeRequestId = "";
     let googleLoadAttempts = 0;
+    let adminMode = false;
+    let adminReports = [];
 
-    const panels = ["accessPanel", "loadingPanel", "pendingPanel", "errorPanel"];
+    const panels = ["accessPanel", "loadingPanel", "pendingPanel", "errorPanel", "adminPanel"];
     const resultLabels = { correct: "Correcta", partial: "Parcial", incorrect: "Incorrecta", unanswered: "Sin respuesta" };
 
     function escapeHtml(value) {
@@ -365,7 +393,7 @@
       });
     }
 
-    async function requestReport() {
+    async function requestReport(targetEmail) {
       if (!googleCredential || !verifiedIdentity) return;
       showOnly("loadingPanel");
 
@@ -380,7 +408,7 @@
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "requestReport", examId: EXAM_ID, requestId: activeRequestId, googleCredential }),
+          body: JSON.stringify({ action: "requestReport", examId: EXAM_ID, requestId: activeRequestId, googleCredential, targetEmail: targetEmail || "" }),
           keepalive: true
         });
         await pollReport();
@@ -399,6 +427,7 @@
           const result = await response.json();
           if (!result || result.pendingRequest) continue;
           if (!result.ok) throw new Error(result.error || "Consulta rechazada");
+          if (result.status === "admin_index" && Array.isArray(result.reports)) { renderAdminIndex(result.reports); return; }
           if (result.status === "ready" && result.report) { renderReport(result.report); return; }
           if (result.status === "pending") { showPending(result.message); return; }
           if (result.status === "not_found") { showPending("No encontramos un examen liberado para esta cuenta. Consulta al docente si utilizaste otro correo."); return; }
@@ -418,6 +447,19 @@
     function showError(message) {
       document.getElementById("errorMessage").textContent = message;
       showOnly("errorPanel");
+    }
+
+    function renderAdminIndex(reports) {
+      adminMode = true;
+      adminReports = reports.slice();
+      const select = document.getElementById("adminReportSelect");
+      select.innerHTML = adminReports.map(report =>
+        '<option value="' + escapeHtml(report.email) + '">' +
+        escapeHtml(report.name + " · " + report.total + "/20 · " + report.level) + '</option>'
+      ).join("");
+      document.getElementById("adminCount").textContent = adminReports.length + " reportes oficiales disponibles. Selecciona uno para ver el detalle pregunta por pregunta.";
+      document.getElementById("adminOpenButton").disabled = adminReports.length === 0;
+      showOnly("adminPanel");
     }
 
     function renderReport(report) {
@@ -441,6 +483,7 @@
       document.getElementById("summaryLevel").textContent = level;
       document.getElementById("reviewedAt").textContent = formatDate(report.reviewedAt);
       document.getElementById("questionList").innerHTML = (report.questions || []).map(renderQuestion).join("");
+      document.getElementById("adminPanel").classList.toggle("visible", adminMode);
       document.getElementById("reportView").classList.add("visible");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -481,8 +524,12 @@
       };
     }
 
-    document.getElementById("retryButton").addEventListener("click", requestReport);
+    document.getElementById("retryButton").addEventListener("click", () => requestReport());
     document.getElementById("errorRetryButton").addEventListener("click", () => verifiedIdentity ? requestReport() : showOnly("accessPanel"));
+    document.getElementById("adminOpenButton").addEventListener("click", () => {
+      const email = document.getElementById("adminReportSelect").value;
+      if (email) requestReport(email);
+    });
 
     if (DEMO_MODE) {
       document.getElementById("demoRibbon").classList.add("visible");
