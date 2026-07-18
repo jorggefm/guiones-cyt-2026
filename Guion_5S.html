@@ -694,4 +694,18 @@ function collapseAll(){
 }
 window.addEventListener('DOMContentLoaded',()=>showClass(8));
 </script>
+<script>
+(function addOfficialReportLink(){
+  const actions=document.querySelector('.top-actions');
+  if(!actions||actions.querySelector('a[href="5S_U4_reporte_C2.html"]'))return;
+  const indexLink=actions.querySelector('a[href="index.html"]');
+  const link=document.createElement('a');
+  link.href='5S_U4_reporte_C2.html';
+  link.target='_blank';
+  link.rel='noopener';
+  link.textContent='Reportes C2 U4';
+  link.style.cssText='color:#fff;font-size:12px;text-decoration:none;font-weight:700;margin-left:6px;display:inline-block';
+  actions.insertBefore(link,indexLink);
+})();
+</script>
 </body></html>

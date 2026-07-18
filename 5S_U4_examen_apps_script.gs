@@ -28,13 +28,25 @@ var GRADING_HEADERS = [
   'Automático', 'Docente', 'Total', 'Máximo', 'Escala', 'Estado', 'Retroalimentación'
 ];
 
+var ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
+var REPORT_HEADERS = ['submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado', 'reporte_json'];
+var EDITABLE_REVIEW_QUESTIONS = {
+  3: { maxTeacher: 2 },
+  7: { maxTeacher: 2 },
+  12: { maxTeacher: 4 }
+};
+
 function doGet(e) {
   try {
+    // Ejecutar doGet manualmente desde el editor regenera los reportes oficiales.
+    // Las solicitudes web reales siempre reciben el objeto de evento `e`.
+    if (!e) return generateOfficialReports();
     validateConfiguration_();
     var action = String(e && e.parameter && e.parameter.action || 'health').toLowerCase();
     if (action === 'status') {
       return submissionStatus_(String(e.parameter.submissionId || ''), String(e.parameter.examId || ''));
     }
+    if (action === 'report') return reportStatus_(String(e.parameter.requestId || ''));
     return json_({ ok: true, service: 'exam-template', examId: CONFIG.examId, version: CONFIG.version });
   } catch (error) {
     return json_({ ok: false, error: String(error && error.message || error) });
@@ -47,6 +59,9 @@ function doPost(e) {
   try {
     validateConfiguration_();
     var payload = parsePayload_(e);
+    var action = String(payload.action || '').toLowerCase();
+    if (action === 'requestreport') return requestReport_(payload);
+    if (action === 'savereportreview') return saveReportReview_(payload);
     var identity = validatePayload_(payload);
     var responses = getOrCreateSheet_(SHEETS.responses);
     ensureHeaders_(responses, RESPONSE_HEADERS);
@@ -101,8 +116,7 @@ function setupExamWorkbook() {
   control.clearContents();
   control.getRange(1, 1, controlRows.length, 2).setValues(controlRows);
 
-  ensureHeaders_(reports, ['Fecha', 'EXAM_ID', 'Indicador', 'Dimensión', 'Valor', 'Filtro', 'Detalle', 'Versión de reporte']);
-  reports.getRange('A2').setNote('Espacio reservado. No se generan reportes hasta implementar una rutina posterior y activar reportsEnabled.');
+  ensureHeaders_(reports, REPORT_HEADERS);
 
   [responses, key, grading, control, reports].forEach(function (sheet) {
     styleHeader_(sheet);
@@ -238,6 +252,270 @@ function findSubmissionRow_(sheet, submissionId) {
   if (last < 2) return -1;
   var match = sheet.getRange(2, 2, last - 1, 1).createTextFinder(String(submissionId)).matchEntireCell(true).findNext();
   return match ? match.getRow() : -1;
+}
+
+function requestReport_(payload) {
+  if (!payload || payload.examId !== CONFIG.examId) throw new Error('Examen no reconocido.');
+  var requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de consulta no válido.');
+  var identity = verifyGoogleIdentity_(String(payload.googleCredential || ''));
+  var email = String(identity.email || '').toLowerCase();
+  var isAdmin = ADMIN_EMAILS.indexOf(email) !== -1;
+  var targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  var cache = CacheService.getScriptCache();
+  var cacheKey = 'report:' + requestId;
+  if (!reportsEnabled_()) {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'disabled' }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+  var sheet = getOrCreateSheet_(SHEETS.reports);
+  ensureHeaders_(sheet, REPORT_HEADERS);
+  var rows = sheet.getLastRow() < 2 ? [] : sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getDisplayValues();
+  if (isAdmin && !targetEmail) {
+    var reports = rows.filter(function (row) { return String(row[7]).toUpperCase() === 'SI'; }).map(function (row) {
+      var section = '';
+      try { section = String(JSON.parse(String(row[8] || '{}')).section || ''); } catch (_) {}
+      return { email: String(row[1]).toLowerCase(), name: row[2], section: section, total: Number(row[3] || 0), level: row[4] };
+    }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'admin_index', reports: reports }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+  var lookup = isAdmin && targetEmail ? targetEmail : email;
+  var row = rows.find(function (item) { return String(item[1]).toLowerCase() === lookup; });
+  if (!row) cache.put(cacheKey, JSON.stringify({ ok: true, status: 'not_found' }), 300);
+  else if (String(row[7]).toUpperCase() !== 'SI') cache.put(cacheKey, JSON.stringify({ ok: true, status: 'pending' }), 300);
+  else {
+    var report = JSON.parse(String(row[8] || '{}'));
+    if (String(report.studentEmail || '').toLowerCase() !== lookup) throw new Error('El reporte no coincide con la identidad verificada.');
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: isAdmin ? prepareAdminReport_(report) : report, admin: isAdmin }), 300);
+  }
+  return json_({ ok: true, accepted: true, requestId: requestId });
+}
+
+function saveReportReview_(payload) {
+  if (!payload || payload.examId !== CONFIG.examId) throw new Error('Examen no reconocido.');
+  var requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de actualización no válido.');
+  var identity = verifyGoogleIdentity_(String(payload.googleCredential || ''));
+  if (ADMIN_EMAILS.indexOf(String(identity.email || '').toLowerCase()) === -1) throw new Error('Esta cuenta no tiene permisos para editar calificaciones.');
+  var targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  var number = Number(payload.questionNumber);
+  var edit = EDITABLE_REVIEW_QUESTIONS[number];
+  if (!edit) throw new Error('Esta pregunta no admite revisión manual.');
+  var points = round_(Number(payload.pointsEarned));
+  var feedback = String(payload.feedback || '').trim();
+  if (!Number.isFinite(points) || points < 0 || points > edit.maxTeacher) throw new Error('Puntaje fuera del rango permitido.');
+  if (!feedback || feedback.length > 1200) throw new Error('Escribe un comentario válido.');
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    var sheet = getOrCreateSheet_(SHEETS.reports);
+    var rows = sheet.getLastRow() < 2 ? [] : sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getDisplayValues();
+    var index = rows.findIndex(function (row) { return String(row[1]).toLowerCase() === targetEmail; });
+    if (index < 0) throw new Error('No se encontró el reporte del estudiante.');
+    var report = JSON.parse(String(rows[index][8] || '{}'));
+    var question = (report.questions || []).find(function (item) { return Number(item.number) === number; });
+    if (!question) throw new Error('No se encontró la pregunta.');
+    question.pointsEarned = points;
+    question.feedback = feedback;
+    question.status = reviewStatus_(points, Number(question.pointsMax || 0), question.studentAnswer);
+    var teacher = [3, 7, 12].reduce(function (sum, n) {
+      var q = (report.questions || []).find(function (item) { return Number(item.number) === n; });
+      return sum + Number(q && q.pointsEarned || 0);
+    }, 0);
+    var automatic = Number(report.score && report.score.automatic || 0);
+    var rawTotal = round_(automatic + teacher);
+    var total = round_(rawTotal / 24 * 20);
+    var level = levelFromScore_(total);
+    report.score = { automatic: automatic, automaticMax: 16, teacher: round_(teacher), teacherMax: 8, rawTotal: rawTotal, rawMaximum: 24, total: total, level: level };
+    report.reviewedAt = new Date().toISOString();
+    report.comment = summaryComment_(level);
+    var detail = buildTeacherDetail_(report);
+    sheet.getRange(index + 2, 4, 1, 6).setValues([[total, level, detail, report.comment, 'SI', JSON.stringify(report)]]);
+    var grading = getOrCreateSheet_(SHEETS.grading);
+    if (grading.getLastRow() >= 2) {
+      var emails = grading.getRange(2, 5, grading.getLastRow() - 1, 1).getDisplayValues();
+      var gi = emails.findIndex(function (item) { return String(item[0]).toLowerCase() === targetEmail; });
+      if (gi >= 0) grading.getRange(gi + 2, 7, 1, 7).setValues([[automatic, round_(teacher), total, 20, level, 'Liberado', report.comment]]);
+    }
+    SpreadsheetApp.flush();
+    CacheService.getScriptCache().put('report:' + requestId, JSON.stringify({ ok: true, status: 'ready', report: prepareAdminReport_(report), admin: true, saved: true }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function prepareAdminReport_(report) {
+  var copy = JSON.parse(JSON.stringify(report || {}));
+  (copy.questions || []).forEach(function (question) {
+    if (EDITABLE_REVIEW_QUESTIONS[Number(question.number)]) {
+      question.adminEditable = true;
+      question.minimumPoints = 0;
+    }
+  });
+  return copy;
+}
+
+function buildTeacherDetail_(report) {
+  function p(number) { var q = (report.questions || []).find(function (item) { return Number(item.number) === number; }); return Number(q && q.pointsEarned || 0); }
+  return ['Automático ' + Number(report.score.automatic || 0) + '/16', 'Docente ' + Number(report.score.teacher || 0) + '/8', 'P3 ' + p(3) + '/2', 'P7 ' + p(7) + '/2', 'P12 ' + p(12) + '/4'].join(' · ');
+}
+
+function reviewStatus_(points, maximum, answer) {
+  if (points <= 0) return String(answer || '').trim() && String(answer || '').trim() !== '.' ? 'incorrect' : 'unanswered';
+  return points >= maximum ? 'correct' : 'partial';
+}
+
+function levelFromScore_(value) { var score = Math.max(0, Math.min(20, Number(value) || 0)); return score < 12 ? 'B' : (score < 17 ? 'A' : 'AD'); }
+function summaryComment_(level) {
+  return level === 'AD'
+    ? 'Logro destacado: analizas los sistemas ecológicos y ambientales con claridad. Revisa los comentarios para seguir afinando tus argumentos.'
+    : (level === 'A'
+      ? 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.'
+      : 'Estás en proceso. Usa las respuestas ideales y los comentarios para reforzar las relaciones ecológicas, ambientales y bioelectroquímicas.');
+}
+
+function reportStatus_(requestId) {
+  var clean = String(requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(clean)) return json_({ ok: false, error: 'Consulta no válida.' });
+  var value = CacheService.getScriptCache().get('report:' + clean);
+  return value ? json_(JSON.parse(value)) : json_({ ok: true, pendingRequest: true });
+}
+
+function reportsEnabled_() {
+  var sheet = getOrCreateSheet_(SHEETS.control);
+  if (sheet.getLastRow() < 2) return false;
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 2).getDisplayValues();
+  var row = rows.find(function (item) { return String(item[0]).toUpperCase() === 'REPORTES_ACTIVOS'; });
+  return !!row && ['SI', 'SÍ'].indexOf(String(row[1]).toUpperCase()) >= 0;
+}
+
+/** Genera y libera los diez reportes oficiales de 5S a partir de las respuestas registradas. */
+function generateOfficialReports() {
+  validateConfiguration_();
+  var reviews = {
+    'josue_ynga@colegiomilagrosdedios.edu.pe': [1.25, 1, 0],
+    'andre_nizama@colegiomilagrosdedios.edu.pe': [1.25, 0.75, 0],
+    'adrian_vasquez@colegiomilagrosdedios.edu.pe': [2, 1.5, 1],
+    'emily_fuentes@colegiomilagrosdedios.edu.pe': [2, 2, 1.25],
+    'lucas_vidal@colegiomilagrosdedios.edu.pe': [1.5, 2, 1.25],
+    'katherine_cortez@colegiomilagrosdedios.edu.pe': [0.75, 1.5, 1],
+    'angel_galdos@colegiomilagrosdedios.edu.pe': [2, 0, 0],
+    'belth_jara@colegiomilagrosdedios.edu.pe': [0, 0.5, 1.25],
+    'yanina_loyola@colegiomilagrosdedios.edu.pe': [0, 1.25, 3],
+    'joseph_valencia@colegiomilagrosdedios.edu.pe': [0.75, 1, 0.5]
+  };
+  var ideals = {
+    1: 'Un ecosistema está formado por componentes bióticos, componentes abióticos y las interacciones entre ambos.',
+    2: 'Hábitat: lugar donde vive el organismo. Nicho: rol funcional, alimentación, recursos, competencia y regulación.',
+    3: 'Representa una red trófica porque existen varias relaciones y rutas alimentarias conectadas, no una sola secuencia lineal.',
+    4: 'La energía disminuye porque parte se utiliza en metabolismo y movimiento y parte se disipa como calor.',
+    5: 'A: agua; B: carbono; C: nitrógeno; D: oxígeno.',
+    6: 'Los microorganismos fijan nitrógeno, degradan materia orgánica y devuelven nutrientes al ecosistema.',
+    7: 'Se vuelve un problema cuando las actividades humanas aumentan los GEI y se retiene más calor del equilibrio natural.',
+    8: 'El retroceso glaciar altera el agua, los caudales, la agricultura, los hábitats y la biodiversidad.',
+    9: 'Biodiversidad genética, de especies, de ecosistemas y funcional.',
+    10: 'El filtro puede mejorar apariencia o turbidez, pero no garantiza potabilidad ni esterilización.',
+    11: 'Adsorber significa retener moléculas en la superficie interna del carbón activado, no destruirlas.',
+    12: 'Medir voltaje abierto no demuestra mucha energía útil: se necesita medir corriente y potencia bajo carga, estabilidad, tratamiento real y reconocer que la energía de una MFC es limitada.'
+  };
+  var explanations = {
+    1: 'Los seres vivos, el ambiente físico y sus interacciones funcionan como un sistema.',
+    2: 'El hábitat describe dónde vive una especie; el nicho explica qué función cumple y cómo utiliza los recursos.',
+    3: 'Una red integra varias cadenas y rutas de transferencia de materia y energía.',
+    4: 'En cada transferencia solo una fracción de la energía queda disponible para el siguiente nivel.',
+    5: 'Cada ciclo se reconoce por los procesos y sustancias que circulan entre ambiente y seres vivos.',
+    6: 'La actividad microbiana permite transformar y reciclar nutrientes esenciales.',
+    7: 'El efecto natural es necesario; su intensificación antropogénica produce calentamiento adicional.',
+    8: 'Los glaciares son reservas de agua y sostienen actividades humanas y ecosistemas.',
+    9: 'La biodiversidad existe en genes, especies, ambientes y funciones ecológicas.',
+    10: 'Eliminar partículas visibles no equivale a eliminar microorganismos o sustancias peligrosas.',
+    11: 'La adsorción ocurre sobre una superficie; no implica destrucción química del contaminante.',
+    12: 'La potencia depende del voltaje y la corriente bajo una carga real; también importan estabilidad, eficiencia y tratamiento.'
+  };
+  var responses = getOrCreateSheet_(SHEETS.responses);
+  var values = responses.getRange(2, 1, responses.getLastRow() - 1, 17).getDisplayValues();
+  var students = values.filter(function (row) { return reviews[String(row[7] || '').toLowerCase()]; });
+  if (students.length !== 10) throw new Error('Se esperaban 10 estudiantes y se encontraron ' + students.length + '.');
+  var reportRows = [REPORT_HEADERS];
+  var grading = getOrCreateSheet_(SHEETS.grading);
+  ensureHeaders_(grading, GRADING_HEADERS);
+  students.forEach(function (row) {
+    var submissionId = row[1], name = row[6], email = String(row[7]).toLowerCase(), section = row[8] || 'Única';
+    var answers = JSON.parse(row[12] || '{}');
+    var objective = CONFIG.questions.reduce(function (sum, q) {
+      return sum + (q.grading.method === 'automatic' ? automaticPoints_(q, answers[q.id]) : 0);
+    }, 0);
+    objective = round_(objective);
+    var teacherParts = reviews[email];
+    var teacher = round_(teacherParts[0] + teacherParts[1] + teacherParts[2]);
+    var raw = round_(objective + teacher);
+    var total = round_(raw / 24 * 20);
+    var level = levelFromScore_(total);
+    var questions = CONFIG.questions.map(function (q, index) {
+      var number = index + 1;
+      var points = number === 3 ? teacherParts[0] : (number === 7 ? teacherParts[1] : (number === 12 ? teacherParts[2] : automaticPoints_(q, answers[q.id])));
+      return {
+        number: number, label: q.label, prompt: q.prompt, studentAnswer: formatReportAnswer_(q, answers[q.id]), idealAnswer: ideals[number],
+        explanation: explanations[number], pointsEarned: round_(points), pointsMax: Number(q.points || 0), status: reviewStatus_(points, Number(q.points || 0), answers[q.id]),
+        feedback: feedbackForQuestion_(number, points, Number(q.points || 0))
+      };
+    });
+    var report = {
+      examId: CONFIG.examId, version: CONFIG.version, grade: CONFIG.grade, unit: CONFIG.unit, title: CONFIG.title,
+      submissionId: submissionId, studentName: name, studentEmail: email, section: section, submittedAt: row[10],
+      score: { automatic: objective, automaticMax: 16, teacher: teacher, teacherMax: 8, rawTotal: raw, rawMaximum: 24, total: total, level: level },
+      comment: summaryComment_(level), questions: questions, reviewedAt: new Date().toISOString()
+    };
+    var detail = buildTeacherDetail_(report);
+    reportRows.push([submissionId, email, name, total, level, detail, report.comment, 'SI', JSON.stringify(report)]);
+    var emailValues = grading.getLastRow() < 2 ? [] : grading.getRange(2, 5, grading.getLastRow() - 1, 1).getDisplayValues();
+    var gradingIndex = emailValues.findIndex(function (item) { return String(item[0]).toLowerCase() === email; });
+    if (gradingIndex >= 0) grading.getRange(gradingIndex + 2, 7, 1, 7).setValues([[objective, teacher, total, 20, level, 'Liberado', report.comment]]);
+  });
+  var reports = getOrCreateSheet_(SHEETS.reports);
+  reports.clearContents();
+  reports.getRange(1, 1, reportRows.length, 9).setValues(reportRows);
+  styleHeader_(reports); reports.setFrozenRows(1); reports.autoResizeColumns(1, 9);
+  var control = getOrCreateSheet_(SHEETS.control);
+  var controlValues = control.getRange(1, 1, control.getLastRow(), 2).getDisplayValues();
+  var controlIndex = controlValues.findIndex(function (item) { return String(item[0]).toUpperCase() === 'REPORTES_ACTIVOS'; });
+  if (controlIndex >= 0) control.getRange(controlIndex + 1, 2).setValue('SI');
+  SpreadsheetApp.flush();
+  return { ok: true, reports: students.length };
+}
+
+function formatReportAnswer_(q, answer) {
+  if (Array.isArray(answer)) {
+    var items = q.items || [];
+    return answer.map(function (value, index) {
+      var item = items[index];
+      var itemLabel = item && typeof item === 'object' ? String(item.label || item.prompt || item.text || '') : String(item || '');
+      var options = item && typeof item === 'object' && Array.isArray(item.options) ? item.options : (q.options || []);
+      var option = options.find(function (candidate) { return String(candidate.value) === String(value); });
+      var valueLabel = option ? String(option.label) : String(value);
+      return (itemLabel ? itemLabel + ': ' : '') + valueLabel;
+    }).join(' | ');
+  }
+  if (q.type === 'single') {
+    var option = (q.options || []).find(function (item) { return String(item.value) === String(answer); });
+    return option ? option.label : String(answer || '');
+  }
+  return String(answer == null ? '' : answer);
+}
+
+function feedbackForQuestion_(number, points, maximum) {
+  if (points >= maximum) return number === 3
+    ? 'Explicaste correctamente por qué una red trófica contiene varias relaciones y rutas conectadas.'
+    : (number === 7
+      ? 'Diferenciaste el efecto invernadero natural de su intensificación por actividades humanas.'
+      : (number === 12
+        ? 'Evaluaste correctamente la afirmación usando potencia bajo carga, estabilidad y límites de la MFC.'
+        : 'Respuesta correcta: identificaste todos los elementos solicitados.'));
+  if (points <= 0) return 'Revisa la respuesta ideal y vuelve a identificar los conceptos científicos que pide la pregunta.';
+  if (number === 3) return 'Reconociste algunas relaciones de la red; faltó explicar con mayor claridad que existen varias rutas conectadas y no una sola cadena lineal.';
+  if (number === 7) return 'Reconociste parte del problema; faltó conectar con precisión actividad humana, aumento de GEI y retención adicional de calor.';
+  if (number === 12) return 'Incluiste una idea relevante, pero faltó evaluar la energía útil mediante corriente y potencia bajo carga, estabilidad y tratamiento real.';
+  return 'Respuesta parcialmente correcta: compara tu selección con la respuesta ideal.';
 }
 
 function parsePayload_(e) {
