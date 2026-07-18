@@ -51,6 +51,7 @@ const KEY_ROWS = [
 function doGet(e) {
   const action = String((e && e.parameter && e.parameter.action) || 'health').toLowerCase();
   if (action === 'status') return submissionStatus_(e.parameter.submissionId || '');
+  if (action === 'report') return reportStatus_(e.parameter.requestId || '');
   return json_({
     ok: true,
     examId: EXAM_ID,
@@ -60,10 +61,15 @@ function doGet(e) {
 }
 
 function doPost(e) {
-  const lock = LockService.getScriptLock();
   try {
-    lock.waitLock(15000);
     const payload = parsePayload_(e);
+    if (String(payload.action || '').toLowerCase() === 'requestreport') {
+      return requestReport_(payload);
+    }
+
+    const lock = LockService.getScriptLock();
+    try {
+      lock.waitLock(15000);
     const identity = validatePayload_(payload);
     payload.studentName = identity.name || payload.studentName || '';
     payload.studentEmail = String(identity.email || '').toLowerCase();
@@ -81,12 +87,68 @@ function doPost(e) {
     sheet.appendRow(buildResponseRow_(payload, result));
     SpreadsheetApp.flush();
 
-    return json_({ ok: true, duplicate: false, submissionId: payload.submissionId });
+      return json_({ ok: true, duplicate: false, submissionId: payload.submissionId });
+    } finally {
+      try { lock.releaseLock(); } catch (_) {}
+    }
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message ? err.message : err) });
-  } finally {
-    try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+function requestReport_(payload) {
+  if (!payload || payload.examId !== EXAM_ID) throw new Error('Examen no reconocido.');
+  const requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de consulta no válido.');
+
+  const identity = verifyGoogleIdentity_(payload.googleCredential || '');
+  const email = String(identity.email || '').trim().toLowerCase();
+  const cache = CacheService.getScriptCache();
+  const cacheKey = 'report:' + requestId;
+
+  if (!reportsEnabled_()) {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'disabled' }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+
+  const sheet = getOrCreateSheet_('Reportes');
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'not_found' }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  }
+
+  const rows = sheet.getRange(2, 1, lastRow - 1, 9).getDisplayValues();
+  const row = rows.find(item => String(item[1] || '').trim().toLowerCase() === email);
+  if (!row) {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'not_found' }), 300);
+  } else if (String(row[7] || '').trim().toUpperCase() !== 'SI') {
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'pending', message: 'La revisión docente todavía no ha sido liberada.' }), 300);
+  } else {
+    const report = JSON.parse(String(row[8] || '{}'));
+    if (!report.studentEmail || String(report.studentEmail).trim().toLowerCase() !== email) {
+      throw new Error('El reporte no coincide con la identidad verificada.');
+    }
+    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: report }), 300);
+  }
+  return json_({ ok: true, accepted: true, requestId: requestId });
+}
+
+function reportStatus_(requestId) {
+  const cleanId = String(requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(cleanId)) return json_({ ok: false, error: 'Consulta no válida.' });
+  const value = CacheService.getScriptCache().get('report:' + cleanId);
+  if (!value) return json_({ ok: true, pendingRequest: true });
+  return json_(JSON.parse(value));
+}
+
+function reportsEnabled_() {
+  const sheet = getOrCreateSheet_('Control');
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return false;
+  const values = sheet.getRange(2, 1, lastRow - 1, 2).getDisplayValues();
+  const row = values.find(item => String(item[0] || '').trim().toUpperCase() === 'REPORTES_ACTIVOS');
+  return !!row && String(row[1] || '').trim().toUpperCase() === 'SI';
 }
 
 function setupExamWorkbook() {
@@ -122,8 +184,8 @@ function setupExamWorkbook() {
 
   const reports = getOrCreateSheet_('Reportes');
   if (reports.getLastRow() === 0) {
-    reports.getRange(1, 1, 1, 8).setValues([[
-      'submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado'
+    reports.getRange(1, 1, 1, 9).setValues([[
+      'submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado', 'reporte_json'
     ]]);
   }
   reports.setFrozenRows(1);

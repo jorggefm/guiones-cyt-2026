@@ -69,6 +69,18 @@ function toggleStep(h){
 }
 function expandAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.add('open'));}
 function collapseAll(){document.querySelectorAll('.step-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.step-toggle').forEach(t=>t.classList.remove('open'));}
-document.addEventListener('DOMContentLoaded',function(){showClass(1);});
+document.addEventListener('DOMContentLoaded',function(){
+  showClass(1);
+  var indexLink=document.querySelector('.top-actions a[href="index.html"]');
+  if(indexLink&&!document.querySelector('.top-actions a[href="2S_U4_reporte_C2.html"]')){
+    var reportLink=document.createElement('a');
+    reportLink.href='2S_U4_reporte_C2.html';
+    reportLink.target='_blank';
+    reportLink.textContent='Reporte C2';
+    reportLink.style.cssText='color:#fff;font-size:12px;text-decoration:none;font-weight:700';
+    indexLink.parentNode.insertBefore(reportLink,indexLink);
+    indexLink.parentNode.insertBefore(document.createTextNode(' '),indexLink);
+  }
+});
 </script></body></html>
 
