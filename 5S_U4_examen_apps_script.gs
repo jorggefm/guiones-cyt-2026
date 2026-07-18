@@ -31,9 +31,18 @@ var GRADING_HEADERS = [
 var ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
 var REPORT_HEADERS = ['submissionId', 'correo', 'nombre', 'puntajeFinal', 'nivel', 'detallePreguntas', 'comentario', 'liberado', 'reporte_json'];
 var EDITABLE_REVIEW_QUESTIONS = {
-  3: { maxTeacher: 2 },
-  7: { maxTeacher: 2 },
-  12: { maxTeacher: 4 }
+  1: { scoreBucket: 'automatic' },
+  2: { scoreBucket: 'automatic' },
+  3: { scoreBucket: 'teacher' },
+  4: { scoreBucket: 'automatic' },
+  5: { scoreBucket: 'automatic' },
+  6: { scoreBucket: 'automatic' },
+  7: { scoreBucket: 'teacher' },
+  8: { scoreBucket: 'automatic' },
+  9: { scoreBucket: 'automatic' },
+  10: { scoreBucket: 'automatic' },
+  11: { scoreBucket: 'automatic' },
+  12: { scoreBucket: 'teacher' }
 };
 
 function doGet(e) {
@@ -304,7 +313,7 @@ function saveReportReview_(payload) {
   if (!edit) throw new Error('Esta pregunta no admite revisión manual.');
   var points = round_(Number(payload.pointsEarned));
   var feedback = String(payload.feedback || '').trim();
-  if (!Number.isFinite(points) || points < 0 || points > edit.maxTeacher) throw new Error('Puntaje fuera del rango permitido.');
+  if (!Number.isFinite(points)) throw new Error('Puntaje fuera del rango permitido.');
   if (!feedback || feedback.length > 1200) throw new Error('Escribe un comentario válido.');
   var lock = LockService.getScriptLock();
   try {
@@ -316,14 +325,18 @@ function saveReportReview_(payload) {
     var report = JSON.parse(String(rows[index][8] || '{}'));
     var question = (report.questions || []).find(function (item) { return Number(item.number) === number; });
     if (!question) throw new Error('No se encontró la pregunta.');
+    var maximum = Number(question.pointsMax || 0);
+    if (points < 0 || points > maximum) throw new Error('El puntaje debe estar entre 0 y ' + maximum + '.');
+    var previousPoints = Number(question.pointsEarned || 0);
     question.pointsEarned = points;
     question.feedback = feedback;
-    question.status = reviewStatus_(points, Number(question.pointsMax || 0), question.studentAnswer);
+    question.status = reviewStatus_(points, maximum, question.studentAnswer);
     var teacher = [3, 7, 12].reduce(function (sum, n) {
       var q = (report.questions || []).find(function (item) { return Number(item.number) === n; });
       return sum + Number(q && q.pointsEarned || 0);
     }, 0);
     var automatic = Number(report.score && report.score.automatic || 0);
+    if (edit.scoreBucket === 'automatic') automatic = round_(Math.max(0, Math.min(16, automatic + points - previousPoints)));
     var rawTotal = round_(automatic + teacher);
     var total = round_(rawTotal / 24 * 20);
     var level = levelFromScore_(total);

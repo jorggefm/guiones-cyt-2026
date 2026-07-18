@@ -5,16 +5,21 @@ const EXAM_VERSION = '2026-07-16';
 const GOOGLE_CLIENT_ID = '120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com';
 const SCHOOL_DOMAIN = 'colegiomilagrosdedios.edu.pe';
 const ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
-// Toda pregunta que recibe texto escrito por el estudiante puede ser ajustada
-// por el docente. Las preguntas de correccion automatica actualizan ese bloque;
-// las abiertas o mixtas conservan el desglose de revision docente.
+// El docente puede ajustar el puntaje y el comentario de las doce preguntas.
+// Las preguntas automáticas actualizan ese subtotal; las abiertas o mixtas
+// conservan el desglose de revisión docente.
 const EDITABLE_REVIEW_QUESTIONS = {
+  1: { scoreBucket: 'automatic' },
+  2: { scoreBucket: 'automatic' },
   3: { scoreBucket: 'automatic' },
   4: { scoreBucket: 'teacher', maxTeacher: 1 },
+  5: { scoreBucket: 'automatic' },
   6: { scoreBucket: 'teacher', maxTeacher: 2 },
   7: { scoreBucket: 'automatic' },
   8: { scoreBucket: 'automatic' },
+  9: { scoreBucket: 'automatic' },
   10: { scoreBucket: 'teacher', maxTeacher: 1 },
+  11: { scoreBucket: 'automatic' },
   12: { scoreBucket: 'teacher', maxTeacher: 2 }
 };
 
@@ -227,30 +232,28 @@ function saveReportReview_(payload) {
     const breakdown = parseTeacherBreakdown_(String(row[5] || ''));
     const previousTeacherPoints = Number(breakdown[questionNumber] || 0);
     const previousQuestionPoints = Number(question.pointsEarned || 0);
-    const automaticFloor = reviewConfig.scoreBucket === 'teacher'
+    const previousAutomaticPoints = reviewConfig.scoreBucket === 'teacher'
       ? Math.max(0, previousQuestionPoints - previousTeacherPoints)
-      : 0;
+      : previousQuestionPoints;
     const maximumPoints = Number(question.pointsMax || 0);
     const roundedPoints = Math.round(requestedPoints * 100) / 100;
-    if (roundedPoints < automaticFloor || roundedPoints > maximumPoints) {
-      throw new Error('El puntaje debe estar entre ' + automaticFloor + ' y ' + maximumPoints + '.');
+    if (roundedPoints < 0 || roundedPoints > maximumPoints) {
+      throw new Error('El puntaje debe estar entre 0 y ' + maximumPoints + '.');
     }
 
+    let automaticDelta = roundedPoints - previousQuestionPoints;
     if (reviewConfig.scoreBucket === 'teacher') {
-      const newTeacherPoints = Math.max(0, Math.min(
-        Number(reviewConfig.maxTeacher || 0),
-        previousTeacherPoints + (roundedPoints - previousQuestionPoints)
-      ));
+      const newTeacherPoints = Math.max(0, Math.min(Number(reviewConfig.maxTeacher || 0), roundedPoints - previousAutomaticPoints));
+      const newAutomaticPoints = roundedPoints - newTeacherPoints;
       breakdown[questionNumber] = Math.round(newTeacherPoints * 100) / 100;
+      automaticDelta = newAutomaticPoints - previousAutomaticPoints;
     }
     question.pointsEarned = roundedPoints;
     question.feedback = feedback;
     question.status = reviewStatus_(roundedPoints, maximumPoints, question.studentAnswer);
 
     const previousAutomaticScore = Number(report.score && report.score.automatic || 0);
-    const automaticScore = reviewConfig.scoreBucket === 'automatic'
-      ? Math.round(Math.max(0, Math.min(14, previousAutomaticScore + roundedPoints - previousQuestionPoints)) * 100) / 100
-      : previousAutomaticScore;
+    const automaticScore = Math.round(Math.max(0, Math.min(14, previousAutomaticScore + automaticDelta)) * 100) / 100;
     const teacherScore = [4, 6, 10, 12].reduce((sum, number) => sum + Number(breakdown[number] || 0), 0);
     const roundedTeacher = Math.round(Math.max(0, Math.min(6, teacherScore)) * 100) / 100;
     const total = Math.round(Math.max(0, Math.min(20, automaticScore + roundedTeacher)) * 100) / 100;
@@ -324,9 +327,7 @@ function prepareAdminReport_(report, detail) {
     if (!EDITABLE_REVIEW_QUESTIONS[number]) return;
     question.adminEditable = true;
     const reviewConfig = EDITABLE_REVIEW_QUESTIONS[number];
-    question.minimumPoints = reviewConfig.scoreBucket === 'teacher'
-      ? Math.max(0, Number(question.pointsEarned || 0) - Number(breakdown[number] || 0))
-      : 0;
+    question.minimumPoints = 0;
   });
   return safeReport;
 }
