@@ -218,13 +218,41 @@ function automaticPoints_(question, answer) {
   var grading = question.grading;
   var available = grading.method === 'mixed' ? Number(grading.automaticPoints || 0) : Number(question.points || 0);
   if (question.type === 'single') return String(answer) === String(grading.correct) ? available : 0;
-  if (question.type === 'multiple' || question.type === 'sequence' || question.type === 'dropdown') return arraysEqual_(answer, grading.correct) ? available : 0;
+  if (question.type === 'multiple') return multipleChoicePoints_(answer, grading.correct, available);
+  if (question.type === 'sequence' || question.type === 'dropdown') return componentPoints_(answer, grading.correct, available);
   if (question.type === 'text') {
     var accepted = grading.accepted || [];
     var pass = accepted.some(function (candidate) { return similarity_(normalize_(answer), normalize_(candidate)) >= Number(grading.threshold || 0.82); });
     return pass ? available : 0;
   }
   return 0;
+}
+
+function strictAutomaticPoints_(question, answer) {
+  var grading = question.grading;
+  var available = grading.method === 'mixed' ? Number(grading.automaticPoints || 0) : Number(question.points || 0);
+  if (question.type === 'single') return String(answer) === String(grading.correct) ? available : 0;
+  if (question.type === 'multiple' || question.type === 'sequence' || question.type === 'dropdown') return arraysEqual_(answer, grading.correct) ? available : 0;
+  return automaticPoints_(question, answer);
+}
+
+function multipleChoicePoints_(answer, correct, available) {
+  if (!Array.isArray(answer) || !Array.isArray(correct) || !correct.length) return 0;
+  var selected = {};
+  answer.forEach(function (value) { selected[String(value)] = true; });
+  var expected = {};
+  correct.forEach(function (value) { expected[String(value)] = true; });
+  var correctValues = Object.keys(expected);
+  var hits = correctValues.reduce(function (sum, value) { return sum + (selected[value] ? 1 : 0); }, 0);
+  return round_(Number(available || 0) * hits / correctValues.length);
+}
+
+function componentPoints_(answer, correct, available) {
+  if (!Array.isArray(answer) || !Array.isArray(correct) || !correct.length) return 0;
+  var hits = correct.reduce(function (sum, value, index) {
+    return sum + (String(answer[index]) === String(value) ? 1 : 0);
+  }, 0);
+  return round_(Number(available || 0) * hits / correct.length);
 }
 
 function buildResponseRow_(payload, identity, score) {
@@ -375,6 +403,13 @@ function reviewStatus_(points, maximum, answer) {
 }
 
 function levelFromScore_(value) { var score = Math.max(0, Math.min(20, Number(value) || 0)); return score < 12 ? 'B' : (score < 17 ? 'A' : 'AD'); }
+function summaryComment_(level) {
+  return level === 'AD'
+    ? 'Logro destacado: conectas los conceptos con claridad. Revisa los comentarios para seguir afinando tus explicaciones.'
+    : (level === 'A'
+      ? 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.'
+      : 'Estás en proceso. Usa las respuestas ideales y los comentarios para reforzar las relaciones de causa y efecto.');
+}
 function reportStatus_(requestId) {
   var clean = String(requestId || '').trim();
   if (!/^[a-zA-Z0-9-]{16,100}$/.test(clean)) return json_({ ok: false, error: 'Consulta no válida.' });
@@ -448,7 +483,7 @@ function generateOfficialReports() {
       var number = index + 1;
       var points = number === 9 ? teacherParts[0] : (number === 11 ? teacherParts[1] : (number === 12 ? teacherParts[2] : automaticPoints_(q, answers[q.id])));
       return {
-        number: number, label: q.label, prompt: q.prompt, studentAnswer: formatReportAnswer_(q, answers[q.id]), idealAnswer: ideals[number],
+        number: number, label: q.label, prompt: q.prompt, studentAnswer: formatReportAnswer_(q, answers[q.id]), idealAnswer: idealAnswerForQuestion_(q, ideals[number]),
         explanation: explanations[number], pointsEarned: round_(points), pointsMax: Number(q.points || 0), status: reviewStatus_(points, Number(q.points || 0), answers[q.id]),
         feedback: feedbackForQuestion_(number, points, Number(q.points || 0))
       };
@@ -478,6 +513,89 @@ function generateOfficialReports() {
   return { ok: true, reports: students.length };
 }
 
+/**
+ * Recalcula únicamente los componentes automáticos de los reportes existentes.
+ * Conserva puntajes y comentarios que ya fueron ajustados manualmente por el
+ * docente. Nunca reduce una nota: la regla parcial solo puede mantenerla o subirla.
+ */
+function recalculateStoredReportsWithPartialCredit() {
+  validateConfiguration_();
+  var responses = getOrCreateSheet_(SHEETS.responses);
+  var responseRows = responses.getLastRow() < 2 ? [] : responses.getRange(2, 1, responses.getLastRow() - 1, 17).getDisplayValues();
+  var responseBySubmission = {};
+  responseRows.forEach(function (row, index) { responseBySubmission[String(row[1])] = { row: row, sheetRow: index + 2 }; });
+
+  var reports = getOrCreateSheet_(SHEETS.reports);
+  var reportRows = reports.getLastRow() < 2 ? [] : reports.getRange(2, 1, reports.getLastRow() - 1, 9).getDisplayValues();
+  var grading = getOrCreateSheet_(SHEETS.grading);
+  var gradingIds = grading.getLastRow() < 2 ? [] : grading.getRange(2, 2, grading.getLastRow() - 1, 1).getDisplayValues();
+  var changedReports = 0;
+  var changedQuestions = 0;
+  var benefitedStudents = 0;
+
+  reportRows.forEach(function (row, reportIndex) {
+    var report = JSON.parse(String(row[8] || '{}'));
+    var source = responseBySubmission[String(report.submissionId || row[0])];
+    if (!source) return;
+    var answers = JSON.parse(String(source.row[12] || '{}'));
+    var previousTotal = Number(report.score && report.score.total || row[3] || 0);
+    var reportChanged = false;
+
+    CONFIG.questions.forEach(function (configQuestion, index) {
+      var number = index + 1;
+      var reportQuestion = (report.questions || []).find(function (item) { return Number(item.number) === number; });
+      if (!reportQuestion) return;
+      if (configQuestion.type === 'multiple') {
+        var listedIdeal = idealAnswerForQuestion_(configQuestion, reportQuestion.idealAnswer);
+        if (String(reportQuestion.idealAnswer || '') !== listedIdeal) {
+          reportQuestion.idealAnswer = listedIdeal;
+          reportChanged = true;
+        }
+      }
+      if (configQuestion.grading.method !== 'automatic') return;
+      var stored = round_(Number(reportQuestion.pointsEarned || 0));
+      var strict = round_(strictAutomaticPoints_(configQuestion, answers[configQuestion.id]));
+      var partial = round_(automaticPoints_(configQuestion, answers[configQuestion.id]));
+      if (Math.abs(stored - strict) > 0.001 || partial === stored) return;
+      var previousDefaultFeedback = feedbackForQuestion_(number, stored, Number(configQuestion.points || 0));
+      reportQuestion.pointsEarned = partial;
+      reportQuestion.status = reviewStatus_(partial, Number(configQuestion.points || 0), answers[configQuestion.id]);
+      if (String(reportQuestion.feedback || '') === previousDefaultFeedback) {
+        reportQuestion.feedback = feedbackForQuestion_(number, partial, Number(configQuestion.points || 0));
+      }
+      changedQuestions += 1;
+      reportChanged = true;
+    });
+
+    if (!reportChanged) return;
+    var automatic = round_(CONFIG.questions.reduce(function (sum, configQuestion, index) {
+      if (configQuestion.grading.method !== 'automatic') return sum;
+      var reportQuestion = (report.questions || []).find(function (item) { return Number(item.number) === index + 1; });
+      return sum + Number(reportQuestion && reportQuestion.pointsEarned || 0);
+    }, 0));
+    var teacher = round_([9, 11, 12].reduce(function (sum, number) {
+      var reportQuestion = (report.questions || []).find(function (item) { return Number(item.number) === number; });
+      return sum + Number(reportQuestion && reportQuestion.pointsEarned || 0);
+    }, 0));
+    var rawTotal = round_(automatic + teacher);
+    var total = round_(rawTotal / 23 * 20);
+    var level = levelFromScore_(total);
+    report.score = { automatic: automatic, automaticMax: 16, teacher: teacher, teacherMax: 7, rawTotal: rawTotal, rawMaximum: 23, total: total, level: level };
+    report.comment = summaryComment_(level);
+    report.reviewedAt = new Date().toISOString();
+    var detail = buildTeacherDetail_(report);
+    reports.getRange(reportIndex + 2, 4, 1, 6).setValues([[total, level, detail, report.comment, 'SI', JSON.stringify(report)]]);
+    responses.getRange(source.sheetRow, 14).setValue(automatic);
+    var gradingIndex = gradingIds.findIndex(function (item) { return String(item[0]) === String(report.submissionId); });
+    if (gradingIndex >= 0) grading.getRange(gradingIndex + 2, 7, 1, 7).setValues([[automatic, teacher, total, 20, level, 'Liberado', report.comment]]);
+    if (total > previousTotal) benefitedStudents += 1;
+    changedReports += 1;
+  });
+
+  SpreadsheetApp.flush();
+  return { ok: true, reportsReviewed: reportRows.length, changedReports: changedReports, changedQuestions: changedQuestions, benefitedStudents: benefitedStudents };
+}
+
 function formatReportAnswer_(q, answer) {
   if (Array.isArray(answer)) {
     var items = q.items || [];
@@ -492,6 +610,14 @@ function formatReportAnswer_(q, answer) {
     return option ? option.label : String(answer || '');
   }
   return String(answer == null ? '' : answer);
+}
+
+function idealAnswerForQuestion_(q, fallback) {
+  if (q.type !== 'multiple' || !Array.isArray(q.grading && q.grading.correct)) return fallback;
+  return q.grading.correct.map(function (value) {
+    var option = (q.options || []).find(function (item) { return String(item.value) === String(value); });
+    return option ? String(option.label) : String(value);
+  }).join(' | ');
 }
 
 function feedbackForQuestion_(number, points, maximum) {

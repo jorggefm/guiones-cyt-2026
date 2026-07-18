@@ -29,9 +29,9 @@ Cada pregunta declara `id`, `type`, `prompt`, alternativas o ítems, `hint`, `po
 Para mantener un examen ágil en tableta, usa como máximo tres preguntas abiertas `text` y distribuye las demás entre alternativas, selección múltiple, ordenamientos y palabras clave desplegables.
 
 - `single`: una alternativa; `grading.correct` es un valor.
-- `multiple`: varias alternativas; `grading.correct` es un arreglo en el mismo orden en que el navegador las recopila.
-- `sequence`: un selector por ítem; `grading.correct` es el arreglo de posiciones esperado.
-- `dropdown`: una palabra o expresión desplegable por ítem; puede usar `options` comunes o alternativas propias dentro de cada ítem, y `grading.correct` es el arreglo esperado.
+- `multiple`: varias alternativas; `grading.correct` es el arreglo de valores correctos. Cada alternativa correcta marcada suma una fracción igual del puntaje y las incorrectas no descuentan.
+- `sequence`: un selector por ítem; `grading.correct` es el arreglo de posiciones esperado y cada posición correcta suma su fracción del puntaje.
+- `dropdown`: una palabra o expresión desplegable por ítem; puede usar `options` comunes o alternativas propias dentro de cada ítem. Cada desplegable correcto suma su fracción del puntaje.
 - `text`: respuesta abierta con longitud mínima.
 - `automatic`: todo el puntaje se asigna en Apps Script.
 - `mixed`: Apps Script asigna `automaticPoints` si la respuesta coincide y deja la pregunta pendiente para revisión.

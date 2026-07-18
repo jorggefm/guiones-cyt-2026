@@ -198,13 +198,38 @@ function automaticPoints_(question, answer) {
   var grading = question.grading;
   var available = grading.method === 'mixed' ? Number(grading.automaticPoints || 0) : Number(question.points || 0);
   if (question.type === 'single') return String(answer) === String(grading.correct) ? available : 0;
-  if (question.type === 'multiple' || question.type === 'sequence' || question.type === 'dropdown') return arraysEqual_(answer, grading.correct) ? available : 0;
+  if (question.type === 'multiple') return multipleChoicePoints_(answer, grading.correct, available);
+  if (question.type === 'sequence' || question.type === 'dropdown') return componentPoints_(answer, grading.correct, available);
   if (question.type === 'text') {
     var accepted = grading.accepted || [];
     var pass = accepted.some(function (candidate) { return similarity_(normalize_(answer), normalize_(candidate)) >= Number(grading.threshold || 0.82); });
     return pass ? available : 0;
   }
   return 0;
+}
+
+/**
+ * Cada alternativa correcta marcada suma su fracción. Las alternativas
+ * incorrectas no restan puntaje y una misma alternativa nunca suma dos veces.
+ */
+function multipleChoicePoints_(answer, correct, available) {
+  if (!Array.isArray(answer) || !Array.isArray(correct) || !correct.length) return 0;
+  var selected = {};
+  answer.forEach(function (value) { selected[String(value)] = true; });
+  var expected = {};
+  correct.forEach(function (value) { expected[String(value)] = true; });
+  var correctValues = Object.keys(expected);
+  var hits = correctValues.reduce(function (sum, value) { return sum + (selected[value] ? 1 : 0); }, 0);
+  return round_(Number(available || 0) * hits / correctValues.length);
+}
+
+/** Cada posición o desplegable correcto suma una parte igual del puntaje. */
+function componentPoints_(answer, correct, available) {
+  if (!Array.isArray(answer) || !Array.isArray(correct) || !correct.length) return 0;
+  var hits = correct.reduce(function (sum, value, index) {
+    return sum + (String(answer[index]) === String(value) ? 1 : 0);
+  }, 0);
+  return round_(Number(available || 0) * hits / correct.length);
 }
 
 function buildResponseRow_(payload, identity, score) {
