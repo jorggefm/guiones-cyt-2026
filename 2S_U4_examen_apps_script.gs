@@ -5,7 +5,18 @@ const EXAM_VERSION = '2026-07-16';
 const GOOGLE_CLIENT_ID = '120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com';
 const SCHOOL_DOMAIN = 'colegiomilagrosdedios.edu.pe';
 const ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
-const EDITABLE_REVIEW_QUESTIONS = { 4: 1, 6: 2, 10: 1, 12: 2 };
+// Toda pregunta que recibe texto escrito por el estudiante puede ser ajustada
+// por el docente. Las preguntas de correccion automatica actualizan ese bloque;
+// las abiertas o mixtas conservan el desglose de revision docente.
+const EDITABLE_REVIEW_QUESTIONS = {
+  3: { scoreBucket: 'automatic' },
+  4: { scoreBucket: 'teacher', maxTeacher: 1 },
+  6: { scoreBucket: 'teacher', maxTeacher: 2 },
+  7: { scoreBucket: 'automatic' },
+  8: { scoreBucket: 'automatic' },
+  10: { scoreBucket: 'teacher', maxTeacher: 1 },
+  12: { scoreBucket: 'teacher', maxTeacher: 2 }
+};
 
 const HEADERS = [
   'timestamp',
@@ -187,7 +198,8 @@ function saveReportReview_(payload) {
   const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
   if (!targetEmail.endsWith('@' + SCHOOL_DOMAIN)) throw new Error('Correo de estudiante no válido.');
   const questionNumber = Number(payload.questionNumber);
-  if (!EDITABLE_REVIEW_QUESTIONS[questionNumber]) throw new Error('Esta pregunta no admite revisión manual.');
+  const reviewConfig = EDITABLE_REVIEW_QUESTIONS[questionNumber];
+  if (!reviewConfig) throw new Error('Esta pregunta no admite revisión manual.');
   const requestedPoints = Number(payload.pointsEarned);
   if (!Number.isFinite(requestedPoints)) throw new Error('El puntaje no es válido.');
   const feedback = String(payload.feedback || '').trim();
@@ -215,23 +227,30 @@ function saveReportReview_(payload) {
     const breakdown = parseTeacherBreakdown_(String(row[5] || ''));
     const previousTeacherPoints = Number(breakdown[questionNumber] || 0);
     const previousQuestionPoints = Number(question.pointsEarned || 0);
-    const automaticFloor = Math.max(0, previousQuestionPoints - previousTeacherPoints);
+    const automaticFloor = reviewConfig.scoreBucket === 'teacher'
+      ? Math.max(0, previousQuestionPoints - previousTeacherPoints)
+      : 0;
     const maximumPoints = Number(question.pointsMax || 0);
     const roundedPoints = Math.round(requestedPoints * 100) / 100;
     if (roundedPoints < automaticFloor || roundedPoints > maximumPoints) {
       throw new Error('El puntaje debe estar entre ' + automaticFloor + ' y ' + maximumPoints + '.');
     }
 
-    const newTeacherPoints = Math.max(0, Math.min(
-      Number(EDITABLE_REVIEW_QUESTIONS[questionNumber]),
-      previousTeacherPoints + (roundedPoints - previousQuestionPoints)
-    ));
-    breakdown[questionNumber] = Math.round(newTeacherPoints * 100) / 100;
+    if (reviewConfig.scoreBucket === 'teacher') {
+      const newTeacherPoints = Math.max(0, Math.min(
+        Number(reviewConfig.maxTeacher || 0),
+        previousTeacherPoints + (roundedPoints - previousQuestionPoints)
+      ));
+      breakdown[questionNumber] = Math.round(newTeacherPoints * 100) / 100;
+    }
     question.pointsEarned = roundedPoints;
     question.feedback = feedback;
     question.status = reviewStatus_(roundedPoints, maximumPoints, question.studentAnswer);
 
-    const automaticScore = Number(report.score && report.score.automatic || 0);
+    const previousAutomaticScore = Number(report.score && report.score.automatic || 0);
+    const automaticScore = reviewConfig.scoreBucket === 'automatic'
+      ? Math.round(Math.max(0, Math.min(14, previousAutomaticScore + roundedPoints - previousQuestionPoints)) * 100) / 100
+      : previousAutomaticScore;
     const teacherScore = [4, 6, 10, 12].reduce((sum, number) => sum + Number(breakdown[number] || 0), 0);
     const roundedTeacher = Math.round(Math.max(0, Math.min(6, teacherScore)) * 100) / 100;
     const total = Math.round(Math.max(0, Math.min(20, automaticScore + roundedTeacher)) * 100) / 100;
@@ -254,7 +273,7 @@ function saveReportReview_(payload) {
       );
       if (gradingIndex >= 0) {
         const gradingRow = gradingIndex + 2;
-        grading.getRange(gradingRow, 5, 1, 3).setValues([[roundedTeacher, total, level]]);
+        grading.getRange(gradingRow, 4, 1, 4).setValues([[automaticScore, roundedTeacher, total, level]]);
         grading.getRange(gradingRow, 9, 1, 3).setValues([['SI', 'SI', report.reviewedAt]]);
       }
     }
@@ -304,7 +323,10 @@ function prepareAdminReport_(report, detail) {
     const number = Number(question.number);
     if (!EDITABLE_REVIEW_QUESTIONS[number]) return;
     question.adminEditable = true;
-    question.minimumPoints = Math.max(0, Number(question.pointsEarned || 0) - Number(breakdown[number] || 0));
+    const reviewConfig = EDITABLE_REVIEW_QUESTIONS[number];
+    question.minimumPoints = reviewConfig.scoreBucket === 'teacher'
+      ? Math.max(0, Number(question.pointsEarned || 0) - Number(breakdown[number] || 0))
+      : 0;
   });
   return safeReport;
 }
