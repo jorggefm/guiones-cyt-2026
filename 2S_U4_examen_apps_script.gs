@@ -5,6 +5,7 @@ const EXAM_VERSION = '2026-07-16';
 const GOOGLE_CLIENT_ID = '120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com';
 const SCHOOL_DOMAIN = 'colegiomilagrosdedios.edu.pe';
 const ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
+const EDITABLE_REVIEW_QUESTIONS = { 4: 1, 6: 2, 10: 1, 12: 2 };
 
 const HEADERS = [
   'timestamp',
@@ -62,10 +63,15 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  let payload = {};
   try {
-    const payload = parsePayload_(e);
-    if (String(payload.action || '').toLowerCase() === 'requestreport') {
+    payload = parsePayload_(e);
+    const action = String(payload.action || '').toLowerCase();
+    if (action === 'requestreport') {
       return requestReport_(payload);
+    }
+    if (action === 'savereportreview') {
+      return saveReportReview_(payload);
     }
 
     const lock = LockService.getScriptLock();
@@ -93,7 +99,12 @@ function doPost(e) {
       try { lock.releaseLock(); } catch (_) {}
     }
   } catch (err) {
-    return json_({ ok: false, error: String(err && err.message ? err.message : err) });
+    const message = String(err && err.message ? err.message : err);
+    const requestId = String(payload && payload.requestId || '').trim();
+    if (/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) {
+      CacheService.getScriptCache().put('report:' + requestId, JSON.stringify({ ok: false, error: message }), 300);
+    }
+    return json_({ ok: false, error: message });
   }
 }
 
@@ -153,9 +164,165 @@ function requestReport_(payload) {
     if (!report.studentEmail || String(report.studentEmail).trim().toLowerCase() !== lookupEmail) {
       throw new Error('El reporte no coincide con la identidad verificada.');
     }
-    cache.put(cacheKey, JSON.stringify({ ok: true, status: 'ready', report: report, admin: isAdmin }), 300);
+    const detail = String(row[5] || '');
+    cache.put(cacheKey, JSON.stringify({
+      ok: true,
+      status: 'ready',
+      report: isAdmin ? prepareAdminReport_(report, detail) : report,
+      admin: isAdmin
+    }), 300);
   }
   return json_({ ok: true, accepted: true, requestId: requestId });
+}
+
+function saveReportReview_(payload) {
+  if (!payload || payload.examId !== EXAM_ID) throw new Error('Examen no reconocido.');
+  const requestId = String(payload.requestId || '').trim();
+  if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) throw new Error('Identificador de actualización no válido.');
+
+  const identity = verifyGoogleIdentity_(payload.googleCredential || '');
+  const adminEmail = String(identity.email || '').trim().toLowerCase();
+  if (ADMIN_EMAILS.indexOf(adminEmail) === -1) throw new Error('Esta cuenta no tiene permisos para editar calificaciones.');
+
+  const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  if (!targetEmail.endsWith('@' + SCHOOL_DOMAIN)) throw new Error('Correo de estudiante no válido.');
+  const questionNumber = Number(payload.questionNumber);
+  if (!EDITABLE_REVIEW_QUESTIONS[questionNumber]) throw new Error('Esta pregunta no admite revisión manual.');
+  const requestedPoints = Number(payload.pointsEarned);
+  if (!Number.isFinite(requestedPoints)) throw new Error('El puntaje no es válido.');
+  const feedback = String(payload.feedback || '').trim();
+  if (!feedback) throw new Error('Escribe un comentario para el estudiante.');
+  if (feedback.length > 1200) throw new Error('El comentario es demasiado extenso.');
+
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    const reportsSheet = getOrCreateSheet_('Reportes');
+    const lastRow = reportsSheet.getLastRow();
+    if (lastRow < 2) throw new Error('No existen reportes para actualizar.');
+    const rows = reportsSheet.getRange(2, 1, lastRow - 1, 9).getDisplayValues();
+    const relativeIndex = rows.findIndex(item => String(item[1] || '').trim().toLowerCase() === targetEmail);
+    if (relativeIndex < 0) throw new Error('No se encontró el reporte del estudiante.');
+
+    const sheetRow = relativeIndex + 2;
+    const row = rows[relativeIndex];
+    if (String(row[7] || '').trim().toUpperCase() !== 'SI') throw new Error('El reporte aún no está liberado.');
+    const report = JSON.parse(String(row[8] || '{}'));
+    const questions = Array.isArray(report.questions) ? report.questions : [];
+    const question = questions.find(item => Number(item.number) === questionNumber);
+    if (!question) throw new Error('No se encontró la pregunta en el reporte.');
+
+    const breakdown = parseTeacherBreakdown_(String(row[5] || ''));
+    const previousTeacherPoints = Number(breakdown[questionNumber] || 0);
+    const previousQuestionPoints = Number(question.pointsEarned || 0);
+    const automaticFloor = Math.max(0, previousQuestionPoints - previousTeacherPoints);
+    const maximumPoints = Number(question.pointsMax || 0);
+    const roundedPoints = Math.round(requestedPoints * 100) / 100;
+    if (roundedPoints < automaticFloor || roundedPoints > maximumPoints) {
+      throw new Error('El puntaje debe estar entre ' + automaticFloor + ' y ' + maximumPoints + '.');
+    }
+
+    const newTeacherPoints = Math.max(0, Math.min(
+      Number(EDITABLE_REVIEW_QUESTIONS[questionNumber]),
+      previousTeacherPoints + (roundedPoints - previousQuestionPoints)
+    ));
+    breakdown[questionNumber] = Math.round(newTeacherPoints * 100) / 100;
+    question.pointsEarned = roundedPoints;
+    question.feedback = feedback;
+    question.status = reviewStatus_(roundedPoints, maximumPoints, question.studentAnswer);
+
+    const automaticScore = Number(report.score && report.score.automatic || 0);
+    const teacherScore = [4, 6, 10, 12].reduce((sum, number) => sum + Number(breakdown[number] || 0), 0);
+    const roundedTeacher = Math.round(Math.max(0, Math.min(6, teacherScore)) * 100) / 100;
+    const total = Math.round(Math.max(0, Math.min(20, automaticScore + roundedTeacher)) * 100) / 100;
+    const level = levelFromScore_(total);
+    report.score = { automatic: automaticScore, teacher: roundedTeacher, total: total, level: level };
+    report.reviewedAt = new Date().toISOString();
+
+    const detail = buildTeacherDetail_(report, breakdown);
+    reportsSheet.getRange(sheetRow, 4, 1, 6).setValues([[
+      total, level, detail, report.comment || '', 'SI', JSON.stringify(report)
+    ]]);
+
+    const grading = getOrCreateSheet_('Calificacion oficial');
+    const gradingLastRow = grading.getLastRow();
+    if (gradingLastRow >= 2) {
+      const gradingRows = grading.getRange(2, 1, gradingLastRow - 1, 2).getDisplayValues();
+      const gradingIndex = gradingRows.findIndex(item =>
+        String(item[0] || '').trim() === String(report.submissionId || row[0] || '').trim() ||
+        String(item[1] || '').trim().toLowerCase() === targetEmail
+      );
+      if (gradingIndex >= 0) {
+        const gradingRow = gradingIndex + 2;
+        grading.getRange(gradingRow, 5, 1, 3).setValues([[roundedTeacher, total, level]]);
+        grading.getRange(gradingRow, 9, 1, 3).setValues([['SI', 'SI', report.reviewedAt]]);
+      }
+    }
+    SpreadsheetApp.flush();
+
+    const prepared = prepareAdminReport_(report, detail);
+    CacheService.getScriptCache().put('report:' + requestId, JSON.stringify({
+      ok: true,
+      status: 'ready',
+      report: prepared,
+      admin: true,
+      saved: true,
+      savedQuestion: questionNumber
+    }), 300);
+    return json_({ ok: true, accepted: true, requestId: requestId });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
+  }
+}
+
+function parseTeacherBreakdown_(detail) {
+  const result = { 4: 0, 6: 0, 10: 0, 12: 0 };
+  [4, 6, 10, 12].forEach(number => {
+    const match = String(detail || '').match(new RegExp('P' + number + '\\s+([0-9]+(?:\\.[0-9]+)?)/'));
+    if (match) result[number] = Number(match[1] || 0);
+  });
+  return result;
+}
+
+function buildTeacherDetail_(report, breakdown) {
+  const automatic = Number(report.score && report.score.automatic || 0);
+  const teacher = Number(report.score && report.score.teacher || 0);
+  return [
+    'Automático ' + automatic + '/14',
+    'Docente ' + teacher + '/6',
+    'P4 ' + Number(breakdown[4] || 0) + '/1',
+    'P6 ' + Number(breakdown[6] || 0) + '/2',
+    'P10 ' + Number(breakdown[10] || 0) + '/1',
+    'P12 ' + Number(breakdown[12] || 0) + '/2'
+  ].join(' · ');
+}
+
+function prepareAdminReport_(report, detail) {
+  const safeReport = JSON.parse(JSON.stringify(report || {}));
+  const breakdown = parseTeacherBreakdown_(detail);
+  (safeReport.questions || []).forEach(question => {
+    const number = Number(question.number);
+    if (!EDITABLE_REVIEW_QUESTIONS[number]) return;
+    question.adminEditable = true;
+    question.minimumPoints = Math.max(0, Number(question.pointsEarned || 0) - Number(breakdown[number] || 0));
+  });
+  return safeReport;
+}
+
+function reviewStatus_(points, maximum, studentAnswer) {
+  if (points <= 0) {
+    const answer = String(studentAnswer || '').trim();
+    return !answer || answer === '.' ? 'unanswered' : 'incorrect';
+  }
+  if (points >= maximum) return 'correct';
+  return 'partial';
+}
+
+function levelFromScore_(value) {
+  const score = Math.max(0, Math.min(20, Number(value) || 0));
+  if (score < 12) return 'B';
+  if (score < 17) return 'A';
+  return 'AD';
 }
 
 function reportStatus_(requestId) {

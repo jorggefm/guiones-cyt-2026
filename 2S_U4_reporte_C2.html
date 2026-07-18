@@ -82,6 +82,14 @@
     .status-panel { display: none; padding: clamp(28px, 5vw, 52px); text-align: center; }
     .status-panel.visible { display: block; }
     .status-mark { width: 62px; height: 62px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 18px; color: var(--forest); background: var(--mint); font-size: 1.65rem; font-weight: 900; }
+    .loading-dots { width: 38px; height: 18px; overflow: visible; }
+    .loading-dots circle { fill: var(--forest); transform-box: fill-box; transform-origin: center; animation: loadingPulse 1.05s ease-in-out infinite; }
+    .loading-dots circle:nth-child(2) { animation-delay: .15s; }
+    .loading-dots circle:nth-child(3) { animation-delay: .3s; }
+    @keyframes loadingPulse {
+      0%, 70%, 100% { opacity: .28; transform: translateY(0) scale(.82); }
+      35% { opacity: 1; transform: translateY(-4px) scale(1); }
+    }
     .status-panel h2 { margin-bottom: 8px; font-family: "Newsreader", serif; font-size: clamp(1.8rem, 4vw, 2.7rem); }
     .status-panel p { max-width: 650px; margin: 0 auto; color: var(--muted); line-height: 1.7; }
     .retry-button, .print-button {
@@ -134,7 +142,7 @@
     .question-number { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; color: #fff; background: var(--forest); font-weight: 900; }
     .question-title { min-width: 0; }
     .question-title small { display: block; margin-bottom: 3px; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
-    .question-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .question-title strong { display: block; line-height: 1.45; white-space: normal; overflow: visible; text-overflow: clip; }
     .question-result { display: flex; gap: 10px; align-items: center; }
     .points { color: var(--forest); font-weight: 900; white-space: nowrap; }
     .result-badge { padding: 6px 9px; border-radius: 999px; font-size: .72rem; font-weight: 900; text-transform: uppercase; }
@@ -150,6 +158,17 @@
     .explanation { border: 1px solid var(--line); background: #fff; }
     .feedback { border-left: 4px solid var(--amber); background: var(--amber-soft); }
     .feedback strong, .explanation strong { color: var(--forest); }
+    .question-media { grid-column: 1 / -1; margin: 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f7faf8; text-align: center; }
+    .question-media img { display: block; width: 100%; max-width: 760px; max-height: 430px; margin: 0 auto; object-fit: contain; border-radius: 12px; background: #fff; }
+    .question-media figcaption { margin-top: 9px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+    .review-editor { grid-column: 1 / -1; display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: end; padding: 16px; border: 1px solid #9ab8aa; border-radius: 16px; background: #edf7f2; }
+    .review-editor label { display: grid; gap: 6px; color: var(--forest); font-size: .76rem; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; }
+    .review-editor input, .review-editor textarea { width: 100%; border: 1px solid #9ab8aa; border-radius: 11px; color: var(--ink); background: #fff; font: inherit; }
+    .review-editor input { min-height: 46px; padding: 0 12px; }
+    .review-editor textarea { min-height: 94px; padding: 11px 12px; resize: vertical; line-height: 1.45; }
+    .review-editor button { min-height: 46px; padding: 0 17px; border: 0; border-radius: 12px; color: #fff; background: var(--forest); font-weight: 900; cursor: pointer; }
+    .review-editor button:disabled { opacity: .6; cursor: wait; }
+    .review-save-status { grid-column: 1 / -1; min-height: 1.2em; margin: 0; color: var(--forest); font-size: .82rem; font-weight: 800; }
 
     .demo-ribbon { display: none; position: fixed; z-index: 30; top: 14px; right: -44px; width: 190px; padding: 8px; transform: rotate(38deg); color: #fff; background: var(--red); text-align: center; font-size: .68rem; font-weight: 900; letter-spacing: .06em; }
     .demo-ribbon.visible { display: block; }
@@ -170,7 +189,8 @@
       .question-card summary { grid-template-columns: auto 1fr; }
       .question-result { grid-column: 2; justify-content: space-between; }
       .question-body { grid-template-columns: 1fr; padding-left: 20px; }
-      .answer-box, .explanation, .feedback { grid-column: 1; }
+      .answer-box, .explanation, .feedback, .question-media, .review-editor { grid-column: 1; }
+      .review-editor { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 430px) {
@@ -219,7 +239,13 @@
     </section>
 
     <section id="loadingPanel" class="panel status-panel" aria-live="polite">
-      <div class="status-mark">···</div>
+      <div class="status-mark" aria-hidden="true">
+        <svg class="loading-dots" viewBox="0 0 42 18" role="img" aria-label="Cargando">
+          <circle cx="7" cy="10" r="4"></circle>
+          <circle cx="21" cy="10" r="4"></circle>
+          <circle cx="35" cy="10" r="4"></circle>
+        </svg>
+      </div>
       <h2>Buscando tu reporte</h2>
       <p>Estamos verificando la cuenta y consultando la calificación liberada por el docente.</p>
     </section>
@@ -311,9 +337,18 @@
     let googleLoadAttempts = 0;
     let adminMode = false;
     let adminReports = [];
+    let currentReport = null;
 
     const panels = ["accessPanel", "loadingPanel", "pendingPanel", "errorPanel", "adminPanel"];
     const resultLabels = { correct: "Correcta", partial: "Parcial", incorrect: "Incorrecta", unanswered: "Sin respuesta" };
+    const QUESTION_IMAGES = {
+      3: { src: "assets/2s_u4_examen_oficial/01_blastocisto.png", alt: "Blastocisto con las estructuras A, B y C señaladas.", caption: "Imagen usada en la pregunta 3." },
+      4: { src: "assets/2s_u4_examen_oficial/02_implantacion.png", alt: "Blastocisto implantándose con zonas A, B y C.", caption: "La flecha A muestra el contacto con el tejido uterino." },
+      7: { src: "assets/2s_u4_examen_oficial/03_capas_embrionarias.png", alt: "Disco trilaminar con las capas A, B y C.", caption: "Imagen usada para identificar la capa embrionaria." },
+      9: { src: "assets/2s_u4_examen_oficial/04_secuencia_neurulacion.png", alt: "Secuencia desde las capas embrionarias hasta el embrión.", caption: "Compara especialmente los momentos 1, 2 y 3." },
+      10: { src: "assets/2s_u4_examen_oficial/05_soporte_temprano.png", alt: "Embrión con estructuras de soporte A, B, C y D.", caption: "Observa la bolsa de apoyo temprano y la conexión con la zona placentaria." },
+      11: { src: "assets/2s_u4_examen_oficial/06_cierre_tubo_neural.png", alt: "Comparación entre tubo neural cerrado y cierre incompleto.", caption: "Compara la estructura azul en A y B." }
+    };
 
     function escapeHtml(value) {
       return String(value == null ? "" : value).replace(/[&<>'"]/g, character => ({
@@ -357,6 +392,24 @@
       return "AD";
     }
 
+    function credentialIsFresh(seconds) {
+      return Boolean(verifiedIdentity && Number(verifiedIdentity.exp || 0) > Math.floor(Date.now() / 1000) + Number(seconds || 0));
+    }
+
+    function requireFreshLogin() {
+      googleCredential = "";
+      verifiedIdentity = null;
+      adminMode = false;
+      currentReport = null;
+      googleLoadAttempts = 0;
+      document.getElementById("verifiedUser").textContent = "";
+      document.getElementById("verifiedUser").classList.remove("visible");
+      document.getElementById("googleSignInButton").replaceChildren();
+      showOnly("accessPanel");
+      document.querySelector("#authBox strong").textContent = "Tu sesión venció. Vuelve a ingresar con Google.";
+      initializeGoogleLogin();
+    }
+
     function handleGoogleCredential(response) {
       const identity = response && response.credential ? decodeGoogleCredential(response.credential) : null;
       const email = String(identity && identity.email || "").trim().toLowerCase();
@@ -370,6 +423,7 @@
       verifiedIdentity = identity;
       document.getElementById("verifiedUser").textContent = identity.name || email;
       document.getElementById("verifiedUser").classList.add("visible");
+      document.querySelector("#authBox strong").textContent = "Cuenta institucional verificada";
       document.getElementById("googleSignInButton").replaceChildren();
       requestReport();
     }
@@ -395,6 +449,7 @@
 
     async function requestReport(targetEmail) {
       if (!googleCredential || !verifiedIdentity) return;
+      if (!credentialIsFresh(60)) { requireFreshLogin(); return; }
       showOnly("loadingPanel");
 
       if (!REPORTS_CONNECTED) {
@@ -426,9 +481,13 @@
           if (!response.ok) continue;
           const result = await response.json();
           if (!result || result.pendingRequest) continue;
-          if (!result.ok) throw new Error(result.error || "Consulta rechazada");
+          if (!result.ok) { showError(result.error || "La consulta fue rechazada por el servidor."); return; }
           if (result.status === "admin_index" && Array.isArray(result.reports)) { renderAdminIndex(result.reports); return; }
-          if (result.status === "ready" && result.report) { renderReport(result.report); return; }
+          if (result.status === "ready" && result.report) {
+            renderReport(result.report);
+            if (result.savedQuestion) showSavedQuestion(result.savedQuestion);
+            return;
+          }
           if (result.status === "pending") { showPending(result.message); return; }
           if (result.status === "not_found") { showPending("No encontramos un examen liberado para esta cuenta. Consulta al docente si utilizaste otro correo."); return; }
           if (result.status === "disabled") { showPending("Los reportes todavía no han sido habilitados por el docente."); return; }
@@ -463,6 +522,7 @@
     }
 
     function renderReport(report) {
+      currentReport = report;
       panels.forEach(id => {
         document.getElementById(id).classList.remove("visible");
         if (id === "accessPanel") document.getElementById(id).style.display = "none";
@@ -483,6 +543,7 @@
       document.getElementById("summaryLevel").textContent = level;
       document.getElementById("reviewedAt").textContent = formatDate(report.reviewedAt);
       document.getElementById("questionList").innerHTML = (report.questions || []).map(renderQuestion).join("");
+      updateAdminSummary(report);
       document.getElementById("adminPanel").classList.toggle("visible", adminMode);
       document.getElementById("reportView").classList.add("visible");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -490,14 +551,84 @@
 
     function renderQuestion(question) {
       const state = ["correct", "partial", "incorrect", "unanswered"].includes(question.status) ? question.status : "incorrect";
-      return '<details class="question-card">' +
+      const image = QUESTION_IMAGES[Number(question.number)];
+      const imageMarkup = image
+        ? '<figure class="question-media"><img src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '" loading="lazy"><figcaption>' + escapeHtml(image.caption) + '</figcaption></figure>'
+        : "";
+      const editorMarkup = adminMode && question.adminEditable
+        ? '<form class="review-editor" data-question="' + escapeHtml(question.number) + '">' +
+          '<label>Puntaje de la pregunta<input name="points" type="number" min="' + escapeHtml(question.minimumPoints || 0) + '" max="' + escapeHtml(question.pointsMax) + '" step="0.25" value="' + escapeHtml(question.pointsEarned) + '" required></label>' +
+          '<label>Comentario para el estudiante<textarea name="feedback" maxlength="1200" required>' + escapeHtml(question.feedback || "") + '</textarea></label>' +
+          '<button type="submit">Guardar cambio</button><p class="review-save-status" aria-live="polite"></p></form>'
+        : "";
+      return '<details class="question-card" data-question="' + escapeHtml(question.number) + '">' +
         '<summary><span class="question-number">' + escapeHtml(question.number) + '</span>' +
         '<span class="question-title"><small>' + escapeHtml(question.type || "Pregunta") + '</small><strong>' + escapeHtml(question.prompt) + '</strong></span>' +
         '<span class="question-result"><span class="result-badge ' + state + '">' + resultLabels[state] + '</span><span class="points">' + escapeHtml(question.pointsEarned) + '/' + escapeHtml(question.pointsMax) + '</span></span></summary>' +
-        '<div class="question-body"><div class="answer-box"><span>Tu respuesta</span><p>' + escapeHtml(question.studentAnswer || "Sin respuesta") + '</p></div>' +
+        '<div class="question-body">' + imageMarkup + '<div class="answer-box"><span>Tu respuesta</span><p>' + escapeHtml(question.studentAnswer || "Sin respuesta") + '</p></div>' +
         '<div class="answer-box ideal"><span>Respuesta ideal</span><p>' + escapeHtml(question.idealAnswer) + '</p></div>' +
         '<p class="explanation"><strong>Explicación:</strong> ' + escapeHtml(question.explanation) + '</p>' +
-        '<p class="feedback"><strong>Comentario:</strong> ' + escapeHtml(question.feedback || "Sin comentario adicional.") + '</p></div></details>';
+        '<p class="feedback"><strong>Comentario:</strong> ' + escapeHtml(question.feedback || "Sin comentario adicional.") + '</p>' + editorMarkup + '</div></details>';
+    }
+
+    function updateAdminSummary(report) {
+      if (!adminMode || !report || !report.studentEmail) return;
+      const item = adminReports.find(entry => entry.email === String(report.studentEmail).toLowerCase());
+      if (!item) return;
+      item.total = Number(report.score && report.score.total || 0);
+      item.level = levelFromScore(item.total);
+      const select = document.getElementById("adminReportSelect");
+      const option = Array.from(select.options).find(entry => entry.value === item.email);
+      if (option) option.textContent = item.name + " · " + item.total + "/20 · " + item.level;
+      select.value = item.email;
+    }
+
+    async function saveQuestionReview(form) {
+      if (!adminMode || !currentReport) return;
+      if (!credentialIsFresh(60)) { requireFreshLogin(); return; }
+      const questionNumber = Number(form.dataset.question);
+      const points = Number(form.elements.points.value);
+      const feedback = form.elements.feedback.value.trim();
+      const button = form.querySelector("button");
+      const status = form.querySelector(".review-save-status");
+      if (!Number.isFinite(points) || !feedback) {
+        status.textContent = "Completa un puntaje válido y un comentario.";
+        return;
+      }
+      button.disabled = true;
+      status.textContent = "Guardando en Google Sheets…";
+      activeRequestId = createRequestId();
+      try {
+        await fetch(REPORT_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "saveReportReview",
+            examId: EXAM_ID,
+            requestId: activeRequestId,
+            googleCredential,
+            targetEmail: currentReport.studentEmail,
+            questionNumber,
+            pointsEarned: points,
+            feedback
+          })
+        });
+        showOnly("loadingPanel");
+        await pollReport();
+      } catch (_) {
+        button.disabled = false;
+        status.textContent = "No se pudo guardar. Comprueba la conexión e inténtalo otra vez.";
+      }
+    }
+
+    function showSavedQuestion(questionNumber) {
+      const card = document.querySelector('.question-card[data-question="' + Number(questionNumber) + '"]');
+      if (!card) return;
+      card.open = true;
+      const status = card.querySelector(".review-save-status");
+      if (status) status.textContent = "Cambio guardado. El reporte del estudiante ya está actualizado.";
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     function demoReport() {
@@ -529,6 +660,12 @@
     document.getElementById("adminOpenButton").addEventListener("click", () => {
       const email = document.getElementById("adminReportSelect").value;
       if (email) requestReport(email);
+    });
+    document.getElementById("questionList").addEventListener("submit", event => {
+      const form = event.target.closest(".review-editor");
+      if (!form) return;
+      event.preventDefault();
+      saveQuestionReview(form);
     });
 
     if (DEMO_MODE) {
