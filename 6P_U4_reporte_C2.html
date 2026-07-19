@@ -114,36 +114,56 @@
     .metric small { display: block; margin-bottom: 8px; color: var(--muted); font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
     .metric strong { font-size: 1.2rem; }
     .notice { margin-top: 16px; padding: 16px 18px; border-left: 4px solid var(--amber); border-radius: 12px; background: var(--amber-soft); line-height: 1.55; }
-    .section-title { display: flex; justify-content: space-between; gap: 14px; align-items: center; margin: 30px 0 14px; }
-    .section-title h2 { margin: 0; font-family: "Newsreader", serif; font-size: clamp(2rem, 4vw, 3.1rem); }
-    .question-card { margin-top: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,254,250,.96); }
-    .question-head { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
-    .num { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: #fff; background: var(--forest); font-weight: 900; }
-    .qtype { color: #b87283; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-    .prompt { margin: 3px 0 0; font-weight: 800; line-height: 1.35; }
-    .status { padding: 7px 10px; border-radius: 999px; background: var(--lime); color: var(--forest); font-size: .76rem; font-weight: 900; }
-    .status.partial { background: var(--amber-soft); color: #8a5a0d; }
-    .status.bad { background: var(--red-soft); color: var(--red); }
-    .qimage { display: block; max-width: min(760px, 100%); max-height: 360px; object-fit: contain; margin: 16px auto; border-radius: 14px; border: 1px solid var(--line); background: #fff; }
-    .answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-    .answer-box { padding: 14px; border-radius: 14px; background: #f4f6f1; line-height: 1.55; white-space: pre-wrap; }
+    .section-title { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 34px 0 14px; }
+    .section-title h2 { margin: 0 0 2px; font-family: "Newsreader", serif; font-size: clamp(1.8rem, 4vw, 2.65rem); }
+    .section-title p { margin: 0; color: var(--muted); }
+    .question-list { display: grid; gap: 14px; }
+    .question-card { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: 0 8px 22px rgba(31,71,38,.06); }
+    .question-card summary { list-style: none; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 18px 20px; cursor: pointer; }
+    .question-card summary::-webkit-details-marker { display: none; }
+    .question-number { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; color: #fff; background: var(--forest); font-weight: 900; }
+    .question-title { min-width: 0; }
+    .question-title small { display: block; margin-bottom: 3px; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+    .question-title strong { display: block; line-height: 1.45; white-space: normal; }
+    .question-result { display: flex; gap: 10px; align-items: center; }
+    .points { color: var(--forest); font-weight: 900; white-space: nowrap; }
+    .result-badge { padding: 6px 9px; border-radius: 999px; font-size: .72rem; font-weight: 900; text-transform: uppercase; }
+    .result-badge.correct { color: var(--forest); background: var(--lime); }
+    .result-badge.partial { color: #7b4e08; background: var(--amber-soft); }
+    .result-badge.incorrect { color: #87362f; background: var(--red-soft); }
+    .question-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px 20px 76px; }
+    .answer-box { padding: 15px; border-radius: 14px; background: #f4f6f1; }
     .answer-box.ideal { background: var(--blue-soft); }
-    .answer-box small, .edit-row label { display: block; margin-bottom: 7px; color: var(--muted); font-size: .72rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
-    .explain, .comment { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff; line-height: 1.55; }
-    .comment { border-left: 4px solid var(--amber); background: var(--amber-soft); }
-    .teacher-edit { display: none; margin-top: 14px; padding: 14px; border: 1px solid #a8c197; border-radius: 16px; background: #edf7e8; }
-    .teacher-edit.visible { display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: end; }
-    .teacher-edit input, .teacher-edit textarea { width: 100%; border: 1px solid #a8c197; border-radius: 12px; padding: 10px 12px; background: #fff; }
-    .teacher-edit textarea { min-height: 74px; resize: vertical; }
-    .save-status { color: var(--muted); font-size: .82rem; font-weight: 800; }
+    .answer-box span { display: block; margin-bottom: 7px; color: var(--muted); font-size: .72rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+    .answer-box p { margin: 0; white-space: pre-wrap; line-height: 1.55; }
+    .explanation, .feedback { grid-column: 1 / -1; margin: 0; padding: 14px 16px; border-radius: 14px; line-height: 1.6; }
+    .explanation { border: 1px solid var(--line); background: #fff; }
+    .feedback { border-left: 4px solid var(--amber); background: var(--amber-soft); }
+    .feedback strong, .explanation strong { color: var(--forest); }
+    .question-media { grid-column: 1 / -1; margin: 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f7faf8; text-align: center; }
+    .question-media img { display: block; width: 100%; max-width: 760px; max-height: 430px; margin: 0 auto; object-fit: contain; border-radius: 12px; background: #fff; }
+    .teacher-edit { grid-column: 1 / -1; display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: end; padding: 16px; border: 1px solid #a8c197; border-radius: 16px; background: #edf7e8; }
+    .teacher-edit label { display: grid; gap: 6px; color: var(--forest); font-size: .76rem; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; }
+    .teacher-edit input, .teacher-edit textarea { width: 100%; border: 1px solid #a8c197; border-radius: 11px; color: var(--ink); background: #fff; }
+    .teacher-edit input { min-height: 46px; padding: 0 12px; }
+    .teacher-edit textarea { min-height: 94px; padding: 11px 12px; resize: vertical; line-height: 1.45; }
+    .save-status { min-height: 1.2em; color: var(--forest); font-size: .82rem; font-weight: 800; }
     @media (max-width: 760px) {
-      .access-panel, .report-hero, .answer-grid, .admin-panel.visible, .teacher-edit.visible, .summary-grid { grid-template-columns: 1fr; }
+      .access-panel, .report-hero, .admin-panel.visible, .summary-grid { grid-template-columns: 1fr; }
       .score-card { width: 100%; }
+      .section-title { align-items: stretch; flex-direction: column; }
+      .question-card summary { grid-template-columns: auto 1fr; }
+      .question-result { grid-column: 2; justify-content: space-between; }
+      .question-body { grid-template-columns: 1fr; padding-left: 20px; }
+      .answer-box, .explanation, .feedback, .question-media, .teacher-edit { grid-column: 1; }
+      .teacher-edit { grid-template-columns: 1fr; }
     }
     @media print {
       .access-panel, .admin-panel, .btn, .teacher-edit { display: none !important; }
       .shell { width: 100%; padding: 0; }
       .panel, .question-card, .masthead { box-shadow: none; }
+      .question-card { break-inside: avoid; }
+      .question-card:not([open]) .question-body { display: grid; }
     }
   </style>
 </head>
@@ -152,36 +172,39 @@
     <section class="masthead">
       <p class="eyebrow">Ciencia y Tecnología · Unidad 4</p>
       <h1>Tu reporte de evaluación</h1>
-      <p class="masthead-copy">Revisa tu puntaje, tus respuestas y la explicación científica de cada pregunta. Este reporte se abre con cuenta institucional.</p>
-      <span class="chip">6.° Primaria · Ecosistemas y biodiversidad · C2</span>
+      <p class="masthead-copy">Revisa tu puntaje, tus respuestas y la explicación científica de cada pregunta. Este reporte es privado y solo se abre con tu cuenta institucional.</p>
+      <span class="chip">6.° Primaria · Evidencia C2</span>
     </section>
 
     <section class="panel access-panel" id="accessPanel">
       <div>
-        <h2>Antes de ver el reporte</h2>
-        <p>Inicia sesión con Google. El docente puede ver todos los reportes; cada estudiante solo verá el suyo cuando su correo esté registrado en la pestaña Correos.</p>
+        <p class="eyebrow" style="color:var(--leaf)">Acceso personal</p>
+        <h2>Ingresa con la misma cuenta del examen</h2>
+        <p>Google verificará tu correo institucional. No escribas tu correo manualmente: el sistema localizará únicamente el reporte asociado a tu identidad.</p>
       </div>
       <div class="auth-box">
         <div>
           <strong id="authTitle">Verifica tu identidad con Google</strong>
           <div id="googleSignInButton"></div>
-          <p class="verified" id="verifiedText">Cuenta institucional verificada.</p>
+          <p class="verified" id="verifiedText"></p>
         </div>
       </div>
     </section>
 
     <section class="panel status-panel" id="statusPanel">
-      <div class="status-mark" id="statusMark">…</div>
+      <div class="status-mark" id="statusMark">
+        <svg class="loading-dots" viewBox="0 0 42 18" role="img" aria-label="Cargando"><circle cx="7" cy="10" r="4"></circle><circle cx="21" cy="10" r="4"></circle><circle cx="35" cy="10" r="4"></circle></svg>
+      </div>
       <h2 id="statusTitle">Buscando tu reporte</h2>
-      <p id="statusText">Estamos verificando la fuente y consultando la calificación liberada por el docente.</p>
-      <svg class="loading-dots" viewBox="0 0 80 24" aria-hidden="true"><circle cx="16" cy="12" r="7"/><circle cx="40" cy="12" r="7"/><circle cx="64" cy="12" r="7"/></svg>
+      <p id="statusText">Estamos verificando la cuenta y consultando la calificación liberada por el docente.</p>
+      <button class="btn" id="statusRetryButton" type="button" style="display:none;margin:20px auto 0">Intentar otra vez</button>
     </section>
 
     <section class="panel admin-panel" id="adminPanel">
       <div>
         <p class="eyebrow">Acceso de administrador</p>
         <h2>Reportes de estudiantes</h2>
-        <p id="adminCount">Selecciona un estudiante para ver el detalle pregunta por pregunta.</p>
+        <p id="adminCount">Selecciona un estudiante para abrir su revisión completa.</p>
       </div>
       <div class="admin-controls">
         <label>Estudiante
@@ -197,11 +220,11 @@
       <div class="section-title">
         <div>
           <h2>Revisión pregunta por pregunta</h2>
-          <p>Compara respuestas, explicación científica y comentario docente.</p>
+          <p>Abre cada tarjeta para comparar tus respuestas y comprender los errores.</p>
         </div>
         <button class="btn secondary" onclick="window.print()">Imprimir reporte</button>
       </div>
-      <div id="questionList"></div>
+      <div id="questionList" class="question-list"></div>
     </section>
   </main>
 
@@ -214,12 +237,14 @@
     let currentData = null;
     let currentReport = null;
     let googleLoadAttempts = 0;
+    const resultLabels = { CORRECTA: "Correcta", PARCIAL: "Parcial", INCORRECTA: "Incorrecta" };
 
     document.addEventListener("DOMContentLoaded", initializeGoogleLogin);
     document.getElementById("adminOpenButton").addEventListener("click", () => {
       const id = document.getElementById("studentSelect").value;
       if (id) requestReport(id);
     });
+    document.getElementById("statusRetryButton").addEventListener("click", () => requestReport(""));
 
     function initializeGoogleLogin() {
       if (!window.google || !google.accounts || !google.accounts.id) {
@@ -232,6 +257,7 @@
         callback: handleGoogleCredential,
         auto_select: false,
         cancel_on_tap_outside: false,
+        hd: SCHOOL_DOMAIN,
       });
       google.accounts.id.renderButton(document.getElementById("googleSignInButton"), {
         type: "standard", theme: "outline", size: "large", text: "signin_with", shape: "pill", width: 260
@@ -239,9 +265,17 @@
     }
 
     function handleGoogleCredential(response) {
+      const identity = decodeGoogleCredential(response && response.credential || "");
+      const email = String(identity && identity.email || "").trim().toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith("@" + SCHOOL_DOMAIN)) {
+        showError("No pudimos consultar el reporte", "La cuenta seleccionada no pertenece al dominio institucional del colegio.");
+        return;
+      }
       credential = response.credential;
+      document.getElementById("verifiedText").textContent = identity.name || email;
       document.getElementById("verifiedText").classList.add("visible");
       document.getElementById("authTitle").textContent = "Cuenta institucional verificada";
+      document.getElementById("googleSignInButton").replaceChildren();
       requestReport("");
     }
 
@@ -250,7 +284,7 @@
         showError("Falta publicar el Apps Script", "El reporte local está listo, pero todavía falta reemplazar el endpoint /exec.");
         return;
       }
-      showLoading("Buscando tu reporte", "Estamos consultando la calificación liberada por el docente.");
+      showLoading("Buscando tu reporte", "Estamos verificando la cuenta y consultando la calificación liberada por el docente.");
       const requestId = crypto.randomUUID();
       await fetch(REPORT_ENDPOINT, {
         method: "POST",
@@ -258,7 +292,7 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({ action: "requestReport", requestId, credential, targetId }),
       });
-      pollReport(requestId);
+      pollReport(requestId).catch(() => showError("No pudimos consultar el reporte", "Comprueba tu conexión e inténtalo nuevamente."));
     }
 
     async function pollReport(requestId) {
@@ -271,7 +305,7 @@
         renderData(json.data);
         return;
       }
-      showError("No se encontró la respuesta", "Actualiza la página e inicia sesión otra vez. Si vuelve a pasar, avísale al docente.");
+      showError("No pudimos consultar el reporte", "El servidor no respondió a tiempo. Espera un momento e inténtalo nuevamente.");
     }
 
     function renderData(data) {
@@ -282,11 +316,11 @@
         const select = document.getElementById("studentSelect");
         select.innerHTML = data.reports.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${formatScore(item.score20)}/20 · ${escapeHtml(item.grade)}</option>`).join("");
         if (data.report) select.value = data.report.id;
-        document.getElementById("adminCount").textContent = `${data.reports.length} reportes disponibles.`;
+        document.getElementById("adminCount").textContent = `${data.reports.length} reportes oficiales disponibles. Selecciona uno para ver el detalle pregunta por pregunta.`;
         panel.classList.add("visible");
       }
       if (!data.report) {
-        showError("Reporte no disponible", data.message || "No hay reporte asociado a esta cuenta.");
+        showPending(data.message || "No encontramos un reporte liberado para esta cuenta. Consulta al docente si utilizaste otro correo.");
         return;
       }
       renderReport(data.report, data.mode === "admin");
@@ -300,10 +334,8 @@
           <p class="eyebrow">Reporte individual</p>
           <h2>${escapeHtml(report.name)}</h2>
           <div class="identity-line">
-            <span><strong>ID:</strong> ${escapeHtml(report.id)}</span>
             <span><strong>Correo:</strong> ${escapeHtml(report.email || "Pendiente de registrar")}</span>
             <span><strong>Sección:</strong> ${escapeHtml(report.section || "6P")}</span>
-            <span><strong>Revisión:</strong> ${escapeHtml(report.reviewedAt || "")}</span>
           </div>
           <div class="notice">${escapeHtml(report.general)}</div>
         </div>
@@ -314,37 +346,37 @@
       document.getElementById("summaryGrid").innerHTML = [
         ["Puntaje automático", `${formatScore(report.automatic)}/8`],
         ["Revisión docente", `${formatScore(report.teacher)}/4`],
-        ["Total bruto", `${formatScore(report.total)}/12`],
         ["Resultado", report.grade],
+        ["Fecha de revisión", report.reviewedAt || "Pendiente"],
       ].map(([label, value]) => `<div class="metric"><small>${label}</small><strong>${escapeHtml(value)}</strong></div>`).join("");
       document.getElementById("questionList").innerHTML = report.details.map(item => renderQuestion(item, isAdmin)).join("");
     }
 
     function renderQuestion(item, isAdmin) {
-      const statusClass = item.status === "CORRECTA" ? "" : item.status === "PARCIAL" ? "partial" : "bad";
-      const image = item.image ? `<img class="qimage" src="${ASSET_BASE + item.image}" alt="Imagen de la pregunta ${item.n}">` : "";
+      const state = item.status === "CORRECTA" ? "correct" : item.status === "PARCIAL" ? "partial" : "incorrect";
+      const image = item.image ? `<figure class="question-media"><img src="${ASSET_BASE + item.image}" alt="Imagen de la pregunta ${item.n}" loading="lazy"></figure>` : "";
       const editor = isAdmin ? `
         <div class="teacher-edit visible" id="edit-${item.n}">
-          <div class="edit-row"><label>Puntaje</label><input id="score-${item.n}" type="number" min="0" max="${item.max}" step="0.05" value="${item.score}"></div>
-          <div class="edit-row"><label>Comentario para el estudiante</label><textarea id="comment-${item.n}">${escapeHtml(item.comment)}</textarea></div>
+          <label>Puntaje de la pregunta<input id="score-${item.n}" type="number" min="0" max="${item.max}" step="0.05" value="${item.score}"></label>
+          <label>Comentario para el estudiante<textarea id="comment-${item.n}" maxlength="1200">${escapeHtml(item.comment)}</textarea></label>
           <div><button class="btn" onclick="saveQuestion(${item.n})">Guardar cambio</button><div class="save-status" id="save-${item.n}"></div></div>
         </div>` : "";
       return `
-        <article class="question-card">
-          <div class="question-head">
-            <div class="num">${item.n}</div>
-            <div><div class="qtype">${escapeHtml(item.type)}</div><p class="prompt">${escapeHtml(item.prompt)}</p></div>
-            <div class="status ${statusClass}">${escapeHtml(item.status)} · ${formatScore(item.score)}/${formatScore(item.max)}</div>
+        <details class="question-card" data-question="${item.n}">
+          <summary>
+            <span class="question-number">${item.n}</span>
+            <span class="question-title"><small>${escapeHtml(item.type || "Pregunta")}</small><strong>${escapeHtml(item.prompt)}</strong></span>
+            <span class="question-result"><span class="result-badge ${state}">${resultLabels[item.status] || "Incorrecta"}</span><span class="points">${formatScore(item.score)}/${formatScore(item.max)}</span></span>
+          </summary>
+          <div class="question-body">
+            ${image}
+            <div class="answer-box"><span>Tu respuesta</span><p>${escapeHtml(item.answer || "Sin respuesta")}</p></div>
+            <div class="answer-box ideal"><span>Respuesta ideal</span><p>${escapeHtml(item.ideal)}</p></div>
+            <p class="explanation"><strong>Explicación:</strong> ${escapeHtml(item.explanation)}</p>
+            <p class="feedback"><strong>Comentario:</strong> ${escapeHtml(item.comment || "Sin comentario adicional.")}</p>
+            ${editor}
           </div>
-          ${image}
-          <div class="answer-grid">
-            <div class="answer-box"><small>Tu respuesta</small>${escapeHtml(item.answer || "Sin respuesta")}</div>
-            <div class="answer-box ideal"><small>Respuesta ideal</small>${escapeHtml(item.ideal)}</div>
-          </div>
-          <div class="explain"><strong>Explicación:</strong> ${escapeHtml(item.explanation)}</div>
-          <div class="comment"><strong>Comentario:</strong> ${escapeHtml(item.comment)}</div>
-          ${editor}
-        </article>`;
+        </details>`;
     }
 
     async function saveQuestion(questionNumber) {
@@ -352,7 +384,7 @@
       const score = Number(document.getElementById(`score-${questionNumber}`).value);
       const comment = document.getElementById(`comment-${questionNumber}`).value;
       const status = document.getElementById(`save-${questionNumber}`);
-      status.textContent = "Guardando…";
+      status.textContent = "Guardando en Google Sheets…";
       const requestId = crypto.randomUUID();
       await fetch(REPORT_ENDPOINT, {
         method: "POST",
@@ -375,8 +407,14 @@
         const json = await response.json();
         if (json.pending) continue;
         if (!json.ok) throw new Error(json.message || "No se pudo guardar.");
-        status.textContent = "Guardado.";
         renderData(json.data);
+        const card = document.querySelector(`.question-card[data-question="${questionNumber}"]`);
+        if (card) {
+          card.open = true;
+          const saved = card.querySelector(".save-status");
+          if (saved) saved.textContent = "Cambio guardado. El reporte del estudiante ya está actualizado.";
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
         return;
       }
       status.textContent = "No se confirmó. Reintenta.";
@@ -386,9 +424,10 @@
       document.getElementById("accessPanel").style.display = "none";
       const panel = document.getElementById("statusPanel");
       panel.classList.add("visible");
-      document.getElementById("statusMark").textContent = "…";
+      document.getElementById("statusMark").innerHTML = '<svg class="loading-dots" viewBox="0 0 42 18" role="img" aria-label="Cargando"><circle cx="7" cy="10" r="4"></circle><circle cx="21" cy="10" r="4"></circle><circle cx="35" cy="10" r="4"></circle></svg>';
       document.getElementById("statusTitle").textContent = title;
       document.getElementById("statusText").textContent = text;
+      document.getElementById("statusRetryButton").style.display = "none";
     }
 
     function showError(title, text) {
@@ -397,9 +436,30 @@
       document.getElementById("statusMark").textContent = "!";
       document.getElementById("statusTitle").textContent = title;
       document.getElementById("statusText").textContent = text;
+      const retry = document.getElementById("statusRetryButton");
+      retry.textContent = "Intentar otra vez";
+      retry.style.display = "block";
+    }
+
+    function showPending(text) {
+      const panel = document.getElementById("statusPanel");
+      panel.classList.add("visible");
+      document.getElementById("statusMark").textContent = "i";
+      document.getElementById("statusTitle").textContent = "Tu reporte todavía no está disponible";
+      document.getElementById("statusText").textContent = text;
+      const retry = document.getElementById("statusRetryButton");
+      retry.textContent = "Volver a consultar";
+      retry.style.display = "block";
     }
 
     function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function decodeGoogleCredential(token) {
+      try {
+        const part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const bytes = Uint8Array.from(atob(part), character => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+      } catch (_) { return null; }
+    }
     function formatScore(value) { return Number(value || 0).toFixed(Number(value) % 1 ? 2 : 0); }
     function escapeHtml(value) {
       return String(value ?? "").replace(/[&<>"']/g, char => ({
