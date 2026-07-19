@@ -105,6 +105,22 @@ document.addEventListener('DOMContentLoaded',function(){
     if(idxExamV2) topActions.insertBefore(examV2, idxExamV2);
     else topActions.appendChild(examV2);
   }
+  if(topActions&&!document.getElementById('link-reporte-forms-4s')){
+    var reportForms=document.createElement('a');
+    reportForms.id='link-reporte-forms-4s';
+    reportForms.href='4S_U4_reporte_forms_C2.html';
+    reportForms.target='_blank';
+    reportForms.textContent='Reporte examen Forms U4';
+    reportForms.style.color='#fff';
+    reportForms.style.fontSize='12px';
+    reportForms.style.textDecoration='none';
+    reportForms.style.fontWeight='700';
+    reportForms.style.marginLeft='6px';
+    reportForms.style.display='inline-block';
+    var idxReportForms=topActions.querySelector('a[href="index.html"]');
+    if(idxReportForms) topActions.insertBefore(reportForms, idxReportForms);
+    else topActions.appendChild(reportForms);
+  }
   if(topActions&&!document.getElementById('link-feedback-4s')){
     var a=document.createElement('a');
     a.id='link-feedback-4s';

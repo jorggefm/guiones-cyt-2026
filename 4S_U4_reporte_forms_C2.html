@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#304f86">
+  <title>4.° Secundaria | Reporte C2 · Google Forms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root {
+      --forest: #304f86;
+      --deep: #182b50;
+      --leaf: #5d7fbd;
+      --lime: #e7efff;
+      --cream: #f6f7fb;
+      --paper: #fffefa;
+      --ink: #152039;
+      --muted: #667087;
+      --line: #dce3f1;
+      --amber: #df9b2e;
+      --amber-soft: #fff1c9;
+      --red: #b5493f;
+      --red-soft: #fbe7e3;
+      --blue-soft: #e7efff;
+      --shadow: 0 18px 48px rgba(24, 43, 80, .14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at 92% 6%, rgba(223,155,46,.22), transparent 28rem),
+        radial-gradient(circle at 3% 38%, rgba(93,127,189,.17), transparent 34rem),
+        linear-gradient(145deg, #fffaf0 0%, #f3f0e6 100%);
+    }
+    button, input, select, textarea { font: inherit; }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 64px; }
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 4vw, 42px);
+      border-radius: 30px;
+      color: #fff;
+      background: linear-gradient(125deg, var(--deep), var(--forest) 62%, #496da9);
+      box-shadow: var(--shadow);
+    }
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -120px;
+      width: 330px;
+      height: 330px;
+      border: 52px solid rgba(255, 255, 255, .08);
+      border-radius: 50%;
+    }
+    .eyebrow { margin: 0 0 10px; color: #d9e6ff; font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 720px; margin-bottom: 10px; font-family: "Newsreader", serif; font-size: clamp(2.15rem, 5.5vw, 4.4rem); line-height: .96; letter-spacing: -.035em; }
+    .masthead-copy { position: relative; z-index: 1; max-width: 760px; margin: 0; color: #eef4ff; font-size: clamp(.95rem, 2vw, 1.08rem); line-height: 1.65; }
+    .chip { display: inline-flex; margin-top: 20px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.1); font-size: .82rem; font-weight: 800; }
+    .panel { margin-top: 22px; border: 1px solid rgba(24,43,80,.14); border-radius: 24px; background: rgba(255,254,250,.94); box-shadow: 0 12px 34px rgba(24,43,80,.08); }
+    .access-panel { display: grid; grid-template-columns: 1.2fr .8fr; gap: 28px; align-items: center; padding: clamp(22px, 4vw, 36px); }
+    .access-panel h2, .status-panel h2, .admin-panel h2 { margin-bottom: 8px; font-family: "Newsreader", serif; font-size: clamp(1.7rem, 3vw, 2.4rem); }
+    .access-panel p, .status-panel p { margin-bottom: 0; color: var(--muted); line-height: 1.65; }
+    .auth-box { min-height: 150px; display: grid; place-items: center; padding: 22px; border: 1px dashed #a7b6d3; border-radius: 18px; background: #f3f6fc; text-align: center; }
+    .auth-box strong { display: block; margin-bottom: 10px; color: var(--forest); }
+    #googleSignInButton { min-height: 44px; display: flex; justify-content: center; }
+    .verified { display: none; color: var(--forest); font-weight: 800; }
+    .verified.visible { display: block; }
+    .status-panel { display: none; padding: clamp(28px, 5vw, 52px); text-align: center; }
+    .status-panel.visible { display: block; }
+    .status-mark { width: 62px; height: 62px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 18px; color: var(--forest); background: var(--lime); font-size: 1.65rem; font-weight: 900; }
+    .loading-dots { width: 44px; height: 18px; overflow: visible; margin: 8px auto 0; }
+    .loading-dots circle { fill: var(--forest); transform-box: fill-box; transform-origin: center; animation: loadingPulse 1.05s ease-in-out infinite; }
+    .loading-dots circle:nth-child(2) { animation-delay: .15s; }
+    .loading-dots circle:nth-child(3) { animation-delay: .3s; }
+    @keyframes loadingPulse {
+      0%, 70%, 100% { opacity: .28; transform: translateY(0) scale(.82); }
+      35% { opacity: 1; transform: translateY(-4px) scale(1); }
+    }
+    .btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 13px;
+      color: #fff;
+      background: var(--forest);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn.secondary { background: #4c3d91; }
+    .admin-panel { display: none; padding: clamp(20px, 4vw, 30px); }
+    .admin-panel.visible { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; }
+    .admin-panel p { margin: 0; color: var(--muted); }
+    .admin-controls { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+    .admin-controls label { display: grid; gap: 6px; color: var(--forest); font-size: .78rem; font-weight: 800; }
+    .admin-controls select { min-width: min(420px, 70vw); min-height: 46px; padding: 0 42px 0 13px; border: 1px solid #a7b6d3; border-radius: 13px; color: var(--ink); background: #fff; }
+    #reportView { display: none; }
+    #reportView.visible { display: block; }
+    .report-hero { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; padding: clamp(24px, 4vw, 38px); }
+    .identity-line { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-bottom: 18px; color: var(--muted); font-size: .9rem; }
+    .identity-line strong { color: var(--ink); }
+    .score-card { min-width: 190px; padding: 22px; border-radius: 22px; color: #fff; background: var(--deep); text-align: center; }
+    .score-card .score { font-family: "Newsreader", serif; font-size: 4.4rem; line-height: .88; }
+    .grade { display: inline-grid; min-width: 58px; place-items: center; margin-left: 8px; padding: 6px 12px; border-radius: 999px; color: #24330f; background: #ffe08a; font-weight: 900; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+    .metric { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .metric small { display: block; margin-bottom: 8px; color: var(--muted); font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .metric strong { font-size: 1.2rem; }
+    .notice { margin-top: 16px; padding: 16px 18px; border-left: 4px solid var(--amber); border-radius: 12px; background: var(--amber-soft); line-height: 1.55; }
+    .section-title { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 34px 0 14px; }
+    .section-title h2 { margin: 0 0 2px; font-family: "Newsreader", serif; font-size: clamp(1.8rem, 4vw, 2.65rem); }
+    .section-title p { margin: 0; color: var(--muted); }
+    .question-list { display: grid; gap: 14px; }
+    .question-card { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: 0 8px 22px rgba(24,43,80,.06); }
+    .question-card summary { list-style: none; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 18px 20px; cursor: pointer; }
+    .question-card summary::-webkit-details-marker { display: none; }
+    .question-number { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; color: #fff; background: var(--forest); font-weight: 900; }
+    .question-title { min-width: 0; }
+    .question-title small { display: block; margin-bottom: 3px; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+    .question-title strong { display: block; line-height: 1.45; white-space: normal; }
+    .question-result { display: flex; gap: 10px; align-items: center; }
+    .points { color: var(--forest); font-weight: 900; white-space: nowrap; }
+    .result-badge { padding: 6px 9px; border-radius: 999px; font-size: .72rem; font-weight: 900; text-transform: uppercase; }
+    .result-badge.correct { color: var(--forest); background: var(--lime); }
+    .result-badge.partial { color: #7b4e08; background: var(--amber-soft); }
+    .result-badge.incorrect { color: #87362f; background: var(--red-soft); }
+    .question-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px 20px 76px; }
+    .answer-box { padding: 15px; border-radius: 14px; background: #f4f6f1; }
+    .answer-box.ideal { background: var(--blue-soft); }
+    .answer-box span { display: block; margin-bottom: 7px; color: var(--muted); font-size: .72rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+    .answer-box p { margin: 0; white-space: pre-wrap; line-height: 1.55; }
+    .explanation, .feedback { grid-column: 1 / -1; margin: 0; padding: 14px 16px; border-radius: 14px; line-height: 1.6; }
+    .explanation { border: 1px solid var(--line); background: #fff; }
+    .feedback { border-left: 4px solid var(--amber); background: var(--amber-soft); }
+    .feedback strong, .explanation strong { color: var(--forest); }
+    .question-media { grid-column: 1 / -1; margin: 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f7faf8; text-align: center; }
+    .question-media img { display: block; width: 100%; max-width: 760px; max-height: 430px; margin: 0 auto; object-fit: contain; border-radius: 12px; background: #fff; }
+    .teacher-edit { grid-column: 1 / -1; display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: end; padding: 16px; border: 1px solid #a7b6d3; border-radius: 16px; background: #edf2fb; }
+    .teacher-edit label { display: grid; gap: 6px; color: var(--forest); font-size: .76rem; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; }
+    .teacher-edit input, .teacher-edit textarea { width: 100%; border: 1px solid #a7b6d3; border-radius: 11px; color: var(--ink); background: #fff; }
+    .teacher-edit input { min-height: 46px; padding: 0 12px; }
+    .teacher-edit textarea { min-height: 94px; padding: 11px 12px; resize: vertical; line-height: 1.45; }
+    .save-status { min-height: 1.2em; color: var(--forest); font-size: .82rem; font-weight: 800; }
+    @media (max-width: 760px) {
+      .access-panel, .report-hero, .admin-panel.visible, .summary-grid { grid-template-columns: 1fr; }
+      .score-card { width: 100%; }
+      .section-title { align-items: stretch; flex-direction: column; }
+      .question-card summary { grid-template-columns: auto 1fr; }
+      .question-result { grid-column: 2; justify-content: space-between; }
+      .question-body { grid-template-columns: 1fr; padding-left: 20px; }
+      .answer-box, .explanation, .feedback, .question-media, .teacher-edit { grid-column: 1; }
+      .teacher-edit { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .access-panel, .admin-panel, .btn, .teacher-edit { display: none !important; }
+      .shell { width: 100%; padding: 0; }
+      .panel, .question-card, .masthead { box-shadow: none; }
+      .question-card { break-inside: avoid; }
+      .question-card:not([open]) .question-body { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="masthead">
+      <p class="eyebrow">Ciencia y Tecnología · Unidad 4</p>
+      <h1>Tu reporte de evaluación</h1>
+      <p class="masthead-copy">Revisa tu nota, tus respuestas y la explicación científica de cada pregunta del examen de Relación y Coordinación. Este reporte es privado y solo se abre con tu cuenta institucional.</p>
+      <span class="chip">4.° Secundaria · Unidad 4 · Google Forms</span>
+    </section>
+
+    <section class="panel access-panel" id="accessPanel">
+      <div>
+        <p class="eyebrow" style="color:var(--leaf)">Acceso personal</p>
+        <h2>Ingresa con tu cuenta institucional</h2>
+        <p>Google verificará tu correo institucional. Cada estudiante solo puede abrir su propio reporte; el docente administrador puede revisar y ajustar todos.</p>
+      </div>
+      <div class="auth-box">
+        <div>
+          <strong id="authTitle">Verifica tu identidad con Google</strong>
+          <div id="googleSignInButton"></div>
+          <p class="verified" id="verifiedText"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel status-panel" id="statusPanel">
+      <div class="status-mark" id="statusMark">
+        <svg class="loading-dots" viewBox="0 0 42 18" role="img" aria-label="Cargando"><circle cx="7" cy="10" r="4"></circle><circle cx="21" cy="10" r="4"></circle><circle cx="35" cy="10" r="4"></circle></svg>
+      </div>
+      <h2 id="statusTitle">Buscando tu reporte</h2>
+      <p id="statusText">Estamos verificando la cuenta y consultando la calificación liberada por el docente.</p>
+      <button class="btn" id="statusRetryButton" type="button" style="display:none;margin:20px auto 0">Intentar otra vez</button>
+    </section>
+
+    <section class="panel admin-panel" id="adminPanel">
+      <div>
+        <p class="eyebrow">Acceso de administrador</p>
+        <h2>Reportes de estudiantes</h2>
+        <p id="adminCount">Selecciona un estudiante para abrir su revisión completa.</p>
+      </div>
+      <div class="admin-controls">
+        <label>Estudiante
+          <select id="studentSelect"></select>
+        </label>
+        <button class="btn" id="adminOpenButton">Ver reporte</button>
+      </div>
+    </section>
+
+    <section id="reportView">
+      <section class="panel report-hero" id="reportHero"></section>
+      <div class="summary-grid" id="summaryGrid"></div>
+      <div class="section-title">
+        <div>
+          <h2>Revisión pregunta por pregunta</h2>
+          <p>Abre cada tarjeta para comparar tus respuestas y comprender los errores.</p>
+        </div>
+        <button class="btn secondary" onclick="window.print()">Imprimir reporte</button>
+      </div>
+      <div id="questionList" class="question-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const REPORT_ENDPOINT = "https://script.google.com/macros/s/AKfycbwo7I4OeSMGbtynn1YpRCRENSp1VIhHuNHCkqpj_2Kor3BV1PWuMzCf5vDnRBWpTyM-FQ/exec";
+    const GOOGLE_CLIENT_ID = "120108159327-6toqcr7bt3rljc8gfhtm7bonpnmueme3.apps.googleusercontent.com";
+    const SCHOOL_DOMAIN = "colegiomilagrosdedios.edu.pe";
+    const ASSET_BASE = "https://jorggefm.github.io/guiones-cyt-2026/";
+    let credential = "";
+    let currentData = null;
+    let currentReport = null;
+    let googleLoadAttempts = 0;
+    const resultLabels = { CORRECTA: "Correcta", PARCIAL: "Parcial", INCORRECTA: "Incorrecta" };
+
+    document.addEventListener("DOMContentLoaded", initializeGoogleLogin);
+    document.getElementById("adminOpenButton").addEventListener("click", () => {
+      const id = document.getElementById("studentSelect").value;
+      if (id) requestReport(id);
+    });
+    document.getElementById("statusRetryButton").addEventListener("click", () => requestReport(""));
+
+    function initializeGoogleLogin() {
+      if (!window.google || !google.accounts || !google.accounts.id) {
+        googleLoadAttempts += 1;
+        if (googleLoadAttempts < 80) window.setTimeout(initializeGoogleLogin, 250);
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: false,
+        hd: SCHOOL_DOMAIN,
+      });
+      google.accounts.id.renderButton(document.getElementById("googleSignInButton"), {
+        type: "standard", theme: "outline", size: "large", text: "signin_with", shape: "pill", width: 260
+      });
+    }
+
+    function handleGoogleCredential(response) {
+      const identity = decodeGoogleCredential(response && response.credential || "");
+      const email = String(identity && identity.email || "").trim().toLowerCase();
+      if (!identity || identity.email_verified !== true || !email.endsWith("@" + SCHOOL_DOMAIN)) {
+        showError("No pudimos consultar el reporte", "La cuenta seleccionada no pertenece al dominio institucional del colegio.");
+        return;
+      }
+      credential = response.credential;
+      document.getElementById("verifiedText").textContent = identity.name || email;
+      document.getElementById("verifiedText").classList.add("visible");
+      document.getElementById("authTitle").textContent = "Cuenta institucional verificada";
+      document.getElementById("googleSignInButton").replaceChildren();
+      requestReport("");
+    }
+
+    async function requestReport(targetId) {
+      if (!REPORT_ENDPOINT.startsWith("https://script.google.com/macros/s/")) {
+        showError("Falta publicar el Apps Script", "El reporte local está listo, pero todavía falta reemplazar el endpoint /exec.");
+        return;
+      }
+      showLoading("Buscando tu reporte", "Estamos verificando la cuenta y consultando la calificación liberada por el docente.");
+      const requestId = crypto.randomUUID();
+      await fetch(REPORT_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "requestReport", requestId, credential, targetId }),
+      });
+      pollReport(requestId).catch(() => showError("No pudimos consultar el reporte", "Comprueba tu conexión e inténtalo nuevamente."));
+    }
+
+    async function pollReport(requestId) {
+      for (let attempt = 0; attempt < 24; attempt += 1) {
+        await delay(650);
+        const response = await fetch(REPORT_ENDPOINT + "?action=report&requestId=" + encodeURIComponent(requestId) + "&t=" + Date.now(), { cache: "no-store" });
+        const json = await response.json();
+        if (json.pending) continue;
+        if (!json.ok) throw new Error(json.message || "No se pudo cargar el reporte.");
+        renderData(json.data);
+        return;
+      }
+      showError("No pudimos consultar el reporte", "El servidor no respondió a tiempo. Espera un momento e inténtalo nuevamente.");
+    }
+
+    function renderData(data) {
+      currentData = data;
+      document.getElementById("statusPanel").classList.remove("visible");
+      if (data.mode === "admin") {
+        const panel = document.getElementById("adminPanel");
+        const select = document.getElementById("studentSelect");
+        select.innerHTML = data.reports.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${formatScore(item.score20)}/20 · ${escapeHtml(item.grade)}</option>`).join("");
+        if (data.report) select.value = data.report.id;
+        document.getElementById("adminCount").textContent = `${data.reports.length} reportes oficiales disponibles. Selecciona uno para ver el detalle pregunta por pregunta.`;
+        panel.classList.add("visible");
+      }
+      if (!data.report) {
+        showPending(data.message || "No encontramos un reporte liberado para esta cuenta. Consulta al docente si utilizaste otro correo.");
+        return;
+      }
+      renderReport(data.report, data.mode === "admin");
+    }
+
+    function renderReport(report, isAdmin) {
+      currentReport = report;
+      document.getElementById("reportView").classList.add("visible");
+      document.getElementById("reportHero").innerHTML = `
+        <div>
+          <p class="eyebrow">Reporte individual</p>
+          <h2>${escapeHtml(report.name)}</h2>
+          <div class="identity-line">
+            <span><strong>Correo:</strong> ${escapeHtml(report.email || "Pendiente de registrar")}</span>
+            <span><strong>Sección:</strong> ${escapeHtml(report.section || "4S")}</span><span><strong>Origen:</strong> Google Forms</span>
+          </div>
+          <div class="notice">${escapeHtml(report.general)}</div>
+        </div>
+        <div class="score-card">
+          <div class="score">${formatScore(report.score20)}</div>
+          <span>sobre 20</span><span class="grade">${escapeHtml(report.grade)}</span>
+        </div>`;
+      document.getElementById("summaryGrid").innerHTML = [
+        ["Puntaje revisado", `${formatScore(report.basePoints)}/12`],
+        ["Nota original Forms", `${formatScore(report.rawGoogleScore20)}/20`],
+        ["Resultado", report.grade],
+        ["Fecha de revisión", report.reviewedAt || "Pendiente"],
+      ].map(([label, value]) => `<div class="metric"><small>${label}</small><strong>${escapeHtml(value)}</strong></div>`).join("");
+      document.getElementById("questionList").innerHTML = report.details.map(item => renderQuestion(item, isAdmin)).join("");
+    }
+
+    function renderQuestion(item, isAdmin) {
+      const state = item.status === "CORRECTA" ? "correct" : item.status === "PARCIAL" ? "partial" : "incorrect";
+      const image = item.image ? `<figure class="question-media"><img src="${ASSET_BASE + item.image}" alt="Imagen de la pregunta ${item.n}" loading="lazy"></figure>` : "";
+      const editor = isAdmin ? `
+        <div class="teacher-edit visible" id="edit-${item.n}">
+          <label>Puntaje de la pregunta<input id="score-${item.n}" type="number" min="0" max="${item.max}" step="0.05" value="${item.score}"></label>
+          <label>Comentario para el estudiante<textarea id="comment-${item.n}" maxlength="1200">${escapeHtml(item.comment)}</textarea></label>
+          <div><button class="btn" onclick="saveQuestion(${item.n})">Guardar cambio</button><div class="save-status" id="save-${item.n}"></div></div>
+        </div>` : "";
+      return `
+        <details class="question-card" data-question="${item.n}">
+          <summary>
+            <span class="question-number">${item.n}</span>
+            <span class="question-title"><small>${escapeHtml(item.type || "Pregunta")}</small><strong>${escapeHtml(item.prompt)}</strong></span>
+            <span class="question-result"><span class="result-badge ${state}">${resultLabels[item.status] || "Incorrecta"}</span><span class="points">${formatScore(item.score)}/${formatScore(item.max)}</span></span>
+          </summary>
+          <div class="question-body">
+            ${image}
+            <div class="answer-box"><span>Tu respuesta</span><p>${escapeHtml(item.answer || "Sin respuesta")}</p></div>
+            <div class="answer-box ideal"><span>Respuesta ideal</span><p>${escapeHtml(item.ideal)}</p></div>
+            <p class="explanation"><strong>Explicación:</strong> ${escapeHtml(item.explanation)}</p>
+            <p class="feedback"><strong>Comentario:</strong> ${escapeHtml(item.comment || "Sin comentario adicional.")}</p>
+            ${editor}
+          </div>
+        </details>`;
+    }
+
+    async function saveQuestion(questionNumber) {
+      const report = currentReport;
+      const score = Number(document.getElementById(`score-${questionNumber}`).value);
+      const comment = document.getElementById(`comment-${questionNumber}`).value;
+      const status = document.getElementById(`save-${questionNumber}`);
+      status.textContent = "Guardando en Google Sheets…";
+      const requestId = crypto.randomUUID();
+      await fetch(REPORT_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "saveQuestionReview",
+          requestId,
+          credential,
+          studentId: report.id,
+          targetId: report.id,
+          question: questionNumber,
+          score,
+          comment,
+        }),
+      });
+      for (let attempt = 0; attempt < 24; attempt += 1) {
+        await delay(650);
+        const response = await fetch(REPORT_ENDPOINT + "?action=report&requestId=" + encodeURIComponent(requestId) + "&t=" + Date.now(), { cache: "no-store" });
+        const json = await response.json();
+        if (json.pending) continue;
+        if (!json.ok) throw new Error(json.message || "No se pudo guardar.");
+        renderData(json.data);
+        const card = document.querySelector(`.question-card[data-question="${questionNumber}"]`);
+        if (card) {
+          card.open = true;
+          const saved = card.querySelector(".save-status");
+          if (saved) saved.textContent = "Cambio guardado. El reporte del estudiante ya está actualizado.";
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        return;
+      }
+      status.textContent = "No se confirmó. Reintenta.";
+    }
+
+    function showLoading(title, text) {
+      document.getElementById("accessPanel").style.display = "none";
+      const panel = document.getElementById("statusPanel");
+      panel.classList.add("visible");
+      document.getElementById("statusMark").innerHTML = '<svg class="loading-dots" viewBox="0 0 42 18" role="img" aria-label="Cargando"><circle cx="7" cy="10" r="4"></circle><circle cx="21" cy="10" r="4"></circle><circle cx="35" cy="10" r="4"></circle></svg>';
+      document.getElementById("statusTitle").textContent = title;
+      document.getElementById("statusText").textContent = text;
+      document.getElementById("statusRetryButton").style.display = "none";
+    }
+
+    function showError(title, text) {
+      const panel = document.getElementById("statusPanel");
+      panel.classList.add("visible");
+      document.getElementById("statusMark").textContent = "!";
+      document.getElementById("statusTitle").textContent = title;
+      document.getElementById("statusText").textContent = text;
+      const retry = document.getElementById("statusRetryButton");
+      retry.textContent = "Intentar otra vez";
+      retry.style.display = "block";
+    }
+
+    function showPending(text) {
+      const panel = document.getElementById("statusPanel");
+      panel.classList.add("visible");
+      document.getElementById("statusMark").textContent = "i";
+      document.getElementById("statusTitle").textContent = "Tu reporte todavía no está disponible";
+      document.getElementById("statusText").textContent = text;
+      const retry = document.getElementById("statusRetryButton");
+      retry.textContent = "Volver a consultar";
+      retry.style.display = "block";
+    }
+
+    function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function decodeGoogleCredential(token) {
+      try {
+        const part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const bytes = Uint8Array.from(atob(part), character => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+      } catch (_) { return null; }
+    }
+    function formatScore(value) { return Number(value || 0).toFixed(Number(value) % 1 ? 2 : 0); }
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      }[char]));
+    }
+  </script>
+</body>
+</html>
