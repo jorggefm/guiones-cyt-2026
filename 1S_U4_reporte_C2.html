@@ -134,6 +134,33 @@
     .questions-header h2 { margin-bottom: 2px; font-family: "Newsreader", serif; font-size: clamp(1.8rem, 4vw, 2.65rem); }
     .questions-header p { margin: 0; color: var(--muted); }
     .print-button { margin: 0; white-space: nowrap; }
+    .student-view-toolbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 22px;
+      padding: 14px 16px;
+      border: 1px solid rgba(23,72,61,.18);
+      border-radius: 16px;
+      background: rgba(255,254,250,.9);
+      box-shadow: 0 8px 22px rgba(23,72,61,.06);
+    }
+    .student-view-toolbar.visible { display: flex; }
+    .student-view-toolbar.student-preview { background: var(--mint); }
+    .student-view-toolbar p { margin: 0; color: var(--muted); line-height: 1.45; }
+    .student-view-toolbar strong { display: block; color: var(--forest); }
+    .student-view-toolbar button {
+      min-height: 42px;
+      padding: 0 15px;
+      border: 0;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--forest);
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
     .question-list { display: grid; gap: 14px; }
     .question-card { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: 0 8px 22px rgba(23,72,61,.06); }
@@ -185,6 +212,7 @@
       .score-block { width: 100%; }
       .summary-grid { grid-template-columns: 1fr 1fr; }
       .questions-header { align-items: stretch; flex-direction: column; }
+      .student-view-toolbar { align-items: stretch; flex-direction: column; }
       .print-button { width: 100%; }
       .question-card summary { grid-template-columns: auto 1fr; }
       .question-result { grid-column: 2; justify-content: space-between; }
@@ -205,7 +233,7 @@
       .masthead, .panel, .question-card { box-shadow: none; }
       .masthead { color: #000; background: #fff; border: 2px solid #17483d; }
       .masthead-copy, .eyebrow { color: #17483d; }
-      .access-panel, .status-panel, .questions-header .print-button, .demo-ribbon { display: none !important; }
+      .access-panel, .status-panel, .questions-header .print-button, .student-view-toolbar, .demo-ribbon { display: none !important; }
       #reportView { display: block !important; }
       .question-card { break-inside: avoid; }
       .question-card:not([open]) .question-body { display: grid; }
@@ -279,6 +307,11 @@
     </section>
 
     <section id="reportView">
+      <div id="studentViewToolbar" class="student-view-toolbar" aria-live="polite">
+        <p><strong id="studentViewTitle">Vista de administrador</strong><span id="studentViewMessage">Puedes revisar y ajustar comentarios o puntajes.</span></p>
+        <button id="studentViewToggle" type="button">Ver como estudiante</button>
+      </div>
+
       <article class="panel report-hero">
         <div>
           <p class="eyebrow" style="color:var(--leaf)">Reporte individual</p>
@@ -336,6 +369,7 @@
     let activeRequestId = "";
     let googleLoadAttempts = 0;
     let adminMode = false;
+    let studentViewMode = false;
     let adminReports = [];
     let currentReport = null;
 
@@ -398,6 +432,7 @@
       googleCredential = "";
       verifiedIdentity = null;
       adminMode = false;
+      studentViewMode = false;
       currentReport = null;
       googleLoadAttempts = 0;
       document.getElementById("verifiedUser").textContent = "";
@@ -508,6 +543,7 @@
 
     function renderAdminIndex(reports) {
       adminMode = true;
+      studentViewMode = false;
       adminReports = reports.slice();
       const select = document.getElementById("adminReportSelect");
       select.innerHTML = adminReports.map(report =>
@@ -542,7 +578,8 @@
       document.getElementById("reviewedAt").textContent = formatDate(report.reviewedAt);
       document.getElementById("questionList").innerHTML = (report.questions || []).map(renderQuestion).join("");
       updateAdminSummary(report);
-      document.getElementById("adminPanel").classList.toggle("visible", adminMode);
+      document.getElementById("adminPanel").classList.toggle("visible", adminMode && !studentViewMode);
+      updateStudentViewToolbar();
       document.getElementById("reportView").classList.add("visible");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -553,7 +590,7 @@
       const imageMarkup = image
         ? '<figure class="question-media"><img src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '" loading="lazy"><figcaption>' + escapeHtml(image.caption) + '</figcaption></figure>'
         : "";
-      const editorMarkup = adminMode && question.adminEditable
+      const editorMarkup = adminMode && !studentViewMode && question.adminEditable
         ? '<form class="review-editor" data-question="' + escapeHtml(question.number) + '">' +
           '<label>Puntaje de la pregunta<input name="points" type="number" min="' + escapeHtml(question.minimumPoints || 0) + '" max="' + escapeHtml(question.pointsMax) + '" step="0.25" value="' + escapeHtml(question.pointsEarned) + '" required></label>' +
           '<label>Comentario para el estudiante<textarea name="feedback" maxlength="1200" required>' + escapeHtml(question.feedback || "") + '</textarea></label>' +
@@ -579,6 +616,27 @@
       const option = Array.from(select.options).find(entry => entry.value === item.email);
       if (option) option.textContent = item.name + " · " + item.total + "/20 · " + item.level;
       select.value = item.email;
+    }
+
+    function updateStudentViewToolbar() {
+      const toolbar = document.getElementById("studentViewToolbar");
+      const title = document.getElementById("studentViewTitle");
+      const message = document.getElementById("studentViewMessage");
+      const toggle = document.getElementById("studentViewToggle");
+      toolbar.classList.toggle("visible", adminMode);
+      toolbar.classList.toggle("student-preview", studentViewMode);
+      if (!adminMode) return;
+      title.textContent = studentViewMode ? "Vista estudiante simulada" : "Vista de administrador";
+      message.textContent = studentViewMode
+        ? "Estás viendo este reporte sin controles de edición, como lo vería el estudiante."
+        : "Puedes revisar y ajustar comentarios o puntajes. Usa la previsualización para comprobar la vista del estudiante.";
+      toggle.textContent = studentViewMode ? "Volver a administrador" : "Ver como estudiante";
+    }
+
+    function toggleStudentViewMode() {
+      if (!adminMode || !currentReport) return;
+      studentViewMode = !studentViewMode;
+      renderReport(currentReport);
     }
 
     async function saveQuestionReview(form) {
@@ -659,6 +717,7 @@
       const email = document.getElementById("adminReportSelect").value;
       if (email) requestReport(email);
     });
+    document.getElementById("studentViewToggle").addEventListener("click", toggleStudentViewMode);
     document.getElementById("questionList").addEventListener("submit", event => {
       const form = event.target.closest(".review-editor");
       if (!form) return;
