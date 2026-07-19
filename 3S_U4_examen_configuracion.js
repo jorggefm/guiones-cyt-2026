@@ -43,16 +43,17 @@ var EXAM_CONFIG = Object.freeze({
   questions: [
     {
       id: "q1", type: "multiple", label: "Selección múltiple",
-      prompt: "Observa la imagen. ¿Qué evidencias permiten reconocer que pudo ocurrir una reacción química? Marca todas las correctas.",
+      prompt: "Observa la imagen. Para inferir que ocurrió una reacción química y no solo un cambio físico, ¿qué evidencias observables serían científicamente válidas? Marca todas las correctas.",
       imageKey: "evidencias_reaccion",
       options: [
-        { value: "color", label: "Cambio de color" },
-        { value: "gas", label: "Formación de gas" },
-        { value: "precipitado", label: "Formación de sólido o precipitado" },
-        { value: "temperatura", label: "Cambio de temperatura" },
-        { value: "mezclar", label: "Solo mezclar sustancias" }
+        { value: "color", label: "Cambio de color persistente" },
+        { value: "gas", label: "Formación de gas o burbujeo" },
+        { value: "precipitado", label: "Aparición de un sólido o precipitado" },
+        { value: "temperatura", label: "Cambio de temperatura sin calentar ni enfriar desde afuera" },
+        { value: "mezclar", label: "Que dos sustancias estén en el mismo recipiente" },
+        { value: "forma", label: "Que una sustancia cambie solo de tamaño o forma" }
       ],
-      hint: "Busca señales observables, no explicaciones invisibles.",
+      hint: "Elige señales de formación de nuevas sustancias; descarta acciones o cambios físicos simples.",
       points: 2,
       grading: { method: "automatic", correct: ["color", "gas", "precipitado", "temperatura"] }
     },
