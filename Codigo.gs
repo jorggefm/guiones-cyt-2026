@@ -97,6 +97,10 @@ function doPost(e) {
     }
 
     // [REZAGADA] Examen de recuperacion -> Rezagada.gs
+    if (action === 'releasereport') {
+      return REZ_handleRelease_(payload);
+    }
+
     if (payload.examId === REZ_EXAM_ID) {
       return REZ_handleSubmit_(payload);
     }
@@ -199,7 +203,8 @@ function requestReport_(payload) {
       ok: true,
       status: 'ready',
       report: isAdmin ? prepareAdminReport_(report, detail) : report,
-      admin: isAdmin
+      admin: isAdmin,
+      liberado: String(row[7] || '').trim().toUpperCase() === 'SI'
     }), 300);
   }
   return json_({ ok: true, accepted: true, requestId: requestId });
