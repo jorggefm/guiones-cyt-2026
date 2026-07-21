@@ -50,9 +50,11 @@ Después del bloque que termina así, agregar las tres líneas nuevas:
 
 ### ② Buscar `action === 'status'`
 
-Reemplazar esa línea por el bloque completo:
+Reemplazar esa línea por el bloque completo (son **dos** cosas: la señal de vida
+y el estado del envío):
 
 ```js
+  if (action === 'rezagada') return REZ_health_();
   if (action === 'status') {
     if (e.parameter.examId === REZ_EXAM_ID) {
       return REZ_submissionStatus_(e.parameter.submissionId || '');
@@ -136,18 +138,27 @@ vieron. Cambiarlo a `SI` a mano.
 Abrir en el navegador:
 
 ```
-https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec?action=status&examId=2S-U4-C2-REZAGADA-2026&submissionId=prueba
+https://script.google.com/macros/s/AKfycbxJQvanNhT4O1bsrC3WQaeti0YDmjYtMPZaOVYmnXqIPbsR-o5NynSradl2FufkBRuYAQ/exec?action=rezagada
 ```
 
-Debe responder:
+**Instalado y publicado correctamente:**
 
 ```json
-{"ok":true,"found":false}
+{"ok":true,"instalado":true,"examId":"2S-U4-C2-REZAGADA-2026",
+ "version":"2026-07-21","hoja":"Respuestas rezagada"}
 ```
 
-- **`{"ok":true,"found":false}`** → todo instalado. `found:false` es lo correcto:
-  significa que buscó y no encontró un envío con ese código de prueba.
-- **Un error, o `found` ausente** → algo falló. Lo más probable: el paso ② o el
-  paso 4.
+**Todavía NO instalado** (o publicado sin versión nueva) — responde lo del examen
+viejo:
 
-Con eso listo, ya se puede rendir el examen.
+```json
+{"ok":true,"examId":"2S-U4-C2-OFICIAL-2026","version":"2026-07-16",
+ "message":"Endpoint activo para el examen oficial 2S U4 C2."}
+```
+
+> Si sale la segunda respuesta, lo más probable es que falte el **paso 4**
+> (publicar una versión nueva sobre el deployment existente). Guardar con Ctrl+S
+> **no** publica: el código queda guardado pero la URL sigue sirviendo la versión
+> anterior. Es el error más común.
+
+Con la primera respuesta, ya se puede rendir el examen.
