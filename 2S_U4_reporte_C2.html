@@ -210,6 +210,21 @@
       .question-card { break-inside: avoid; }
       .question-card:not([open]) .question-body { display: grid; }
     }
+    /* --- Boton de liberacion (solo administrador) --- */
+    #releaseBar { display: none; align-items: center; justify-content: space-between; gap: 18px;
+                  flex-wrap: wrap; margin-top: 28px; padding: 20px 22px; border-radius: 16px;
+                  border: 2px solid #c8d6cd; background: #f6faf7; }
+    #releaseBar.visible { display: flex; }
+    .release-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .release-hint { margin: 4px 0 0; font-size: 14px; color: #5b6b63; max-width: 46ch; }
+    .release-state { font-weight: 700; font-size: 17px; }
+    .release-state.pendiente { color: #a05a00; }
+    .release-state.liberado { color: #166446; }
+    .release-button { border: 0; border-radius: 10px; padding: 10px 18px; font-weight: 700;
+                      cursor: pointer; color: #fff; background: #1d6650; }
+    .release-button.ocultar { background: #8a6d2f; }
+    .release-button:disabled { opacity: .55; cursor: default; }
+    .release-message { font-size: 14px; color: #5b6b63; }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -309,6 +324,17 @@
         <button class="print-button" type="button" onclick="window.print()">Imprimir reporte</button>
       </div>
       <div id="questionList" class="question-list"></div>
+
+      <div id="releaseBar" class="release-bar">
+        <div>
+          <strong id="releaseState" class="release-state"></strong>
+          <p id="releaseHint" class="release-hint"></p>
+        </div>
+        <div class="release-actions">
+          <button id="releaseButton" class="release-button" type="button"></button>
+          <span id="releaseMessage" class="release-message" role="status" aria-live="polite"></span>
+        </div>
+      </div>
     </section>
 
     <div id="fatalMessage" class="fatal" role="alert"></div>
@@ -336,6 +362,7 @@
     let activeRequestId = "";
     let googleLoadAttempts = 0;
     let adminMode = false;
+    let reportLiberado = false;
     let adminReports = [];
     let currentReport = null;
 
@@ -483,7 +510,9 @@
           if (!result || result.pendingRequest) continue;
           if (!result.ok) { showError(result.error || "La consulta fue rechazada por el servidor."); return; }
           if (result.status === "admin_index" && Array.isArray(result.reports)) { renderAdminIndex(result.reports); return; }
+          if (result.status === "released") { applyReleaseResult(result); return; }
           if (result.status === "ready" && result.report) {
+            reportLiberado = result.liberado === true;
             renderReport(result.report);
             if (result.savedQuestion) showSavedQuestion(result.savedQuestion);
             return;
@@ -544,6 +573,7 @@
       document.getElementById("reviewedAt").textContent = formatDate(report.reviewedAt);
       document.getElementById("questionList").innerHTML = (report.questions || []).map(renderQuestion).join("");
       updateAdminSummary(report);
+      renderReleaseBar();
       document.getElementById("adminPanel").classList.toggle("visible", adminMode);
       document.getElementById("reportView").classList.add("visible");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -657,6 +687,68 @@
 
     document.getElementById("retryButton").addEventListener("click", () => requestReport());
     document.getElementById("errorRetryButton").addEventListener("click", () => verifiedIdentity ? requestReport() : showOnly("accessPanel"));
+    /* ---------- Liberacion del reporte (solo administrador) ---------- */
+
+    function renderReleaseBar() {
+      const bar = document.getElementById("releaseBar");
+      if (!adminMode || !currentReport) { bar.classList.remove("visible"); return; }
+      bar.classList.add("visible");
+      const estado = document.getElementById("releaseState");
+      const boton = document.getElementById("releaseButton");
+      estado.textContent = reportLiberado
+        ? "Liberado: el estudiante ya puede ver su reporte."
+        : "Pendiente: el estudiante todavia NO ve este reporte.";
+      estado.className = "release-state " + (reportLiberado ? "liberado" : "pendiente");
+      document.getElementById("releaseHint").textContent = reportLiberado
+        ? "Puedes ocultarlo si necesitas corregir algo antes de que lo siga viendo."
+        : "Revisa las 12 preguntas y califica las abiertas (4, 6, 10 y 12) antes de liberar.";
+      boton.textContent = reportLiberado ? "Ocultar reporte" : "Liberar reporte";
+      boton.className = "release-button" + (reportLiberado ? " ocultar" : "");
+      boton.disabled = false;
+      document.getElementById("releaseMessage").textContent = "";
+    }
+
+    function applyReleaseResult(result) {
+      reportLiberado = result.liberado === true;
+      renderReleaseBar();
+      document.getElementById("releaseMessage").textContent = reportLiberado
+        ? "Listo. El estudiante ya puede verlo."
+        : "Reporte ocultado nuevamente.";
+    }
+
+    async function toggleRelease() {
+      if (!currentReport) return;
+      const boton = document.getElementById("releaseButton");
+      const quiereLiberar = !reportLiberado;
+      if (quiereLiberar && !confirm("Vas a liberar este reporte. El estudiante podra ver su nota de inmediato. Continuar?")) return;
+
+      boton.disabled = true;
+      document.getElementById("releaseMessage").textContent = quiereLiberar ? "Liberando..." : "Ocultando...";
+      activeRequestId = createRequestId();
+      try {
+        await fetch(REPORT_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "releaseReport",
+            examId: EXAM_ID,
+            requestId: activeRequestId,
+            googleCredential,
+            targetEmail: currentReport.studentEmail,
+            liberar: quiereLiberar
+          }),
+          keepalive: true
+        });
+        await pollReport();
+      } catch (_) {
+        boton.disabled = false;
+        document.getElementById("releaseMessage").textContent = "No se pudo completar. Intenta nuevamente.";
+      }
+    }
+
+    document.getElementById("releaseButton").addEventListener("click", toggleRelease);
+
     document.getElementById("adminOpenButton").addEventListener("click", () => {
       const email = document.getElementById("adminReportSelect").value;
       if (email) requestReport(email);
