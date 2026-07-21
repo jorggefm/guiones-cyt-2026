@@ -464,6 +464,45 @@ function REZ_round_(n) {
 }
 
 /**
+ * [BOTON LIBERAR] Cambia el estado de liberacion desde el propio reporte.
+ * Solo administradores. Sirve para liberar y para volver a ocultar.
+ */
+function REZ_handleRelease_(payload) {
+  const identity = verifyGoogleIdentity_(payload.googleCredential || '');
+  const adminEmail = String(identity.email || '').trim().toLowerCase();
+  if (ADMIN_EMAILS.indexOf(adminEmail) === -1) {
+    throw new Error('Esta cuenta no tiene permisos para liberar reportes.');
+  }
+
+  const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
+  if (!targetEmail.endsWith('@' + SCHOOL_DOMAIN)) throw new Error('Correo de estudiante no valido.');
+  const liberar = payload.liberar !== false;   // por defecto libera
+
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    const sheet = getOrCreateSheet_('Reportes');
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) throw new Error('No existen reportes.');
+    const correos = sheet.getRange(2, 2, lastRow - 1, 1).getDisplayValues();
+    const idx = correos.findIndex(item => String(item[0] || '').trim().toLowerCase() === targetEmail);
+    if (idx < 0) throw new Error('No se encontro el reporte de ' + targetEmail);
+    sheet.getRange(idx + 2, 8).setValue(liberar ? 'SI' : 'NO');
+    SpreadsheetApp.flush();
+
+    const requestId = String(payload.requestId || '').trim();
+    if (/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) {
+      CacheService.getScriptCache().put('report:' + requestId, JSON.stringify({
+        ok: true, status: 'released', liberado: liberar, targetEmail: targetEmail
+      }), 300);
+    }
+    return json_({ ok: true, accepted: true, liberado: liberar });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
+  }
+}
+
+/**
  * Señal de vida. Sirve para comprobar que este archivo está realmente
  * instalado y publicado: si no lo está, doGet cae en su respuesta por
  * defecto y devuelve el examId del examen OFICIAL.
