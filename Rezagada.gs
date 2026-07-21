@@ -463,6 +463,22 @@ function REZ_round_(n) {
   return Math.round(Number(n || 0) * 100) / 100;
 }
 
+/**
+ * Señal de vida. Sirve para comprobar que este archivo está realmente
+ * instalado y publicado: si no lo está, doGet cae en su respuesta por
+ * defecto y devuelve el examId del examen OFICIAL.
+ *   ...exec?action=rezagada
+ */
+function REZ_health_() {
+  return json_({
+    ok: true,
+    instalado: true,
+    examId: REZ_EXAM_ID,
+    version: REZ_EXAM_VERSION,
+    hoja: REZ_RESPONSES_SHEET
+  });
+}
+
 /** Estado del envío, para la pantalla de confirmación del examen. */
 function REZ_submissionStatus_(submissionId) {
   if (!submissionId) return json_({ ok: false, found: false, error: 'Falta submissionId.' });
