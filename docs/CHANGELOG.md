@@ -78,6 +78,33 @@ automática. Todos pasan. Correr ante cualquier cambio:
 node docs/pruebas/test_calificacion_rezagada.js Rezagada.gs
 ```
 
+### Botón "Liberar reporte" (misma fecha, más tarde)
+
+Se agregó un botón al final del reporte individual, después de la pregunta 12,
+para liberar sin salir del reporte. Antes había que abrir Apps Script y ejecutar
+`REZ_liberarReporte()` a mano. Ver [`decisiones/005`](decisiones/005-boton-liberar.md).
+
+También se corrigió el índice de administrador, que filtraba a `liberado = 'SI'`
+y por tanto **impedía seleccionar un reporte pendiente para calificarlo** — lo
+que anulaba por completo la liberación diferida. Ese arreglo era necesario para
+que [`decisiones/003`](decisiones/003-liberacion-diferida.md) funcionara de verdad.
+
+### Tres pegados fallidos en Apps Script
+
+Durante la instalación, tres pegados de código **no entraron y el editor no dio
+ningún aviso**. El sistema quedó a medias y el error solo apareció al usarlo.
+
+Causa: el editor pierde el foco al cambiar de archivo; `Ctrl+A` seleccionaba la
+lista de archivos en vez del código.
+
+El método correcto quedó documentado en
+[`FLUJO-COMPLETO.md`](FLUJO-COMPLETO.md) §4: hacer clic en una línea de código,
+confirmar que quedó activa, pegar, y **buscar con `Ctrl+F` antes de guardar**.
+
+Se agregó `REZ_health_` (`?action=rezagada`) porque la verificación anterior
+(`?action=status`) devolvía lo mismo con el código viejo y con el nuevo, y por
+tanto no verificaba nada.
+
 ### Publicación en el repositorio
 
 Se subió **todo**, por decisión explícita del docente (20/07): el examen, el
