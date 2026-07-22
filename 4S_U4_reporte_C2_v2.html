@@ -368,14 +368,7 @@
 
     const panels = ["accessPanel", "loadingPanel", "pendingPanel", "errorPanel", "adminPanel"];
     const resultLabels = { correct: "Correcta", partial: "Parcial", incorrect: "Incorrecta", unanswered: "Sin respuesta" };
-    const QUESTION_IMAGES = {
-      3: { src: "assets/2s_u4_examen_oficial/01_blastocisto.png", alt: "Blastocisto con las estructuras A, B y C señaladas.", caption: "Imagen usada en la pregunta 3." },
-      4: { src: "assets/2s_u4_examen_oficial/02_implantacion.png", alt: "Blastocisto implantándose con zonas A, B y C.", caption: "La flecha A muestra el contacto con el tejido uterino." },
-      7: { src: "assets/2s_u4_examen_oficial/03_capas_embrionarias.png", alt: "Disco trilaminar con las capas A, B y C.", caption: "Imagen usada para identificar la capa embrionaria." },
-      9: { src: "assets/2s_u4_examen_oficial/04_secuencia_neurulacion.png", alt: "Secuencia desde las capas embrionarias hasta el embrión.", caption: "Compara especialmente los momentos 1, 2 y 3." },
-      10: { src: "assets/2s_u4_examen_oficial/05_soporte_temprano.png", alt: "Embrión con estructuras de soporte A, B, C y D.", caption: "Observa la bolsa de apoyo temprano y la conexión con la zona placentaria." },
-      11: { src: "assets/2s_u4_examen_oficial/06_cierre_tubo_neural.png", alt: "Comparación entre tubo neural cerrado y cierre incompleto.", caption: "Compara la estructura azul en A y B." }
-    };
+    const QUESTION_IMAGES = {};
 
     function escapeHtml(value) {
       return String(value == null ? "" : value).replace(/[&<>'"]/g, character => ({
@@ -581,7 +574,12 @@
 
     function renderQuestion(question) {
       const state = ["correct", "partial", "incorrect", "unanswered"].includes(question.status) ? question.status : "incorrect";
-      const image = QUESTION_IMAGES[Number(question.number)];
+      // La imagen viaja DENTRO de la pregunta (question.image). La tabla fija
+      // QUESTION_IMAGES solo se usa si el servidor no mandó ninguna: sin esto,
+      // un reporte derivado de otro grado mostraba las imágenes del original.
+      const image = question.image
+        ? { src: question.image, alt: question.imageAlt || '', caption: question.imageCaption || '' }
+        : QUESTION_IMAGES[Number(question.number)];
       const imageMarkup = image
         ? '<figure class="question-media"><img src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '" loading="lazy"><figcaption>' + escapeHtml(image.caption) + '</figcaption></figure>'
         : "";
@@ -701,7 +699,7 @@
       estado.className = "release-state " + (reportLiberado ? "liberado" : "pendiente");
       document.getElementById("releaseHint").textContent = reportLiberado
         ? "Puedes ocultarlo si necesitas corregir algo antes de que lo siga viendo."
-        : "Revisa las 12 preguntas y califica las abiertas (5, 7 y 12) antes de liberar.";
+        : "Revisa las 12 preguntas y califica las abiertas (4, 6, 10 y 12) antes de liberar.";
       boton.textContent = reportLiberado ? "Ocultar reporte" : "Liberar reporte";
       boton.className = "release-button" + (reportLiberado ? " ocultar" : "");
       boton.disabled = false;
