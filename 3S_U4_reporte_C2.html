@@ -307,7 +307,7 @@
         </div>
         <div class="score-block" aria-label="Nota final">
           <span id="scoreNumber" class="score-number">0</span>
-          <span class="score-out-of">sobre 24</span>
+          <span class="score-out-of">sobre 20</span>
           <span id="levelBadge" class="level-badge">B</span>
         </div>
       </article>
@@ -410,6 +410,10 @@
       if (score < 12) return "B";
       if (score < 17) return "A";
       return "AD";
+    }
+
+    function formatScore(value) {
+      return Math.max(0, Number(value) || 0).toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
     }
 
     function credentialIsFresh(seconds) {
@@ -536,7 +540,7 @@
       const select = document.getElementById("adminReportSelect");
       select.innerHTML = adminReports.map(report =>
         '<option value="' + escapeHtml(report.email) + '">' +
-        escapeHtml(report.name + " · " + report.total + "/24 · " + report.level) + '</option>'
+        escapeHtml(report.name + " · " + formatScore(report.total) + "/20 · " + report.level) + '</option>'
       ).join("");
       document.getElementById("adminCount").textContent = adminReports.length + " reportes oficiales disponibles. Selecciona uno para ver el detalle pregunta por pregunta.";
       document.getElementById("adminOpenButton").disabled = adminReports.length === 0;
@@ -558,10 +562,10 @@
       const score = report.score || {};
       const total = Math.max(0, Math.min(20, Number(score.total) || 0));
       const level = levelFromScore(total);
-      document.getElementById("scoreNumber").textContent = total.toFixed(1).replace(".0", "");
+      document.getElementById("scoreNumber").textContent = formatScore(total);
       document.getElementById("levelBadge").textContent = level;
-      document.getElementById("automaticScore").textContent = Number(score.automatic || 0).toFixed(2).replace(/\.00$/, "") + "/14";
-      document.getElementById("teacherScore").textContent = Number(score.teacher || 0).toFixed(2).replace(/\.00$/, "") + "/6";
+      document.getElementById("automaticScore").textContent = formatScore(score.automatic) + "/14";
+      document.getElementById("teacherScore").textContent = formatScore(score.teacher) + "/6";
       document.getElementById("summaryLevel").textContent = level;
       document.getElementById("reviewedAt").textContent = formatDate(report.reviewedAt);
       document.getElementById("questionList").innerHTML = (report.questions || []).map(renderQuestion).join("");
@@ -607,7 +611,7 @@
       item.level = levelFromScore(item.total);
       const select = document.getElementById("adminReportSelect");
       const option = Array.from(select.options).find(entry => entry.value === item.email);
-      if (option) option.textContent = item.name + " · " + item.total + "/24 · " + item.level;
+      if (option) option.textContent = item.name + " · " + formatScore(item.total) + "/20 · " + item.level;
       select.value = item.email;
     }
 
