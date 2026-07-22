@@ -15,6 +15,13 @@
 
 const R4_REPORTS_SHEET = 'Reportes';
 
+/**
+ * El Codigo.gs de 4S v2 NO define R4_ADMIN_EMAILS: ese examen solo capturaba
+ * y corregia, nunca tuvo funciones de administrador. Se define aqui, con
+ * prefijo propio para no chocar si algun dia se agrega alla.
+ */
+const R4_ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
+
 /** Que preguntas admiten ajuste docente y cuanto aportan. */
 const R4_TEACHER_QUESTIONS = { 5: 1.5, 7: 2, 12: 2.5 };
 const R4_AUTO_MAX = 14;
@@ -22,6 +29,26 @@ const R4_TEACHER_MAX = 6;
 
 /** Puntaje maximo por pregunta, tomado de KEY_ROWS. */
 const R4_MAX = { 1: 1, 2: 2, 3: 1.5, 4: 2, 5: 1.5, 6: 1, 7: 2, 8: 2, 9: 2, 10: 1.5, 11: 1, 12: 2.5 };
+
+/**
+ * Imagenes del examen v2, por numero de pregunta.
+ * Sin esto el reporte caia en la tabla fija heredada de 2S y mostraba
+ * imagenes de otro grado (blastocisto en una pregunta de neuronas).
+ */
+const R4_IMAGENES = {
+  3:  { src: 'assets/4s_u4_examen_v2/01_circuito_nervioso.png',
+        alt: 'Circuito nervioso con neuronas señaladas A, B y C.',
+        caption: 'Imagen usada en la pregunta 3.' },
+  6:  { src: 'assets/4s_u4_examen_v2/02_especificidad_hormonal.png',
+        alt: 'Hormona y células con distintos receptores.',
+        caption: 'Imagen usada en la pregunta 6.' },
+  8:  { src: 'assets/4s_u4_examen_v2/03_tipos_senales.png',
+        alt: 'Receptores que detectan señales mecánica, luminosa, térmica y eléctrica.',
+        caption: 'Imagen usada en la pregunta 8.' },
+  11: { src: 'assets/4s_u4_examen_v2/04_bomba_na_k.png',
+        alt: 'Bomba sodio-potasio con ATP.',
+        caption: 'Imagen usada en la pregunta 11.' }
+};
 
 const R4_PROMPTS = {
   1: 'Un sonido fuerte activa una respuesta de alarma. ¿Qué ocurre primero?',
@@ -144,9 +171,20 @@ function R4_generarReportes(correos) {
   const reportes = R4_prepararHojaReportes_();
   let hechos = 0;
 
+  // Cuantos envios tiene cada correo, para numerar los intentos.
+  const totalPorCorreo = {};
+  filas.forEach(f => {
+    const c = String(f[iCorreo] || '').trim().toLowerCase();
+    if (c) totalPorCorreo[c] = (totalPorCorreo[c] || 0) + 1;
+  });
+  const vistos = {};
+
   filas.forEach(fila => {
     const correo = String(fila[iCorreo] || '').trim().toLowerCase();
-    if (!correo || !correo.endsWith('@' + SCHOOL_DOMAIN)) return;      // descarta pruebas sin correo real
+    if (!correo || !correo.endsWith('@' + SCHOOL_DOMAIN)) return;
+    vistos[correo] = (vistos[correo] || 0) + 1;
+    const intento = vistos[correo];
+    const hayVarios = (totalPorCorreo[correo] || 0) > 1;      // descarta pruebas sin correo real
     if (filtro.length && filtro.indexOf(correo) === -1) return;
 
     let d = {};
@@ -165,6 +203,9 @@ function R4_generarReportes(correos) {
         number: n,
         label: '',
         prompt: R4_PROMPTS[n] || '',
+        image: (R4_IMAGENES[n] || {}).src || '',
+        imageAlt: (R4_IMAGENES[n] || {}).alt || '',
+        imageCaption: (R4_IMAGENES[n] || {}).caption || '',
         studentAnswer: R4_answer_(n, d),
         idealAnswer: R4_claveIdeal_(n),
         explanation: R4_claveExplicacion_(n),
@@ -186,7 +227,7 @@ function R4_generarReportes(correos) {
       unit: 'Unidad 4',
       title: 'Sistema nervioso y endocrino',
       submissionId: iSub >= 0 ? fila[iSub] : '',
-      studentName: iNombre >= 0 ? fila[iNombre] : '',
+      studentName: (iNombre >= 0 ? String(fila[iNombre] || '') : '') + (hayVarios ? ' · Intento ' + intento : ''),
       studentEmail: correo,
       section: iSeccion >= 0 ? fila[iSeccion] : '',
       submittedAt: iTs >= 0 ? fila[iTs] : '',
@@ -202,7 +243,7 @@ function R4_generarReportes(correos) {
       total, nivel, detalle, report.comment, 'NO', JSON.stringify(report)
     ];
 
-    const destino = R4_buscarFila_(reportes, correo);
+    const destino = R4_buscarPorEnvio_(reportes, report.submissionId);  // una fila por INTENTO
     if (destino > 0) reportes.getRange(destino, 1, 1, 9).setValues([nuevaFila]);
     else reportes.appendRow(nuevaFila);
     hechos += 1;
@@ -235,7 +276,32 @@ function R4_prepararHojaReportes_() {
   return hoja;
 }
 
-function R4_buscarFila_(hoja, correo) {
+/** Localiza la fila de un envio concreto (columna 1 = submissionId). */
+function R4_buscarPorEnvio_(hoja, submissionId) {
+  const lastRow = hoja.getLastRow();
+  if (lastRow < 2 || !submissionId) return 0;
+  const ids = hoja.getRange(2, 1, lastRow - 1, 1).getDisplayValues();
+  const i = ids.findIndex(x => String(x[0] || '').trim() === String(submissionId).trim());
+  return i >= 0 ? i + 2 : 0;
+}
+
+/**
+ * Acepta 'correo' o la clave compuesta 'correo::submissionId'.
+ * Con solo el correo devuelve el intento MAS RECIENTE, que es lo que
+ * corresponde mostrarle al alumno.
+ */
+function R4_buscarFila_(hoja, clave) {
+  const txt = String(clave || '').trim().toLowerCase();
+  if (txt.indexOf('::') !== -1) return R4_buscarPorEnvio_(hoja, txt.split('::')[1]);
+  const lastRow = hoja.getLastRow();
+  if (lastRow < 2) return 0;
+  const correos = hoja.getRange(2, 2, lastRow - 1, 1).getDisplayValues();
+  let ultima = 0;
+  correos.forEach((x, i) => { if (String(x[0] || '').trim().toLowerCase() === txt) ultima = i + 2; });
+  return ultima;
+}
+
+function R4_buscarFilaObsoleta_(hoja, correo) {
   const lastRow = hoja.getLastRow();
   if (lastRow < 2) return 0;
   const correos = hoja.getRange(2, 2, lastRow - 1, 1).getDisplayValues();
@@ -290,7 +356,7 @@ function R4_requestReport_(payload) {
 
   const identity = verifyGoogleIdentity_(payload.googleCredential || '');
   const email = String(identity.email || '').trim().toLowerCase();
-  const isAdmin = ADMIN_EMAILS.indexOf(email) !== -1;
+  const isAdmin = R4_ADMIN_EMAILS.indexOf(email) !== -1;
   const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
   const cache = CacheService.getScriptCache();
   const key = 'r4report:' + requestId;
@@ -308,7 +374,7 @@ function R4_requestReport_(payload) {
     const lista = filas.map(f => {
       const liberado = String(f[7] || '').trim().toUpperCase() === 'SI';
       return {
-        email: String(f[1] || '').trim().toLowerCase(),
+        email: String(f[1] || '').trim().toLowerCase() + '::' + String(f[0] || '').trim(),
         name: (liberado ? '' : 'PENDIENTE · ') + String(f[2] || '').trim(),
         section: '',
         total: Number(f[3] || 0),
@@ -320,7 +386,9 @@ function R4_requestReport_(payload) {
   }
 
   const buscar = isAdmin && targetEmail ? targetEmail : email;
-  const fila = filas.find(f => String(f[1] || '').trim().toLowerCase() === buscar);
+  const correoBuscado = buscar.indexOf('::') !== -1 ? buscar.split('::')[0] : buscar;
+  const dest = R4_buscarFila_(hoja, buscar);
+  const fila = dest > 0 ? filas[dest - 2] : null;
   if (!fila) {
     cache.put(key, JSON.stringify({ ok: true, status: 'not_found' }), 300);
   } else if (!isAdmin && String(fila[7] || '').trim().toUpperCase() !== 'SI') {
@@ -328,7 +396,7 @@ function R4_requestReport_(payload) {
       message: 'La revisión docente todavía no ha sido liberada.' }), 300);
   } else {
     const report = JSON.parse(String(fila[8] || '{}'));
-    if (!report.studentEmail || String(report.studentEmail).toLowerCase() !== buscar) {
+    if (!report.studentEmail || String(report.studentEmail).toLowerCase() !== correoBuscado) {
       throw new Error('El reporte no coincide con la identidad verificada.');
     }
     if (isAdmin) {
@@ -350,7 +418,7 @@ function R4_saveReview_(payload) {
 
   const identity = verifyGoogleIdentity_(payload.googleCredential || '');
   const admin = String(identity.email || '').trim().toLowerCase();
-  if (ADMIN_EMAILS.indexOf(admin) === -1) throw new Error('Esta cuenta no puede editar calificaciones.');
+  if (R4_ADMIN_EMAILS.indexOf(admin) === -1) throw new Error('Esta cuenta no puede editar calificaciones.');
 
   const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
   const n = Number(payload.questionNumber);
@@ -413,10 +481,11 @@ function R4_saveReview_(payload) {
 function R4_release_(payload) {
   const identity = verifyGoogleIdentity_(payload.googleCredential || '');
   const admin = String(identity.email || '').trim().toLowerCase();
-  if (ADMIN_EMAILS.indexOf(admin) === -1) throw new Error('Esta cuenta no puede liberar reportes.');
+  if (R4_ADMIN_EMAILS.indexOf(admin) === -1) throw new Error('Esta cuenta no puede liberar reportes.');
 
   const targetEmail = String(payload.targetEmail || '').trim().toLowerCase();
-  if (!targetEmail.endsWith('@' + SCHOOL_DOMAIN)) throw new Error('Correo de estudiante no válido.');
+  const soloCorreo = targetEmail.indexOf('::') !== -1 ? targetEmail.split('::')[0] : targetEmail;
+  if (!soloCorreo.endsWith('@' + SCHOOL_DOMAIN)) throw new Error('Correo de estudiante no válido.');
   const liberar = payload.liberar !== false;
 
   const lock = LockService.getScriptLock();
