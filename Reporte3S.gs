@@ -8,20 +8,23 @@
  * la calificacion docente y liberar el reporte al alumno.
  *
  * DIFERENCIAS con 2S y 4S (importante):
- *   - El examen vale 24 puntos, no 20.  Automatico 16 + docente 8.
- *   - La escala es por RATIO (CONFIG.achievementScale), no por corte fijo.
+ *   - La matriz conserva 24 puntos brutos (16 automaticos + 8 docentes),
+ *     pero la nota oficial se convierte a 20 (14 automaticos + 6 docentes).
+ *   - La escala oficial usa cortes B/A/AD sobre 20.
  *   - Las preguntas y las imagenes salen de 3S_U4_examen_configuracion.js,
  *     asi que aqui NO se duplica ningun dato del examen.
  *
- * Por eso NO se usa el modelo de "cubos" (automatico/docente) de 2S y 4S.
- * Aqui cada pregunta guarda su puntaje y el total es la suma. Mas simple y
- * sin el frágil parseo de la columna de detalle.
+ * Cada pregunta conserva su puntaje bruto para que la revision siga siendo
+ * auditable. R3_aplicarEscala20_ calcula los dos subtotales y la nota final.
  *
  * Ver docs/FLUJO-COMPLETO.md
  */
 
 const R3_REPORTS_SHEET = 'Reportes';
 const R3_ADMIN_EMAILS = ['jorge.fernandez@colegiomilagrosdedios.edu.pe'];
+const R3_FINAL_MAX = 20;
+const R3_AUTO_FINAL_MAX = 14;
+const R3_TEACHER_FINAL_MAX = 6;
 
 /** Cabecera propia. La ultima columna guarda el reporte completo. */
 const R3_HEADERS = ['submissionId', 'correo', 'nombre', 'puntajeFinal', 'maximo',
@@ -37,15 +40,12 @@ function R3_cfg_() {
   return CONFIG;
 }
 
-/** Nivel segun la escala por ratio del propio examen. */
-function R3_nivel_(total, maximo) {
-  const cfg = R3_cfg_();
-  const ratio = Number(maximo) > 0 ? Number(total) / Number(maximo) : 0;
-  const escala = (cfg.achievementScale || []).slice().sort((a, b) => b.minRatio - a.minRatio);
-  for (let i = 0; i < escala.length; i += 1) {
-    if (ratio >= Number(escala[i].minRatio)) return String(escala[i].label);
-  }
-  return 'B';
+/** Escala oficial comun: B hasta 11.99, A hasta 16.99 y AD desde 17. */
+function R3_nivel_(total) {
+  const nota = Math.max(0, Math.min(R3_FINAL_MAX, Number(total) || 0));
+  if (nota < 12) return 'B';
+  if (nota < 17) return 'A';
+  return 'AD';
 }
 
 /** Una pregunta admite ajuste docente si su metodo no es puramente automatico. */
@@ -76,6 +76,69 @@ function R3_ideal_(q) {
 }
 
 function R3_round_(n) { return Math.round(Number(n || 0) * 100) / 100; }
+
+/** Maximos de la matriz original. No cambia preguntas ni respuestas. */
+function R3_maximosBrutos_() {
+  const cfg = R3_cfg_();
+  let automatico = 0, docente = 0, total = 0;
+  cfg.questions.forEach(function (q) {
+    const puntos = Number(q.points || 0);
+    const metodo = q.grading && q.grading.method;
+    const auto = metodo === 'automatic' ? puntos
+      : metodo === 'mixed' ? Number(q.grading.automaticPoints || 0) : 0;
+    total += puntos;
+    automatico += auto;
+    docente += Math.max(0, puntos - auto);
+  });
+  return { automatico: automatico, docente: docente, total: total };
+}
+
+/**
+ * Convierte los puntajes brutos por pregunta a la escala oficial de 20.
+ * La parte automatica de cada pregunta se asigna primero hasta su maximo;
+ * cualquier resto corresponde a revision docente. Asi ambos subtotales suman
+ * exactamente la nota final y nunca exceden 14/6.
+ */
+function R3_aplicarEscala20_(rep) {
+  const cfg = R3_cfg_();
+  const maximos = R3_maximosBrutos_();
+  let automaticoBruto = 0, docenteBruto = 0, totalBruto = 0;
+
+  (rep.questions || []).forEach(function (pregunta, idx) {
+    const q = cfg.questions.find(function (item) { return item.id === pregunta.id; }) || cfg.questions[idx] || {};
+    const puntos = Number(q.points || pregunta.pointsMax || 0);
+    const metodo = q.grading && q.grading.method;
+    const autoMax = metodo === 'automatic' ? puntos
+      : metodo === 'mixed' ? Number(q.grading.automaticPoints || 0) : 0;
+    const ganado = Math.max(0, Math.min(puntos, Number(pregunta.pointsEarned || 0)));
+    const autoGanado = Math.min(autoMax, ganado);
+    const docenteGanado = Math.max(0, ganado - autoGanado);
+    automaticoBruto += autoGanado;
+    docenteBruto += docenteGanado;
+    totalBruto += ganado;
+  });
+
+  automaticoBruto = R3_round_(automaticoBruto);
+  docenteBruto = R3_round_(docenteBruto);
+  totalBruto = R3_round_(totalBruto);
+  const automatico = maximos.automatico > 0
+    ? R3_round_(automaticoBruto * R3_AUTO_FINAL_MAX / maximos.automatico) : 0;
+  const docente = maximos.docente > 0
+    ? R3_round_(docenteBruto * R3_TEACHER_FINAL_MAX / maximos.docente) : 0;
+  const total = R3_round_(Math.min(R3_FINAL_MAX, automatico + docente));
+
+  rep.rawScore = {
+    automatic: automaticoBruto, automaticMaximum: maximos.automatico,
+    teacher: docenteBruto, teacherMaximum: maximos.docente,
+    total: totalBruto, maximum: maximos.total
+  };
+  rep.score = {
+    automatic: automatico, automaticMaximum: R3_AUTO_FINAL_MAX,
+    teacher: docente, teacherMaximum: R3_TEACHER_FINAL_MAX,
+    total: total, maximum: R3_FINAL_MAX, level: R3_nivel_(total)
+  };
+  return rep;
+}
 
 function R3_hoja_() {
   const hoja = getOrCreateSheet_(R3_REPORTS_SHEET);
@@ -160,7 +223,7 @@ function R3_construir_(datos) {
   total = R3_round_(total);
   const pendientes = questions.filter(q => q.teacherEditable).map(q => q.number);
 
-  return {
+  const rep = {
     examId: cfg.examId,
     version: cfg.version,
     grade: cfg.grade,
@@ -171,15 +234,20 @@ function R3_construir_(datos) {
     studentEmail: datos.correo,
     section: datos.seccion,
     submittedAt: datos.fecha,
-    score: { total: total, maximum: maximo, level: R3_nivel_(total, maximo) },
+    score: { total: total, maximum: maximo },
     comment: 'Reporte preliminar: faltan calificar las preguntas ' + pendientes.join(', ') + '.',
     questions: questions,
     reviewedAt: ''
   };
+  return R3_aplicarEscala20_(rep);
 }
 
 function R3_detalle_(rep) {
-  return 'Total ' + rep.score.total + '/' + rep.score.maximum +
+  const bruto = rep.rawScore || {};
+  return 'Nota ' + rep.score.total + '/' + rep.score.maximum +
+    ' · Automático ' + rep.score.automatic + '/' + rep.score.automaticMaximum +
+    ' · Docente ' + rep.score.teacher + '/' + rep.score.teacherMaximum +
+    ' · Bruto ' + Number(bruto.total || 0) + '/' + Number(bruto.maximum || 24) +
     ' · ' + (rep.questions || []).filter(q => q.teacherEditable)
       .map(q => 'P' + q.number + ' ' + q.pointsEarned + '/' + q.pointsMax).join(' · ');
 }
@@ -327,7 +395,7 @@ function R3_requestReport_(payload) {
     cache.put(key, JSON.stringify({ ok: true, status: 'pending',
       message: 'La revisión docente todavía no ha sido liberada.' }), 300);
   } else {
-    const rep = JSON.parse(String(fila[9] || '{}'));
+    const rep = R3_aplicarEscala20_(JSON.parse(String(fila[9] || '{}')));
     if (!rep.studentEmail || String(rep.studentEmail).toLowerCase() !== soloCorreo) {
       throw new Error('El reporte no coincide con la identidad verificada.');
     }
@@ -366,7 +434,7 @@ function R3_saveReview_(payload) {
     if (!dest) throw new Error('No se encontró el reporte del estudiante.');
     const fila = hoja.getRange(dest, 1, 1, R3_HEADERS.length).getDisplayValues()[0];
 
-    const rep = JSON.parse(String(fila[9] || '{}'));
+    const rep = R3_aplicarEscala20_(JSON.parse(String(fila[9] || '{}')));
     const q = (rep.questions || []).find(x => Number(x.number) === n);
     if (!q) throw new Error('No se encontró la pregunta.');
     if (!q.teacherEditable) throw new Error('Esta pregunta no admite revisión manual.');
@@ -378,10 +446,9 @@ function R3_saveReview_(payload) {
     q.feedback = feedback;
     q.status = val <= 0 ? 'incorrect' : (val >= max ? 'correct' : 'partial');
 
-    // El total es la suma de las preguntas. Sin cubos, sin reparseo.
-    const total = R3_round_((rep.questions || []).reduce((s, x) => s + Number(x.pointsEarned || 0), 0));
-    const maximo = Number(rep.score.maximum || 0);
-    rep.score = { total: total, maximum: maximo, level: R3_nivel_(total, maximo) };
+    R3_aplicarEscala20_(rep);
+    const total = rep.score.total;
+    const maximo = rep.score.maximum;
     rep.reviewedAt = new Date().toISOString();
 
     hoja.getRange(dest, 4, 1, 7).setValues([[
@@ -447,13 +514,15 @@ function R3_reportStatus_(requestId) {
 /** Señal de vida: comprueba que este archivo esta instalado Y publicado. */
 function R3_health_() {
   const cfg = R3_cfg_();
-  let maximo = 0, docentes = [];
+  const bruto = R3_maximosBrutos_();
+  let docentes = [];
   cfg.questions.forEach(function (q, i) {
-    maximo += Number(q.points || 0);
     if (R3_esDocente_(q)) docentes.push(i + 1);
   });
   return json_({ ok: true, instalado: true, examId: cfg.examId,
-                 maximo: maximo, preguntasDocentes: docentes });
+                 maximo: R3_FINAL_MAX, maximoBruto: bruto.total,
+                 automatico: R3_AUTO_FINAL_MAX, docente: R3_TEACHER_FINAL_MAX,
+                 preguntasDocentes: docentes });
 }
 
 /* ------------------------------------------------------------------ *
@@ -461,6 +530,35 @@ function R3_health_() {
  * ------------------------------------------------------------------ */
 
 function R3_generarTodos() { return R3_generarReportes([]); }
+
+/**
+ * Migra reportes existentes a la escala de 20 sin reconstruir preguntas ni
+ * perder comentarios, puntajes docentes o estado de liberacion.
+ */
+function R3_migrarEscala20() {
+  validateConfiguration_();
+  const hoja = getOrCreateSheet_(R3_REPORTS_SHEET);
+  const last = hoja.getLastRow();
+  if (last < 2) return 'No hay reportes para migrar.';
+  const filas = hoja.getRange(2, 1, last - 1, R3_HEADERS.length).getDisplayValues();
+  let actualizados = 0, omitidos = 0;
+  filas.forEach(function (fila, idx) {
+    try {
+      const rep = R3_aplicarEscala20_(JSON.parse(String(fila[9] || '{}')));
+      hoja.getRange(idx + 2, 4, 1, 7).setValues([[
+        rep.score.total, rep.score.maximum, rep.score.level, R3_detalle_(rep),
+        rep.comment || '', String(fila[8] || 'NO').trim().toUpperCase() === 'SI' ? 'SI' : 'NO',
+        JSON.stringify(rep)
+      ]]);
+      actualizados += 1;
+    } catch (err) {
+      omitidos += 1;
+      console.error('R3 migracion fila ' + (idx + 2) + ': ' + err);
+    }
+  });
+  SpreadsheetApp.flush();
+  return 'Reportes actualizados: ' + actualizados + '. Omitidos: ' + omitidos + '.';
+}
 
 function R3_liberar(correo) {
   const hoja = getOrCreateSheet_(R3_REPORTS_SHEET);
