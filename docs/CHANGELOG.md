@@ -4,6 +4,70 @@ Orden cronológico inverso. Cada entrada dice **qué** cambió y **por qué**.
 
 ---
 
+## 2026-07-21 — Reportes de 3.° de secundaria y arreglo de imágenes
+
+### 3S: sistema de reportes completo (PENDIENTE DE INSTALAR)
+
+3.° de secundaria tenía examen pero **ningún reporte**: capturaba y corregía, y
+ahí terminaba. Se agregó `Reporte3S.gs` con generación automática, calificación
+docente y liberación diferida.
+
+**3S no sigue el patrón de 2S y 4S**, y a propósito:
+
+| | 2S / 4S | 3S |
+|---|---|---|
+| Total | 20 | **24** |
+| Automático / docente | 14 / 6 | **16 / 8** |
+| Escala | corte fijo | **por ratio** |
+| Datos del examen | en el `.gs` | **en la config** |
+
+`Reporte3S.gs` no duplica ningún dato del examen: lee
+`3S_U4_examen_configuracion.js` y **reutiliza `automaticPoints_()`**, la misma
+función que corrige el examen real. La nota del reporte no puede divergir de la
+nota verdadera porque es literalmente el mismo código.
+
+También abandona el modelo de "cubos" automático/docente. Cada pregunta guarda
+su puntaje y el total es la suma — sin el frágil reparseo de la columna de
+detalle que arrastran 2S y 4S.
+
+Preguntas con parte docente: **2, 6, 8, 9 y 12**.
+
+**Instalación en [`INSTALACION-3S.md`](INSTALACION-3S.md).** Hasta hacerla, el
+examen funciona pero no genera reportes.
+
+### Arreglo: el reporte de 4S mostraba imágenes de 2S
+
+El reporte de 4S se derivó del de 2S, que tiene las imágenes en una **tabla fija
+por número de pregunta** (`QUESTION_IMAGES`). Como el generador de 4S nunca
+mandaba imágenes, el reporte caía en esa tabla y mostraba un blastocisto en una
+pregunta sobre neuronas.
+
+Arreglado en dos partes:
+
+1. El HTML ahora usa `question.image` si el servidor la manda, y solo cae en la
+   tabla fija como respaldo.
+2. `Reporte4S.gs` incluye las imágenes reales del examen v2 (preguntas 3, 6, 8
+   y 11, de `assets/4s_u4_examen_v2/`).
+
+3S nace sin este problema: sus imágenes salen de la config, por `imageKey`.
+
+### Enlaces en los guiones
+
+- `Guion_2S.html`: examen de recuperación (en ámbar, para distinguirlo del
+  oficial) y reporte C2
+- `Guion_4S.html`: reporte C2 v2
+
+### Pendiente
+
+- **Instalar 3S** (ver [`INSTALACION-3S.md`](INSTALACION-3S.md))
+- Publicar el reporte de 4S corregido y regenerar las filas para que tomen las
+  imágenes
+- `Guion_2S.html` tiene doble codificación de caracteres (`ReproducciÃ³n`),
+  **anterior a estos cambios**; el archivo es una mezcla, así que hay que
+  arreglarlo con sustituciones dirigidas, no con una conversión global
+
+---
+
 ## 2026-07-20 — Examen de recuperación 2S U4 y mejoras al sistema
 
 **Motivo:** una alumna de 2.° de secundaria no rindió el examen de Unidad 4 y lo
