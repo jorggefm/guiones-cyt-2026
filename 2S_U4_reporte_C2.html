@@ -581,7 +581,12 @@
 
     function renderQuestion(question) {
       const state = ["correct", "partial", "incorrect", "unanswered"].includes(question.status) ? question.status : "incorrect";
-      const image = QUESTION_IMAGES[Number(question.number)];
+      // La imagen viaja DENTRO de la pregunta (question.image). La tabla fija
+      // QUESTION_IMAGES solo se usa si el servidor no mandó ninguna: sin esto,
+      // un reporte derivado de otro grado mostraba las imágenes del original.
+      const image = question.image
+        ? { src: question.image, alt: question.imageAlt || '', caption: question.imageCaption || '' }
+        : QUESTION_IMAGES[Number(question.number)];
       const imageMarkup = image
         ? '<figure class="question-media"><img src="' + escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '" loading="lazy"><figcaption>' + escapeHtml(image.caption) + '</figcaption></figure>'
         : "";
