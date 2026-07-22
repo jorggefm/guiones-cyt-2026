@@ -123,8 +123,11 @@ function setupExamWorkbook() {
   control.clearContents();
   control.getRange(1, 1, controlRows.length, 2).setValues(controlRows);
 
-  ensureHeaders_(reports, ['Fecha', 'EXAM_ID', 'Indicador', 'Dimensión', 'Valor', 'Filtro', 'Detalle', 'Versión de reporte']);
-  reports.getRange('A2').setNote('Espacio reservado. No se generan reportes hasta implementar una rutina posterior y activar reportsEnabled.');
+  // Desde R3, Reportes ya es una tabla operativa. Usar su esquema evita
+  // reponer accidentalmente la estructura provisional al reparar el libro.
+  if (typeof R3_hoja_ === 'function') R3_hoja_();
+  else ensureHeaders_(reports, ['submissionId', 'correo', 'nombre', 'puntajeFinal', 'maximo',
+    'nivel', 'detallePreguntas', 'comentario', 'liberado', 'reporte_json']);
 
   [responses, key, grading, control, reports].forEach(function (sheet) {
     styleHeader_(sheet);
