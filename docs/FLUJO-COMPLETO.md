@@ -1,10 +1,13 @@
 # Flujo completo: del examen al reporte liberado
 
-**Documento maestro.** Describe el ciclo entero, paso a paso, tal como quedó
+**Caso de estudio operativo de 2S.** Describe el ciclo entero, paso a paso, tal como quedó
 **verificado el 20 de julio de 2026** con el examen de recuperación de 2.° de
 secundaria (Unidad 4, competencia C2).
 
 Todo lo que dice aquí fue ejecutado y comprobado, no supuesto.
+
+Para generar un examen nuevo sin copiar las particularidades de 2S, usar
+[`GENERACION-CON-AGENTE.md`](GENERACION-CON-AGENTE.md) y la plantilla neutral.
 
 ---
 

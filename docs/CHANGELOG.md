@@ -4,9 +4,41 @@ Orden cronológico inverso. Cada entrada dice **qué** cambió y **por qué**.
 
 ---
 
+## 2026-07-22 — 3S operativo y procedimiento para agentes
+
+### 3S instalado y reparado
+
+El sistema de 3S quedó instalado en su proyecto Apps Script independiente,
+publicado como versión 5 y verificado de punta a punta. Se corrigió el esquema
+de la pestaña `Reportes`, que permitía guardar la respuesta pero impedía crear
+el reporte. `Control!REPORTES_ACTIVOS` quedó en `SI` y el enlace del reporte se
+añadió a `Guion_3S.html`.
+
+El health check vigente informa máximo 24 y preguntas habilitadas para revisión
+**2, 6, 7, 8, 9, 11 y 12**. La lista anterior de cinco preguntas estaba
+desactualizada. Q7 y Q11 son mixtas y editables, aunque su punto completo se
+calcula automáticamente; el reparto total continúa siendo 16/8.
+
+También quedó documentado que **Extensiones → Apps Script** puede abrir un
+proyecto vinculado vacío: el backend real de 3S es el proyecto independiente
+registrado en [`INSTALACION-3S.md`](INSTALACION-3S.md).
+
+### Generación futura con agentes
+
+Se agregó [`GENERACION-CON-AGENTE.md`](GENERACION-CON-AGENTE.md), procedimiento
+neutral para que Codex, Claude Code o un agente local pueda instanciar futuros
+exámenes desde una matriz aprobada y un manifiesto de imágenes. Define fuentes
+de verdad, límites pedagógicos, aislamiento Git, recursos Google exclusivos,
+pruebas obligatorias, privacidad de reportes, puntos de autorización humana y
+entrega verificable.
+
+`FLUJO-COMPLETO.md` queda identificado como caso de estudio de 2S, no como una
+plantilla universal, y `reglas-calificacion.md` aclara que el reparto 14/6 no se
+aplica a todos los grados.
+
 ## 2026-07-21 — Reportes de 3.° de secundaria y arreglo de imágenes
 
-### 3S: sistema de reportes completo (PENDIENTE DE INSTALAR)
+### 3S: sistema de reportes completo (instalado el 22/07)
 
 3.° de secundaria tenía examen pero **ningún reporte**: capturaba y corregía, y
 ahí terminaba. Se agregó `Reporte3S.gs` con generación automática, calificación
@@ -30,10 +62,11 @@ También abandona el modelo de "cubos" automático/docente. Cada pregunta guarda
 su puntaje y el total es la suma — sin el frágil reparseo de la columna de
 detalle que arrastran 2S y 4S.
 
-Preguntas con parte docente: **2, 6, 8, 9 y 12**.
+La lista inicialmente documentada aquí fue **2, 6, 8, 9 y 12**. La instalación
+real quedó corregida el 22/07 a **2, 6, 7, 8, 9, 11 y 12**; ver la entrada
+superior y el health check.
 
-**Instalación en [`INSTALACION-3S.md`](INSTALACION-3S.md).** Hasta hacerla, el
-examen funciona pero no genera reportes.
+**Instalación en [`INSTALACION-3S.md`](INSTALACION-3S.md).**
 
 ### Arreglo: el reporte de 4S mostraba imágenes de 2S
 
@@ -59,7 +92,8 @@ Arreglado en dos partes:
 
 ### Pendiente
 
-- **Instalar 3S** (ver [`INSTALACION-3S.md`](INSTALACION-3S.md))
+- 3S fue instalado y verificado el 22/07; consultar
+  [`INSTALACION-3S.md`](INSTALACION-3S.md) para auditoría o recuperación
 - Publicar el reporte de 4S corregido y regenerar las filas para que tomen las
   imágenes
 - `Guion_2S.html` tiene doble codificación de caracteres (`ReproducciÃ³n`),
