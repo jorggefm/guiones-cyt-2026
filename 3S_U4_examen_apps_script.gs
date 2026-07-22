@@ -35,6 +35,8 @@ function doGet(e) {
     if (action === 'status') {
       return submissionStatus_(String(e.parameter.submissionId || ''), String(e.parameter.examId || ''));
     }
+    if (action === 'r3health') return R3_health_();                                  // [REPORTES 3S]
+    if (action === 'report') return R3_reportStatus_(String(e.parameter.requestId || ''));  // [REPORTES 3S]
     return json_({ ok: true, service: 'exam-template', examId: CONFIG.examId, version: CONFIG.version });
   } catch (error) {
     return json_({ ok: false, error: String(error && error.message || error) });
@@ -47,6 +49,13 @@ function doPost(e) {
   try {
     validateConfiguration_();
     var payload = parsePayload_(e);
+
+    // [REPORTES 3S] consulta, calificacion y liberacion
+    var accion = String(payload.action || '').toLowerCase();
+    if (accion === 'requestreport') return R3_requestReport_(payload);
+    if (accion === 'savereportreview') return R3_saveReview_(payload);
+    if (accion === 'releasereport') return R3_release_(payload);
+
     var identity = validatePayload_(payload);
     var responses = getOrCreateSheet_(SHEETS.responses);
     ensureHeaders_(responses, RESPONSE_HEADERS);
@@ -60,7 +69,20 @@ function doPost(e) {
     responses.appendRow(buildResponseRow_(payload, identity, score));
     appendGradingRow_(payload, identity, score);
     SpreadsheetApp.flush();
-    return json_({ ok: true, duplicate: false, submissionId: payload.submissionId });
+
+    // [REPORTES 3S] La fila del reporte se genera sola. Un fallo aqui JAMAS
+    // puede costarle el examen al alumno: sus respuestas ya estan guardadas.
+    var reporteOk = true;
+    try {
+      payload.studentName = identity.name || payload.studentName || '';
+      payload.studentEmail = String(identity.email || '').toLowerCase();
+      R3_generarUno_(payload, payload.answers);
+    } catch (err) {
+      reporteOk = false;
+      console.error('R3: fallo al generar el reporte: ' + err);
+    }
+
+    return json_({ ok: true, duplicate: false, submissionId: payload.submissionId, reportGenerated: reporteOk });
   } catch (error) {
     return json_({ ok: false, error: String(error && error.message || error) });
   } finally {
