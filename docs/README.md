@@ -20,6 +20,7 @@ el peor caso alguien "arregla" algo que era intencional.
 | **Hacer un examen de principio a fin** | [`FLUJO-COMPLETO.md`](FLUJO-COMPLETO.md) ← **documento maestro** |
 | **Entender qué es cada archivo** (si algo no se entiende) | [`que-es-cada-archivo.md`](que-es-cada-archivo.md) |
 | **Instalar el código en Apps Script** | [`INSTALACION.md`](INSTALACION.md) |
+| **Instalar los reportes de 3.° de secundaria** | [`INSTALACION-3S.md`](INSTALACION-3S.md) ← **pendiente de hacer** |
 | Entender cómo se conectan las piezas | [`arquitectura.md`](arquitectura.md) |
 | Saber cómo se asignan los puntajes | [`reglas-calificacion.md`](reglas-calificacion.md) |
 | Tomar el examen a un alumno rezagado | [`operacion-rezagados.md`](operacion-rezagados.md) |
