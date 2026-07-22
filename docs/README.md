@@ -17,10 +17,11 @@ el peor caso alguien "arregla" algo que era intencional.
 
 | Si necesitas… | Lee |
 |---|---|
-| **Hacer un examen de principio a fin** | [`FLUJO-COMPLETO.md`](FLUJO-COMPLETO.md) ← **documento maestro** |
+| **Encargar un examen nuevo a un agente** | [`GENERACION-CON-AGENTE.md`](GENERACION-CON-AGENTE.md) ← **procedimiento maestro actual** |
+| Entender el caso completo y verificado de 2S | [`FLUJO-COMPLETO.md`](FLUJO-COMPLETO.md) |
 | **Entender qué es cada archivo** (si algo no se entiende) | [`que-es-cada-archivo.md`](que-es-cada-archivo.md) |
 | **Instalar el código en Apps Script** | [`INSTALACION.md`](INSTALACION.md) |
-| **Instalar los reportes de 3.° de secundaria** | [`INSTALACION-3S.md`](INSTALACION-3S.md) ← **pendiente de hacer** |
+| Consultar la instalación verificada de 3.° de secundaria | [`INSTALACION-3S.md`](INSTALACION-3S.md) |
 | Entender cómo se conectan las piezas | [`arquitectura.md`](arquitectura.md) |
 | Saber cómo se asignan los puntajes | [`reglas-calificacion.md`](reglas-calificacion.md) |
 | Tomar el examen a un alumno rezagado | [`operacion-rezagados.md`](operacion-rezagados.md) |
@@ -37,7 +38,8 @@ el peor caso alguien "arregla" algo que era intencional.
 
 ## Estado
 
-Lo documentado aquí describe **2.° de secundaria, Unidad 4**. Las mejoras
-introducidas en julio de 2026 (generación automática del reporte, liberación
-diferida, respaldo en PDF) están pensadas para extenderse después a 1S, 3S, 4S,
-5S y 6P, pero **todavía no se han aplicado a esos grados**.
+La carpeta comenzó documentando el caso de **2.° de secundaria, Unidad 4**, y
+ahora también registra el sistema operativo de 3S y el procedimiento neutral
+para construir futuros exámenes. Algunos grados conservan implementaciones
+anteriores y no deben suponerse idénticos: auditar siempre sus archivos y
+recursos reales antes de intervenir.

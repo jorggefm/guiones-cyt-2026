@@ -1,9 +1,11 @@
 # Reglas de calificación
 
-Estas reglas son **criterio pedagógico del docente**, no una convención técnica.
-Cualquier examen nuevo debe respetarlas.
+Estas reglas documentan el caso de **2S U4 y su recuperación**. Son criterio
+pedagógico del docente, no una convención técnica global. Cada examen nuevo debe
+respetar su propia matriz y configuración; por ejemplo, 3S U4 suma 24 puntos y
+reparte 16 automáticos / 8 docentes.
 
-## 1. El reparto 14 / 6 es obligatorio
+## 1. En 2S, el reparto 14 / 6 es obligatorio
 
 | | Puntos |
 |---|---|

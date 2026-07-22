@@ -82,6 +82,11 @@ No es parte del sistema. Es **memoria del proyecto**: para que dentro de seis
 meses tú, o cualquier agente que audite el repositorio, entienda por qué las
 cosas están como están sin tener que deducirlo.
 
+Para construir un examen nuevo, la entrada recomendada es
+[`GENERACION-CON-AGENTE.md`](GENERACION-CON-AGENTE.md). `FLUJO-COMPLETO.md`
+conserva el caso particular de recuperación de 2S y no debe copiarse como si
+fuera una plantilla neutral.
+
 ---
 
 ## Preguntas frecuentes

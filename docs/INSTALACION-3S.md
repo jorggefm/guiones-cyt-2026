@@ -1,8 +1,8 @@
 # Instalación de los reportes de 3.° de secundaria
 
-**Estado: el código está escrito y subido, pero NO instalado.** Hasta que se
-pegue en Apps Script y se publique, el examen funciona pero **no se genera
-ningún reporte**.
+**Estado: instalado, publicado y verificado el 22 de julio de 2026.** Esta guía
+se conserva como procedimiento de recuperación y auditoría; no hay que repetir
+la instalación mientras el health check siga correcto.
 
 Tiempo: ~10 minutos. Con la cuenta `jorge.fernandez@colegiomilagrosdedios.edu.pe`.
 
@@ -25,15 +25,37 @@ También abandona el modelo de "cubos" (automático + docente) que usan 2S y 4S.
 Aquí cada pregunta guarda su puntaje y **el total es la suma**. Más simple, y sin
 el frágil reparseo de la columna de detalle.
 
-**Preguntas con parte docente: 2, 6, 8, 9 y 12** (1+1+1+1+4 = 8 puntos).
+**Preguntas habilitadas para revisión manual: 2, 6, 7, 8, 9, 11 y 12.**
+El máximo docente sigue siendo 8 puntos: Q7 y Q11 son mixtas y editables, pero
+su punto completo ya se calcula automáticamente.
+
+## Inventario activo
+
+| Elemento | Valor |
+|---|---|
+| Spreadsheet ID | `1bkNqkOtCfLmn_icVFPsgZVO8tUHJUFrAZy_-SIgxkfc` |
+| Apps Script Project ID | `1Q6L5qhgDaiJim8FRg1_WnIw_K5f3TKycOyf5UgYVeCBIAqHerl7UyY6u` |
+| Deployment | versión 5 |
+| Endpoint `/exec` | `https://script.google.com/macros/s/AKfycbwcu8b674jxWTiw0nvBNd-mHf0u7pRc1QCG-2h_b9RVer8b9wSbcht2RuHpeAm1Ual3sA/exec` |
+| EXAM_ID | `3S-U4-C2-OFICIAL-2026` |
+| Reportes | activos (`Control!REPORTES_ACTIVOS = SI`) |
+
+> **Importante:** abrir **Extensiones → Apps Script** desde el Sheets puede
+> mostrar un proyecto vinculado vacío. Ese no es el backend activo. El proyecto
+> operativo es el proyecto independiente identificado arriba; comprobar siempre
+> Project ID y endpoint.
 
 ---
 
 ## Paso 1 — Agregar `Reporte3S.gs`
 
-1. Abrir el Sheets `1bkNqkOtCfLmn_icVFPsgZVO8tUHJUFrAZy_-SIgxkfc`
-2. **Extensiones → Apps Script**
-3. **+ → Secuencia de comandos**, nombrarlo `Reporte3S`
+1. Abrir directamente el proyecto Apps Script independiente con Project ID
+   `1Q6L5qhgDaiJim8FRg1_WnIw_K5f3TKycOyf5UgYVeCBIAqHerl7UyY6u`.
+2. Confirmar en **Configuración del proyecto** que el ID coincide. No entrar por
+   **Extensiones → Apps Script** desde el Sheets: esa ruta abre el proyecto
+   vinculado vacío mostrado en la auditoría del 22/07.
+3. Si se está reconstruyendo el proyecto, usar **+ → Secuencia de comandos** y
+   nombrarlo `Reporte3S`.
 4. Pegar el contenido de `Reporte3S.gs`
 5. **`Ctrl+F` y buscar `function R3_generarReportes`. Debe decir `1 of 1`.**
    Si dice *No results*, el pegado no entró: hacer clic sobre una línea de
@@ -115,7 +137,7 @@ curl -sL "$EP?action=r3health"
 **Correcto:**
 ```json
 {"ok":true,"instalado":true,"examId":"3S-U4-C2-OFICIAL-2026",
- "maximo":24,"preguntasDocentes":[2,6,8,9,12]}
+ "maximo":24,"preguntasDocentes":[2,6,7,8,9,11,12]}
 ```
 
 **Mal:** si responde `{"ok":true,"service":"exam-template",...}` falta publicar
@@ -162,7 +184,7 @@ Después:
 
 1. Abrir `3S_U4_reporte_C2.html` con la cuenta de administrador
 2. Los pendientes aparecen marcados `PENDIENTE · Nombre`
-3. Calificar las preguntas **2, 6, 8, 9 y 12**
+3. Calificar las preguntas **2, 6, 7, 8, 9, 11 y 12**
 4. Botón **"Liberar reporte"** al final, después de la pregunta 12
 
 Si un alumno rinde dos veces, cada intento conserva su fila y aparece como
@@ -183,3 +205,17 @@ Si un alumno rinde dos veces, cada intento conserva su fila y aparece como
 ⚠️ **`R3_generarReportes()` reconstruye desde las respuestas y descarta la
 calificación docente de los envíos que procesa.** Pasarle correos para acotar,
 o no usarla después de haber calificado.
+
+### Fallo ya corregido: esquema de `Reportes`
+
+El 22/07 se comprobó que una respuesta podía quedar correctamente guardada y,
+sin embargo, no producir reporte porque la pestaña conservaba encabezados de un
+esquema anterior. El esquema R3 vigente es:
+
+```text
+submissionId, correo, nombre, puntajeFinal, maximo, nivel,
+detallePreguntas, comentario, liberado, reporte_json
+```
+
+Por eso una prueba de envío debe verificar por separado `Respuestas oficial`,
+`Calificación oficial` y `Reportes`.
