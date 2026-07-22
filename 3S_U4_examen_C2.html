@@ -214,6 +214,162 @@
     catch (error) { lockExam(error.message); actionMessage.textContent="Configuración inválida: "+error.message; }
   }());
   </script>
+
+  <!-- ================================================================= -->
+  <!-- RESPALDO DEL ALUMNO — borrador local y copia en PDF               -->
+  <!-- Bloque autónomo: no depende del resto del marcado ni del servidor. -->
+  <!-- Funciona SIN internet y SIN sesión de Google.                      -->
+  <!-- ================================================================= -->
+  <div id="printSheet" aria-hidden="true"></div>
+  <style>
+    .pdf-button { border: 2px solid currentColor; background: transparent; color: inherit;
+                  font-weight: 700; border-radius: 12px; padding: 10px 18px; cursor: pointer;
+                  margin-right: 10px; white-space: nowrap; }
+    #printSheet { display: none; }
+    #printSheet h1 { font-size: 20px; margin: 0 0 4px; }
+    #printSheet .meta { font-size: 13px; color: #444; margin-bottom: 18px;
+                        border-bottom: 2px solid #333; padding-bottom: 10px; }
+    #printSheet .meta b { display: inline-block; min-width: 96px; }
+    #printSheet .pq { margin-bottom: 15px; break-inside: avoid; page-break-inside: avoid; }
+    #printSheet .pq-num { font-weight: 700; }
+    #printSheet .pq-prompt { font-size: 13px; color: #333; margin: 2px 0 5px; }
+    #printSheet .pq-ans { border-left: 3px solid #666; padding: 5px 10px;
+                          white-space: pre-wrap; font-size: 14px; }
+    #printSheet .pq-empty { color: #a72f2f; font-style: italic; }
+    #printSheet .warn { margin-top: 20px; border: 2px solid #333; padding: 10px; font-size: 13px; }
+    @media print {
+      body.printing-backup > *:not(#printSheet) { display: none !important; }
+      body.printing-backup #printSheet { display: block !important; }
+    }
+  </style>
+  <script>
+  (function () {
+    if (typeof EXAM_CONFIG === 'undefined') return;      // sin config no hay nada que respaldar
+    var CLAVE = 'borrador:' + EXAM_CONFIG.examId;
+    var NO_RESTAURAR = ['studentName', 'studentEmail'];  // los llena Google al verificar
+
+    function campos() {
+      return Array.prototype.slice.call(document.querySelectorAll('input, select, textarea'))
+        .filter(function (el) { return el.name && el.type !== 'hidden'; });
+    }
+
+    /* ---------- borrador automático ---------- */
+    function guardar() {
+      try {
+        var d = {};
+        campos().forEach(function (el) {
+          if (el.type === 'radio' || el.type === 'checkbox') {
+            if (el.checked) { (d[el.name] = d[el.name] || []).push(el.value); }
+          } else if (el.value) { d[el.name] = el.value; }
+        });
+        localStorage.setItem(CLAVE, JSON.stringify({ savedAt: Date.now(), data: d }));
+      } catch (_) { /* modo privado o cuota llena: el examen sigue igual */ }
+    }
+
+    function restaurar() {
+      var g = null;
+      try { g = JSON.parse(localStorage.getItem(CLAVE) || 'null'); } catch (_) { return; }
+      if (!g || !g.data) return;
+      var n = 0;
+      campos().forEach(function (el) {
+        if (NO_RESTAURAR.indexOf(el.name) !== -1) return;
+        var v = g.data[el.name];
+        if (v === undefined) return;
+        if (el.type === 'radio' || el.type === 'checkbox') {
+          if (Array.isArray(v) && v.indexOf(el.value) !== -1) { el.checked = true; n++; }
+        } else { el.value = v; n++; }
+      });
+      if (n) {
+        var m = document.getElementById('actionMessage');
+        if (m) m.textContent = 'Se recuperaron tus respuestas guardadas (' +
+          new Date(g.savedAt).toLocaleString('es-PE') + ').';
+      }
+    }
+
+    window.limpiarBorrador3S = function () { try { localStorage.removeItem(CLAVE); } catch (_) {} };
+
+    /* ---------- copia en PDF ---------- */
+    function esc(t) {
+      return String(t == null ? '' : t)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /** Texto legible: usa la etiqueta visible, no el valor interno. */
+    function respuestaDe(q) {
+      var partes = [];
+      var sel = document.querySelectorAll('[name="' + q.id + '"], [name^="' + q.id + '_"]');
+      Array.prototype.forEach.call(sel, function (el) {
+        var etq = '';
+        var lab = el.id ? document.querySelector('label[for="' + el.id + '"]') : null;
+        if (lab) etq = lab.textContent.trim() + ': ';
+        if (el.type === 'radio' || el.type === 'checkbox') {
+          if (!el.checked) return;
+          var cont = el.closest('label');
+          partes.push(cont ? cont.textContent.trim() : el.value);
+        } else if (el.tagName === 'SELECT') {
+          if (!el.value) return;
+          partes.push(etq + el.options[el.selectedIndex].textContent.trim());
+        } else if (el.value && el.value.trim()) {
+          partes.push(etq + el.value.trim());
+        }
+      });
+      return partes.join('\n');
+    }
+
+    function armar(enviado) {
+      var nom = (document.getElementById('studentName') || {}).value || '';
+      var cor = (document.getElementById('studentEmail') || {}).value || '';
+      var sec = (document.getElementById('section') || {}).value || '';
+      var h = '<h1>' + esc(EXAM_CONFIG.title) + '</h1><div class="meta">' +
+        '<div><b>Estudiante:</b> ' + (esc(nom) || '<i>sin identificar</i>') + '</div>' +
+        '<div><b>Correo:</b> ' + (esc(cor) || '<i>sin identificar</i>') + '</div>' +
+        '<div><b>Sección:</b> ' + (esc(sec) || '—') + '</div>' +
+        '<div><b>Fecha:</b> ' + new Date().toLocaleString('es-PE') + '</div></div>';
+      EXAM_CONFIG.questions.forEach(function (q, i) {
+        var r = respuestaDe(q);
+        h += '<div class="pq"><div class="pq-num">Pregunta ' + (i + 1) + '</div>' +
+             '<div class="pq-prompt">' + esc(q.prompt) + '</div>' +
+             (r ? '<div class="pq-ans">' + esc(r) + '</div>'
+                : '<div class="pq-ans pq-empty">Sin responder</div>') + '</div>';
+      });
+      h += '<div class="warn">' + (enviado
+        ? 'Este examen <b>ya fue enviado correctamente</b> al sistema. Esta copia es solo un respaldo personal.'
+        : '<b>Este examen todavía NO ha sido enviado al sistema.</b> Si no lograste enviarlo, entrega esta copia a tu profesor.')
+        + '</div>';
+      document.getElementById('printSheet').innerHTML = h;
+    }
+
+    function guardarPdf() {
+      var panel = document.getElementById('submissionPanel');
+      armar(!!(panel && panel.classList.contains('visible')));
+      document.body.classList.add('printing-backup');
+      window.print();
+    }
+    window.addEventListener('afterprint', function () {
+      document.body.classList.remove('printing-backup');
+    });
+
+    /* ---------- botón, junto al de enviar ---------- */
+    function montar() {
+      var env = document.getElementById('submitButton');
+      if (!env || document.getElementById('pdfButton')) return;
+      var b = document.createElement('button');
+      b.id = 'pdfButton'; b.type = 'button'; b.className = 'pdf-button';
+      b.textContent = 'Guardar copia en PDF';
+      b.addEventListener('click', guardarPdf);
+      env.parentNode.insertBefore(b, env);
+    }
+
+    document.addEventListener('input', guardar, true);
+    document.addEventListener('change', guardar, true);
+    window.addEventListener('beforeunload', guardar);
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { montar(); restaurar(); });
+    } else { montar(); restaurar(); }
+  })();
+  </script>
+
 </body>
 </html>
 
