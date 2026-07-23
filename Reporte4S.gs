@@ -344,6 +344,12 @@ function R4_nivel_(v) {
   return 'AD';
 }
 
+function R4_sharedSummary_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
+}
+
 function R4_round_(n) { return Math.round(Number(n || 0) * 100) / 100; }
 
 /* ------------------------------------------------------------------ *
@@ -454,6 +460,7 @@ function R4_saveReview_(payload) {
     const automatico = Number(report.score && report.score.automatic || 0);
     const total = R4_round_(Math.min(20, automatico + docente));
     report.score = { automatic: automatico, teacher: docente, total: total, level: R4_nivel_(total) };
+    if (String(fila[7] || '').trim().toUpperCase() === 'SI') report.comment = R4_sharedSummary_(report.score.level);
     report.reviewedAt = new Date().toISOString();
 
     hoja.getRange(destino, 4, 1, 6).setValues([[
@@ -494,6 +501,15 @@ function R4_release_(payload) {
     const hoja = getOrCreateSheet_(R4_REPORTS_SHEET);
     const destino = R4_buscarFila_(hoja, targetEmail);
     if (!destino) throw new Error('No se encontró el reporte de ' + targetEmail);
+    const fila = hoja.getRange(destino, 1, 1, 9).getDisplayValues()[0];
+    if (liberar) {
+      try {
+        const report = JSON.parse(String(fila[8] || '{}'));
+        report.comment = R4_sharedSummary_(String((report.score || {}).level || fila[4] || ''));
+        hoja.getRange(destino, 7).setValue(report.comment);
+        hoja.getRange(destino, 9).setValue(JSON.stringify(report));
+      } catch (_) {}
+    }
     hoja.getRange(destino, 8).setValue(liberar ? 'SI' : 'NO');
     SpreadsheetApp.flush();
 
@@ -537,6 +553,27 @@ function R4_generarLosDos() {
 /** Genera el reporte de todos los envios con correo institucional. */
 function R4_generarTodos() {
   return R4_generarReportes([]);
+}
+
+function R4_estandarizarComentariosLiberados() {
+  const hoja = getOrCreateSheet_(R4_REPORTS_SHEET);
+  const last = hoja.getLastRow();
+  if (last < 2) return { ok: true, updated: 0 };
+  const filas = hoja.getRange(2, 1, last - 1, 9).getDisplayValues();
+  let updated = 0;
+  filas.forEach(function (fila, idx) {
+    if (String(fila[7] || '').trim().toUpperCase() !== 'SI') return;
+    try {
+      const report = JSON.parse(String(fila[8] || '{}'));
+      const comment = R4_sharedSummary_(String((report.score || {}).level || fila[4] || ''));
+      report.comment = comment;
+      hoja.getRange(idx + 2, 7).setValue(comment);
+      hoja.getRange(idx + 2, 9).setValue(JSON.stringify(report));
+      updated += 1;
+    } catch (_) {}
+  });
+  SpreadsheetApp.flush();
+  return { ok: true, updated: updated };
 }
 
 function R4_liberar(correo) {

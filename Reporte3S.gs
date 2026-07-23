@@ -48,6 +48,12 @@ function R3_nivel_(total) {
   return 'AD';
 }
 
+function R3_sharedSummary_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
+}
+
 /** Una pregunta admite ajuste docente si su metodo no es puramente automatico. */
 function R3_esDocente_(q) {
   const m = q.grading && q.grading.method;
@@ -449,6 +455,7 @@ function R3_saveReview_(payload) {
     R3_aplicarEscala20_(rep);
     const total = rep.score.total;
     const maximo = rep.score.maximum;
+    if (String(fila[8] || '').trim().toUpperCase() === 'SI') rep.comment = R3_sharedSummary_(rep.score.level);
     rep.reviewedAt = new Date().toISOString();
 
     hoja.getRange(dest, 4, 1, 7).setValues([[
@@ -489,6 +496,15 @@ function R3_release_(payload) {
     const hoja = getOrCreateSheet_(R3_REPORTS_SHEET);
     const dest = R3_fila_(hoja, target);
     if (!dest) throw new Error('No se encontró el reporte de ' + solo);
+    const fila = hoja.getRange(dest, 1, 1, R3_HEADERS.length).getDisplayValues()[0];
+    if (liberar) {
+      try {
+        const rep = JSON.parse(String(fila[9] || '{}'));
+        rep.comment = R3_sharedSummary_(String((rep.score || {}).level || fila[5] || ''));
+        hoja.getRange(dest, 8).setValue(rep.comment);
+        hoja.getRange(dest, 10).setValue(JSON.stringify(rep));
+      } catch (_) {}
+    }
     hoja.getRange(dest, 9).setValue(liberar ? 'SI' : 'NO');
     SpreadsheetApp.flush();
     const requestId = String(payload.requestId || '').trim();
@@ -558,6 +574,28 @@ function R3_migrarEscala20() {
   });
   SpreadsheetApp.flush();
   return 'Reportes actualizados: ' + actualizados + '. Omitidos: ' + omitidos + '.';
+}
+
+function R3_estandarizarComentariosLiberados() {
+  const hoja = getOrCreateSheet_(R3_REPORTS_SHEET);
+  const last = hoja.getLastRow();
+  if (last < 2) return { ok: true, updated: 0 };
+  const filas = hoja.getRange(2, 1, last - 1, R3_HEADERS.length).getDisplayValues();
+  let updated = 0;
+  filas.forEach(function (fila, idx) {
+    if (String(fila[8] || '').trim().toUpperCase() !== 'SI') return;
+    try {
+      const rep = JSON.parse(String(fila[9] || '{}'));
+      const comment = R3_sharedSummary_(String((rep.score || {}).level || fila[5] || ''));
+      if (!comment) return;
+      rep.comment = comment;
+      hoja.getRange(idx + 2, 8).setValue(comment);
+      hoja.getRange(idx + 2, 10).setValue(JSON.stringify(rep));
+      updated += 1;
+    } catch (_) {}
+  });
+  SpreadsheetApp.flush();
+  return { ok: true, updated: updated };
 }
 
 function R3_liberar(correo) {

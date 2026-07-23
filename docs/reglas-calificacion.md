@@ -3,6 +3,28 @@
 Estas reglas son **criterio pedagógico del docente**, no una convención técnica.
 Cualquier examen nuevo debe respetarlas.
 
+## Mensaje general unificado del reporte
+
+Todos los reportes publicados usan el mismo mensaje de logro, elegido por la
+nota final sobre 20. El mensaje se guarda junto con el JSON del reporte:
+
+| Nivel | Mensaje |
+|---|---|
+| AD | Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones. |
+| A | Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas. |
+| B | Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas. |
+
+Los reportes pendientes conservan el aviso de revision hasta que el docente los
+libere. Al liberar un reporte, Apps Script actualiza tambien la columna
+`comentario` y `reporte_json`. La migracion historica solo cambia ese mensaje;
+no reconstruye respuestas ni puntajes.
+
+Funciones de migracion disponibles: `standardizeReportComments` (2S),
+`R3_estandarizarComentariosLiberados` (3S) y
+`R4_estandarizarComentariosLiberados` (4S). 1S, 5S y 6P generan el mensaje
+unificado desde su funcion de calificacion; 4S Forms lo calcula al cargar el
+reporte.
+
 ## 1. El reparto 14 / 6 es obligatorio
 
 | | Puntos |

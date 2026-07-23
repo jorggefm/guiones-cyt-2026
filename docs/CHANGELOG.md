@@ -4,6 +4,16 @@ Orden cronológico inverso. Cada entrada dice **qué** cambió y **por qué**.
 
 ---
 
+## 2026-07-23 - Mensaje de logro unificado en reportes
+
+Se normalizo el mensaje general de los reportes de 1S, 2S, 3S, 4S, 5S y 6P.
+La escala B/A/AD no cambia. Los reportes pendientes mantienen su aviso hasta
+que el docente los libere. Las funciones de migracion actualizan unicamente el
+comentario y el JSON de filas liberadas, sin tocar respuestas, puntajes ni
+archivos de examen.
+
+La regla completa queda en `docs/reglas-calificacion.md`, seccion 7.
+
 ## 2026-07-21 — Reportes de 3.° de secundaria y arreglo de imágenes
 
 ### 3S: sistema de reportes completo (PENDIENTE DE INSTALAR)

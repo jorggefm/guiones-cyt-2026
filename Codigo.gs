@@ -277,6 +277,7 @@ function saveReportReview_(payload) {
     const total = Math.round(Math.max(0, Math.min(20, automaticScore + roundedTeacher)) * 100) / 100;
     const level = levelFromScore_(total);
     report.score = { automatic: automaticScore, teacher: roundedTeacher, total: total, level: level };
+    report.comment = sharedSummaryComment_(level);
     report.reviewedAt = new Date().toISOString();
 
     const detail = buildTeacherDetail_(report, breakdown);
@@ -315,6 +316,42 @@ function saveReportReview_(payload) {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+function sharedSummaryComment_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
+}
+
+/** Actualiza solo el mensaje general de los reportes ya liberados. */
+function standardizeReportComments() {
+  const reports = getOrCreateSheet_('Reportes');
+  const lastRow = reports.getLastRow();
+  if (lastRow < 2) return { ok: true, updated: 0 };
+  const rows = reports.getRange(2, 1, lastRow - 1, 9).getDisplayValues();
+  const grading = getOrCreateSheet_('Calificacion oficial');
+  const gradingRows = grading.getLastRow() < 2 ? [] : grading.getRange(2, 1, grading.getLastRow() - 1, 11).getDisplayValues();
+  let updated = 0;
+  rows.forEach(function (row, index) {
+    if (String(row[7] || '').trim().toUpperCase() !== 'SI') return;
+    let report;
+    try { report = JSON.parse(String(row[8] || '{}')); } catch (_) { return; }
+    const level = String((report.score && report.score.level) || row[4] || '').trim();
+    if (!level) return;
+    const comment = sharedSummaryComment_(level);
+    report.comment = comment;
+    reports.getRange(index + 2, 7).setValue(comment);
+    reports.getRange(index + 2, 9).setValue(JSON.stringify(report));
+    const gradingIndex = gradingRows.findIndex(function (item) {
+      return String(item[0] || '').trim() === String(report.submissionId || row[0] || '').trim()
+        || String(item[1] || '').trim().toLowerCase() === String(row[1] || '').trim().toLowerCase();
+    });
+    if (gradingIndex >= 0) grading.getRange(gradingIndex + 2, 8).setValue(comment);
+    updated += 1;
+  });
+  SpreadsheetApp.flush();
+  return { ok: true, updated: updated };
 }
 
 function parseTeacherBreakdown_(detail) {
