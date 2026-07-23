@@ -239,7 +239,7 @@ function buildAllReports_() {
       total,
       score20,
       grade: grade_(score20),
-      general: generalComment_(score20),
+      general: sharedGeneralComment_(score20),
       reviewedAt: Utilities.formatDate(new Date(), "America/Lima", "dd/MM/yyyy HH:mm"),
       details,
     });
@@ -400,6 +400,12 @@ function grade_(score20) {
   if (score20 >= 17) return "AD";
   if (score20 >= 12) return "A";
   return "B";
+}
+
+function sharedGeneralComment_(score20) {
+  if (score20 >= 17) return "Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.";
+  if (score20 >= 12) return "Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.";
+  return "Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.";
 }
 
 function generalComment_(score20) {

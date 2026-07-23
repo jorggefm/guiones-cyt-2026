@@ -463,6 +463,12 @@ function REZ_round_(n) {
   return Math.round(Number(n || 0) * 100) / 100;
 }
 
+function REZ_sharedSummary_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
+}
+
 /**
  * [BOTON LIBERAR] Cambia el estado de liberacion desde el propio reporte.
  * Solo administradores. Sirve para liberar y para volver a ocultar.
@@ -487,6 +493,15 @@ function REZ_handleRelease_(payload) {
     const correos = sheet.getRange(2, 2, lastRow - 1, 1).getDisplayValues();
     const idx = correos.findIndex(item => String(item[0] || '').trim().toLowerCase() === targetEmail);
     if (idx < 0) throw new Error('No se encontro el reporte de ' + targetEmail);
+    if (liberar) {
+      try {
+        const reportRow = sheet.getRange(idx + 2, 1, 1, 9).getDisplayValues()[0];
+        const report = JSON.parse(String(reportRow[8] || '{}'));
+        report.comment = REZ_sharedSummary_(String((report.score || {}).level || reportRow[4] || ''));
+        sheet.getRange(idx + 2, 7).setValue(report.comment);
+        sheet.getRange(idx + 2, 9).setValue(JSON.stringify(report));
+      } catch (_) {}
+    }
     sheet.getRange(idx + 2, 8).setValue(liberar ? 'SI' : 'NO');
     SpreadsheetApp.flush();
 

@@ -410,6 +410,12 @@ function summaryComment_(level) {
       ? 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.'
       : 'Estás en proceso. Usa las respuestas ideales y los comentarios para reforzar las relaciones de causa y efecto.');
 }
+function sharedSummaryComment_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
+}
+
 function reportStatus_(requestId) {
   var clean = String(requestId || '').trim();
   if (!/^[a-zA-Z0-9-]{16,100}$/.test(clean)) return json_({ ok: false, error: 'Consulta no válida.' });
@@ -581,7 +587,7 @@ function recalculateStoredReportsWithPartialCredit() {
     var total = round_(rawTotal / 23 * 20);
     var level = levelFromScore_(total);
     report.score = { automatic: automatic, automaticMax: 16, teacher: teacher, teacherMax: 7, rawTotal: rawTotal, rawMaximum: 23, total: total, level: level };
-    report.comment = summaryComment_(level);
+    report.comment = sharedSummaryComment_(level);
     report.reviewedAt = new Date().toISOString();
     var detail = buildTeacherDetail_(report);
     reports.getRange(reportIndex + 2, 4, 1, 6).setValues([[total, level, detail, report.comment, 'SI', JSON.stringify(report)]]);

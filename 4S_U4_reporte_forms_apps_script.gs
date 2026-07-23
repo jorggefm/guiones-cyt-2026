@@ -102,7 +102,7 @@ function buildAllReports_() {
     });
     const total = round2_(details.reduce(function(sum,item){return sum+Number(item.score || 0);},0));
     const score20 = round2_(total/12*20);
-    reports.push({id:id,name:name,email:email,section:"4S",rawGoogleScore:String(row[1] || ""),rawGoogleScore20:Number(row[2] || 0),basePoints:total,total:total,score20:score20,grade:grade_(score20),general:generalComment_(score20),reviewedAt:Utilities.formatDate(new Date(),"America/Lima","dd/MM/yyyy HH:mm"),details:details});
+    reports.push({id:id,name:name,email:email,section:"4S",rawGoogleScore:String(row[1] || ""),rawGoogleScore20:Number(row[2] || 0),basePoints:total,total:total,score20:score20,grade:grade_(score20),general:sharedGeneralComment_(score20),reviewedAt:Utilities.formatDate(new Date(),"America/Lima","dd/MM/yyyy HH:mm"),details:details});
   }
   return reports;
 }
@@ -210,6 +210,7 @@ function normalize_(value){return String(value || "").toLowerCase().normalize("N
 function round2_(value){return Math.round((Number(value)||0)*100)/100;}
 function status_(score,max){if(score>=max)return "CORRECTA";if(score>0)return "PARCIAL";return "INCORRECTA";}
 function grade_(score20){if(score20>=17)return "AD";if(score20>=12)return "A";return "B";}
+function sharedGeneralComment_(score20){if(score20>=17)return "Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.";if(score20>=12)return "Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.";return "Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.";}
 function generalComment_(score20){if(score20>=17)return "Logro destacado: comprendes muy bien la relación y coordinación nerviosa y endocrina.";if(score20>=12)return "Logro esperado. Revisa los comentarios para precisar las rutas de comunicación y la regulación corporal.";return "Necesitas reforzar las rutas nerviosas, hormonales y el potencial de membrana. Revisa cada explicación.";}
 
 

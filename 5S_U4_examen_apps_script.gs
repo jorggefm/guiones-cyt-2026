@@ -370,7 +370,7 @@ function saveReportReview_(payload) {
     var level = levelFromScore_(total);
     report.score = { automatic: automatic, automaticMax: 16, teacher: round_(teacher), teacherMax: 8, rawTotal: rawTotal, rawMaximum: 24, total: total, level: level };
     report.reviewedAt = new Date().toISOString();
-    report.comment = summaryComment_(level);
+    report.comment = sharedSummaryComment_(level);
     var detail = buildTeacherDetail_(report);
     sheet.getRange(index + 2, 4, 1, 6).setValues([[total, level, detail, report.comment, 'SI', JSON.stringify(report)]]);
     var grading = getOrCreateSheet_(SHEETS.grading);
@@ -413,6 +413,12 @@ function summaryComment_(level) {
     : (level === 'A'
       ? 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.'
       : 'Estás en proceso. Usa las respuestas ideales y los comentarios para reforzar las relaciones ecológicas, ambientales y bioelectroquímicas.');
+}
+
+function sharedSummaryComment_(level) {
+  if (level === 'AD') return 'Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.';
+  if (level === 'A') return 'Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones cientificas.';
+  return 'Estas en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones cientificas.';
 }
 
 function reportStatus_(requestId) {
@@ -505,7 +511,7 @@ function generateOfficialReports() {
       examId: CONFIG.examId, version: CONFIG.version, grade: CONFIG.grade, unit: CONFIG.unit, title: CONFIG.title,
       submissionId: submissionId, studentName: name, studentEmail: email, section: section, submittedAt: row[10],
       score: { automatic: objective, automaticMax: 16, teacher: teacher, teacherMax: 8, rawTotal: raw, rawMaximum: 24, total: total, level: level },
-      comment: summaryComment_(level), questions: questions, reviewedAt: new Date().toISOString()
+      comment: sharedSummaryComment_(level), questions: questions, reviewedAt: new Date().toISOString()
     };
     var detail = buildTeacherDetail_(report);
     reportRows.push([submissionId, email, name, total, level, detail, report.comment, 'SI', JSON.stringify(report)]);
@@ -593,7 +599,7 @@ function recalculateStoredReportsWithPartialCredit() {
     var total = round_(rawTotal / 24 * 20);
     var level = levelFromScore_(total);
     report.score = { automatic: automatic, automaticMax: 16, teacher: teacher, teacherMax: 8, rawTotal: rawTotal, rawMaximum: 24, total: total, level: level };
-    report.comment = summaryComment_(level);
+    report.comment = sharedSummaryComment_(level);
     report.reviewedAt = new Date().toISOString();
     var detail = buildTeacherDetail_(report);
     reports.getRange(reportIndex + 2, 4, 1, 6).setValues([[total, level, detail, report.comment, 'SI', JSON.stringify(report)]]);
