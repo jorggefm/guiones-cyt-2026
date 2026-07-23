@@ -385,6 +385,12 @@
       return new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Lima" }).format(date);
     }
 
+    function summaryCommentForLevel(level) {
+      if (level === "AD") return "Logro destacado: comprendiste y aplicaste los contenidos centrales con claridad. Revisa los comentarios para seguir afinando tus explicaciones.";
+      if (level === "A") return "Logro esperado: comprendiste los contenidos centrales. Revisa cada comentario para precisar mejor las relaciones científicas.";
+      return "Estás en proceso: usa las respuestas ideales y los comentarios para reforzar los contenidos y sus relaciones científicas.";
+    }
+
     function levelFromScore(value) {
       const score = Math.max(0, Math.min(20, Number(value) || 0));
       if (score < 12) return "B";
@@ -531,11 +537,10 @@
       document.getElementById("studentEmail").textContent = report.studentEmail || "";
       document.getElementById("studentSection").textContent = report.section || "No indicada";
       document.getElementById("submittedAt").textContent = formatDate(report.submittedAt);
-      document.getElementById("teacherComment").textContent = report.comment || "Revisa el detalle de cada pregunta para continuar aprendiendo.";
-
       const score = report.score || {};
       const total = Math.max(0, Math.min(20, Number(score.total) || 0));
       const level = levelFromScore(total);
+      document.getElementById("teacherComment").textContent = summaryCommentForLevel(level);
       document.getElementById("scoreNumber").textContent = total.toFixed(1).replace(".0", "");
       document.getElementById("levelBadge").textContent = level;
       document.getElementById("automaticScore").textContent = Number(score.automatic || 0).toFixed(2).replace(/\.00$/, "") + "/16";
