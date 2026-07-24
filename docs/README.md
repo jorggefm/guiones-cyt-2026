@@ -26,6 +26,14 @@ el peor caso alguien "arregla" algo que era intencional.
 | Tomar el examen a un alumno rezagado | [`operacion-rezagados.md`](operacion-rezagados.md) |
 | Saber qué cambió y cuándo | [`CHANGELOG.md`](CHANGELOG.md) |
 | Entender **por qué** algo está así | [`decisiones/`](decisiones/) |
+| Continuar la instalación de la **IA local agéntica** | [`IA-LOCAL-AGENTICA.md`](IA-LOCAL-AGENTICA.md) |
+
+## Infraestructura complementaria
+
+`IA-LOCAL-AGENTICA.md` documenta el servidor local de inferencia, Open WebUI,
+Computer, la exposición controlada a la red doméstica y el plan de herramientas
+futuras. Es documentación de continuidad operativa; no forma parte del sitio ni
+autoriza al agente local a modificar exámenes.
 
 ## Reglas de esta carpeta
 

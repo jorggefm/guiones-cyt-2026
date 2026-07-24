@@ -4,6 +4,17 @@ Orden cronológico inverso. Cada entrada dice **qué** cambió y **por qué**.
 
 ---
 
+## 2026-07-24 - Manual de continuidad de la IA local agéntica
+
+Se añadió `docs/IA-LOCAL-AGENTICA.md` con el estado verificado de la instalación
+local: Qwen3.5 9B sobre `llama.cpp`, Open WebUI, Computer, scripts de operación,
+aislamiento del espacio de pruebas, acceso LAN limitado al puerto 3000,
+incidencias resueltas y hoja de ruta para micrófono, OCR, visión, Office,
+Google Drive/Gmail, Tailscale y automatizaciones futuras.
+
+La documentación sustituye secretos por marcadores y no modifica archivos de
+examen, Apps Script, endpoints ni reportes.
+
 ## 2026-07-23 - Mensaje de logro unificado en reportes
 
 Se normalizo el mensaje general de los reportes de 1S, 2S, 3S, 4S, 5S y 6P.
