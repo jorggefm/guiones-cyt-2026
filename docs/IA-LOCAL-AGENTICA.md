@@ -103,6 +103,7 @@ IA-Local\
 ├─ interfaz_web.py             inicia/detiene/verifica Open WebUI
 ├─ agente_local.py             inicia/detiene/verifica Computer
 ├─ INICIAR_TODO.cmd            arranque diario de los tres componentes
+├─ INICIAR_TODO_SILENCIOSO.vbs arranque diario sin ventanas CMD visibles
 ├─ DETENER_TODO.cmd            apagado ordenado
 ├─ ESTADO_TODO.cmd             diagnóstico de los tres componentes
 ├─ INICIAR_*.cmd               arranque individual
@@ -283,14 +284,14 @@ Detener:
 
 ## 8. Uso diario
 
-1. Ejecutar `INICIAR_TODO.cmd`.
+1. Ejecutar `INICIAR_TODO_SILENCIOSO.vbs` para un arranque sin ventanas CMD. Usar `INICIAR_TODO.cmd` solo cuando se necesite observar el diagnóstico.
 2. Esperar el mensaje “IA local, interfaz y agente listos”.
 3. Chat: abrir `http://127.0.0.1:3000`.
 4. Agente: abrir `http://127.0.0.1:8000`.
 5. Antes de una tarea importante, ejecutar `ESTADO_TODO.cmd`.
 6. Al terminar, ejecutar `DETENER_TODO.cmd`.
 
-Si se reinicia Windows, los servicios no se inician solos. Debe ejecutarse `INICIAR_TODO.cmd`, salvo que más adelante se cree una tarea programada.
+Si se reinicia Windows, los servicios no se inician solos. Debe ejecutarse `INICIAR_TODO_SILENCIOSO.vbs`, salvo que más adelante se cree una tarea programada.
 
 ## 9. Red local
 
